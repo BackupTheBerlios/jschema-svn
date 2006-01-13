@@ -1,0 +1,114 @@
+/*
+JSchema: library for GUI-based database applications
+This file Copyright (c) 2006 by Robert Fischer
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+package citibob.jschema;
+
+import java.util.*;
+import java.sql.*;
+
+public class MultiDbModel implements DbModel
+{
+
+ArrayList models = new ArrayList();
+
+// ---------------------------------------------------
+public void add(DbModel m)
+	{ models.add(m); }
+public void remove(DbModel m)
+	{ models.remove(m); }
+// ---------------------------------------------------
+private int getStatus()
+	{ return 0; }	// Not needed, we're overriding doUpdate() and doDelete().
+
+// ---------------------------------------------------
+public void doUpdate(Statement st)
+throws java.sql.SQLException
+{
+	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
+		DbModel m = (DbModel)ii.next();
+		m.doUpdate(st);
+	}
+}
+
+// public void doSimpleUpdate(Statement st)
+// throws java.sql.SQLException
+// {
+// 	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
+// 		DbModel m = (DbModel)ii.next();
+// 		m.doSimpleUpdate(st);
+// 	}
+// }
+
+public void doDelete(Statement st)
+throws java.sql.SQLException
+{
+	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
+		DbModel m = (DbModel)ii.next();
+		m.doDelete(st);
+	}
+}
+// public void doSimpleDelete(Statement st)
+// throws java.sql.SQLException
+// {
+// 	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
+// 		DbModel m = (DbModel)ii.next();
+// 		m.doSimpleDelete(st);
+// 	}
+// }
+// ---------------------------------------------------
+public void doInit(Statement st)
+throws java.sql.SQLException
+{
+	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
+		DbModel m = (DbModel)ii.next();
+		m.doInit(st);
+	}
+}
+public void doSelect(Statement st)
+throws java.sql.SQLException
+{
+	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
+		DbModel m = (DbModel)ii.next();
+		m.doSelect(st);
+	}
+}
+public void doInsert(Statement st)
+throws java.sql.SQLException
+{
+	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
+		DbModel m = (DbModel)ii.next();
+		m.doInsert(st);
+	}
+}
+public boolean valueChanged()
+{
+	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
+		DbModel m = (DbModel)ii.next();
+		if (m.valueChanged()) return true;
+	}
+	return false;
+}
+public void doClear()
+{
+	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
+		DbModel m = (DbModel)ii.next();
+		m.doClear();
+	}
+}
+// ---------------------------------------------------
+}
