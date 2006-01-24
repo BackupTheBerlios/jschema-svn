@@ -32,8 +32,9 @@ public class IntKeyedDbModel extends SchemaBufDbModel
 int idValue;
 String keyField;
 
-/** Should we add the key field to the list when we insert records?  Generally,
-this will be false for main tables, and true for subsidiary tables. Defaults to true. */
+/** Should we add the key field to the SQL statement when we insert records?  Generally,
+this will be false for main tables (because they have auto-insert), and
+true for subsidiary tables. Defaults to true. */
 boolean doInsertKeys;
 
 public void setKey(int idValue)

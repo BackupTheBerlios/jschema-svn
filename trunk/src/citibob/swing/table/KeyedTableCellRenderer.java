@@ -28,11 +28,9 @@ import javax.swing.table.*;
 import citibob.swing.typed.*;
 import java.sql.*;
 import citibob.jschema.KeyedModel;
+import javax.swing.*;
+import javax.swing.event.*;
 
-/**
- *
- * @author citibob
- */
 public class KeyedTableCellRenderer extends DefaultTableCellRenderer {
 
 KeyedModel model;

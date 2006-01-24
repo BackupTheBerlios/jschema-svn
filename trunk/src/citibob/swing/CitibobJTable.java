@@ -21,7 +21,7 @@ package citibob.swing;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import citibob.swing.table.CitibobTableModel;
+import citibob.swing.table.*;
 import de.chka.swing.components.*;
 
 public class CitibobJTable extends JTable
@@ -47,4 +47,12 @@ public void setRowHeightUpdaterEnabled(boolean b)
 public boolean isRowHeightUpdaterEnabled()
 	{ return rhu.isEnabled(); }
 
+/** Sets a renderer and editor pair at once, for a column. */
+public void setRenderEdit(int col, RenderEdit re)
+{
+	TableColumnModel cols = getColumnModel();
+	cols.getColumn(col).setCellRenderer(re.getRenderer());
+	if (re.getEditor() != null)
+		cols.getColumn(col).setCellEditor(re.getEditor());
+}
 }

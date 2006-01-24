@@ -53,8 +53,10 @@ String[] sColMap)
 System.out.println("ColPermuteTableModel: this = " + this);
 	int[] colMap = new int[sColMap.length];
 	for (int i = 0; i < colMap.length; ++i) {
+System.out.println("sColMap[" + i + "] = " + sColMap[i]);
 		for (int j = 0; j < model_u.getColumnCount(); ++j) {
 			if (sColMap[i].equals(model_u.getColumnName(j))) {
+System.out.println("    " + model_u.getColumnName(j));
 				colMap[i] = j;
 				break;
 			}
