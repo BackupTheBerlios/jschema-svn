@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package citibob.jschema.swing;
 
 import javax.swing.table.*;
+import citibob.swing.table.*;
 import citibob.swing.typed.*;
 import java.sql.*;
 import citibob.jschema.KeyedModel;
@@ -33,7 +34,16 @@ import citibob.jschema.KeyedModel;
  *
  * @author citibob
  */
-public class StatusTableCellRenderer
+public class StatusRenderEdit extends RenderEdit
+{
+
+public StatusRenderEdit()
+{
+	renderer = new StatusTableCellRenderer();
+	editor = null;
+}
+// =====================================================================
+public static class StatusTableCellRenderer
 extends DefaultTableCellRenderer
 implements citibob.jschema.RowStatusConst {
 
@@ -51,5 +61,6 @@ public void setValue(Object o) {
 }
 
 }
-    
+}
+
 
