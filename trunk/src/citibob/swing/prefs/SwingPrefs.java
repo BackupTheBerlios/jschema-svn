@@ -88,17 +88,19 @@ private void setPrefsRecurse(Component c, String prefix, Preferences prefs)
 			String pkgName = klass.getPackage().getName();
 			String className = klass.getName();
 			//System.out.println(className.length());
-			String leafName = className.substring(pkgName.length());
+			String leafName = className.substring(pkgName.length()+1);
 			name = leafName + nCount;
 		}
-		prefix = prefix + name;
+
+		prefs = prefs.node(name);
+		prefix = "";
 
 		// Take care of yourself
-//System.out.println("Setting Pref (prefix = " + prefix + ") for " + c);
+System.out.println("Setting Pref (node = " + prefs.absolutePath() + ") for " + c);
 		if (setter != null) setter.setPrefs(c, prefix, prefs);
 		else ((PrefWidget)c).setPrefs(prefix, prefs);
 	}
-	
+
 	// Take care of your children
 	if (c instanceof Container) {
 	    Component[] child = ((Container)c).getComponents();

@@ -20,7 +20,11 @@ package citibob.swing.prefs;
 
 import java.util.prefs.*;
 
-/** An object that has PREFERENCES, which may be saved and restored. */
+/** An object that has PREFERENCES, which may be saved and restored.
+Swing widgets may implement this if they like, otherwise they can just
+rely on the standard pref setters, based on the object class.
+ @see SwingPrefs
+*/
 public interface PrefWidget
 {
 	void setPrefs(final String prefix, final Preferences prefs);

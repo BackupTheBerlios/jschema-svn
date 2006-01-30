@@ -28,7 +28,8 @@ import java.awt.*;
 import java.util.prefs.*;
 
 /**
- *
+ * Sets the preferences for an entire class of widgets: JTable, JSplitPane, etc.
+@see SwingPrefs
  * @author citibob
  */
 public interface SwingPrefSetter {
