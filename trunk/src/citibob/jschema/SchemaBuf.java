@@ -40,7 +40,23 @@ Schema schema;
 // Our data storage
 ArrayList rows = new ArrayList();			// ArrayList<SqlRow>
 private SqlRow newRow()
-	{ return new SqlRow(getColumnCount()); }
+{
+	int n = getColumnCount();
+	SqlRow row = new SqlRow(n);
+	
+	// Put in default values
+	for (int i=0; i<n; ++i) {
+		row.data[i] = getDefault(i);
+	}
+	
+	return row;
+}
+/** User should override this; provides default values for rows
+ newly inserted into this schema buf */
+public Object getDefault(int col)
+{
+	return null;
+}
 // =====================================================
 public interface Listener
 {
@@ -274,6 +290,7 @@ for (int i = 0; i < colNames.length; ++i) System.out.println("    insertRow " + 
 	int numKey = 0;
 	for (int i=0; i<colNames.length; ++i) {
 		coli[i] = findCol(colNames[i]);
+		if (coli[i] < 0) throw new KeyViolationException("Column named " + colNames[i] + " not found!");
 		if (isKey(coli[i])) ++numKey;
 	}
 
