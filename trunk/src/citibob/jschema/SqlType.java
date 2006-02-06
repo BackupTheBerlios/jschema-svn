@@ -46,4 +46,6 @@ public interface SqlType
 	and user input Strings.  This cannot just return nulL!  It will
 	crash when you try to use it. */
 	TextConverter getTextConverter();
+	
+	/** TODO: Subclasses of this implement a compareTo() that compares only type.  Please figure out what this is used for. */
 }

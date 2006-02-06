@@ -345,6 +345,14 @@ throws KeyViolationException
 {
 	return insertRow(rowIndex, new String[] {colName}, new Object[] {val});
 }
+/** Undoes any edits... */
+// Not really needed... undo is done by re-querying DB through DBModel
+//public void resetRow(int row)
+//{
+//	for (int i=0; i<colNames.length; ++i) {
+//		setValueAt(getOrigValueAt(row,i), row,i);
+//	}
+//}
 // ===============================================================
 // Implementation of TableModel
 

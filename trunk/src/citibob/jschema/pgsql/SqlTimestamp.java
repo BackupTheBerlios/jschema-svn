@@ -21,8 +21,7 @@ package citibob.jschema.pgsql;
 import java.sql.Timestamp;
 import java.sql.*;
 
-import citibob.textconverter.TimestampTextConverter;
-import citibob.textconverter.TextConverter;
+import citibob.textconverter.*;
 
 public class SqlTimestamp implements citibob.jschema.SqlType
 {
@@ -56,10 +55,19 @@ public TextConverter getTextConverter()
 	public boolean compareTo(Object o)
 		{ return (o instanceof SqlTimestamp); }
 
+	private static java.text.DateFormat sqlFmt;
+	static {
+		try {
+			sqlFmt = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
 
 	public static String sql(Timestamp ts)
 	{
 		return ts == null ? "null" :
-			('\'' + ts.toString() + '\'');
+			("TIMESTAMP '" + sqlFmt.format(ts) + '\'');
 	}
 }

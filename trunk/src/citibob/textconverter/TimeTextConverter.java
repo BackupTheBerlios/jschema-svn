@@ -15,24 +15,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*//*
- * ERunnable.java
- *
- * Created on January 29, 2006, 7:50 PM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
+*/
+package citibob.textconverter;
 
-package citibob.multithread;
+import citibob.exception.FormatException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
-/**
- *
- * @author citibob
- */
-public interface ERunnable {
+public class TimeTextConverter extends UtilDateTextConverter
+{
 
-public void run() throws Throwable;
-	
+	/** Returns Java class of objects handled by this InputParser */
+	public Class getObjClass()
+		{ return java.sql.Time.class; }
+
+	/** Tries to convert string to an object of getClass(). */
+	public Object parseObject(String s) throws Exception
+	{
+		java.util.Date dt = parseDate(s);
+		return (dt == null ? null : new java.sql.Time(dt.getTime()));
+	}
 }

@@ -33,25 +33,32 @@ import citibob.swing.typed.*;
 import citibob.swing.*;
 
 /**
- * High-level table: contains a type field, a status field and a bunch of other stuff.
+ * High-level table: contains a status field and a bunch of other stuff.
  * @author citibob
  */
-public class TypedItemTable extends StatusTable {
+public class StatusTable extends CitibobJTable {
 
 /** Creates a new instance of GroupsTable */
-public TypedItemTable() {
+public StatusTable() {
 	setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 }
 
 //		new String[] {"S", "Type", "Phone"},
 //		new String[] {"__status__", "groupid", "phone"});
 
+/** Convenience function, to be used by subclasses:
+ * finds the column number based on a column name, not display name. */
+public int findUnderlyingCol(String s)
+{
+	return ((ColPermuteTableModel)getModel()).findUnderlyingCol(s);
+}
+
+
 /** @param schemaBuf Underling data buffer to use
  * @param typeCol Name of type column in the schema
  * @param xColNames Columns (other than type and status) from schema to display
  */
 public void initRuntime(SchemaBuf schemaBuf,
-		String typeCol, KeyedModel typeKeyedModel,
 		String[] xColNames, String[] xSColMap)
 //throws java.sql.SQLException
 {
@@ -59,19 +66,21 @@ public void initRuntime(SchemaBuf schemaBuf,
 	// Prepend 2 columns to column list
 	String[] colNames = new String[xColNames.length + 1];
 	String[] sColMap = new String[xSColMap.length + 1];
-	colNames[0] = "Type";
-	sColMap[0] = typeCol;
+	colNames[0] = "Status";
+	sColMap[0] = "__status__";
 	for (int i=0; i<xColNames.length; ++i) {
 		colNames[i+2] = xColNames[i];
 		sColMap[i+2] = xSColMap[i];
 	}
 
 	// Set it up
-	super.initRuntime(schemaBuf, colNames, sColMap);
+	StatusSchemaBuf ssb = new StatusSchemaBuf(schemaBuf);
+	ColPermuteTableModel model = new ColPermuteTableModel(
+		ssb, colNames, sColMap);
+	setModel(model);
 	
-	
-	setRenderEdit(findUnderlyingCol(typeCol),
-		new KeyedRenderEdit(typeKeyedModel));
+	setRenderEdit(findUnderlyingCol("__status__"),
+		new citibob.swing.table.StatusRenderEdit());
 }
 
 	

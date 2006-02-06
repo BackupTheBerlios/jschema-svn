@@ -97,8 +97,10 @@ public int findCol(String name)
 }
 /** Finds a column by name in the UNDERLYING table model, then
 reports its location in THIS table model.  This allows one to refer
-to columns by their UNDERLYING name, not their display name. */
-public int findColUnderlying(String s)
+to columns by their UNDERLYING name, not their display name.
+ TODO: Maybe add a separate concept for actual name and display name in 
+ the table model... */
+public int findUnderlyingCol(String s)
 {
 	int col_u = model_u.findCol(s);
 	int col_t = iColMap[col_u];

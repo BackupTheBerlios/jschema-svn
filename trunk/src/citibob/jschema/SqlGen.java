@@ -47,6 +47,9 @@ void addAllRows(ResultSet rs) throws java.sql.SQLException;
 /** Removes a row from the buffer... */
 void removeRow(int row);
 
+/** Undoes any edits... */
+//public void resetRow(int row);
+
 ///** Convenience functions for single-row SchemaBufs */
 //void setOneRow(ResultSet rs) throws java.sql.SQLException;
 

@@ -18,23 +18,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package citibob.jschema.pgsql;
 
-import java.sql.Date;
+import java.sql.Time;
 import java.sql.*;
 import java.text.*;
+import citibob.textconverter.*;
 
-import citibob.textconverter.SqlDateTextConverter;
-import citibob.textconverter.TextConverter;
-
-public class SqlDate implements citibob.jschema.SqlType
+public class SqlTime implements citibob.jschema.SqlType
 {
 
 public TextConverter getTextConverter()
-	{ return new SqlDateTextConverter(); }
+	{ return new TimeTextConverter(); }
 
 
 	/** Java class used to represent this type */
 	public Class getObjClass()
-		{ return java.sql.Date.class; }
+		{ return java.sql.Time.class; }
 
 	/** Name of type in the database */
 	// public String getDBType()
@@ -42,34 +40,34 @@ public TextConverter getTextConverter()
 
 	/** Convert an element of this type to an Sql string for use in a query */
 	public String toSql(Object o)
-		{ return SqlDate.sql((Date)o); }
+		{ return SqlTime.sql((Time)o); }
 
 	/** Read an element of this type from a ResultSet */
 	public Object get(ResultSet rs, int colno) throws SQLException
-		{ return rs.getDate(colno); }
+		{ return rs.getTimestamp(colno); }
 
 	/** Read an element of this type from a ResultSet */
 	public Object get(ResultSet rs, String colname) throws SQLException
-		{ return rs.getDate(colname); }
+		{ return rs.getTimestamp(colname); }
 
 	public Object getPrototype()
-		{ return new Date(System.currentTimeMillis()); }
+		{ return new Time(System.currentTimeMillis()); }
+	public boolean compareTo(Object o)
+		{ return (o instanceof SqlTime); }
 
 
 	private static DateFormat sqlFmt;
 	static {
 		try {
-			sqlFmt = new SimpleDateFormat("yyyy-MM-dd");
+			sqlFmt = new SimpleDateFormat("HH:mm:ss.SSS");
 		} catch(Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
 	}
-	public static String sql(Date ts)
+	public static String sql(Time ts)
 	{
-		return ts == null ? "null" : '\'' + sqlFmt.format(ts) + '\'';
+		return ts == null ? "null" :
+			('\'' + sqlFmt.format(ts) + '\'');
 	}
-	public boolean compareTo(Object o)
-		{ return (o instanceof SqlDate); }
-
 }

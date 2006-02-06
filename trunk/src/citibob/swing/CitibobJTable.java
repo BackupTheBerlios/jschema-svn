@@ -39,6 +39,12 @@ public void setModel(TableModel model)
 	}
 }
 
+public CitibobTableModel getCBModel()
+{
+	TableModel m = super.getModel();
+	return (CitibobTableModel)m;
+}
+
 public void setRowHeightUpdaterEnabled(boolean b)
 {
 	rhu.setEnabled(b);

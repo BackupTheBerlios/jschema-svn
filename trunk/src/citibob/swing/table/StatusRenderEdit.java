@@ -15,24 +15,51 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*//*
- * ERunnable.java
+*/
+/*
+ * StatusTableCellRenderer.java
  *
- * Created on January 29, 2006, 7:50 PM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
+ * Created on May 8, 2005, 7:42 PM
  */
 
-package citibob.multithread;
+package citibob.swing.table;
+
+import javax.swing.table.*;
+import citibob.swing.typed.*;
+import java.sql.*;
+import citibob.jschema.KeyedModel;
 
 /**
  *
  * @author citibob
  */
-public interface ERunnable {
+public class StatusRenderEdit extends RenderEdit
+{
 
-public void run() throws Throwable;
-	
+public StatusRenderEdit()
+{
+	renderer = new StatusTableCellRenderer();
+	editor = null;
 }
+// =====================================================================
+public static class StatusTableCellRenderer
+extends DefaultTableCellRenderer
+implements citibob.jschema.RowStatusConst {
+
+
+public void setValue(Object o) {
+	if (o instanceof Integer) {
+		String s = "";
+		int status = ((Integer)o).intValue();
+		if ((status & INSERTED) != 0) s += "I";
+		if ((status & DELETED) != 0) s += "D";
+		setText(s);
+	} else {
+		setText("<ERROR>");
+	}
+}
+
+}
+}
+
+
