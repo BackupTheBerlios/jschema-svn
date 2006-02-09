@@ -25,6 +25,8 @@ import javax.swing.event.*;
 public abstract class SqlGenDbModel implements DbModel, RowStatusConst
 {
 
+boolean insertBlankRow = false;
+
 SqlGen gen;
 /** Name of table to which we're bound. */
 String table;
@@ -32,6 +34,11 @@ String table;
 //Object[] curKey;
 /** The listener used to push updates to the database instantly (a la Access) */
 TableModelListener instantUpdateListener = null;
+// -----------------------------------------------------------
+public void setInsertBlankRow(boolean b) { insertBlankRow = b; }
+/** If a row is inserted to the buffer but not edited, should it be inserted to the DB? */
+public boolean getInsertBlankRow() { return insertBlankRow; }
+
 // -----------------------------------------------------------
 public SqlGenDbModel(String table, SqlGen gen)
 {
@@ -100,17 +107,24 @@ public boolean valueChanged()
 public void doUpdate(Statement st, int row) throws java.sql.SQLException
 {
 System.out.println("doUpdate.status(" + row + ") = " + gen.getStatus(row));
-	switch(gen.getStatus(row)) {
+	int status = gen.getStatus(row); // & ~CHANGED;
+	switch(status) {
 		// case DELETED || INSERTED :
 			// Do nothing; we inserted then deleted record.
 		// break;
 		case DELETED :
+		case DELETED | CHANGED :
 			doSimpleDelete(row, st);
 		break;
 		case INSERTED :
+			if (insertBlankRow) doSimpleInsert(row, st);
+			else gen.removeRow(row);
+		break;
+		case INSERTED | CHANGED :
 			doSimpleInsert(row, st);
 		break;
-		case 0 :	// No status bits, just a normal record
+		case 0 :
+		case CHANGED :	// No status bits, just a normal record
 			doSimpleUpdate(row, st);
 		break;
 	}
@@ -160,8 +174,8 @@ private void doSimpleUpdate(int row, Statement st) throws java.sql.SQLException
 	String sql = q.toString();
 System.out.println("doSimpleUpdate: " + sql);
 		st.executeUpdate(sql);
-		gen.setStatus(row, 0);
 	}
+	gen.setStatus(row, 0);
 
 }
 // -----------------------------------------------------------

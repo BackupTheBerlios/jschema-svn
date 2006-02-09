@@ -42,7 +42,10 @@ public TextConverter getTextConverter()
 
 	/** Convert an element of this type to an Sql string for use in a query */
 	public String toSql(Object o)
-		{ return SqlDate.sql((Date)o); }
+	{
+		System.out.println("o.class = " + o.getClass());
+		return SqlDate.sql((java.util.Date)o);
+	}
 
 	/** Read an element of this type from a ResultSet */
 	public Object get(ResultSet rs, int colno) throws SQLException
@@ -65,7 +68,7 @@ public TextConverter getTextConverter()
 			System.exit(-1);
 		}
 	}
-	public static String sql(Date ts)
+	public static String sql(java.util.Date ts)
 	{
 		return ts == null ? "null" : '\'' + sqlFmt.format(ts) + '\'';
 	}

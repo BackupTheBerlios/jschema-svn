@@ -29,5 +29,6 @@ public interface RowStatusConst
 	// Data was deleted from data model, but not yet from database.
 	public static final int DELETED = 2;
 
-
+	// A column was changed in data model, not yet written back to database.
+	public static final int CHANGED = 4;
 }

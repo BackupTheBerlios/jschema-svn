@@ -92,14 +92,21 @@ public abstract class Adapter implements Listener
 // public int getRowCount()
 //	{ return rows.size(); }
 // --------------------------------------------------
+public boolean valueChanged(SqlRow r, int col)
+{
+	//SqlRow r = (SqlRow)rows.get(row);
+
+	Object origData = r.origData[col];
+	Object curData = r.data[col];
+	return !(curData == null ? origData == null : curData.equals(origData));
+}
 public boolean valueChanged(int row)
 {
 	SqlRow r = (SqlRow)rows.get(row);
 	for (int col = 0; col < schema.getColCount(); ++col) {
 		Object origData = r.origData[col];
 		Object curData = r.data[col];
-		boolean unchanged = (curData == null ? origData == null : curData.equals(origData));
-		if (!unchanged) return true;
+		if (valueChanged(r, col)) return true;
 	}
 	return false;
 }
@@ -370,11 +377,23 @@ public boolean isKey(int columnIndex)
 public boolean isCellEditable(int rowIndex, int columnIndex)
 	{ return !isKey(columnIndex); }
 // --------------------------------------------------
-public void setValueAt(Object val, int rowIndex, int colIndex)
+public void setValueAt(Object val, int row, int col)
 {
-	SqlRow row = (SqlRow)rows.get(rowIndex);
-	row.data[colIndex] = val;
-	fireTableCellUpdated(rowIndex, colIndex);
+	// Figure out whether our new value is same or different from original
+	SqlRow srow = (SqlRow)rows.get(row);
+
+	boolean ochanged = valueChanged(srow, col);
+	srow.data[col] = val;		// Make the change
+
+	// Figure out status, etc...
+	boolean nchanged = valueChanged(srow, col);
+	if (ochanged == nchanged) return;
+	int status = getStatus(row);
+	int nstatus = (nchanged ? status | CHANGED : status & ~CHANGED);
+	if (status != nstatus) this.setStatus(row, nstatus);
+
+	// Update listeners
+	fireTableCellUpdated(row, col);
 }
 // --------------------------------------------------
 public int getColumnCount()

@@ -71,9 +71,10 @@ public void setValue(Object o) {
 //System.out.println(model.getItemMap());
 //System.out.println("KeyedRender.setValue(" + o + ")");
 	Object keyedO = null;
-	if (o != null) keyedO = model.getItemMap().get(o);
-	if (keyedO != null) setText(keyedO.toString());
-	else setText("x" + o.toString());
-//	else setText(nullString);
+	if (o != null) {
+		keyedO = model.getItemMap().get(o);
+		if (keyedO != null) setText(keyedO.toString());
+		else setText("x" + o.toString());
+	} else setText(nullString);
 }
 }

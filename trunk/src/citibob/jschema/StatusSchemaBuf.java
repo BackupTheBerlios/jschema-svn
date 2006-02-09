@@ -110,6 +110,7 @@ public void tableChanged(TableModelEvent e_u)
 		if (col_u == TableModelEvent.ALL_COLUMNS) {
 			this.fireTableRowsUpdated(e_u.getFirstRow(), e_u.getLastRow());
 		} else {
+			// Column in this TableModel is 1 greater than in underlying model
 			int col_t = col_u + 1;
 System.out.println("StatusSchemaBuf.tableChanged: underlying " + col_u +
 	" --> " + col_t + "(" + sb.getColumnName(col_u));

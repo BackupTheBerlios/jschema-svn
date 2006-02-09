@@ -54,6 +54,9 @@ public void doClear()
 
 // -----------------------------------------------------------
 // ===========================================================
+/** This should NOT be used by subclasses.  In general, instant update is a property
+assigned by enclosing objects --- panels that USE this DbModel.
+TODO: Make instant updates delete instantly when user hits "delete". */
 public void setInstantUpdate(Statement st, boolean instantUpdate)
 {
 	if (instantUpdate) {

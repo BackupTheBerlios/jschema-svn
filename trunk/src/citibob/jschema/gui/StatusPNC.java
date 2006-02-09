@@ -40,7 +40,6 @@ public class StatusPNC extends javax.swing.JPanel {
 	
 SchemaBuf schemaBuf;
 ActionRunner runner;
-String typeCol;
 SchemaBufDbModel dbm;
 
 	/** Creates new form CompleteStatusPanel */
@@ -53,11 +52,19 @@ SchemaBufDbModel dbm;
 	String[] xColNames, String[] xSColMap,
 	ActionRunner runner)
 	{
-		this.runner = runner;
-		this.typeCol = typeCol;
-		table.initRuntime(schemaBuf, xColNames, xSColMap);
 		this.dbm = dbm;
 		this.schemaBuf = dbm.getSchemaBuf();
+		this.runner = runner;
+		table.initRuntime(schemaBuf, xColNames, xSColMap);
+	}
+
+	public StatusTable getTable() { return table; }
+
+	/** Convenience Function */
+	ColPermuteTableModel getTableModel()
+	{
+		ColPermuteTableModel model = (ColPermuteTableModel)getTable().getModel();
+		return model;
 	}
 
 	/** This method is called from within the constructor to
@@ -72,6 +79,7 @@ SchemaBufDbModel dbm;
         bDel = new javax.swing.JButton();
         bRestore = new javax.swing.JButton();
         bSave = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
         table = new citibob.jschema.gui.StatusTable();
 
         setLayout(new java.awt.BorderLayout());
@@ -104,6 +112,12 @@ SchemaBufDbModel dbm;
         jPanel1.add(bRestore);
 
         bSave.setText("Save");
+        bSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSaveActionPerformed(evt);
+            }
+        });
+
         jPanel1.add(bSave);
 
         add(jPanel1, java.awt.BorderLayout.SOUTH);
@@ -119,10 +133,20 @@ SchemaBufDbModel dbm;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        add(table, java.awt.BorderLayout.CENTER);
+        jScrollPane1.setViewportView(table);
+
+        add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
     }
     // </editor-fold>//GEN-END:initComponents
+
+private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
+		runner.run(new StRunnable() { public void run(Statement st) throws Exception {
+			dbm.doUpdate(st);
+			dbm.doSelect(st);
+		}});
+// TODO add your handling code here:
+}//GEN-LAST:event_bSaveActionPerformed
 
 	private void bRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRestoreActionPerformed
 		runner.run(new StRunnable() { public void run(Statement st) throws Exception {
@@ -155,6 +179,7 @@ SchemaBufDbModel dbm;
     private javax.swing.JButton bRestore;
     private javax.swing.JButton bSave;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private citibob.jschema.gui.StatusTable table;
     // End of variables declaration//GEN-END:variables
 	

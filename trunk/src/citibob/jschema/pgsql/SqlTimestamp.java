@@ -27,7 +27,7 @@ public class SqlTimestamp implements citibob.jschema.SqlType
 {
 
 public TextConverter getTextConverter()
-	{ return new TimestampTextConverter(); }
+	{ return new TimestampDateTextConverter(); }
 
 
 	/** Java class used to represent this type */

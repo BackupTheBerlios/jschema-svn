@@ -53,6 +53,7 @@ public void setValue(Object o) {
 		int status = ((Integer)o).intValue();
 		if ((status & INSERTED) != 0) s += "I";
 		if ((status & DELETED) != 0) s += "D";
+		if ((status & CHANGED) != 0) s += "*";
 		setText(s);
 	} else {
 		setText("<ERROR>");

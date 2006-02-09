@@ -29,6 +29,12 @@ public class CitibobJTable extends JTable
 
 RowHeightUpdater rhu;
 
+public CitibobJTable()
+{
+	// See: http://bugs.sun.com/bugdatabase/view_bug.do;:YfiG?bug_id=4709394
+	this.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+}
+
 public void setModel(TableModel model)
 {
 	super.setModel(model);

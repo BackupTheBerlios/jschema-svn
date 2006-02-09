@@ -38,6 +38,8 @@ import citibob.swing.*;
  */
 public class StatusTable extends CitibobJTable {
 
+StatusSchemaBuf ssb;
+
 /** Creates a new instance of GroupsTable */
 public StatusTable() {
 	setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -53,6 +55,16 @@ public int findUnderlyingCol(String s)
 	return ((ColPermuteTableModel)getModel()).findUnderlyingCol(s);
 }
 
+/** Convenience function */
+public void setRenderEdit(String underlyingName, RenderEdit re)
+{
+	setRenderEdit(findUnderlyingCol(underlyingName), re);
+}
+
+public void setModel(TableModel m)
+{
+	super.setModel(m);
+}
 
 /** @param schemaBuf Underling data buffer to use
  * @param typeCol Name of type column in the schema
@@ -69,12 +81,12 @@ public void initRuntime(SchemaBuf schemaBuf,
 	colNames[0] = "Status";
 	sColMap[0] = "__status__";
 	for (int i=0; i<xColNames.length; ++i) {
-		colNames[i+2] = xColNames[i];
-		sColMap[i+2] = xSColMap[i];
+		colNames[i+1] = xColNames[i];
+		sColMap[i+1] = xSColMap[i];
 	}
 
 	// Set it up
-	StatusSchemaBuf ssb = new StatusSchemaBuf(schemaBuf);
+	ssb = new StatusSchemaBuf(schemaBuf);
 	ColPermuteTableModel model = new ColPermuteTableModel(
 		ssb, colNames, sColMap);
 	setModel(model);
