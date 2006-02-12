@@ -79,7 +79,7 @@ private void addItem(KeyedModel.Item oi)
 }
 
 /** Adds another item to the dropdown list. */
-private void addItem(Object key, Object item)
+public void addItem(Object key, Object item)
 {
 	KeyedModel.Item oi = new KeyedModel.Item(key, item);
 	addItem(oi);
