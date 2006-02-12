@@ -32,7 +32,15 @@ RowHeightUpdater rhu;
 public CitibobJTable()
 {
 	// See: http://bugs.sun.com/bugdatabase/view_bug.do;:YfiG?bug_id=4709394
-	this.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+	// Unfortunately, this "fix" breaks the JDateChooser date editor.
+	// As soon as user selects a date, the focus is lost from the table,
+	// BEFORE the JDateChooser has had a chance to update itself...
+	// TODO: For now, I won't use it, but once JDateChooser is fixed, I'll turn
+	// it back on.
+//	this.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+
+
+//javax.swing.plaf.basic.BasicComboBoxUI
 }
 
 public void setModel(TableModel model)
