@@ -76,4 +76,23 @@ public void run(DbRunnable r)
 	}
 }
 
+public void run(CBRunnable rr)
+{
+	if (rr instanceof ERunnable) {
+		ERunnable r = (ERunnable)rr;
+		run(r);
+		return;
+	}
+	if (rr instanceof StRunnable) {
+		StRunnable r = (StRunnable)rr;
+		run(r);
+		return;
+	}
+	if (rr instanceof DbRunnable) {
+		DbRunnable r = (DbRunnable)rr;
+		run(r);
+		return;
+	}
+}
+
 }

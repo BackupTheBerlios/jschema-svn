@@ -58,6 +58,8 @@ SchemaBufDbModel dbm;
 		table.initRuntime(schemaBuf, xColNames, xSColMap);
 	}
 
+	
+	
 	public StatusTable getTable() { return table; }
 
 	/** Convenience Function */

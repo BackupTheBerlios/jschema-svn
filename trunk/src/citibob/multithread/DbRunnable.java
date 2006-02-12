@@ -31,7 +31,7 @@ package citibob.multithread;
  *
  * @author citibob
  */
-public interface DbRunnable {
+public interface DbRunnable extends CBRunnable {
 
 public void run(java.sql.Connection dbb) throws Throwable;
 	

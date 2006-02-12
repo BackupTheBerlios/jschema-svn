@@ -140,7 +140,10 @@ public Object getValueAt(int row, int column)
 	{ return model_u.getValueAt(row, colMap[column]); }
 
 public void setValueAt(Object val, int row, int column)
-	{ model_u.setValueAt(val, row, colMap[column]); }
+{
+	System.out.println("ColpermuteTableModel: setValueAt(" + val + ", " + row + ", " + column);
+	model_u.setValueAt(val, row, colMap[column]);
+}
 
 // =========================================================
 public void tableChanged(TableModelEvent e_u) 

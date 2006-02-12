@@ -28,8 +28,8 @@ import citibob.sql.SqlQuery;
 public class WhereClauseDbModel extends SchemaBufDbModel
 {
 
-/** Key fields to control who gets displayed. */
-int idValue;
+///** Key fields to control who gets displayed. */
+//int idValue;
 String whereClause;
 String orderClause;
 
@@ -42,7 +42,11 @@ public void setOrderClause(String orderClause)
 
 public WhereClauseDbModel(Schema schema, String whereClause, String orderClause)
 {
-	super(new SchemaBuf(schema));
+	this(new SchemaBuf(schema), whereClause, orderClause);
+}
+public WhereClauseDbModel(SchemaBuf sbuf, String whereClause, String orderClause)
+{
+	super(sbuf);
 	this.whereClause = whereClause;
 	this.orderClause = orderClause;
 }
