@@ -32,6 +32,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 
 import java.text.DateFormatSymbols;
 
@@ -51,7 +52,7 @@ import javax.swing.JPanel;
  * @version 1.2.1
  */
 public class JDayChooser extends JPanel implements ActionListener, KeyListener,
-    FocusListener {
+    FocusListener, MouseListener {
     protected JButton[] days;
     protected JButton[] weeks;
     protected JButton selectedDay;
@@ -115,12 +116,12 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
                     // changes.
                     // Thanks to Thomas Schaefer for the focus hint :)
                     days[index] = new JButton() {
-                                public void addMouseListener(MouseListener l) {
-                                }
-
-                                public boolean isFocusable() {
-                                    return false;
-                                }
+//                                public void addMouseListener(MouseListener l) {
+//                                }
+//
+//                                public boolean isFocusable() {
+//                                    return false;
+//                                }
                             };
 
                     days[index].setContentAreaFilled(decorationBackgroundVisible);
@@ -131,6 +132,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
                     days[index].addActionListener(this);
                     days[index].addKeyListener(this);
                     days[index].addFocusListener(this);
+					days[index].addMouseListener(this);
                 }
 
                 days[index].setMargin(new Insets(0, 0, 0, 0));
@@ -411,6 +413,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
      * @see #setDay
      */
     public int getDay() {
+System.out.println("getDay() returning: " + day);
         return day;
     }
 
@@ -503,11 +506,18 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
      */
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
-        String buttonText = button.getText();
-        int day = new Integer(buttonText).intValue();
-        setDay(day);
+		setDay(button);
     }
 
+	/** Set the day corresponding to a button that was pressed or moused over. */
+	public void setDay(JButton button)
+	{
+        String buttonText = button.getText();
+        int day = new Integer(buttonText).intValue();
+        setDay(day);		
+	}
+	
+	
     /**
      * JDayChooser is the FocusListener for all day buttons. (Added by Thomas
      * Schaefer)
@@ -758,6 +768,40 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
         initDecorations();
     }
     
+	
+// ==================================================================
+int storedDay;
+public void  mouseClicked(MouseEvent e)
+{
+	
+}
+public void  mouseEntered(MouseEvent e)
+{
+	JButton b = (JButton)e.getComponent();
+	storedDay = getDay();
+	String buttonText = b.getText();
+	day = Integer.parseInt(buttonText);
+System.out.println("Setting day to: " + day + "(" + buttonText + ")");
+	firePropertyChange("tmpday", storedDay, day);
+//	setDay(b);
+}
+public void  mouseExited(MouseEvent e)
+{
+	int xday = day;
+	day = storedDay;
+	System.out.println("resetting day to: " + day);
+	firePropertyChange("tmpday", xday, day);
+//	setDay(storedDay);
+}
+public void  mousePressed(MouseEvent e) 
+{
+}
+public void  mouseReleased(MouseEvent e)
+{
+
+}
+// ==================================================================
+	
     /**
      * Creates a JFrame with a JDayChooser inside and can be used for testing.
      *

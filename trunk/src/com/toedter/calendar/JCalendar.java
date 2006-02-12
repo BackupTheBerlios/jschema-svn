@@ -266,7 +266,12 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
         if (calendar != null) {
             Calendar c = (Calendar) calendar.clone();
 
-            if (evt.getPropertyName().equals("day")) {
+            if (evt.getPropertyName().equals("tmpday")) {
+                c.set(Calendar.DAY_OF_MONTH,
+                    ((Integer) evt.getNewValue()).intValue());
+                setCalendar(c, false);
+System.out.println("JCalendar: c set to: " + calendar.getTime());
+			} else if (evt.getPropertyName().equals("day")) {
                 c.set(Calendar.DAY_OF_MONTH,
                     ((Integer) evt.getNewValue()).intValue());
                 setCalendar(c, false);

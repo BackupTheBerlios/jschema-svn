@@ -48,6 +48,10 @@ public class JTypedDateChooser extends JDateChooser implements TypedWidget {
 		if (d.getClass() != Date.class)
 			throw new ClassCastException("Expected java.util.Date");
 		Date val = (Date)d;
+System.out.println("JTypedDateChooser: Setting date to " + val + "(" + this + ")");
+		// TODO: Bug in JDateChooser doesn't work well with null dates.
+		// It gets confused when embedded in a table.
+//		if (val == null) val = new Date();
 		setDate(val);
 	}
 	

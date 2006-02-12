@@ -231,6 +231,8 @@ super.setVisible(b);
 }
 }
 };
+//popup.setFocusable(false);
+//calendarButton.setFocusable(false);
 
 popup.setLightWeightPopupEnabled(true);
 
@@ -255,6 +257,7 @@ int y = calendarButton.getY() + calendarButton.getHeight();
 Calendar calendar = Calendar.getInstance();
 calendar.setTime(model.getDate());
 jcalendar.setCalendar(calendar);
+popup.requestFocus(true);
 popup.show(calendarButton, x, y);
 dateSelected = false;
 }
@@ -267,13 +270,12 @@ dateSelected = false;
 */
 public void propertyChange(PropertyChangeEvent evt)
 {
-if (evt.getPropertyName().equals("day"))
-{
-dateSelected = true;
-popup.setVisible(false);
-setDate(jcalendar.getCalendar().getTime());
-setDateFormatString(dateFormatString);
-}
+	if (evt.getPropertyName().equals("day")) {
+		dateSelected = true;
+		popup.setVisible(false);
+		setDate(jcalendar.getCalendar().getTime());
+		setDateFormatString(dateFormatString);
+	}
 else if (evt.getPropertyName().equals("date"))
 {
 setDate((Date) evt.getNewValue());

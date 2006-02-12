@@ -48,7 +48,8 @@ public class JDateChooserCellEditor
     // This method is called when a cell value is edited by the user.
     public Component getTableCellEditorComponent(JTable table, Object value,
             boolean isSelected, int rowIndex, int vColIndex) {
-        
+//        ((JDateChooser)component).setTable(table);
+
     	// 'value' is value contained in the cell located at (rowIndex, vColIndex)
     	Date date ;
 		if (value instanceof Date) 
