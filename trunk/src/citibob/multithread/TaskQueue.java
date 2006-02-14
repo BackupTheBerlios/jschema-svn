@@ -31,7 +31,7 @@ import citibob.sql.*;
 public class TaskQueue extends TaskQueueMVC
 {
 
-boolean singleTask = true;		// ONly do 1 task at a time
+boolean singleTask = false;		// ONly do 1 task at a time
 LinkedList tasks = new LinkedList();
 Thread curTask;
 ExpHandler ehandler;
@@ -51,11 +51,14 @@ public TaskQueue(ConnPool pool, ExpHandler ehandler)
 	this(new DefaultRawRunner(pool), ehandler);
 }
 
-
+public void setSingleTask(boolean b)
+{
+	this.singleTask = b;
+}
 // -------------------------------------------------------
 synchronized public void doRun(CBTask r)
 {
-System.out.println("Adding task: " + r);
+//System.out.println("Adding task: " + r + "(" + r.getCBRunnable());
 	tasks.addLast(r);
 	fireTaskAdded(r);
 	this.notify();
@@ -113,9 +116,9 @@ public void run() {
 			// Do whatever we're supposed to do...
 			try {
 				fireTaskStarting(r);
-System.out.println("Running task: " + r + "(" + r.getCBRunnable() + ")");
+//System.out.println("Running task: " + r + "(" + r.getCBRunnable() + ")");
 				Throwable e = raw.doRun(r.getCBRunnable());
-System.out.println("exp = " + e);
+//System.out.println("exp = " + e);
 				if (e != null) ehandler.consume(e);
 			} catch(Throwable e2) {
 				// Shouldn't be much here, but just in case...
