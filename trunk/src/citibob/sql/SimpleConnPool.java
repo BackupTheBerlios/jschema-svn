@@ -16,28 +16,39 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-/*
- * ActionRunner.java
- *
- * Created on January 29, 2006, 7:49 PM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
+package citibob.sql;
 
-package citibob.multithread;
+import java.sql.*;
+import citibob.multithread.*;
 
 /**
  *
- * @author citibob
+ * @author fiscrob
  */
-public interface ActionRunner {
+public abstract class SimpleConnPool implements ConnPool
+{
+
+//ExceptionHandler ehandler;
+//
+//public SimpleConnectionPool(ExceptionHandler eh)
+//{
+//	this.ehandler = eh;
+//}
+
+/** Create an actual connection --- used by pool implementations, should not
+ * be called by user. */
+protected abstract Connection create() throws SQLException;
+
+/** Get a connection from the pool. */
+public Connection checkout() throws SQLException
+{
+	return create();
+}
+
+/** Return a connection */
+public void checkin(Connection c) throws SQLException
+{
+	c.close();
+}
 	
-//public void run(ERunnable r);
-//public void run(StRunnable r);
-//public void run(DbRunnable r);
-
-public void doRun(CBRunnable r);
-
 }

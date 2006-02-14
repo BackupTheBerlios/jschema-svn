@@ -16,28 +16,18 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-/*
- * ActionRunner.java
- *
- * Created on January 29, 2006, 7:49 PM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
-
 package citibob.multithread;
 
 /**
  *
- * @author citibob
+ * @author fiscrob
  */
-public interface ActionRunner {
+public class SimpleExpHandler implements ExpHandler
+{
+
+public void consume(Throwable e)
+{
+	e.printStackTrace();
+}
 	
-//public void run(ERunnable r);
-//public void run(StRunnable r);
-//public void run(DbRunnable r);
-
-public void doRun(CBRunnable r);
-
 }

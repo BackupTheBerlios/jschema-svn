@@ -143,7 +143,7 @@ SchemaBufDbModel dbm;
     // </editor-fold>//GEN-END:initComponents
 
 private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
-		runner.run(new StRunnable() { public void run(Statement st) throws Exception {
+		runner.doRun(new StRunnable() { public void run(Statement st) throws Exception {
 			dbm.doUpdate(st);
 			dbm.doSelect(st);
 		}});
@@ -151,14 +151,14 @@ private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
 }//GEN-LAST:event_bSaveActionPerformed
 
 	private void bRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRestoreActionPerformed
-		runner.run(new StRunnable() { public void run(Statement st) throws Exception {
+		runner.doRun(new StRunnable() { public void run(Statement st) throws Exception {
 			dbm.doSelect(st);
 		}});
 // TODO add your handling code here:
 	}//GEN-LAST:event_bRestoreActionPerformed
 
 	private void bDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDelActionPerformed
-		runner.run(new ERunnable() { public void run() throws Exception {
+		runner.doRun(new ERunnable() { public void run() throws Exception {
 			int selected = table.getSelectedRow();
 			if (selected != -1) {
 	System.out.println("Deleting row: " + selected);
@@ -168,7 +168,7 @@ private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
 	}//GEN-LAST:event_bDelActionPerformed
 
 	private void bAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAddActionPerformed
-		runner.run(new ERunnable() { public void run() throws Exception {
+		runner.doRun(new ERunnable() { public void run() throws Exception {
 			schemaBuf.insertRow(-1);
 		}});
 // TODO add your handling code here:

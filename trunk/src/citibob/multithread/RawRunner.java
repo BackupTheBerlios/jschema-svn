@@ -29,15 +29,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package citibob.multithread;
 
 /**
- *
+ * Runs the various kinds of runnables in the current thread, and returns any exceptions.
  * @author citibob
  */
-public interface ActionRunner {
+public interface RawRunner {
 	
 //public void run(ERunnable r);
 //public void run(StRunnable r);
 //public void run(DbRunnable r);
 
-public void doRun(CBRunnable r);
+public Throwable doRun(CBRunnable r);
 
 }

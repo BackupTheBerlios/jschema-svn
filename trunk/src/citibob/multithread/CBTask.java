@@ -15,11 +15,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
-/*
- * ActionRunner.java
+*//*
+ * ERunnable.java
  *
- * Created on January 29, 2006, 7:49 PM
+ * Created on January 29, 2006, 7:50 PM
  *
  * To change this template, choose Tools | Options and locate the template under
  * the Source Creation and Management node. Right-click the template and choose
@@ -29,15 +28,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package citibob.multithread;
 
 /**
- *
- * @author citibob
+ * A runnable with addiontal stuff..
  */
-public interface ActionRunner {
-	
-//public void run(ERunnable r);
-//public void run(StRunnable r);
-//public void run(DbRunnable r);
-
-public void doRun(CBRunnable r);
+public class CBTask
+{
+String name;
+CBRunnable r;
+java.util.Date dTime;
+		
+public CBTask(String name, CBRunnable r)
+{
+	this.name = name;
+	this.r = r;
+	this.dTime = new java.util.Date();
+}	
+public String getName() { return name; }
+public java.util.Date getDTime() { return dTime; }
+public CBRunnable getCBRunnable() { return r; }
 
 }

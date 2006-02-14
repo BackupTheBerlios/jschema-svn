@@ -130,7 +130,7 @@ System.out.println("Deleting row: " + selected);
 	}//GEN-LAST:event_delBtnActionPerformed
 
 	private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-		runner.run(new ERunnable() { public void run() throws Exception {
+		runner.doRun(new ERunnable() { public void run() throws Exception {
 			schemaBuf.insertRow(-1, typeCol, addType.getValue());
 		}});
 	}//GEN-LAST:event_addBtnActionPerformed

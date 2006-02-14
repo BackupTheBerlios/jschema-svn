@@ -15,84 +15,37 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*//*
- * SimpleActionRunner.java
- *
- * Created on January 29, 2006, 7:51 PM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
-
+*/
 package citibob.multithread;
 
 import java.sql.*;
+import citibob.sql.*;
 
 /**
- *
+ * Just run the CBRunnables in the current thread.  Route exceptions to the ExpHandler.
  * @author citibob
  */
 public class SimpleActionRunner implements ActionRunner
 {
 
-Connection dbb;
+RawRunner raw;
+ExpHandler eh;
 
-public SimpleActionRunner(Connection dbb)
+public SimpleActionRunner(RawRunner raw, ExpHandler eh)
 {
-	this.dbb = dbb;
+	this.raw = raw;
+	this.eh = eh;
 }
-	
-public void run(ERunnable r)
+public SimpleActionRunner(ConnPool pool, ExpHandler eh)
 {
-	try {
-		r.run();		
-	} catch(Throwable e) {
-		e.printStackTrace();
-	}
+	this(new DefaultRawRunner(pool), eh);
 }
 
-public void run(StRunnable r)
-{
-	Statement st = null;
-	try {
-		st = dbb.createStatement();
-		r.run(st);
-	} catch(Throwable e) {
-		e.printStackTrace();
-	} finally {
-		try {
-			if (st != null) st.close();
-		} catch(SQLException se) {}
-	}
-}
-	
-public void run(DbRunnable r)
-{
-	try {
-		r.run(dbb);
-	} catch(Throwable e) {
-		e.printStackTrace();
-	}
-}
 
-public void run(CBRunnable rr)
+public void doRun(CBRunnable rr)
 {
-	if (rr instanceof ERunnable) {
-		ERunnable r = (ERunnable)rr;
-		run(r);
-		return;
-	}
-	if (rr instanceof StRunnable) {
-		StRunnable r = (StRunnable)rr;
-		run(r);
-		return;
-	}
-	if (rr instanceof DbRunnable) {
-		DbRunnable r = (DbRunnable)rr;
-		run(r);
-		return;
-	}
+	Throwable e = raw.doRun(rr);
+	if (e != null && eh != null) eh.consume(e);
 }
 
 }

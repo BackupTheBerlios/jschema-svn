@@ -16,28 +16,25 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-/*
- * ActionRunner.java
- *
- * Created on January 29, 2006, 7:49 PM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
-
 package citibob.multithread;
 
-/**
- *
- * @author citibob
- */
-public interface ActionRunner {
-	
-//public void run(ERunnable r);
-//public void run(StRunnable r);
-//public void run(DbRunnable r);
+import java.util.*;
+import java.io.*;
 
-public void doRun(CBRunnable r);
+listeners TaskQueueMVC extends Thread implements TaskRunner
+{
+    /** Task added to queue. */
+    taskAdded(CBTask t);
 
+    /** Task removed from the queue */
+    taskRemoved(CBTask t);
+
+    /** Task being executed */
+    taskStarting(CBTask t);
+
+    /** Task finished running --- exception (if any) is passed along */
+    taskFinished(CBTask t, Throwable e);
+
+    /** Queue cleared (usually, the running task will be finished here as well.) */
+    queueCleared();
 }
