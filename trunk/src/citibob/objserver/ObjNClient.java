@@ -28,6 +28,9 @@ String sockFilename;
 
 public ObjNClient() {}
 
+
+public void close() {}
+
 public ObjNClient(String sockFilename)
 {
 	this.init(sockFilename);
