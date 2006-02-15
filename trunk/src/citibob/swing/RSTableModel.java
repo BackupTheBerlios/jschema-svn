@@ -89,7 +89,7 @@ public RSTableModel(Statement st, String sql) throws SQLException
 // Implementation of TableModel
 
 // --------------------------------------------------
-public int findCol(String colName)
+public int findColumn(String colName)
 {
 	for (int i = 0; i < getColumnCount(); ++i) {
 		if (colName.equals(getColumnName(i))) return i;

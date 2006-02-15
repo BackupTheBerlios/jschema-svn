@@ -39,6 +39,18 @@ int[] colMap;		// Column map: i in this table --> colMap[i] in underlying
 int[] iColMap;
 boolean[] editable;	// Is each column editable?  (NULL ==> use underlying default)
 // ---------------------------------------------------------
+/** Clone the bheavior of the underlying TableModel. */
+public ColPermuteTableModel(CitibobTableModel model_u)
+{
+	int ncol = model_u.getColumnCount();
+	String[] colNames = new String[ncol];
+	int[] colMap = new int[ncol];
+	for (int i=0; i<ncol; ++i) {
+		colNames[i] = model_u.getColumnName(i);
+		colMap[i] = i;
+	}
+	init(model_u, colNames, colMap);
+}
 /** Constructor
  @param Column i in this table maps to column colMap[i] in underlying table. */
 public ColPermuteTableModel(CitibobTableModel model_u, String[] colNames, int[] colMap)
@@ -88,7 +100,7 @@ private void init(CitibobTableModel model_u, String[] colNames, int[] colMap)
 //for (int i = 0; i < colMap.length; ++i) System.out.println("colMap["+i+"] = "+colMap[i]);
 }
 // -------------------------------------------------------------------
-public int findCol(String name)
+public int findColumn(String name)
 {
 	for (int i = 0; i < colNames.length; ++i) {
 		if (colNames[i].equals(name)) return i;
@@ -102,7 +114,7 @@ to columns by their UNDERLYING name, not their display name.
  the table model... */
 public int findUnderlyingCol(String s)
 {
-	int col_u = model_u.findCol(s);
+	int col_u = model_u.findColumn(s);
 	int col_t = iColMap[col_u];
 	return col_t;
 }

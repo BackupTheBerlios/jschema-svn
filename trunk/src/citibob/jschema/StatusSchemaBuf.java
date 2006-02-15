@@ -41,10 +41,10 @@ public StatusSchemaBuf(SchemaBuf sb)
 	sb.addSchemaBufListener(this);
 }
 // -------------------------------------------------------------------
-public int findCol(String colName)
+public int findColumn(String colName)
 {
 	if ("__status__".equals(colName)) return 0;
-	return sb.findCol(colName) + 1;
+	return sb.findColumn(colName) + 1;
 }
 public Class getColumnClass(int colIndex)
 {

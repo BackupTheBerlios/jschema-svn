@@ -296,7 +296,7 @@ for (int i = 0; i < colNames.length; ++i) System.out.println("    insertRow " + 
 	int[] coli = new int[colNames.length];
 	int numKey = 0;
 	for (int i=0; i<colNames.length; ++i) {
-		coli[i] = findCol(colNames[i]);
+		coli[i] = findColumn(colNames[i]);
 		if (coli[i] < 0) throw new KeyViolationException("Column named " + colNames[i] + " not found!");
 		if (isKey(coli[i])) ++numKey;
 	}
@@ -343,7 +343,7 @@ for (int i = 0; i < colNames.length; ++i) System.out.println("    insertRow " + 
 
 	// Set any values necessary
 	for (int i=0; i<colNames.length; ++i) {
-		setValueAt(vals[i], rowInserted, findCol(colNames[i]));
+		setValueAt(vals[i], rowInserted, findColumn(colNames[i]));
 	}
 	return rowInserted;
 }
@@ -364,7 +364,7 @@ throws KeyViolationException
 // Implementation of TableModel
 
 // --------------------------------------------------
-public int findCol(String colName)
+public int findColumn(String colName)
 	{ return schema.findCol(colName); }
 public Class getColumnClass(int colIndex)
 	{ return schema.getCol(colIndex).getType().getObjClass(); }
