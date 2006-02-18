@@ -19,6 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package citibob.sql;
 
 import java.sql.*;
+import citibob.multithread.*;
 
 /**
  *
@@ -31,5 +32,10 @@ Connection checkout() throws SQLException;
 
 /** Return a connection */
 void checkin(Connection c) throws SQLException;
+
+public void doRun(StRunnable r);
+//	{ DefaultRawRunner.run(r, this); }
+public void doRun(DbRunnable r);
+//	{ DefaultRawRunner.run(r, this); }
 
 }

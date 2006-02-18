@@ -25,11 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package citibob.jschema;
 
 /**
- *
+ * TODO: This is not currently used.
  * @author citibob
  */
 public interface DbBindable {
 
-	void bind(java.sql.Connection db) throws java.sql.SQLException;
+	void bind(citibob.sql.ConnPool pool) throws java.sql.SQLException;
 
 }

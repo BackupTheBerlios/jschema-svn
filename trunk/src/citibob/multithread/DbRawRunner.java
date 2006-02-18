@@ -26,17 +26,18 @@ import citibob.sql.*;
  * for running the polymorphic runnable types.
  * @author citibob
  */
-public class DefaultRawRunner implements RawRunner
+public class DbRawRunner implements RawRunner
 {
 
 ConnPool pool;
 
-public DefaultRawRunner(ConnPool pool)
+public ConnPool getPool() { return pool; }
+public DbRawRunner(ConnPool pool)
 {
 	this.pool = pool;
 }
 
-public Throwable run(ERunnable r)
+public static Throwable run(ERunnable r)
 {
 	try {
 		r.run();		
@@ -47,7 +48,7 @@ public Throwable run(ERunnable r)
 	return null;
 }
 
-public Throwable run(StRunnable r)
+public static Throwable run(StRunnable r, ConnPool pool)
 {
 	Throwable ret = null;
 	Statement st = null;
@@ -70,7 +71,7 @@ public Throwable run(StRunnable r)
 	return ret;
 }
 	
-public Throwable run(DbRunnable r)
+public static Throwable run(DbRunnable r, ConnPool pool)
 {
 	Connection dbb = null;
 	Throwable ret = null;
@@ -95,11 +96,11 @@ public Throwable doRun(CBRunnable rr)
 	}
 	if (rr instanceof StRunnable) {
 		StRunnable r = (StRunnable)rr;
-		return run(r);
+		return run(r, pool);
 	}
 	if (rr instanceof DbRunnable) {
 		DbRunnable r = (DbRunnable)rr;
-		return run(r);
+		return run(r, pool);
 	}
 	return new ClassCastException("CBRunnable of class " + rr.getClass() + " is not one of ERunnable, StRunnable or DbRunnable");
 }

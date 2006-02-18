@@ -48,7 +48,7 @@ public TaskQueue(RawRunner raw, ExpHandler ehandler)
 }
 public TaskQueue(ConnPool pool, ExpHandler ehandler)
 {
-	this(new DefaultRawRunner(pool), ehandler);
+	this(new DbRawRunner(pool), ehandler);
 }
 
 public void setSingleTask(boolean b)

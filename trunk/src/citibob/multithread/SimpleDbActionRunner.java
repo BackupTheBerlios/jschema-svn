@@ -16,59 +16,41 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-
 package citibob.multithread;
 
-import java.util.*;
+import java.sql.*;
+import citibob.sql.*;
 
 /**
+ * Just run the CBRunnables in the current thread.  Route exceptions to the ExpHandler.
+ * @author citibob
  */
-public class EventQueue extends Thread {
-
-LinkedList events = new LinkedList();
-ActionRunner runner;
-
-public EventQueue(ActionRunner runner)
+public class SimpleDbActionRunner implements DbActionRunner
 {
-	this.runner = runner;
-}
 
-synchronized public void add(CBRunnable r)
+DbRawRunner raw;
+ExpHandler eh;
+
+public ConnPool getPool() { return raw.getPool(); }
+
+public SimpleDbActionRunner(DbRawRunner raw, ExpHandler eh)
 {
-	events.addLast(r);
-	this.notify();
+	this.raw = raw;
+	this.eh = eh;
+}
+public SimpleDbActionRunner(ConnPool pool, ExpHandler eh)
+{
+	this(new DbRawRunner(pool), eh);
+}
+public SimpleDbActionRunner(ConnPool pool)
+{
+	this(new DbRawRunner(pool), new SimpleExpHandler());
 }
 
-public void run() {
-	for (;;) {
-		CBRunnable r = null;
-
-		// Remove element from the queue
-		synchronized(this) {
-			try {
-				this.wait();
-			} catch(InterruptedException e) {
-				System.out.println("EventQueue exiting...");
-				return;		// Exit the thread if we're told to...
-			}
-			for (;;) {
-				try {
-					r = (CBRunnable)events.removeFirst();
-				} catch(NoSuchElementException e) {
-					// Queue is empty; thread can go back to sleep.
-					break;
-				}
-				if (r == null) break;
-				// Do whatever we're supposed to do...
-				runner.run(r);
-			}
-		}
-		
-	}
+public void doRun(CBRunnable rr)
+{
+	Throwable e = raw.doRun(rr);
+	if (e != null && eh != null) eh.consume(e);
 }
-
-
-
-
 
 }

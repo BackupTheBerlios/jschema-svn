@@ -26,55 +26,61 @@ package citibob.swing.table;
 
 import javax.swing.table.*;
 import citibob.swing.typed.*;
-import java.sql.*;
+import java.util.*;
+import java.text.*;
 import citibob.jschema.KeyedModel;
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class KeyedTableCellRenderer extends DefaultTableCellRenderer {
+public class DateRenderer extends DefaultTableCellRenderer {
 
-KeyedModel model;
+DateFormat fmt;
 String nullString = "";
 
 /** Creates a new instance of KeyedItemCellRenderer */
-public KeyedTableCellRenderer() {
-	model = new KeyedModel();
-}
-public KeyedTableCellRenderer(KeyedModel model)
-{
-	this.model = model;
+public DateRenderer(DateFormat fmt) {
+	this.fmt = fmt;
 }
 // ------------------------------------------------------
 
-public void setModel(KeyedModel model)
-{
-	this.model = model;
-}
 public void setNullString(String s)
 	{ nullString = s; }
 
-public void addAllItems(ResultSet rs, String intCol, String itemCol)
-throws SQLException
+
+public void setValue(Object o)
 {
-	model.addAllItems(rs, intCol, itemCol);
+	Date dt = (Date)o;
+	if (o == null) setText(nullString);
+	setText(fmt.format(dt));
+}
+// ==========================================================
+public static List makeDateList(Date first, Date last, long periodMS)
+{
+	ArrayList ret = new ArrayList();
+	Date dt = (Date)first.clone();
+	while (dt.getTime() <= last.getTime()) {
+		ret.add(dt);
+		dt = new Date(dt.getTime() + periodMS);
+	}
+	return ret;
 }
 
-public void addAllItems(ResultSet rs, int intCol, int itemCol)
-throws SQLException
-{
-	model.addAllItems(rs, intCol, itemCol);
-}
-// ------------------------------------------------------
 
-public void setValue(Object o) {
-//System.out.println(model);
-//System.out.println(model.getItemMap());
-System.out.println("KeyedRender.setValue(" + o.getClass() + ": " + o + ")");
-	Object keyedO = null;
-	if (o != null) {
-		keyedO = model.getItemMap().get(o);
-		if (keyedO != null) setText(keyedO.toString());
-		else setText("x" + o.toString());
-	} else setText(nullString);
+public static List makeDateList(Calendar cal, int firstHr, int firstMin, int lastHr, int lastMin, long periodMS)
+{
+	if (cal == null) cal = Calendar.getInstance(); //new GregorianCalendar();
+	cal.setTimeInMillis(0);
+	
+	cal.set(Calendar.HOUR_OF_DAY, firstHr);
+	cal.set(Calendar.MINUTE, firstMin);
+	java.util.Date first = new java.util.Date(cal.getTimeInMillis());
+	
+	cal.set(Calendar.HOUR_OF_DAY, lastHr);
+	cal.set(Calendar.MINUTE, lastMin);
+	java.util.Date last = new java.util.Date(cal.getTimeInMillis());
+
+	return makeDateList(first, last, periodMS);
+	
 }
+
 }

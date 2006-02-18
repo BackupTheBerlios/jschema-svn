@@ -115,17 +115,18 @@ extends DefaultListCellRenderer {
 		Object displayObj = null;
 		Object o = value;
 		if (o == null) displayObj = "<null>";
-		else if (o instanceof String) {
-			displayObj = o;
-		} else if (o instanceof Integer) {
+		else {
+//		if (o instanceof String) {
+//			displayObj = o;
+//		} else if (o instanceof Integer) {
 			Map map = kmodel.getItemMap();
-			Integer ii = (Integer)o;
-			KeyedModel.Item it = (KeyedModel.Item)map.get(ii);
-			if (it == null) displayObj = ii.toString();
+//			Integer ii = (Integer)o;
+			KeyedModel.Item it = (KeyedModel.Item)map.get(o);
+			if (it == null) displayObj = "x" + o.toString();
 			else displayObj = it;
-		} else {
-			// displayObj = o.getClass().toString();//"<Not Integer>";
-			displayObj = "<Not Integer>";
+//		} else {
+//			// displayObj = o.getClass().toString();//"<Not Integer>";
+//			displayObj = "<Not Integer>";
 		}
 		return super.getListCellRendererComponent(
 			list,displayObj,index,isSelected,cellHasFocus);
