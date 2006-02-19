@@ -17,47 +17,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 /*
- * JDate.java
+ * StatementBindable.java
  *
- * Created on May 14, 2003, 8:52 PM
+ * Created on March 4, 2005, 3:46 PM
  */
 
-package citibob.swing.typed;
-
-import java.text.DateFormat;
-import java.util.Date;
-import javax.swing.*;
+package citibob.jschema;
 
 /**
  *
- * @author  citibob
- * Doesn't hold NULL values.
+ * @author citibob
  */
-public class JBoolCheckbox extends JCheckBox implements TypedWidget {
-	
-	Boolean val;
+public interface StatementInitializable {
 
-	public void setValue(Object d)
-	{
-		// Default null to false...
-		if (d == null) {
-			val = null;
-			setSelected(false);
-			return;
-		}
-		
-		if (d.getClass() != Boolean.class)
-			throw new ClassCastException("Expected Boolean");
-		val = (Boolean)d;
-		setSelected(val.booleanValue());
-	}
-	
-	public Object getValue()
-		{ return val; }
-	public Class getObjClass()
-		{ return Boolean.class; }
-	public void resetValue() {}
-	public void setLatestValue() {}
-	public boolean isValueValid() { return true; }
+	void init(java.sql.Statement db) throws java.sql.SQLException;
 
 }

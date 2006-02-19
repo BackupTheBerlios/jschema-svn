@@ -50,57 +50,42 @@ public static void bindToSchemaRow(Component c, SchemaRowModel bufRow)
 }
 
 
-/** Binds all components in a widget tree to a (Schema, RowModel), if they implement SchemaRowBinder. */
-public static void bindToPool(Component c, ConnPool pool)
+///** Binds all components in a widget tree to an ActionRunner.  Gives them an opportunity
+// * to re-query the database on an as-neede basis. */
+//public static void bindToRunner(Component c, ActionRunner runner)
+//throws java.sql.SQLException
+//{
+//	// Take care of yourself
+//	if (c instanceof DbBindable) {
+//		((DbBindable)c).bind(pool);
+//	}
+//
+//	// Take care of your children
+//	if (c instanceof Container) {
+//	    Component[] child = ((Container)c).getComponents();
+//	    for (int i = 0; i < child.length; ++i) {
+//			bindToPool(child[i], pool);
+//		}
+//	}
+//}
+
+/** Allows components to initialize themselves using a Statement object,
+ * if they implement StatementInitializable.  Components may use the Statement,
+   but may NOT keep it for later use! */
+public static void initWithStatement(Component c, java.sql.Statement st)
 throws java.sql.SQLException
 {
 	// Take care of yourself
-	if (c instanceof DbBindable) {
-		((DbBindable)c).bind(pool);
-	}
+	if (c instanceof StatementInitializable)
+		((StatementInitializable)c).init(st);
 
 	// Take care of your children
 	if (c instanceof Container) {
 	    Component[] child = ((Container)c).getComponents();
 	    for (int i = 0; i < child.length; ++i) {
-			bindToPool(child[i], pool);
+			initWithStatement(child[i], st);
 		}
 	}
 }
-
-///** Binds all components in a widget tree to a (Schema, RowModel), if they implement SchemaRowBinder. */
-//public static void bindToDb(Component c, java.sql.Connection db)
-//throws java.sql.SQLException
-//{
-//	// Take care of yourself
-//	if (c instanceof DbBindable) {
-//		((DbBindable)c).bind(db);
-//	}
-//
-//	// Take care of your children
-//	if (c instanceof Container) {
-//	    Component[] child = ((Container)c).getComponents();
-//	    for (int i = 0; i < child.length; ++i) {
-//			bindToDb(child[i], db);
-//		}
-//	}
-//}
-//
-///** Binds all components in a widget tree to a (Schema, RowModel), if they implement SchemaRowBinder. */
-//public static void bindToStatement(Component c, java.sql.Statement st)
-//throws java.sql.SQLException
-//{
-//	// Take care of yourself
-//	if (c instanceof StatementBindable)
-//		((StatementBindable)c).bind(st);
-//
-//	// Take care of your children
-//	if (c instanceof Container) {
-//	    Component[] child = ((Container)c).getComponents();
-//	    for (int i = 0; i < child.length; ++i) {
-//			bindToStatement(child[i], st);
-//		}
-//	}
-//}
 
 }

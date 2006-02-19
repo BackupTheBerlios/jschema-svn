@@ -41,16 +41,21 @@ public void setKey(int idValue)
 {
 	this.idValue = idValue;
 }
-
+// --------------------------------------------------------------
+public IntKeyedDbModel(SchemaBuf buf, String keyField, boolean doInsertKeys)
+{
+	super(buf);
+	this.keyField = keyField;
+	this.doInsertKeys = doInsertKeys;	
+}
 public IntKeyedDbModel(Schema schema, String keyField, boolean doInsertKeys)
 {
-	super(new SchemaBuf(schema));
-	this.keyField = keyField;
-	this.doInsertKeys = doInsertKeys;
+	this(new SchemaBuf(schema), keyField, doInsertKeys);
 }
 
 public IntKeyedDbModel(Schema schema, String keyField)
 	{ this(schema, keyField, true); }
+// --------------------------------------------------------------
 
 public void setSelectWhere(SqlQuery q)
 {
@@ -59,6 +64,7 @@ public void setSelectWhere(SqlQuery q)
 public void setInsertKeys(int row, SqlQuery q)
 {
 	if (doInsertKeys) q.addColumn(keyField, SqlInteger.sql(idValue));
+//	q.addColumn("lastupdated", "now()");
 }
 
 }

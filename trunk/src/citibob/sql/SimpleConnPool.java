@@ -42,6 +42,7 @@ protected abstract Connection create() throws SQLException;
 /** Get a connection from the pool. */
 public Connection checkout() throws SQLException
 {
+	//return new WrapperConn(create(), this);	// Caused inifinte recursion on checkin
 	return create();
 }
 

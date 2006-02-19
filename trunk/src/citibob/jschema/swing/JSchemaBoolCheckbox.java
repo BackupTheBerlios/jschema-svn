@@ -28,55 +28,39 @@ import java.text.DateFormat;
 import java.util.Date;
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.*;
 
 import citibob.swing.typed.*;
 import citibob.exception.*;
 import citibob.jschema.*;
+import citibob.jschema.KeyedModel;
 import citibob.swing.*;
-//import citibob.jschema.KeyedModel;
 
 /**
  *
  * @author  citibob
  */
-public class JSchemaKeyedButtonGroup
-extends KeyedButtonGroup
-implements RowModel.ColListener, SchemaRowModelBindable, ActionListener
+public class JSchemaBoolCheckbox
+extends JBoolCheckbox
+implements RowModel.ColListener, SchemaRowModelBindable
 {
 
 SchemaRowModel bufRow;
 int colNo;
 String colName;
-boolean inValueChanged = false;
 
 // --------------------------------------------------------------
-// Override in KeyedButtonGroup
-public void add(Object key, AbstractButton b)
-{
-	super.add(key,b);
-	b.addActionListener(this);
-}
-
-public AbstractButton remove(Object key)
-{
-	AbstractButton b = super.remove(key);
-	b.removeActionListener(this);
-	return b;
-}
-// -------------------------------------------------------------
 public String getColName()
 	{ return colName; }
 public void setColName(String s)
 	{ colName = s; }
 // --------------------------------------------------------------
-public JSchemaKeyedButtonGroup(SchemaRowModel bufRow, String colName)
+public JSchemaBoolCheckbox(SchemaRowModel bufRow, String colName)
 {
 	super();
 	this.colName = colName;
 	bind(bufRow);
 }
-public JSchemaKeyedButtonGroup()
+public JSchemaBoolCheckbox()
 	{ super(); }
 protected void finalize()
 {
@@ -84,12 +68,7 @@ protected void finalize()
 	bufRow = null;
 }
 // --------------------------------------------------------------
-/** Binds this widget to listen/edit a particular column in a RowModel, using
- * the type for that column derived from the associated Schema.  NOTE: This
- * requires a correspondence in the numbering of columns in the Schema and
- * in the RowModel.  No permutions inbetween are allowed!  This should not
- * be a problem, just make sure the TableRowModel binds DIRECTLY to the source
- * SchemaBuf, not to some permutation thereof. */
+/** Binds this widget to listen/edit a particular column in a RowModel, using the type for that column derived from the associated Schema.  NOTE: This requires a correspondence in the numbering of columns in the Schema and in the RowModel.  No permutions inbetween are allowed!  This should not be a problem, just make sure the TableRowModel binds DIRECTLY to the source SchemaBuf, not to some permutation thereof. */
 public void bind(SchemaRowModel bufRow)
 {
 	colNo = bufRow.getSchema().findCol(getColName());
@@ -100,9 +79,6 @@ public void bind(SchemaRowModel bufRow)
 	/** Bind as a listener to the RowModel (which fronts a SchemaBuf)... */
 	this.bufRow = bufRow;
 	bufRow.addColListener(colNo, this);
-
-	/* Now, set the initial value. */
-	valueChanged(colNo);
 }
 
 
@@ -112,39 +88,13 @@ public void bind(SchemaRowModel bufRow)
 /** Propagate data from underlying model to widget. */
 public void valueChanged(int col)
 {
-	inValueChanged = true;
-	setValue(bufRow.get(col));
-	inValueChanged = false;
+	setValue((Boolean)bufRow.get(col));
 }
-
 public void curRowChanged(int col)
 {
 	int row = bufRow.getCurRow();
+	setEnabled(row != MultiRowModel.NOROW);
 	setValue(row == MultiRowModel.NOROW ? null : bufRow.get(col));
-
-	boolean enabled = (row != MultiRowModel.NOROW);
-	for (Iterator ii = map.values().iterator(); ii.hasNext(); ) {
-		AbstractButton b = (AbstractButton)ii.next();
-		b.setEnabled(enabled);
-	}
-}
-// ===============================================================
-// Implementation of ActionListener
-
-/** Propagate data from widget to underlying model. */
-public void actionPerformed(ActionEvent e)
-{
-System.out.println("JSchemaKBG.actionPerformed start" + inValueChanged);
-	if (bufRow != null && !inValueChanged) {
-		AbstractButton b = (AbstractButton)(e.getSource());
-//System.out.println(getSelectedItem().getClass());
-//		KeyedModel.Item it = (KeyedModel.Item)getSelectedItem();
-		Object value = getValue(b);
-System.out.println("JSchemaKBG.actionPerformed: " + value + ", " + b);
-		if (value == null) bufRow.set(colNo, null);
-		else bufRow.set(colNo, value);
-	}
 }
 
 }
-
