@@ -69,7 +69,7 @@ throws SQLException
 public void setValue(Object o) {
 //System.out.println(model);
 //System.out.println(model.getItemMap());
-System.out.println("KeyedRender.setValue(" + o.getClass() + ": " + o + ")");
+//System.out.println("KeyedRender.setValue(" + o.getClass() + ": " + o + ")");
 	Object keyedO = null;
 	if (o != null) {
 		keyedO = model.getItemMap().get(o);
