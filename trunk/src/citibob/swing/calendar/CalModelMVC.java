@@ -24,20 +24,26 @@ public abstract class CalModelMVC
 {
 public static interface Listener {
     /**  Value has changed. */
-    public void changed();
+    public void calChanged();
 
 
     /**  The "final" value has been changed. */
-    public void finalChanged();
+/*    finalCalChanged();*/
+
+    /**  User clicked on a day selection button --- will cause the popup to disappear. */
+    public void dayButtonSelected();
 }
 // ======================================================
 public static class Adapter implements CalModelMVC.Listener {
     /**  Value has changed. */
-    public void changed() {}
+    public void calChanged() {}
 
 
     /**  The "final" value has been changed. */
-    public void finalChanged() {}
+/*    finalCalChanged();*/
+
+    /**  User clicked on a day selection button --- will cause the popup to disappear. */
+    public void dayButtonSelected() {}
 }
 // ======================================================
 java.util.LinkedList listeners = new java.util.LinkedList();
@@ -47,18 +53,18 @@ public void removeListener(CalModelMVC.Listener l)
 	{ listeners.remove(l); }
 
 // ======================================================
-public void fireChanged()
+public void fireCalChanged()
 {
 	for (java.util.Iterator ii=listeners.iterator(); ii.hasNext(); ) {
 		CalModelMVC.Listener l = (CalModelMVC.Listener)ii.next();
-		l.changed();
+		l.calChanged();
 	}
 }
-public void fireFinalChanged()
+public void fireDayButtonSelected()
 {
 	for (java.util.Iterator ii=listeners.iterator(); ii.hasNext(); ) {
 		CalModelMVC.Listener l = (CalModelMVC.Listener)ii.next();
-		l.finalChanged();
+		l.dayButtonSelected();
 	}
 }
 }

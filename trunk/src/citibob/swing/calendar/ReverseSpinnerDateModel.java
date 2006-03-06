@@ -16,19 +16,20 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
+
 package citibob.swing.calendar;
 
-import java.util.*;
-
-listeners CalModelMVC
-{
-    /** Value has changed. */
-    calChanged();
-
-    /** The "final" value has been changed. */
-/*    finalCalChanged();*/
-
-    /** User clicked on a day selection button --- will cause the popup to disappear. */
-    dayButtonSelected();
-
+/**
+ *
+ * @author citibob
+ */
+public class ReverseSpinnerDateModel extends javax.swing.SpinnerDateModel {
+	
+	/** Creates a new instance of ReverseSpinnerDateModel */
+	public ReverseSpinnerDateModel() {
+	}
+	
+public   Object  getNextValue() { return super.getPreviousValue(); }
+public    Object  getPreviousValue()  { return super.getNextValue(); }
+   
 }

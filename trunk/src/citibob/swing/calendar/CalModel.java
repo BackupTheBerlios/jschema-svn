@@ -39,6 +39,21 @@ public class CalModel extends CalModelMVC
 {
 
 Calendar cal, finalCal;
+int tmpDay;
+
+private static Calendar getCalInstance()
+{
+	Calendar c = Calendar.getInstance();
+	c.set(Calendar.HOUR_OF_DAY, 0);
+	c.set(Calendar.MINUTE, 0);
+	c.set(Calendar.SECOND, 0);
+	c.set(Calendar.MILLISECOND, 0);
+	return c;
+}
+
+public CalModel() {
+	this(getCalInstance());
+}
 
 /** Wraps a Calendar object. */
 public CalModel(Calendar cal)
@@ -50,75 +65,74 @@ public Calendar getCal()
 { return cal; }
 public Calendar getFinalCal()
 { return finalCal; }
+
+public void setTmpDay(int day)
+{ tmpDay = day; }
+public void useTmpDay()
+{ if (tmpDay != -1) set(Calendar.DAY_OF_MONTH, tmpDay); }
+
 // ===========================================================
-/** Make the current value final. */
-public void saveFinal()
+public void fireCalChanged()
 {
-	finalCal = (Calendar)cal.clone();
-	fireFinalChanged();
-}
-/** Restore the current value from the final value */
-public void restoreFinal()
-{
-	cal = finalCal;
-	fireChanged();
+	System.out.println("Cal changed to: " + cal.getTime());
+	super.fireCalChanged();
 }
 // ===========================================================
 // ==== Stuff from Calendar
 public void  add(int field, int amount)
 {
 	cal.add(field, amount);
-	fireChanged();
+	fireCalChanged();
 }
 public void clear()
 {
 	cal.clear();
-	fireChanged();
+	fireCalChanged();
 }
 public void clear(int field) 
 {
 	cal.clear();
-	fireChanged();
+	fireCalChanged();
 }
 public void  roll(int field, boolean up)
 {
 	cal.roll(field,up);
-	fireChanged();
+	fireCalChanged();
 }
 public   void  roll(int field, int amount) 
 {
 	cal.roll(field,amount);
-	fireChanged();
+	fireCalChanged();
 }
 public   void  set(int field, int value) 
 {
 	cal.set(field,value);
-	fireChanged();
+	fireCalChanged();
 }
 public   void  set(int year, int month, int date) 
 {
 	cal.set(year,month,date);
-	fireChanged();
+	fireCalChanged();
 }
 public   void  set(int year, int month, int date, int hour, int minute) 
 {
 	cal.set(year,month,date,hour,minute);
-	fireChanged();
+	fireCalChanged();
 }
 public   void  set(int year, int month, int date, int hour, int minute, int second) 
 {
 	cal.set(year,month,date,hour,minute,second);
-	fireChanged();
+	fireCalChanged();
 }
 public   void  setTime(Date date)
 {
 	cal.setTime(date);
-	fireChanged();
+	fireCalChanged();
 }
    void  setTimeInMillis(long millis) 
 {
 	cal.setTimeInMillis(millis);
-	fireChanged();
+	fireCalChanged();
 }
 	
 }

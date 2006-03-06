@@ -18,17 +18,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package citibob.swing.calendar;
 
-import java.util.*;
+import javax.swing.*;
+import java.lang.reflect.*;
 
-listeners CalModelMVC
+/**
+ *
+ * @author citibob
+ */
+public class FocusArrowButton extends javax.swing.plaf.basic.BasicArrowButton
 {
-    /** Value has changed. */
-    calChanged();
+boolean xFocusTraversable = false;
 
-    /** The "final" value has been changed. */
-/*    finalCalChanged();*/
+  public FocusArrowButton(int direction)
+  { super(direction); }
 
-    /** User clicked on a day selection button --- will cause the popup to disappear. */
-    dayButtonSelected();
-
+public void setFocusTraversable(boolean b)
+{ xFocusTraversable = b; }
+//public boolean isFocusTraversable()
+//{
+////	Class c = this.getClass();
+////	c = c.getSuperclass();
+////	c = c.getSuperclass();		// JButton
+////	try {
+////		Method m = c.getMethod("isFocusTraversable", null);
+////		Boolean b = (Boolean)m.invoke(this, null);
+////		return b.booleanValue();
+////	} catch(Exception e) {
+////		return false;
+////	}
+//
+//	return xFocusTraversable;
+//}
+	
 }
