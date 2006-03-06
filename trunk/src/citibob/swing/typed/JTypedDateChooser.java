@@ -27,19 +27,25 @@ package citibob.swing.typed;
 import java.text.DateFormat;
 import java.util.Date;
 import javax.swing.*;
-import com.toedter.calendar.*;
+import citibob.swing.calendar.*;
 //import com.toedter.components.*;
 
 /**
- *
+ * TODO: This class need sthe once-over!
  * @author  citibob
  * Doesn't hold NULL values.
  */
 public class JTypedDateChooser extends JDateChooser implements TypedWidget {
+
 	
+ObjModel model;
+public ObjModel getObjModel() { return model; }
+public void setObjModel(ObjModel m) { model = m; }
+
 	public JTypedDateChooser(String fmt)
 	{
-		super(fmt, true);
+		super();
+//		super(fmt, true);
 		//setDateFormatString(fmt);
 	}
 	
@@ -52,11 +58,11 @@ System.out.println("JTypedDateChooser: Setting date to " + val + "(" + this + ")
 		// TODO: Bug in JDateChooser doesn't work well with null dates.
 		// It gets confused when embedded in a table.
 //		if (val == null) val = new Date();
-		setDate(val);
+		getModel().setTime(val);
 	}
 	
 	public Object getValue()
-		{ return getDate(); }
+		{ return getModel().getCal().getTime(); }
 	public Class getObjClass()
 		{ return Date.class; }
 	public void resetValue() {}

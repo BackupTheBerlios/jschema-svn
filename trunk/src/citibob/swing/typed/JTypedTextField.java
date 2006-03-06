@@ -42,16 +42,18 @@ implements ThrowsException, TypedWidget, KeyListener {
 
 ExceptionHandler handler;
 TextConverter converter;
-Object val;
-
+//Object val;
+ObjModel model;
+public ObjModel getObjModel() { return model; }
+public void setObjModel(ObjModel m) { model = m; }
 // --------------------------------------------------------------
 /** For building with NetBeans */
 public JTypedTextField()
 {
 	super();
+	model = new DefaultObjModel();
 //	addKeyListener(this);
 }
-
 
 /** For constructing manually */
 public JTypedTextField(TextConverter converter)
@@ -86,12 +88,12 @@ public void setValue(Object o)
 	if (o != null && !converter.getObjClass().isAssignableFrom(o.getClass())) {
 		throw new java.lang.ClassCastException("Cannot assign object of class " + getClass() + " to JTypedTextField of class " + converter.getObjClass());
 	}
-	val = o;
-	setText(converter.toString(val));
+	setText(converter.toString(o));
+	model.setValue(o);
 }
 
 public Object getValue()
-	{ return val; }
+	{ return model.getValue(); }
 public Class getObjClass()
 	{ return converter.getObjClass(); }
 public void resetValue()
@@ -101,7 +103,7 @@ public void resetValue()
 public void setLatestValue()
 {
 	if (!isValueValid()) {
-		setValue(val);	// Sets text in accordance with last good value
+		setValue(getValue());	// Sets text in accordance with last good value
 	}
 }
 public boolean isValueValid()
@@ -111,6 +113,7 @@ public boolean isValueValid()
 // ===================== KeyListener =====================
 public void keyTyped(KeyEvent e) {
 	if (e.getKeyChar() == '\033') resetValue();
+//	if (e.getKeyChar() == '\r') setLatestValue();	// Submit current value.
 }
 public void keyReleased(KeyEvent e) {
 	if (e.getKeyCode() == KeyEvent.VK_ESCAPE) resetValue();
@@ -119,6 +122,7 @@ public void keyPressed(KeyEvent e) {}
 // ====================== Input Verifier ===========
 protected static class MyInputVerifier extends javax.swing.InputVerifier {
 public boolean verify(javax.swing.JComponent jComponent) {
+//System.out.println("Verifying text field.");
 	JTypedTextField tf = (JTypedTextField) jComponent;
 	try {
 		String s = tf.getText();

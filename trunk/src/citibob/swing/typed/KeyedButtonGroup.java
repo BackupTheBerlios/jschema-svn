@@ -38,10 +38,15 @@ extends ButtonGroup implements TypedWidget {
 protected Map map;		// key -> AbstractButton
 Map imap;		// ButtonModel -> key
 Class objClass = null;
+	
+ObjModel model;
+public ObjModel getObjModel() { return model; }
+public void setObjModel(ObjModel m) { model = m; }
 
 /** Creates a new instance of KeyedButtonGroup */
 public KeyedButtonGroup()
 {
+	model = new DefaultObjModel();
 	map = new HashMap();
 	imap = new HashMap();
 }
@@ -90,12 +95,14 @@ protected Object getValue(AbstractButton b)
 /** Returns current value in the widget. */
 public Object getValue()
 {
-	ButtonModel m = getSelection();
-	return map.get(m);
+//	ButtonModel m = getSelection();
+//	return map.get(m);
+	return model.getValue();
 }
 /** Sets the value.  Returns a ClassCastException */
 public void setValue(Object o)
 {
+	model.setValue(o);
 	AbstractButton b = (AbstractButton)map.get(o);
 	setSelected(b.getModel(), true);
 }

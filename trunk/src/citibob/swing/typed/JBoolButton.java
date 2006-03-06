@@ -32,24 +32,29 @@ import javax.swing.*;
  */
 public class JBoolButton extends JButton implements TypedWidget {
 	
-	Boolean val;
+//	Boolean val;
 
 	String trueLabel = "Y";
 	String falseLabel = "N";
+
 	
+ObjModel model;
+public ObjModel getObjModel() { return model; }
+public void setObjModel(ObjModel m) { model = m; }
+
 	public void setValue(Object d)
 	{
 		if (d != null && d.getClass() != Boolean.class)
 			throw new ClassCastException("Expected Boolean");
-		val = (Boolean)d;
-		setText(val == null ? "-" :
-			val.booleanValue() ? trueLabel : falseLabel);
+		model.setValue(d);
+		setText(d == null ? "-" :
+			((Boolean)d).booleanValue() ? trueLabel : falseLabel);
 	}
 	public void setValue(boolean b)
 		{ setValue(new Boolean(b)); }
 	
 	public Object getValue()
-		{ return val; }
+		{ return model.getValue(); }
 	public Class getObjClass()
 		{ return Boolean.class; }
 	public void resetValue() {}
@@ -59,10 +64,12 @@ public class JBoolButton extends JButton implements TypedWidget {
 	public JBoolButton()
 	{
 		super();
+		model = new DefaultObjModel();
         setText("-");
 		setMargin(new java.awt.Insets(2, 2, 2, 2));
         addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
+			Boolean val = (Boolean)model.getValue();
 			if (val == null) setValue(true);
 			else if (!val.booleanValue()) setValue(null);
 			else setValue(false);

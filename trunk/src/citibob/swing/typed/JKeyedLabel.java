@@ -36,29 +36,35 @@ public class JKeyedLabel extends JLabel
 implements TypedWidget {
 
 Object val = null;
-KeyedModel model;
+KeyedModel kmodel;
+
+
+//ObjModel model;
+/** Model is kind of useless here, since JKeyedLabel never receives input from user. */
+public ObjModel getObjModel() { return null; }
+public void setObjModel(ObjModel m) { }
 
 /** Creates a new instance of JKeyedItemLabel */
 public JKeyedLabel() {
-	model = new KeyedModel();
+	kmodel = new KeyedModel();
 }
 // ------------------------------------------------------
 
-public void setModel(KeyedModel model)
+public void setModel(KeyedModel kmodel)
 {
-	this.model = model;
+	this.kmodel = kmodel;
 }
 
 public void addAllItems(ResultSet rs, String intCol, String itemCol)
 throws SQLException
 {
-	model.addAllItems(rs, intCol, itemCol);
+	kmodel.addAllItems(rs, intCol, itemCol);
 }
 
 public void addAllItems(ResultSet rs, int intCol, int itemCol)
 throws SQLException
 {
-	model.addAllItems(rs, intCol, itemCol);
+	kmodel.addAllItems(rs, intCol, itemCol);
 }
 // ------------------------------------------------------
 /** Returns current value in the widget. */
@@ -67,7 +73,7 @@ public Object getValue()
 
 /** Sets the value.  Returns a ClassCastException */
 public void setValue(Object o)
-	{ setText(model.getItemMap().get(o).toString()); }
+	{ setText(kmodel.getItemMap().get(o).toString()); }
 
 /** Returns type of object this widget edits. */
 public Class getObjClass()

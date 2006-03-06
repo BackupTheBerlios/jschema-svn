@@ -40,18 +40,24 @@ Used to make a combo box that returns one of a fixed set of integer values.  The
 public class JKeyedComboBox extends JComboBox implements TypedWidget {
 	KeyedModel kmodel;
 
+	ObjModel model;
+public ObjModel getObjModel() { return model; }
+public void setObjModel(ObjModel m) { model = m; }
+
 // ------------------------------------------------------
 public JKeyedComboBox()
 {
 //	addActionListener(this);
+	model = new DefaultObjModel();
 	setRenderer(new MyRenderer());
 	kmodel = new KeyedModel();
 }
-public JKeyedComboBox(KeyedModel model)
+public JKeyedComboBox(KeyedModel kmodel)
 {
 //	addActionListener(this);
+	model = new DefaultObjModel();
 	setRenderer(new MyRenderer());
-	setModel(model);
+	setModel(kmodel);
 }
 // ------------------------------------------------------
 
@@ -89,9 +95,16 @@ public Object getSelectedItem()
 // ============================================================
 
 	public void setValue(Object d)
-		{ setSelectedItem(d); }
+	{
+		model.setValue(d);
+		setSelectedItem(d);
+	}
 	public void setValue(int i)
-		{ setValue(new Integer(i)); }
+	{
+		Integer ii = new Integer(i);
+		setValue(ii);
+		model.setValue(ii);
+	}
 	
 	public Class getObjClass()
 		{ return Integer.class; }

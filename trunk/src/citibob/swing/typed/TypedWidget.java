@@ -44,5 +44,10 @@ boolean isValueValid();
 /** Returns type of object this widget edits. */
 Class getObjClass();
 
+/** Returns the underlying ObjModel; used to combine this widget's data model
+ * into another model.  So far, Objmodel is not able to take listeners,
+ * but that could change... */
+public ObjModel getObjModel();
+public void setObjModel(ObjModel m);
 
 }

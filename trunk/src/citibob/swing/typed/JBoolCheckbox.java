@@ -35,25 +35,34 @@ import javax.swing.*;
  */
 public class JBoolCheckbox extends JCheckBox implements TypedWidget {
 	
-	Boolean val;
+//	Boolean val;
+ObjModel model;
+public ObjModel getObjModel() { return model; }
+public void setObjModel(ObjModel m) { model = m; }
+
+	public JBoolCheckbox()
+	{
+		super();
+		model = new DefaultObjModel();
+	}
 
 	public void setValue(Object d)
 	{
 		// Default null to false...
 		if (d == null) {
-			val = null;
+			model.setValue(null);
 			setSelected(false);
 			return;
 		}
 		
 		if (d.getClass() != Boolean.class)
 			throw new ClassCastException("Expected Boolean");
-		val = (Boolean)d;
-		setSelected(val.booleanValue());
+		model.setValue(d);
+		setSelected(((Boolean)d).booleanValue());
 	}
 	
 	public Object getValue()
-		{ return val; }
+		{ return model.getValue(); }
 	public Class getObjClass()
 		{ return Boolean.class; }
 	public void resetValue() {}
