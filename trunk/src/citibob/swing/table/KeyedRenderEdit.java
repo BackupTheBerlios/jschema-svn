@@ -40,6 +40,8 @@ public KeyedRenderEdit(KeyedModel kmodel)
 {
 	renderer = new KeyedTableCellRenderer(kmodel);
 	editor = new DefaultCellEditor(new JKeyedComboBox(kmodel));
+//TODO: make my own CellEditor, instead of relying on DefaultCellEditor.  This will
+//allow me to properly set the currently-selected field when it starts up.
 }
 //// ==================================================================
 //public static class KeyedTableCellRenderer extends DefaultTableCellRenderer {
