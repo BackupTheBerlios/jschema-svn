@@ -31,7 +31,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.text.*;
 import java.util.Date;
-import com.toedter.calendar.*;
+import citibob.swing.calendar.*;
 
 /** Provides renderer and editor appropriate for an java.util.Date
  * (day only, no time). */
