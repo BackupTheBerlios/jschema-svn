@@ -96,7 +96,7 @@ private void setPrefsRecurse(Component c, String prefix, Preferences prefs)
 		prefix = "";
 
 		// Take care of yourself
-System.out.println("Setting Pref (node = " + prefs.absolutePath() + ") for " + c);
+//System.out.println("Setting Pref (node = " + prefs.absolutePath() + ") for " + c);
 		if (setter != null) setter.setPrefs(c, prefix, prefs);
 		else ((PrefWidget)c).setPrefs(prefix, prefs);
 	}
