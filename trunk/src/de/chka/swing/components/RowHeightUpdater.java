@@ -132,6 +132,8 @@ public class RowHeightUpdater
 
     private int preferredHeight(int column)
     {
+		if (prototypes == null) return 15;	// TODO: Hack!  This is required to make EClauseTable work.  Instead, we SHOULD change EClauseTable to conform to CitibobJTable standards.
+		
         // cannot use JTable.getCellRenderer (there need not be a row)
         
         TableColumn c = table.getColumnModel().getColumn(column);

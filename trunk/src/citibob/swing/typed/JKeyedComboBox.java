@@ -96,6 +96,7 @@ public Object getSelectedItem()
 
 	public void setValue(Object d)
 	{
+System.out.println("JKeyedComboBox.setValue: " + d);
 		model.setValue(d);
 		setSelectedItem(d);
 	}

@@ -75,4 +75,6 @@ public void setRenderEdit(int col, RenderEdit re)
 	if (re.getEditor() != null)
 		cols.getColumn(col).setCellEditor(re.getEditor());
 }
+
+
 }
