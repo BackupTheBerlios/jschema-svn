@@ -33,6 +33,9 @@ Connection checkout() throws SQLException;
 /** Return a connection */
 void checkin(Connection c) throws SQLException;
 
+/** Free up resources when you'return done with this conn pool. */
+public void dispose();
+
 public void doRun(StRunnable r);
 //	{ DefaultRawRunner.run(r, this); }
 public void doRun(DbRunnable r);

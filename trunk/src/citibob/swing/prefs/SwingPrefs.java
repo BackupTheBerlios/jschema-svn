@@ -47,6 +47,7 @@ public SwingPrefs()
 {
 	settersType = new HashMap();
 	settersType.put(JFrame.class, new JFramePrefSetter());
+	settersType.put(JDialog.class, new JDialogPrefSetter());
 	settersType.put(JTable.class, new JTablePrefSetter());
 	settersType.put(JSplitPane.class, new JSplitPanePrefSetter());
 	settersType.put(JFileChooser.class, new JFileChooserPrefSetter());

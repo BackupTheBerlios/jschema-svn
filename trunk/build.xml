@@ -72,5 +72,11 @@
     <mvcgen file="src/citibob/multithread/TaskQueueMVC.mvc"/>
 </target>
 
+<target name="-post-jar">
+    <copy todir="dist">
+        <fileset dir="./lib"><include name="*.jar"/></fileset>
+    </copy>
+</target>
+
 
 </project>

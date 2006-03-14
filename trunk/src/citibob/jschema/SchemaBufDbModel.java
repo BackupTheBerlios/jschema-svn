@@ -20,6 +20,7 @@ package citibob.jschema;
 
 import java.sql.*;
 import javax.swing.event.*;
+import citibob.multithread.*;
 
 public abstract class SchemaBufDbModel extends SqlGenDbModel
 {
@@ -57,11 +58,11 @@ public void doClear()
 /** This should NOT be used by subclasses.  In general, instant update is a property
 assigned by enclosing objects --- panels that USE this DbModel.
 TODO: Make instant updates delete instantly when user hits "delete". */
-public void setInstantUpdate(Statement st, boolean instantUpdate)
+public void setInstantUpdate(ActionRunner runner, boolean instantUpdate)
 {
 	if (instantUpdate) {
 		if (instantUpdateListener == null) {
-			instantUpdateListener = new InstantUpdateListener(st);
+			instantUpdateListener = new InstantUpdateListener(runner);
 			getSchemaBuf().addTableModelListener(instantUpdateListener);
 		}
 	} else {
@@ -77,14 +78,16 @@ public boolean isInstantUpdate()
 }
 // ==============================================
 private class InstantUpdateListener implements TableModelListener {
-	Statement st;
-	public InstantUpdateListener(Statement st)
+//	Statement st;
+	ActionRunner runner;
+	public InstantUpdateListener(ActionRunner runner)
 	{
-		this.st = st;
+		this.runner = runner;
 	}
-	public void tableChanged(TableModelEvent e) {
+	public void tableChanged(final TableModelEvent e) {
 System.out.println("InstantUpdateListener.tableChanged()");
-		try {
+		runner.doRun(new StRunnable() {
+		public void run(Statement st) throws SQLException {
 			switch(e.getType()) {
 				// TODO: Update only rows that have changed, don't waste
 				// your time on all the other rows!
@@ -95,10 +98,8 @@ System.out.println("InstantUpdateListener.doUpdate row = " + r);
 					}
 				break;
 			}
-		} catch(java.sql.SQLException se) {
-			se.printStackTrace(System.out);
-		}
-	}
+		}});
+ 	}
 }
 
 }

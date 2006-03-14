@@ -19,21 +19,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package citibob.swing.table;
 
-import javax.swing.table.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 /**
- * A cell renderer and editor that go together for a table column.
- * This is a convenience class.
+ * Provides default RenderEdit objects based on an SqlType for the column.
  * @author citibob
  */
-public abstract class RenderEdit {
+public interface RenderEditSet {
 
-protected TableCellRenderer renderer;
-protected TableCellEditor editor;
+public RenderEdit getRenderEdit(SqlType t);
 
-public TableCellRenderer getRenderer() { return renderer; }
-public TableCellEditor getEditor() { return editor; }
-	
 }

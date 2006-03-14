@@ -51,6 +51,8 @@ public void checkin(Connection c) throws SQLException
 {
 	c.close();
 }
+public void dispose() {}
+
 public void doRun(StRunnable r)
 	{ DbRawRunner.run(r, this); }
 public void doRun(DbRunnable r)

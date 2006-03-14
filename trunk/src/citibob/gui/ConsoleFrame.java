@@ -25,6 +25,7 @@ package citibob.gui;
 
 import java.io.*;
 import javax.swing.*;
+import citibob.swing.prefs.*;
 import javax.swing.text.*;
 import javax.swing.table.*;
 import java.util.prefs.*;
@@ -44,19 +45,19 @@ public class ConsoleFrame extends javax.swing.JFrame {
 	 */
 	public ConsoleFrame() {
 		initComponents();
+		this.setTitle("Java Console");
 		logText.setLineWrap(true);
 		logText.setWrapStyleWord(true);
 		logText.setEditable(false);
 //		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	}
 	
-Thread thread;
+//Thread thread;
 DocumentWriter logWriter;
 
-public void initRuntime(Thread thread, String title)
+public void initRuntime(String title, String guiNodePath)
 {
 	setTitle(title);
-	this.thread = thread;
 	Document doc = new CircularPlainDocument(20000);
 	logWriter = new DocumentWriter(doc);
 
@@ -76,8 +77,11 @@ public void initRuntime(Thread thread, String title)
 	});
 	
 	
-	Preferences prefs = Preferences.userNodeForPackage(thread.getClass());
-	new citibob.swing.prefs.SwingPrefs().setPrefs(this, "", prefs);
+	// Save GUI Preferences preferences
+	Preferences guiPrefs = Preferences.userRoot();
+	guiPrefs = guiPrefs.node(guiNodePath);
+	new SwingPrefs().setPrefs(this, "", guiPrefs);
+
 }
 	/** This method is called from within the constructor to
 	 * initialize the form.
@@ -88,8 +92,6 @@ public void initRuntime(Thread thread, String title)
     private void initComponents() {
         logScrollPane = new javax.swing.JScrollPane();
         logText = new javax.swing.JTextArea();
-        jToolBar1 = new javax.swing.JToolBar();
-        bStop = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("OmniFX Quote Server");
@@ -106,43 +108,12 @@ public void initRuntime(Thread thread, String title)
 
         getContentPane().add(logScrollPane, java.awt.BorderLayout.CENTER);
 
-        bStop.setText("Stop");
-        bStop.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bStopActionPerformed(evt);
-            }
-        });
-
-        jToolBar1.add(bStop);
-
-        getContentPane().add(jToolBar1, java.awt.BorderLayout.NORTH);
-
         pack();
     }
     // </editor-fold>//GEN-END:initComponents
 
-	private void bStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bStopActionPerformed
-		System.out.println("Interrupting the thread... (alive = " + thread.isAlive() + ")");
-		thread.interrupt();
-	}//GEN-LAST:event_bStopActionPerformed
-
 	private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-System.err.println("formWindowClosing");
-		if (thread.isAlive()) {
-			String msg = "Do you really wish to stop this thread?";
-			// Modal dialog with yes/no button
-			int answer = JOptionPane.showOptionDialog(this, msg, "Exit FXServer?", 
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-				null, null);
-			if (answer == JOptionPane.YES_OPTION) {
-				System.out.println("Interrupting the thread...");
-				thread.interrupt();
-			} else if (answer == JOptionPane.NO_OPTION) {
-				// User clicked NO.
-			}
-		} else {
-			System.exit(0);
-		}
+		setVisible(false);
 	}//GEN-LAST:event_formWindowClosing
 
 	private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -151,8 +122,6 @@ System.err.println("formWindowClosing");
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bStop;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JScrollPane logScrollPane;
     private javax.swing.JTextArea logText;
     // End of variables declaration//GEN-END:variables
