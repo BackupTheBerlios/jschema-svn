@@ -66,7 +66,7 @@ will involve setting the key fields (same as setSelectWhere()),
 which are usually the same for all the same for all records
 in the SqlGenDbModel.  This method is called AFTER the rest of
 the insert query has been constructed. */
-public abstract void setInsertKeys(int row, SqlQuery sql);
+public void setInsertKeys(int row, SqlQuery sql) {}
 // -----------------------------------------------------------
 /** Get Sql query to re-select current records
 * from database.  When combined with an actual
