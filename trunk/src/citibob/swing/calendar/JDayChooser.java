@@ -396,6 +396,7 @@ public void calChanged()
 	else this.drawCurrentDay();
 }
 public void dayButtonSelected() {}
+public void nullChanged() { citibob.swing.WidgetTree.setEnabled(this, !model.isNull()); }
 // ===================================================================
 /**
  * Sets the font property.

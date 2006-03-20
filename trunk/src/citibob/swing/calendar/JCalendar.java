@@ -46,6 +46,7 @@ public class JCalendar extends javax.swing.JPanel {
 		jYear.setModel(m);
 		jDay.setModel(m);
 		jDayTF.setModel(m);
+		jNull.setCalModel(m);
 	}
 	
 	/** This method is called from within the constructor to
@@ -62,6 +63,7 @@ public class JCalendar extends javax.swing.JPanel {
         jDayTF = new citibob.swing.calendar.JDayTFChooser();
         jYear = new citibob.swing.calendar.JYearChooser();
         bClose = new javax.swing.JButton();
+        jNull = new citibob.swing.calendar.JNullChooser();
         jDay = new citibob.swing.calendar.JDayChooser();
 
         setLayout(new java.awt.BorderLayout());
@@ -91,9 +93,17 @@ public class JCalendar extends javax.swing.JPanel {
         });
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         jPanel1.add(bClose, gridBagConstraints);
+
+        jNull.setText("null");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(jNull, gridBagConstraints);
 
         add(jPanel1, java.awt.BorderLayout.NORTH);
 
@@ -113,6 +123,7 @@ public class JCalendar extends javax.swing.JPanel {
     private citibob.swing.calendar.JDayChooser jDay;
     private citibob.swing.calendar.JDayTFChooser jDayTF;
     private citibob.swing.calendar.JMonthChooser jMonth;
+    private citibob.swing.calendar.JNullChooser jNull;
     private javax.swing.JPanel jPanel1;
     private citibob.swing.calendar.JYearChooser jYear;
     // End of variables declaration//GEN-END:variables

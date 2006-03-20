@@ -59,11 +59,11 @@ public static void setEnabled(Component c, boolean enabled)
 }
 
 /** Sets the handler for all components implementing ThrowsException in a widget tree. */
-public static void setExceptionHandler(Component c, ExceptionHandler handler)
+public static void setExceptionHandler(Component c, ExpHandler handler)
 {
 	// Take care of yourself
 	if (c instanceof ThrowsException)
-		((ThrowsException)c).setExceptionHandler(handler);
+		((ThrowsException)c).setExpHandler(handler);
 
 	// Take care of your children
 	if (c instanceof Container) {

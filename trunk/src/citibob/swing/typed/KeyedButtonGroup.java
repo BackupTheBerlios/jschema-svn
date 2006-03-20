@@ -27,6 +27,7 @@ package citibob.swing.typed;
 import citibob.jschema.*;
 import java.util.*;
 import javax.swing.*;
+import java.beans.*;
 
 /**
  *
@@ -35,22 +36,64 @@ import javax.swing.*;
 public class KeyedButtonGroup
 extends ButtonGroup implements TypedWidget {
 
+PropertyChangeSupport support = new PropertyChangeSupport(this);
+
 protected Map map;		// key -> AbstractButton
 Map imap;		// ButtonModel -> key
 Class objClass = null;
-	
-ObjModel model;
-public ObjModel getObjModel() { return model; }
-public void setObjModel(ObjModel m) { model = m; }
+Object val = null;
 
+/** Returns last legal value of the widget.  Same as method in JFormattedTextField */
+public Object getValue()
+{ return val; }
+
+/** Sets the value.  Same as method in JFormattedTextField.  Fires a
+ * propertyChangeEvent("value") when calling setValue() changes the value. */
+public void setValue(Object o)
+{
+	Object oldVal = val;
+	val = o;
+	AbstractButton b = (AbstractButton)map.get(o);
+	setSelected(b.getModel(), true);
+	support.firePropertyChange("value", oldVal, val);
+}
+
+/** Is this object an instance of the class available for this widget?
+ * If so, then setValue() will work.  See SqlType.. */
+public boolean isInstance(Object o)
+{
+	return map.containsKey(o);
+}
+
+/** Set up widget to edit a specific SqlType.  Note that this widget does not
+ have to be able to edit ALL SqlTypes... it can throw a ClassCastException
+ if asked to edit a SqlType it doesn't like. */
+public void setSqlType(citibob.swing.typed.SqlSwinger f) throws ClassCastException
+{
+	// Could be anything...
+//	SqlType sqlType = f.getSqlType();
+//	if (!(sqlType instanceof SqlEnum)) 
+//		throw new ClassCastException("Expected Enum type, got " + sqlType);
+//	SqlEnum etype = (SqlEnum)sqlType;
+//	setKeyedModel(etype.getKeyedModel());
+}
+
+// ---------------------------------------------------
+String colName;
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public String getColName() { return colName; }
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public void setColName(String col) { colName = col; }
+public boolean stopEditing() { return true; }
+
+// ---------------------------------------------------
 /** Creates a new instance of KeyedButtonGroup */
 public KeyedButtonGroup()
 {
-	model = new DefaultObjModel();
 	map = new HashMap();
 	imap = new HashMap();
 }
-
+// -------------------------------------------------------------
 public void add(Object key, AbstractButton b)
 {
 	super.add(b);
@@ -80,6 +123,7 @@ public AbstractButton remove(Object key)
 	super.remove(b);
 	return b;
 }
+// -------------------------------------------------------------
 
 // =====================================================
 // TypedWidget
@@ -92,32 +136,10 @@ protected Object getValue(AbstractButton b)
 	return ret;
 }
 
-/** Returns current value in the widget. */
-public Object getValue()
-{
-//	ButtonModel m = getSelection();
-//	return map.get(m);
-	return model.getValue();
-}
-/** Sets the value.  Returns a ClassCastException */
-public void setValue(Object o)
-{
-	model.setValue(o);
-	AbstractButton b = (AbstractButton)map.get(o);
-	setSelected(b.getModel(), true);
-}
-
 protected void setButton(AbstractButton b)
 {
 	setSelected(b.getModel(), true);
 }
-/** Returns type of object this widget edits. */
-public Class getObjClass()
-	{ return objClass; }
-public void setObjClass(Class c)
-	{ objClass = c; }
-public void resetValue() {}
-public void setLatestValue() {}
-public boolean isValueValid() { return true; }
+
 }
 

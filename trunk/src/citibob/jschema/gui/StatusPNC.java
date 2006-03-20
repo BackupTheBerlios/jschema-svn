@@ -27,9 +27,12 @@ package citibob.jschema.gui;
 import java.sql.*;
 import citibob.jschema.*;
 import citibob.jschema.swing.*;
-import citibob.jschema.swing.JSchemaWidgetTree;
+//import citibob.jschema.swing.JSchemaWidgetTree;
 import citibob.swing.table.*;
+import citibob.swing.typed.*;
 import citibob.multithread.*;
+import citibob.jschema.swing.StatusTable;
+import citibob.sql.*;
 
 /**
  * StatusPNC = Panel 'n Controller
@@ -49,13 +52,13 @@ SchemaBufDbModel dbm;
 	
 	
 	public void initRuntime(SchemaBufDbModel dbm,
-	String[] xColNames, String[] xSColMap,
+	String[] xColNames, String[] xSColMap, SwingerMap swingers,
 	ActionRunner runner)
 	{
 		this.dbm = dbm;
 		this.schemaBuf = dbm.getSchemaBuf();
 		this.runner = runner;
-		table.initRuntime(schemaBuf, xColNames, xSColMap);
+		table.setModelU(schemaBuf, xColNames, xSColMap, swingers);
 	}
 
 	
@@ -82,7 +85,7 @@ SchemaBufDbModel dbm;
         bRestore = new javax.swing.JButton();
         bSave = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table = new citibob.jschema.gui.StatusTable();
+        table = new citibob.jschema.swing.StatusTable();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -182,7 +185,7 @@ private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
     private javax.swing.JButton bSave;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private citibob.jschema.gui.StatusTable table;
+    private citibob.jschema.swing.StatusTable table;
     // End of variables declaration//GEN-END:variables
 	
 }

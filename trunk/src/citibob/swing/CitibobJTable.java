@@ -22,12 +22,12 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import citibob.swing.table.*;
-import de.chka.swing.components.*;
+//import de.chka.swing.components.*;
 
 public class CitibobJTable extends JTable
 {
 
-RowHeightUpdater rhu;
+//RowHeightUpdater rhu;
 
 public CitibobJTable()
 {
@@ -48,8 +48,8 @@ public void setModel(TableModel model)
 	super.setModel(model);
 	if (model instanceof CitibobTableModel) {
 		CitibobTableModel ctm = (CitibobTableModel)model;
-		rhu = new RowHeightUpdater(this, ctm.getPrototypes());
-		rhu.setEnabled(true);
+//		rhu = new RowHeightUpdater(this, ctm.getPrototypes());
+//		rhu.setEnabled(true);
 	}
 }
 
@@ -59,22 +59,35 @@ public CitibobTableModel getCBModel()
 	return (CitibobTableModel)m;
 }
 
-public void setRowHeightUpdaterEnabled(boolean b)
-{
-	rhu.setEnabled(b);
-}
-
-public boolean isRowHeightUpdaterEnabled()
-	{ return rhu.isEnabled(); }
+//public void setRowHeightUpdaterEnabled(boolean b)
+//{
+//	rhu.setEnabled(b);
+//}
+//
+//public boolean isRowHeightUpdaterEnabled()
+//	{ return rhu.isEnabled(); }
 
 /** Sets a renderer and editor pair at once, for a column. */
-public void setRenderEdit(int col, RenderEdit re)
+public void setRenderEdit(int colNo, RenderEdit re)
 {
-	TableColumnModel cols = getColumnModel();
-	cols.getColumn(col).setCellRenderer(re.getRenderer());
-	if (re.getEditor() != null)
-		cols.getColumn(col).setCellEditor(re.getEditor());
+	if (re == null) return;		// Don't change, if we don't know what to set it TO.
+	
+	TableColumn col = getColumnModel().getColumn(colNo);
+	if (re.getRenderer() != null) col.setCellRenderer(re.getRenderer());
+	if (re.getEditor() != null) col.setCellEditor(re.getEditor());
 }
 
+///** Sets a renderer and editor pair at once, for a column. */
+//public void setDefaultRenderEdit(Class klass, RenderEdit re)
+//{
+//	setDefaultRenderer(klass, re.getRenderer());
+//	setDefaultEditor(klass, re.getEditor());
+//}
 
+///** Sets RenderEdit on a column according to the column's declared class. */
+//public void setRenderEdit(int col, RenderEditSet res)
+//{
+//	Class klass = getModel().getColumnClass(col);
+//	setRenderEdit(col, res.getRenderEdit(klass));
+//}
 }

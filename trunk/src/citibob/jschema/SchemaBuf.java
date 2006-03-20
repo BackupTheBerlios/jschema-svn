@@ -22,13 +22,14 @@ import java.sql.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
 
-import citibob.swing.table.CitibobTableModel;
+import citibob.swing.table.*;
 
 import java.util.*;
 import citibob.sql.SqlQuery;
+import citibob.sql.SqlType;
 
 public class SchemaBuf extends AbstractTableModel
-implements SqlBuf, CitibobTableModel, RowStatusConst
+implements SqlBuf, SqlTypeTableModel, RowStatusConst
 {
 /** Data model we'll use for our columns. */
 Schema schema;
@@ -46,17 +47,17 @@ private SqlRow newRow()
 	
 	// Put in default values
 	for (int i=0; i<n; ++i) {
-		row.data[i] = getDefault(i);
+		row.data[i] = schema.getCol(i).getDefault();
 	}
 	
 	return row;
 }
-/** User should override this; provides default values for rows
- newly inserted into this schema buf */
-public Object getDefault(int col)
-{
-	return null;
-}
+///** User should override this; provides default values for rows
+// newly inserted into this schema buf */
+//public Object getDefault(int col)
+//{
+//	return null;
+//}
 // =====================================================
 public interface Listener
 {
@@ -368,6 +369,8 @@ public int findColumn(String colName)
 	{ return schema.findCol(colName); }
 public Class getColumnClass(int colIndex)
 	{ return schema.getCol(colIndex).getType().getObjClass(); }
+public SqlType getColumnSqlType(int colIndex)
+	{ return schema.getCol(colIndex).getType(); }
 public String getColumnName(int colIndex)
 	{ return schema.getCol(colIndex).getName(); }
 // --------------------------------------------------
@@ -416,14 +419,14 @@ public Object getValueAt(int row, String col)
 	return getValueAt(row, findColumn(col));
 }
 // --------------------------------------------------
-// ===============================================================
-// Implementation of CitibobTableModel (prototype stuff)
-public List getPrototypes()
-{
-	Schema s = getSchema();
-	if (s == null) return null;
-	return s.getPrototypes();
-}
+//// ===============================================================
+//// Implementation of CitibobTableModel (prototype stuff)
+//public List getPrototypes()
+//{
+//	Schema s = getSchema();
+//	if (s == null) return null;
+//	return s.getPrototypes();
+//}
 // ================================================================
 // Deprecated stuff
 

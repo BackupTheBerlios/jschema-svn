@@ -30,5 +30,5 @@ package citibob.exception;
  * @author  citibob
  */
 public interface ThrowsException {
-	 void setExceptionHandler(ExceptionHandler handler);
+	 void setExpHandler(ExpHandler handler);
 }

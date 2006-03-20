@@ -32,6 +32,7 @@ package citibob.jschema;
 import java.text.*;
 import java.util.Date;
 import java.util.*;
+import citibob.sql.KeyedModel;
 
 /**
  * Sets up a keyed model with a bunch of SqlTime objects as keys, Strings as display objects.

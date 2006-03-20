@@ -18,36 +18,64 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package citibob.swing.typed;
 
-/** A widget that edits a Java object.  Usually implemented in conjunction
-with subclassing java.awt.Component */
-public interface TypedWidget
+//import
+
+
+/** A widget that edits a Java object.  Always implemented in conjunction
+with subclassing java.awt.Component, i.e. (x istanceof TypedWidget) implies (x instanceof Component) */
+public interface TypedWidget extends Cloneable
 {
 
-/** Returns current value in the widget. */
-Object getValue();
+/** Returns last legal value of the widget.  Same as method in JFormattedTextField */
+public Object getValue();
 
-/** Sets the value.  Returns a ClassCastException */
-void setValue(Object o);
+/** Sets the value.  Same as method in JFormattedTextField.  Fires a
+ * propertyChangeEvent("value") when calling setValue() changes the value. */
+public void setValue(Object o);
 
-/** Sets value back to some "original" value
-(eg, last edited value, or original value from a DB record). */
-void resetValue();
+/** From TableCellEditor (in case this is being used in a TableCellEditor):
+ * Tells the editor to stop editing and accept any partially edited value
+ * as the value of the editor. The editor returns false if editing was not
+ * stopped; this is useful for editors that validate and can not accept
+ * invalid entries. */
+public boolean stopEditing();
 
-/** Sets the value to the last legal edited value.
-Allows focus to leave the widget*/
-void setLatestValue();
+/** Is this object an instance of the class available for this widget?
+ * If so, then setValue() will work.  See SqlType.. */
+public boolean isInstance(Object o);
 
-/** If false, then user is in middle of editing something
-and doesn't have a valid value yet. */
-boolean isValueValid();
+/** Set up widget to edit a specific SqlType.  Note that this widget does not
+ have to be able to edit ALL SqlTypes... it can throw a ClassCastException
+ if asked to edit a SqlType it doesn't like. */
+public void setSqlType(citibob.swing.typed.SqlSwinger f) throws ClassCastException;
+
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public String getColName();
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public void setColName(String col);
+
+//public Object clone() throws CloneNotSupportedException;
+
+/** Sets value back to last legal value (i.e. setValue(getValue())) */
+//void resetValue();
+
+///** Sets the value to the last legal edited value.
+//Allows focus to leave the widget*/
+//void setLatestValue();
+//
+///** If false, then user is in middle of editing something
+//and doesn't have a valid value yet. */
+//boolean isValueValid();
 
 /** Returns type of object this widget edits. */
-Class getObjClass();
+//Class getObjClass();
+
+
 
 /** Returns the underlying ObjModel; used to combine this widget's data model
  * into another model.  So far, Objmodel is not able to take listeners,
  * but that could change... */
-public ObjModel getObjModel();
-public void setObjModel(ObjModel m);
+//public ObjModel getObjModel();
+//public void setObjModel(ObjModel m);
 
 }

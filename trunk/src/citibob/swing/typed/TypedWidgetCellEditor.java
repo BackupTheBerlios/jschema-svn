@@ -33,7 +33,9 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.event.*;
 
+/** XXXXXXXXXXXXXXXXXXXXXXXXXXXXX: This class is basically obsolete, used only by DefaultEClauseCellEditor. */
 public class TypedWidgetCellEditor
 extends AbstractCellEditor
 implements TableCellEditor {
@@ -63,6 +65,17 @@ public TypedWidgetCellEditor(Component editor) {
 		if (stopCellEditing()) fireEditingStopped();
 	}});
 */
+		this.addCellEditorListener(new CellEditorListener() {
+			public void  editingCanceled(ChangeEvent e) {
+				System.out.println("Cell Edint cancelled!");
+				editorTw.setValue(editorTw.getValue());
+			}
+		    public void  editingStopped(ChangeEvent e) {
+				System.out.println("Cell Editing stopped!");
+				editorTw.stopEditing();
+				//((JDateChooser)component).getModel().useTmpDay();
+			}
+		});
 }
 
 public TypedWidget getTypedWidget()
@@ -89,18 +102,16 @@ System.out.println("getCellEditorValue: " + ret);
 	return ret;
 }
 
-public boolean stopCellEditing()
-{
-System.out.println("stopCellEditing");
-	boolean ret = editorTw.isValueValid();
-	if (ret) fireEditingStopped();
-	else editorTw.setLatestValue();
-	return ret;
-}
-public void cancelCellEditing()
-{
-System.out.println("cancelCellEditing");
-	editorTw.setLatestValue();	// This allows focus to leave the widget
-}
+//public boolean stopCellEditing()
+//{
+//	boolean ret = editorTw.stopEditing();
+//	if (ret) fireEditingStopped();
+//	return ret;
+//}
+//public void cancelCellEditing()
+//{
+//	editorTw.setValue(editorTw.getValue());
+//	super.cancelCellEditing();
+//}
 
 }

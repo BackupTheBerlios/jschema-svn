@@ -38,8 +38,11 @@ import java.util.*;
 public class CalModel extends CalModelMVC
 {
 
-Calendar cal, finalCal;
+Calendar cal;
+//, finalCal;
 int tmpDay;
+boolean nullValue;			// true if we're holding a null date value now...
+boolean nullable = true;			// Are we even allowed to set null values?
 
 private static Calendar getCalInstance()
 {
@@ -51,20 +54,52 @@ private static Calendar getCalInstance()
 	return c;
 }
 
-public CalModel() {
-	this(getCalInstance());
-}
 
+public void setNullable(boolean n)
+{
+	nullable = n;
+	if (!nullable) nullValue = false;
+}
+public boolean isNullable() { return nullable; }
+
+// ============================================================
+public CalModel() {
+	this(getCalInstance(), true);
+}
 /** Wraps a Calendar object. */
-public CalModel(Calendar cal)
+public CalModel(Calendar cal, boolean nullable)
 {
 	this.cal = cal;
-	finalCal = (Calendar)cal.clone();
+	this.nullable = nullable;
+	//finalCal = (Calendar)cal.clone();
 }
+public CalModel(boolean nullable) {
+	this(getCalInstance(), nullable);
+}
+// ============================================================
 public Calendar getCal()
-{ return cal; }
-public Calendar getFinalCal()
-{ return finalCal; }
+	{ return cal; }
+public Date getCalTime()
+	{ return cal.getTime(); }
+public Date getTime()
+{
+	if (nullValue) return null;
+	return cal.getTime();
+}
+
+/** Clear the null field, setting date back to what it was before
+ *this was nulled. */
+public void setNull(boolean nll)
+{
+	if (!nullable) return;	// Not legal if we're not nullable...
+	if (nll == nullValue) return;
+	nullValue = nll;
+	fireNullChanged();
+}
+public boolean isNull() { return nullValue; }
+		
+//public Calendar getFinalCal()
+//{ return finalCal; }
 
 public void setTmpDay(int day)
 { tmpDay = day; }
@@ -74,8 +109,13 @@ public void useTmpDay()
 // ===========================================================
 public void fireCalChanged()
 {
-	System.out.println("Cal changed to: " + cal.getTime());
+//	System.out.println("Cal changed to: " + getTime());
 	super.fireCalChanged();
+}
+public void fireNullChanged()
+{
+//	System.out.println("Null changed to: " + getTime());
+	super.fireNullChanged();
 }
 // ===========================================================
 // ==== Stuff from Calendar
@@ -124,15 +164,25 @@ public   void  set(int year, int month, int date, int hour, int minute, int seco
 	cal.set(year,month,date,hour,minute,second);
 	fireCalChanged();
 }
-public   void  setTime(Date date)
+/** Set time in the underlying Calendar, don't affect null status. */
+public void setCalTime(Date date)
 {
 	cal.setTime(date);
 	fireCalChanged();
 }
-   void  setTimeInMillis(long millis) 
+public void setTime(Date date)
 {
-	cal.setTimeInMillis(millis);
-	fireCalChanged();
+	if (date == null) {
+		setNull(true);
+	} else {
+		setNull(false);
+		setCalTime(date);
+	}
 }
+//   void  setTimeInMillis(long millis) 
+//{
+//	cal.setTimeInMillis(millis);
+//	fireCalChanged();
+//}
 	
 }

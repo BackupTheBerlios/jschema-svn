@@ -23,11 +23,12 @@ import javax.swing.table.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import citibob.swing.table.*;
+import citibob.sql.*;
 
 import java.io.*;
 
 public class StatusSchemaBuf extends AbstractTableModel
-implements CitibobTableModel, TableModelListener, SchemaBuf.Listener
+implements SqlTypeTableModel, TableModelListener, SchemaBuf.Listener
 {
 
 SchemaBuf sb;
@@ -50,6 +51,11 @@ public Class getColumnClass(int colIndex)
 {
 	if (colIndex == 0) return Integer.class;
 	return sb.getColumnClass(colIndex-1);
+}
+public SqlType getColumnSqlType(int colIndex)
+{
+	if (colIndex == 0) return null;
+	return sb.getColumnSqlType(colIndex-1);
 }
 public String getColumnName(int colIndex)
 {
@@ -86,12 +92,12 @@ public void setValueAt(Object val, int rowIndex, int colIndex)
 public int getRowCount()
 	{ return sb.getRowCount(); }
 
-public List getPrototypes()
-{
-	List l = sb.getPrototypes();
-	l.add(0, new Integer(0));
-	return l;
-}
+//public List getPrototypes()
+//{
+//	List l = sb.getPrototypes();
+//	l.add(0, new Integer(0));
+//	return l;
+//}
 
 // =========================================================
 public void statusChanged(int row)

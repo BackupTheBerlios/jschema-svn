@@ -51,4 +51,7 @@ public Object get(int col);
 /** Returns number of columns */
 public int getColCount();
 
+/** Finds a column's index by name --- also implemented in AbstractTableModel. */
+int findColumn(String name);
+// ===========================================================
 }

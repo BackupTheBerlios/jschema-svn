@@ -68,6 +68,10 @@ public void setModel(CalModel m) {
 	calChanged();
 }
 public CalModel getModel() { return model; }
+public void nullChanged() {
+	// TODO: Don't for now, we're permanently disabled...
+	// citibob.swing.WidgetTree.setEnabled(this, !model.isNull());
+}
 // =====================================================
 
 // ===================================================================

@@ -26,14 +26,14 @@ public class ConstSchema implements Schema
 protected Column[] cols;
 protected String table;
 
-public List getPrototypes()
-{
-	ArrayList ls = new ArrayList(cols.length);
-	for (int i = 0; i < cols.length; ++i) {
-		ls.add(cols[i].getType().getPrototype());
-	}
-	return ls;
-}
+//public List getPrototypes()
+//{
+//	ArrayList ls = new ArrayList(cols.length);
+//	for (int i = 0; i < cols.length; ++i) {
+//		ls.add(cols[i].getType().getPrototype());
+//	}
+//	return ls;
+//}
 
 public String getDefaultTable()
 	{ return table; }

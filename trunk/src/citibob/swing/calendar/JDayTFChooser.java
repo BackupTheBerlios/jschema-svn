@@ -91,6 +91,7 @@ public void setModel(CalModel m) {
 	calChanged();
 }
 public CalModel getModel() { return model; }
+public void nullChanged() { citibob.swing.WidgetTree.setEnabled(this, !model.isNull()); }
 // =====================================================
 
 // ===================================================================

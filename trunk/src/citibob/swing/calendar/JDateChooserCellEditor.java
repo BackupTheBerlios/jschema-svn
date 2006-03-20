@@ -81,7 +81,7 @@ System.out.println("getTableCellEditorComponent: " + value);
     public Object getCellEditorValue() {
 		JDateChooser jdc = (JDateChooser)component;
 //		jdc.setPopupVisible(false);		// TODO: Get around popup JComboBox bug in Java 1.4; see JDateChooser file.
-        Object ret = jdc.getModel().getCal().getTime();
+        Object ret = jdc.getModel().getTime();
 System.out.println("getCellEditorValue: " + ret);
 		return ret;
     }

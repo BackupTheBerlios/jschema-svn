@@ -24,6 +24,7 @@ public abstract class AbstractRowModel implements RowModel
 RowModel.ColListener[] colListeners;		// One listener per column.  We don't allow multiple listeners
 public void addColListener(int colIndex, ColListener l)
 	{ colListeners[colIndex] = l; }
+
 public void removeColListener(int colIndex, ColListener l)
 	{ colListeners[colIndex] = null; }
 

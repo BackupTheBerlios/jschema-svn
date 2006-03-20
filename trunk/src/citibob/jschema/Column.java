@@ -18,6 +18,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package citibob.jschema;
 
+import citibob.sql.SqlType;
+
 /** Represents one column in a Schema. */
 public class Column
 {
@@ -51,5 +53,9 @@ public String getName()
 public boolean isKey()
 	{ return key; }
 
+/** Default value for column when inserting new row in buffers. 
+ This method will be overridden. */
+public Object getDefault()
+	{ return null; }
 
 }

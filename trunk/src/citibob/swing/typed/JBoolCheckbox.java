@@ -27,6 +27,7 @@ package citibob.swing.typed;
 import java.text.DateFormat;
 import java.util.Date;
 import javax.swing.*;
+import java.beans.*;
 
 /**
  *
@@ -34,39 +35,64 @@ import javax.swing.*;
  * Doesn't hold NULL values.
  */
 public class JBoolCheckbox extends JCheckBox implements TypedWidget {
-	
-//	Boolean val;
-ObjModel model;
-public ObjModel getObjModel() { return model; }
-public void setObjModel(ObjModel m) { model = m; }
 
-	public JBoolCheckbox()
-	{
-		super();
-		model = new DefaultObjModel();
-	}
+//PropertyChangeSupport support = new PropertyChangeSupport(this);
+Boolean val;
 
-	public void setValue(Object d)
-	{
-		// Default null to false...
-		if (d == null) {
-			model.setValue(null);
-			setSelected(false);
-			return;
-		}
-		
-		if (d.getClass() != Boolean.class)
-			throw new ClassCastException("Expected Boolean");
-		model.setValue(d);
-		setSelected(((Boolean)d).booleanValue());
-	}
-	
-	public Object getValue()
-		{ return model.getValue(); }
-	public Class getObjClass()
-		{ return Boolean.class; }
-	public void resetValue() {}
-	public void setLatestValue() {}
-	public boolean isValueValid() { return true; }
+
+/** Returns last legal value of the widget.  Same as method in JFormattedTextField */
+public Object getValue()
+{
+	return val;
+}
+
+/** Sets the value.  Same as method in JFormattedTextField.  Fires a
+ * propertyChangeEvent("value") when calling setValue() changes the value. */
+public void setValue(Object d)
+{
+	if (d != null && d.getClass() != Boolean.class)
+		throw new ClassCastException("Expected Boolean");
+	if (d == null) d = Boolean.FALSE;
+	Object oldVal = val;
+	val = (Boolean)d;
+	setSelected(val.booleanValue());
+	firePropertyChange("value", oldVal, val);
+}
+
+/** Is this object an instance of the class available for this widget?
+ * If so, then setValue() will work.  See SqlType.. */
+public boolean isInstance(Object o)
+{
+	return (o instanceof Boolean);
+}
+
+/** Set up widget to edit a specific SqlType.  Note that this widget does not
+ have to be able to edit ALL SqlTypes... it can throw a ClassCastException
+ if asked to edit a SqlType it doesn't like. */
+public void setSqlType(citibob.swing.typed.SqlSwinger f) throws ClassCastException
+{
+	Class klass = f.getSqlType().getObjClass();
+	if (!(Boolean.class.isInstance(klass)))
+		throw new ClassCastException("Expected Boolean type, got " + klass);
+}
+
+// ---------------------------------------------------
+String colName;
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public String getColName() { return colName; }
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public void setColName(String col) { colName = col; }
+public boolean stopEditing() { return true; }
+public Object clone() throws CloneNotSupportedException { return super.clone(); }
+
+// ---------------------------------------------------
+
+public JBoolCheckbox()
+{
+	super();
+	val = this.isSelected() ? Boolean.TRUE : Boolean.FALSE;
+}
+public void setValue(boolean b)
+	{ setValue(b ? Boolean.TRUE : Boolean.FALSE); }
 
 }

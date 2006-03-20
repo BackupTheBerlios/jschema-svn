@@ -65,9 +65,10 @@ CalModel.Listener, ChangeListener {
 	protected JButton calendarButton;
 	protected JSpinner dateSpinner;
 	protected JSpinner.DateEditor editor;
+	protected JPanel datePanel;
 	protected JCalendar jcalendar;
 	protected JPopupMenu popup;
-	protected SpinnerDateModel sModel;
+	protected ReverseSpinnerDateModel sModel;
 	protected String dateFormatString;
 //	protected boolean dateSelected;
 //	protected boolean isInitialized;
@@ -75,13 +76,14 @@ CalModel.Listener, ChangeListener {
 	protected boolean startEmpty;
 CalModel model;
 boolean lastPopupVisible = false;
+//boolean buttonsEnabled = true;		// Are we responding to button clicks?
 
 /**
 * Creates a new JDateChooser object.
 */
 public JDateChooser()
 {
-	this(null, false, null, true, null);
+	this(null, null, true, null);
 }
 
 /**
@@ -91,17 +93,7 @@ public JDateChooser()
 */
 public JDateChooser(ImageIcon icon)
 {
-	this(null, false, icon, true, null);
-}
-
-/**
-* Creates a new JDateChooser object.
-*
-* @param startEmpty true, if the date field should be empty
-*/
-public JDateChooser(boolean startEmpty)
-{
-	this(null, startEmpty, null, true, null);
+	this(null, icon, true, null);
 }
 
 /**
@@ -111,9 +103,9 @@ public JDateChooser(boolean startEmpty)
 * @param dateFormatString the date format string
 * @param startEmpty true, if the date field should be empty
 */
-public JDateChooser(String dateFormatString, boolean startEmpty)
+public JDateChooser(String dateFormatString)
 {
-	this(dateFormatString, startEmpty, null, true, null);
+	this(dateFormatString, null, true, null);
 }
 
 
@@ -127,7 +119,7 @@ public JDateChooser(String dateFormatString, boolean startEmpty)
 * @param mnemonic false, if you wish to disable the mnemonic code
 */
 public JDateChooser(String dateFormatString,
-boolean startEmpty, ImageIcon icon, boolean mnemonic, CalModel model)
+ImageIcon icon, boolean mnemonic, CalModel model)
 {
 	
 	jcalendar = new JCalendar();
@@ -136,27 +128,35 @@ boolean startEmpty, ImageIcon icon, boolean mnemonic, CalModel model)
 	if (dateFormatString == null) dateFormatString = "MM/dd/yyyy";
 	this.dateFormatString = dateFormatString;
 
-	this.startEmpty = startEmpty;
-this.startEmpty = false;		// TODO: startEmpty doesn't work.  For now, this cannot handle null dates.
+//	this.startEmpty = startEmpty;
+//this.startEmpty = false;		// TODO: startEmpty doesn't work.  For now, this cannot handle null dates.
 
 	setLayout(new BorderLayout());
 
 	// ------------- Set up spinner model
 	sModel = new ReverseSpinnerDateModel();
 	setSModel(sModel);
-	dateSpinner = new JSpinner(sModel) {
-	public void setEnabled(boolean enabled) {
-		super.setEnabled(enabled);
-		calendarButton.setEnabled(enabled);
-	}};
+	dateSpinner = new JSpinner(sModel);
+//	{
+//	public void setEnabled(boolean enabled) {
+//		// TODO: I don't know why this is.
+//		super.setEnabled(enabled);
+//		calendarButton.setEnabled(enabled);
+//	}};
 
+	// Allow to have either date or null showing.
+	datePanel = new JPanel();
+    datePanel.setLayout(new java.awt.CardLayout());
+	datePanel.add(dateSpinner, "date");
+	datePanel.add(new JLabel("null"), "null");
+		
 	String tempDateFormatString = "";
 
 	if (!startEmpty) tempDateFormatString = dateFormatString;
 
 	editor = new JSpinner.DateEditor(dateSpinner, tempDateFormatString);
 	dateSpinner.setEditor(editor);
-	add(dateSpinner, BorderLayout.CENTER);
+	add(datePanel, BorderLayout.CENTER);
 
 	// ------------- Display a calendar button with an icon
 	if (icon == null) {
@@ -218,6 +218,12 @@ this.startEmpty = false;		// TODO: startEmpty doesn't work.  For now, this canno
 	setModel(model);
 }
 
+//public void setButtonsEnabled(boolean e)
+//{
+//	buttonsEnabled = e;
+//	sModel.setEnabled(e);
+//}
+
 public void setModel(CalModel m)
 {
 	if (m != null) m.removeListener(this);
@@ -240,12 +246,14 @@ void setPopupVisible(boolean b)
 */
 public void actionPerformed(ActionEvent e)
 {
+//	if (!buttonsEnabled) return;
 System.out.println("Cal button action performed!");
-	if (lastPopupVisible) {
-	System.out.println("hiding popup");
-		calendarButton.requestFocus();
-		setPopupVisible(false);
-	} else {
+	if (lastPopupVisible) return;		// Do nothing; already visible.
+//	System.out.println("hiding popup");
+//		calendarButton.requestFocus();
+//		setPopupVisible(false);
+//	} else {
+		model.setNull(false);
 		int x = calendarButton.getWidth() - (int) popup.getPreferredSize().getWidth();
 		int y = calendarButton.getY() + calendarButton.getHeight();
 System.out.println("showing popup");
@@ -263,7 +271,7 @@ System.out.println("showing popup");
 		
 		// #ifdef Java 1.5
 		popup.show(calendarButton, x, y);
-	}
+//	}
 }
 // ===================================================================
 // CalModel.Listener
@@ -275,6 +283,13 @@ public void calChanged()
 }
 public void dayButtonSelected() {
 	setPopupVisible(false);
+}
+public void nullChanged() {
+	//citibob.swing.WidgetTree.setEnabled(this, !model.isNull());
+	//calendarButton.setEnabled(true);
+	CardLayout cl = (CardLayout)(datePanel.getLayout());
+	if (model.isNull()) cl.show(datePanel, "null");
+	else cl.show(datePanel, "date");
 }
 // ===================================================================
 
@@ -345,7 +360,7 @@ public String getName()
 */
 public void calModel2SModel()
 {
-	Date date = model.getCal().getTime();
+	Date date = model.getCalTime();
 	if (date.equals(sModel.getDate())) return;
 
 	sModel.setValue(date);
@@ -353,7 +368,7 @@ public void calModel2SModel()
 public void sModel2CalModel()
 {
 	Date date = sModel.getDate();
-	if (date.equals(model.getCal().getTime())) return;
+	if (date.equals(model.getCalTime())) return;
 	model.setTime(date);
 }
 // ---------------------------------------------------------
@@ -404,7 +419,7 @@ public SpinnerDateModel getSModel()
 *
 * @param mdl the SpinnerDateModel
 */
-public void setSModel(SpinnerDateModel mdl)
+public void setSModel(ReverseSpinnerDateModel mdl)
 {
 	sModel = mdl;
 	sModel.setCalendarField(java.util.Calendar.WEEK_OF_MONTH);

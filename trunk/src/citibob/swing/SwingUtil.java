@@ -57,16 +57,5 @@ public static void resizeJPanel(JPanel p)
 }
 
 
-/** Sets the logger for all JLoggedComponents in an object tree. */
-public static void setExceptionHandler(Container c, ExceptionHandler logger)
-{
-    Component[] child = c.getComponents();
-    for (int i = 0; i < child.length; ++i) {
-		if (!(child[i] instanceof ThrowsException)) continue;
-		ThrowsException f = (ThrowsException)child[i];
-		f.setExceptionHandler(logger);
-	}
-}
-
 
 }

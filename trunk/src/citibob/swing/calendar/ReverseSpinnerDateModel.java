@@ -25,11 +25,20 @@ package citibob.swing.calendar;
  */
 public class ReverseSpinnerDateModel extends javax.swing.SpinnerDateModel {
 	
-	/** Creates a new instance of ReverseSpinnerDateModel */
-	public ReverseSpinnerDateModel() {
-	}
+boolean enabled = true;
+
+public void setEnabled(boolean e)
+{
+	this.enabled = e;
+}
 	
-public   Object  getNextValue() { return super.getPreviousValue(); }
-public    Object  getPreviousValue()  { return super.getNextValue(); }
+public   Object  getNextValue() {
+	if (enabled) return super.getPreviousValue();
+	return super.getValue();
+}
+public    Object  getPreviousValue()  {
+	if (enabled) return super.getNextValue();
+	return super.getValue();
+}
    
 }

@@ -25,6 +25,9 @@ listeners CalModelMVC
     /** Value has changed. */
     calChanged();
 
+    /** Nullness has changed. */
+    nullChanged();
+
     /** The "final" value has been changed. */
 /*    finalCalChanged();*/
 

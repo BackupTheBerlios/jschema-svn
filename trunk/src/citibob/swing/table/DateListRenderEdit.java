@@ -26,7 +26,7 @@ package citibob.swing.table;
 
 import javax.swing.table.*;
 import citibob.swing.typed.*;
-import citibob.jschema.KeyedModel;
+import citibob.sql.KeyedModel;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
@@ -34,18 +34,16 @@ import java.text.*;
 
 /** Provides renderer and editor appropriate for an enumerated type field
  * (according to a KeyedModel). */
-public class DateListRenderEdit extends RenderEdit
+public class DateListRenderEdit extends KeyedRenderEdit
 {
 	
 public DateListRenderEdit(List dates, String sfmt)
 {
 	this(dates, new SimpleDateFormat(sfmt));
 }
-public DateListRenderEdit(List dates, DateFormat fmt)
-{
-	// Render as simple string
-	renderer = new DateRenderer(fmt);
 
+static KeyedModel getKmodel(List dates, DateFormat fmt)
+{
 	// Set up list of dropdown choices & labels for editor
 	KeyedModel kmodel = new KeyedModel();
 	for (Iterator ii=dates.iterator(); ii.hasNext(); ) {
@@ -53,9 +51,14 @@ public DateListRenderEdit(List dates, DateFormat fmt)
 		String lab = fmt.format(dt);
 		kmodel.addItem(dt,lab);
 //System.out.println("Adding: " + lab + " (key = " + dt);
-	}
-	editor = new DefaultCellEditor(new JKeyedComboBox(kmodel));
+	}	
+	
+	return kmodel;
+}
 
+public DateListRenderEdit(List dates, DateFormat fmt)
+{
+	super(getKmodel(dates, fmt));
 }
 
 

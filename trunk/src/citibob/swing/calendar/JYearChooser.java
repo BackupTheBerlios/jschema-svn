@@ -111,6 +111,7 @@ public void calChanged()
 	tfYear.setValue(new Integer(year));
 }
 public void dayButtonSelected() {}
+public void nullChanged() { citibob.swing.WidgetTree.setEnabled(this, !model.isNull()); }
 // ===================================================================
 // These are called by the Integer TextField.
 class YearObjModel implements ObjModel

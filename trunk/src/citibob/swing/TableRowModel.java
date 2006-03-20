@@ -22,6 +22,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 import java.util.*;
+import citibob.swing.table.*;
 
 /** An improvement on TableRowModel, realizing this should have a SelectModel
  *in it too. */
@@ -29,21 +30,21 @@ public class TableRowModel
 extends AbstractRowModel
 implements MultiRowModel, TableModelListener, ListSelectionModel {
 
-private TableModel tmodel;
+private CitibobTableModel tmodel;
 int curRow;
-/** Should we listen to the underlying TableModel for insert/delete events?
+/** Should we listen to the underlying CitibobTableModel for insert/delete events?
 It's appropriate to be false only when this has been used as a JTable's
 ListSelectionModel. */
 boolean listenTableModel = true;
 
-public TableModel getTableModel()
+public CitibobTableModel getTableModel()
 { return tmodel; }
 
-public TableRowModel(TableModel tmodel)
+public TableRowModel(CitibobTableModel tmodel)
 {
 	this(tmodel, true);
 }
-public TableRowModel(TableModel tmodel, boolean listen)
+public TableRowModel(CitibobTableModel tmodel, boolean listen)
 {
 	listenTableModel = listen;
 	this.tmodel = tmodel;
@@ -58,6 +59,8 @@ protected void finalize() {
 	tmodel.removeTableModelListener(this);
 }
 
+public int findColumn(String s)
+	{ return tmodel.findColumn(s); }
 // ===========================================================
 // We also need a way for single-column widgets to get and set
 // individual values in the current row.

@@ -112,12 +112,20 @@ reports its location in THIS table model.  This allows one to refer
 to columns by their UNDERLYING name, not their display name.
  TODO: Maybe add a separate concept for actual name and display name in 
  the table model... */
-public int findUnderlyingCol(String s)
+public int findColumnU(String s)
 {
 	int col_u = model_u.findColumn(s);
 	int col_t = iColMap[col_u];
 	return col_t;
 }
+public int getColMap(int col) { return colMap[col]; }
+
+/** Gets the column class of a column named ``name'' in the underlying model. */
+public Class getColumnClassU(String s)
+	{ return model_u.getColumnClass(model_u.findColumn(s)); }
+public TableModel getModelU() { return model_u; }
+
+
 public String getColumnName(int col)
 	{ return colNames[col]; }
 public Class getColumnClass(int col)
@@ -137,16 +145,16 @@ public int getColumnCount()
 public int getRowCount()
 	{ return model_u.getRowCount(); }
 
-public List getPrototypes()
-{
-	List pold = model_u.getPrototypes();
-	if (pold == null) return null;
-
-	// TODO: This could be inefficient with LinkedList.
-	ArrayList pnew = new ArrayList(colMap.length);
-	for (int i = 0; i < colMap.length; ++i) pnew.add(pold.get(colMap[i]));
-	return pnew;
-}
+//public List getPrototypes()
+//{
+//	List pold = model_u.getPrototypes();
+//	if (pold == null) return null;
+//
+//	// TODO: This could be inefficient with LinkedList.
+//	ArrayList pnew = new ArrayList(colMap.length);
+//	for (int i = 0; i < colMap.length; ++i) pnew.add(pold.get(colMap[i]));
+//	return pnew;
+//}
 
 public Object getValueAt(int row, int column)
 	{ return model_u.getValueAt(row, colMap[column]); }

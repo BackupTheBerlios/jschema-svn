@@ -27,7 +27,7 @@ import java.util.*;
 import citibob.jschema.swing.*;
 import citibob.swing.calendar.JDateChooser;
 import citibob.swing.typed.*;
-import citibob.jschema.KeyedModel;
+import citibob.sql.KeyedModel;
 
 public class KeyedTableCellEditor 
 extends AbstractCellEditor implements TableCellEditor {

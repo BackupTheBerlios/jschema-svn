@@ -49,11 +49,7 @@ public class JDateChooserCellRenderer
 		else 
 			date = null;
 		
-		if( date != null ) {
-			chooser.getModel().setTime((Date)date);
-		} else {
-//			chooser.startEmpty = true;
-		}
+		chooser.getModel().setTime((Date)date);
 		return chooser;
 	}
 

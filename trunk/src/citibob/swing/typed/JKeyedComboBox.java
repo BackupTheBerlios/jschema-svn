@@ -28,9 +28,9 @@ package citibob.swing.typed;
 import javax.swing.*;
 import java.util.*;
 import java.sql.*;
-import citibob.jschema.KeyedModel;
+import citibob.sql.KeyedModel;
 import java.awt.*;
-//import java.awt.event.*;
+import citibob.sql.*;
 
 /**
  *
@@ -38,83 +38,80 @@ import java.awt.*;
 Used to make a combo box that returns one of a fixed set of integer values.  The ComboBox displays a list of describtive strings, one per integer value to be returned.
  */
 public class JKeyedComboBox extends JComboBox implements TypedWidget {
-	KeyedModel kmodel;
-
-	ObjModel model;
-public ObjModel getObjModel() { return model; }
-public void setObjModel(ObjModel m) { model = m; }
-
+KeyedModel kmodel;
+KeyedFormatter kformatter;
+//SqlType sqlType;
 // ------------------------------------------------------
 public JKeyedComboBox()
 {
-//	addActionListener(this);
-	model = new DefaultObjModel();
 	setRenderer(new MyRenderer());
-	kmodel = new KeyedModel();
 }
 public JKeyedComboBox(KeyedModel kmodel)
 {
-//	addActionListener(this);
-	model = new DefaultObjModel();
-	setRenderer(new MyRenderer());
-	setModel(kmodel);
+	this();
+	setKeyedModel(kmodel);
 }
-// ------------------------------------------------------
-
-public void setModel(KeyedModel kmodel)
+// --------------------------------------------------------------
+public void setKeyedModel(KeyedModel kmodel)
 {
 	this.kmodel = kmodel;
+	kformatter = new KeyedFormatter(kmodel);
 	DefaultComboBoxModel cmodel = new DefaultComboBoxModel(kmodel.getKeyList());
 	super.setModel(cmodel);
 }
-public void setModel(ResultSet rs, int keyCol, int itemCol) throws SQLException
+public void setSqlType(SqlSwinger f)
 {
-	KeyedModel kmodel = new KeyedModel();
-	kmodel.addAllItems(rs,keyCol,itemCol);
-	setModel(kmodel);
+	SqlType sqlType = f.getSqlType();
+	if (!(sqlType instanceof SqlEnum)) 
+		throw new ClassCastException("Expected Enum type, got " + sqlType);
+	SqlEnum etype = (SqlEnum)sqlType;
+	setKeyedModel(etype.getKeyedModel());
 }
-public void setModel(ResultSet rs, String keyCol, String itemCol) throws SQLException
+// --------------------------------------------------------------
+public boolean isInstance(Object o)
 {
-	KeyedModel kmodel = new KeyedModel();
-	kmodel.addAllItems(rs,keyCol,itemCol);
-	setModel(kmodel);
+	return kmodel.getItemMap().containsKey(o);
 }
-// -------------------------------------------------------
-public void setSelectedItem(Object o)
-{
-	System.out.println("setSelectedItem("+ o + ")");
-	super.setSelectedItem(o);
-//	System.out.println("getSelectedItem = " + getSelectedItem());
-}
-public Object getSelectedItem()
-{
-	Object ret = super.getSelectedItem();
-//	System.out.println("getSelectedItem = " + ret);
-	return ret;
-}
+// --------------------------------------------------------------
+String colName;
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public String getColName() { return colName; }
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public void setColName(String col) { colName = col; }
+public boolean stopEditing() { return true; }
+public Object clone() throws CloneNotSupportedException { return super.clone(); }
+
+// ---------------------------------------------------
+
+
+//// -------------------------------------------------------
+//public void setSelectedItem(Object o)
+//{
+//	System.out.println("setSelectedItem("+ o + ")");
+//	super.setSelectedItem(o);
+////	System.out.println("getSelectedItem = " + getSelectedItem());
+//}
+//public Object getSelectedItem()
+//{
+//	Object ret = super.getSelectedItem();
+////	System.out.println("getSelectedItem = " + ret);
+//	return ret;
+//}
 // ============================================================
-
-	public void setValue(Object d)
-	{
+// TypedWidget stuff
+public void setValue(Object d)
+{
 System.out.println("JKeyedComboBox.setValue: " + d);
-		model.setValue(d);
-		setSelectedItem(d);
-	}
-	public void setValue(int i)
-	{
-		Integer ii = new Integer(i);
-		setValue(ii);
-		model.setValue(ii);
-	}
+	setSelectedItem(d);
+}
+public void setValue(int i)
+{
+	Integer ii = new Integer(i);
+	setValue(ii);
+}
 	
-	public Class getObjClass()
-		{ return Integer.class; }
-
-	public Object getValue()
-		{ return getSelectedItem(); }
-	public void resetValue() {}
-	public void setLatestValue() {}
-	public boolean isValueValid() { return true; }
+public Object getValue()
+	{ return getSelectedItem(); }
 
 // ==============================================================
 class MyRenderer 
@@ -123,62 +120,10 @@ extends DefaultListCellRenderer {
     public Component getListCellRendererComponent(
 	JList list, Object value, int index,
 	boolean isSelected, boolean cellHasFocus) {
-
-        //Set the icon and text.  If icon was null, say so.
-//		Object o = getSelectedItem();
-		Object displayObj = null;
-		Object o = value;
-		if (o == null) displayObj = "<null>";
-		else {
-//		if (o instanceof String) {
-//			displayObj = o;
-//		} else if (o instanceof Integer) {
-			Map map = kmodel.getItemMap();
-//			Integer ii = (Integer)o;
-			KeyedModel.Item it = (KeyedModel.Item)map.get(o);
-			if (it == null) displayObj = "x" + o.toString();
-			else displayObj = it;
-//		} else {
-//			// displayObj = o.getClass().toString();//"<Not Integer>";
-//			displayObj = "<Not Integer>";
-		}
+		value = kformatter.valueToString(value);
 		return super.getListCellRendererComponent(
-			list,displayObj,index,isSelected,cellHasFocus);
+			list, value, index,isSelected,cellHasFocus);
     }
 }
 
-/*
-    public Component getListCellRendererComponent(
-	JList list, Object value, int index,
-	boolean isSelected, boolean cellHasFocus) {
-        //Get the selected index. (The index param isn't
-        //always valid, so just use the value.)
-//        int selectedIndex = ((Integer)value).intValue();
-
-        if (isSelected) {
-            setBackground(list.getSelectionBackground());
-            setForeground(list.getSelectionForeground());
-        } else {
-            setBackground(list.getBackground());
-            setForeground(list.getForeground());
-        }
-
-        //Set the icon and text.  If icon was null, say so.
-//		Object o = getSelectedItem();
-Object o = value;
-		if (o == null) setText("<null>");
-		else if (o instanceof Integer) {
-			Map map = kmodel.getItemMap();
-			Integer ii = (Integer)o;
-			KeyedModel.Item it = (KeyedModel.Item)map.get(ii);
-			if (it == null) setText(ii.toString());
-			else setText(it.toString());
-		} else {
-			setText("<Not Integer>");
-		}
-
-        return this;
-    }
-}
-*/
 }

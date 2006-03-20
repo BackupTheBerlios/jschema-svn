@@ -27,6 +27,10 @@ public static interface Listener {
     public void calChanged();
 
 
+    /**  Nullness has changed. */
+    public void nullChanged();
+
+
     /**  The "final" value has been changed. */
 /*    finalCalChanged();*/
 
@@ -37,6 +41,10 @@ public static interface Listener {
 public static class Adapter implements CalModelMVC.Listener {
     /**  Value has changed. */
     public void calChanged() {}
+
+
+    /**  Nullness has changed. */
+    public void nullChanged() {}
 
 
     /**  The "final" value has been changed. */
@@ -58,6 +66,13 @@ public void fireCalChanged()
 	for (java.util.Iterator ii=listeners.iterator(); ii.hasNext(); ) {
 		CalModelMVC.Listener l = (CalModelMVC.Listener)ii.next();
 		l.calChanged();
+	}
+}
+public void fireNullChanged()
+{
+	for (java.util.Iterator ii=listeners.iterator(); ii.hasNext(); ) {
+		CalModelMVC.Listener l = (CalModelMVC.Listener)ii.next();
+		l.nullChanged();
 	}
 }
 public void fireDayButtonSelected()

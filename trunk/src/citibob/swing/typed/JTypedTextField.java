@@ -30,115 +30,79 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import citibob.exception.*;
-import citibob.textconverter.TextConverter;
+import citibob.sql.*;
+import citibob.swing.typed.SwingerMap;
 
 /**
  *
  * @author  citibob
  */
 public class JTypedTextField
-extends JNullTextField
-implements ThrowsException, TypedWidget, KeyListener {
+extends JFormattedTextField
+implements TypedWidget, KeyListener {
 
-ExceptionHandler handler;
-TextConverter converter;
-//Object val;
-ObjModel model;
-public ObjModel getObjModel() { return model; }
-public void setObjModel(ObjModel m) { model = m; }
-// --------------------------------------------------------------
-/** For building with NetBeans */
+/** Our best guess of the class this takes. */
+//Class objClass = null;
+SqlType sqlType;	
+
 public JTypedTextField()
 {
 	super();
-	model = new DefaultObjModel();
-//	addKeyListener(this);
+	addKeyListener(this);
 }
-
-/** For constructing manually */
-public JTypedTextField(TextConverter converter)
+public JTypedTextField(SqlSwinger f)
 {
 	this();
-	setTextConverter(converter);
+	setSqlType(f);
 }
 
 // --------------------------------------------------------------
-
-/** For setting after NetBeans creates it, or in the properties dialog. */
-public void setTextConverter(TextConverter converter)
+public void setSqlType(SqlSwinger f)
 {
-	this.converter = converter;
-	setInputVerifier(new MyInputVerifier());
+	sqlType = f.getSqlType();
+	super.setFormatterFactory(f.newFormatterFactory());
 }
-
-public TextConverter getTextConverter()
-	{ return converter; }
-
+public boolean isInstance(Object o)
+{
+	return sqlType.isInstance(o);
+}
+public boolean stopEditing()
+{
+	try {
+		super.commitEdit();
+		return true;
+	} catch(java.text.ParseException e) {
+		return false;
+	}
+}
 // --------------------------------------------------------------
-/** Set by an automatic scanner that finds all objects implementing ThrowsException. */
-public void setExceptionHandler(ExceptionHandler handler)
-	{ this.handler = handler; }
-
-public void setValue(Object o)
-{
-//System.out.println("this = " + this.getClass());
-//System.out.println("o = " + o);
-//System.out.println("converter = " + converter);
-//System.out.println("Assigning " + o.getClass() + " to " + converter.getObjClass());
-	if (o != null && !converter.getObjClass().isAssignableFrom(o.getClass())) {
-		throw new java.lang.ClassCastException("Cannot assign object of class " + getClass() + " to JTypedTextField of class " + converter.getObjClass());
-	}
-	setText(converter.toString(o));
-	model.setValue(o);
-}
-
-public Object getValue()
-	{ return model.getValue(); }
-public Class getObjClass()
-	{ return converter.getObjClass(); }
-public void resetValue()
-{
-	setLatestValue();
-}
-public void setLatestValue()
-{
-	if (!isValueValid()) {
-		setValue(getValue());	// Sets text in accordance with last good value
-	}
-}
-public boolean isValueValid()
-{
-	return getInputVerifier().verify(this);
-}
+//public Class getObjClass()
+//	{ return objClass; }
+//private void resetValue()
+//{
+//	setValue(getValue());	// Sets text in accordance with last good value
+//}
+// JFormatterTextField already calls PropertyChangeEvent
+//public void setValue(Object val)
+//{
+//	super.setValue(val);
+//}
+// ---------------------------------------------------
+String colName;
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public String getColName() { return colName; }
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public void setColName(String col) { colName = col; }
+public Object clone() throws CloneNotSupportedException { return super.clone(); }
+// ---------------------------------------------------
 // ===================== KeyListener =====================
 public void keyTyped(KeyEvent e) {
-	if (e.getKeyChar() == '\033') resetValue();
+	if (e.getKeyChar() == '\033') setValue(getValue());
 //	if (e.getKeyChar() == '\r') setLatestValue();	// Submit current value.
 }
 public void keyReleased(KeyEvent e) {
-	if (e.getKeyCode() == KeyEvent.VK_ESCAPE) resetValue();
+	if (e.getKeyCode() == KeyEvent.VK_ESCAPE) setValue(getValue());
 }
 public void keyPressed(KeyEvent e) {}
-// ====================== Input Verifier ===========
-protected static class MyInputVerifier extends javax.swing.InputVerifier {
-public boolean verify(javax.swing.JComponent jComponent) {
-//System.out.println("Verifying text field.");
-	JTypedTextField tf = (JTypedTextField) jComponent;
-	try {
-		String s = tf.getText();
-		Object o = tf.converter.parseObject(s);
-		tf.setValue(o);
-//		tf.val = o;
-//		tf.setText(tf.converter.toString(tf.val));
-
-		// Unset any format error conditions
-		if (tf.handler != null) tf.handler.throwException(null);
-		return true;
-	} catch(Exception e) {
-		if (tf.handler != null) tf.handler.throwException(e);
-		else System.err.println("Format Exception: " + e);
-		return false;
-	}
-}}
 
 }

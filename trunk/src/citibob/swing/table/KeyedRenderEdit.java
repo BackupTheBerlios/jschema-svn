@@ -27,7 +27,7 @@ package citibob.swing.table;
 import javax.swing.table.*;
 import citibob.swing.typed.*;
 import java.sql.*;
-import citibob.jschema.KeyedModel;
+import citibob.sql.KeyedModel;
 import javax.swing.*;
 import javax.swing.event.*;
 

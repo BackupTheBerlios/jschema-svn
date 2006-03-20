@@ -25,7 +25,7 @@ import javax.swing.event.*;
 public interface CitibobTableModel extends TableModel
 {
 	/** Model provies "prototype" information, i.e. a sample row of data. */
-	List getPrototypes();
+//	List getPrototypes();
 
 	/** These, you will get for free if you subclass AbstractTableModel. */
 	void fireTableChanged(TableModelEvent e);

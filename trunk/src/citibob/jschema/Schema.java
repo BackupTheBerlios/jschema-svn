@@ -40,7 +40,7 @@ public interface Schema
 	// ColumnIterator colIterator();
 
 	/** Gets a set of prototype values for the columns, of the given types.  This is used to properly set table display parameters in Swing. */
-	List getPrototypes();
+//	List getPrototypes();
 
 //void getWhereKey(SqlQuery q, String table, Object[] whereKey);
 //void getSelectCols(SqlQuery q, String table);

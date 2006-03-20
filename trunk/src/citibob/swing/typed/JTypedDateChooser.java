@@ -28,7 +28,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import javax.swing.*;
 import citibob.swing.calendar.*;
-//import com.toedter.components.*;
+import citibob.sql.*;
 
 /**
  * TODO: This class need sthe once-over!
@@ -37,36 +37,72 @@ import citibob.swing.calendar.*;
  */
 public class JTypedDateChooser extends JDateChooser implements TypedWidget {
 
+SqlDateType sqlType;
 	
-ObjModel model;
-public ObjModel getObjModel() { return model; }
-public void setObjModel(ObjModel m) { model = m; }
+/** Returns last legal value of the widget.  Same as method in JFormattedTextField */
+public Object getValue()
+{
+System.out.println("JTDC.getValue = " + getModel().getTime());
+	return getModel().getTime();
+}
 
-	public JTypedDateChooser(String fmt)
-	{
-		super();
-//		super(fmt, true);
-		//setDateFormatString(fmt);
+/** Sets the value.  Same as method in JFormattedTextField.  Fires a
+ * propertyChangeEvent("value") when calling setValue() changes the value. */
+public void setValue(Object d)
+{
+	java.util.Date dt;
+	if (d == null) {
+		// Set default value to current time
+		setValue(new java.util.Date());
+		dt = null;
+	} else {
+		// Truncate the incoming date to fit this kind of date.
+		if (!(d instanceof java.util.Date)) throw new ClassCastException("Bad type " + d);
+		dt = sqlType.truncate((java.util.Date)d);
 	}
 	
-	public void setValue(Object d)
-	{
-		if (d.getClass() != Date.class)
-			throw new ClassCastException("Expected java.util.Date");
-		Date val = (Date)d;
-System.out.println("JTypedDateChooser: Setting date to " + val + "(" + this + ")");
-		// TODO: Bug in JDateChooser doesn't work well with null dates.
-		// It gets confused when embedded in a table.
+	if (!isInstance(dt)) throw new ClassCastException("Bad type, but cast right.");
+System.out.println("JTDC: Setting date to " + dt );
+	// TODO: Bug in JDateChooser doesn't work well with null dates.
+	// It gets confused when embedded in a table.
 //		if (val == null) val = new Date();
-		getModel().setTime(val);
-	}
-	
-	public Object getValue()
-		{ return getModel().getCal().getTime(); }
-	public Class getObjClass()
-		{ return Date.class; }
-	public void resetValue() {}
-	public void setLatestValue() {}
-	public boolean isValueValid() { return true; }
+	getModel().setTime(dt);
+}
+
+/** Is this object an instance of the class available for this widget?
+ * If so, then setValue() will work.  See SqlType.. */
+public boolean isInstance(Object o)
+{
+	return sqlType.isInstance(o);
+}
+
+/** Set up widget to edit a specific SqlType.  Note that this widget does not
+ have to be able to edit ALL SqlTypes... it can throw a ClassCastException
+ if asked to edit a SqlType it doesn't like. */
+public void setSqlType(citibob.swing.typed.SqlSwinger f) throws ClassCastException
+{
+	sqlType = (SqlDateType)f.getSqlType();
+
+	// Set up the type properly
+	Class klass = sqlType.getObjClass();
+	if (!(java.util.Date.class.isAssignableFrom(klass)))
+		throw new ClassCastException("Expected Date type, got " + klass);
+	CalModel mcal = new CalModel(sqlType.isInstance(null));
+	super.setModel(mcal);
+	//super.setNullable(sqlType.isInstance(null));
+}
+public boolean stopEditing()
+{
+	getModel().useTmpDay();
+	return true;
+}
+// ---------------------------------------------------
+String colName;
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public String getColName() { return colName; }
+/** Row (if any) in a RowModel we will bind this to at runtime. */
+public void setColName(String col) { colName = col; }
+public Object clone() throws CloneNotSupportedException { return super.clone(); }
+// ---------------------------------------------------
 
 }
