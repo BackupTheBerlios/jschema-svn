@@ -22,7 +22,7 @@ import java.util.*;
 import java.io.*;
 import citibob.multithread.*;
 import citibob.sql.*;
-import citibob.exception.ExpHandler;
+import citibob.multithread.ExpHandler;
 
 
 /**

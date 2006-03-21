@@ -24,6 +24,7 @@ import javax.swing.*;
 import citibob.exception.*;
 import java.util.prefs.*;
 import citibob.swing.prefs.*;
+import citibob.multithread.ExpHandler;
 
 /** Static utilities for dealing with an entire tree of widgets (widget tree / widget hierarchy). */
 public class WidgetTree

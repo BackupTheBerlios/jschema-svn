@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package citibob.multithread;
 
-import citibob.exception.ExpHandler;
+import citibob.multithread.ExpHandler;
 
 /**
  * Collects any exceptions received...

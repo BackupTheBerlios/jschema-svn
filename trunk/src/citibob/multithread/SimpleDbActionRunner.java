@@ -20,7 +20,7 @@ package citibob.multithread;
 
 import java.sql.*;
 import citibob.sql.*;
-import citibob.exception.ExpHandler;
+import citibob.multithread.ExpHandler;
 
 /**
  * Just run the CBRunnables in the current thread.  Route exceptions to the ExpHandler.
