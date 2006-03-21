@@ -22,7 +22,7 @@ import java.sql.*;
 import javax.swing.event.*;
 import citibob.multithread.*;
 
-public abstract class SchemaBufDbModel extends SqlGenDbModel
+public class SchemaBufDbModel extends SqlGenDbModel
 {
 
 Statement st;
