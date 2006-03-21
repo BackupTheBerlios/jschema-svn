@@ -25,7 +25,7 @@ import citibob.multithread.*;
 public class SchemaBufDbModel extends SqlGenDbModel
 {
 
-Statement st;
+//Statement st;
 	
 public SchemaBufDbModel(String table, SchemaBuf buf)
 {

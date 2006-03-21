@@ -48,7 +48,7 @@ public Class getObjClass()
 /** Convert an element of this type to an Sql string for use in a query */
 public String toSql(Object o)
 {
-	System.out.println("o.class = " + o.getClass());
+//	System.out.println("o.class = " + o.getClass());
 	return SqlDate.sql((java.util.Date)o);
 }
 
