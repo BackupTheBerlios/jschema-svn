@@ -120,7 +120,7 @@ extends DefaultListCellRenderer {
     public Component getListCellRendererComponent(
 	JList list, Object value, int index,
 	boolean isSelected, boolean cellHasFocus) {
-		value = kformatter.valueToString(value);
+		if (kformatter != null) value = kformatter.valueToString(value);
 		return super.getListCellRendererComponent(
 			list, value, index,isSelected,cellHasFocus);
     }
