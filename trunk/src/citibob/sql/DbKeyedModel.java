@@ -39,7 +39,7 @@ throws SQLException
 	this.orderFieldName = orderFieldName;
 	this.change = change;
 	requery(st);
-	change.addListener(idTableName, this);
+	if (change != null) change.addListener(idTableName, this);
 }
 
 /** Re-load keyed model from database... */

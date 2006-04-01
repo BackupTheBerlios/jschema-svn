@@ -21,7 +21,7 @@ package citibob.jschema;
 import citibob.jschema.*;
 import citibob.sql.pgsql.*;
 import java.sql.*;
-import citibob.sql.SqlQuery;
+import citibob.sql.*;
 //import java.util.*;
 
 /** Description of a set of queries we would like to do and load into a PersonsBuf. */
@@ -42,19 +42,19 @@ public void setKey(int idValue)
 	this.idValue = idValue;
 }
 // --------------------------------------------------------------
-public IntKeyedDbModel(SchemaBuf buf, String keyField, boolean doInsertKeys)
+public IntKeyedDbModel(SchemaBuf buf, String keyField, boolean doInsertKeys, DbChangeModel dbChange)
 {
-	super(buf);
+	super(buf, dbChange);
 	this.keyField = keyField;
 	this.doInsertKeys = doInsertKeys;	
 }
-public IntKeyedDbModel(Schema schema, String keyField, boolean doInsertKeys)
+public IntKeyedDbModel(Schema schema, String keyField, boolean doInsertKeys, DbChangeModel dbChange)
 {
-	this(new SchemaBuf(schema), keyField, doInsertKeys);
+	this(new SchemaBuf(schema), keyField, doInsertKeys, dbChange);
 }
 
-public IntKeyedDbModel(Schema schema, String keyField)
-	{ this(schema, keyField, true); }
+public IntKeyedDbModel(Schema schema, String keyField, DbChangeModel dbChange)
+	{ this(schema, keyField, true, dbChange); }
 // --------------------------------------------------------------
 
 public void setSelectWhere(SqlQuery q)

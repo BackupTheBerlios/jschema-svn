@@ -21,6 +21,7 @@ package citibob.jschema;
 import java.sql.*;
 import javax.swing.event.*;
 import citibob.multithread.*;
+import citibob.sql.*;
 
 public class SchemaBufDbModel extends SqlGenDbModel
 {
@@ -33,9 +34,9 @@ public SchemaBufDbModel(String table, SchemaBuf buf)
 }
 
 /** Uses the default table for the Schema in buf. */
-public SchemaBufDbModel(SchemaBuf buf)
+public SchemaBufDbModel(SchemaBuf buf, DbChangeModel dbChange)
 {
-	super(buf.getSchema().getDefaultTable(), buf);
+	super(buf.getSchema().getDefaultTable(), buf, dbChange);
 }
 
 public void doSelect(Statement st) throws java.sql.SQLException

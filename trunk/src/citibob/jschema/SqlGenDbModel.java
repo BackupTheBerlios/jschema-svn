@@ -21,11 +21,13 @@ package citibob.jschema;
 import java.sql.*;
 import citibob.sql.SqlQuery;
 import javax.swing.event.*;
+import citibob.sql.*;
 
 public abstract class SqlGenDbModel implements DbModel, RowStatusConst
 {
 
 boolean insertBlankRow = false;
+DbChangeModel dbChange;
 
 SqlGen gen;
 /** Name of table to which we're bound. */
@@ -40,11 +42,14 @@ public void setInsertBlankRow(boolean b) { insertBlankRow = b; }
 public boolean getInsertBlankRow() { return insertBlankRow; }
 
 // -----------------------------------------------------------
-public SqlGenDbModel(String table, SqlGen gen)
+public SqlGenDbModel(String table, SqlGen gen, DbChangeModel dbChange)
 {
 	this.table = table;
 	this.gen = gen;
+	this.dbChange = dbChange;
 }
+public SqlGenDbModel(String table, SqlGen gen)
+	{ this(table, gen, null); }
 public SqlGen getSqlGen()
 	{ return gen; }
 // -----------------------------------------------------------
@@ -128,6 +133,7 @@ System.out.println("doUpdate.status(" + row + ") = " + gen.getStatus(row));
 			doSimpleUpdate(row, st);
 		break;
 	}
+	if (dbChange != null) dbChange.fireTableChanged(st, table);	
 }
 // -----------------------------------------------------------
 /** Get Sql query to flush updates to database.

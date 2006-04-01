@@ -20,7 +20,7 @@ package citibob.jschema;
 
 import citibob.jschema.*;
 import java.sql.*;
-import citibob.sql.SqlQuery;
+import citibob.sql.*;
 //import java.util.*;
 
 /** Description of a set of queries we would like to do and load into a PersonsBuf. */
@@ -39,13 +39,13 @@ public void setWhereClause(String whereClause)
 public void setOrderClause(String orderClause)
 	{ this.orderClause = orderClause; }
 
-public WhereClauseDbModel(Schema schema, String whereClause, String orderClause)
+public WhereClauseDbModel(Schema schema, String whereClause, String orderClause, DbChangeModel dbChange)
 {
-	this(new SchemaBuf(schema), whereClause, orderClause);
+	this(new SchemaBuf(schema), whereClause, orderClause, dbChange);
 }
-public WhereClauseDbModel(SchemaBuf sbuf, String whereClause, String orderClause)
+public WhereClauseDbModel(SchemaBuf sbuf, String whereClause, String orderClause, DbChangeModel dbChange)
 {
-	super(sbuf);
+	super(sbuf, dbChange);
 	this.whereClause = whereClause;
 	this.orderClause = orderClause;
 }

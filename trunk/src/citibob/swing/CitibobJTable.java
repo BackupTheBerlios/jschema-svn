@@ -39,6 +39,7 @@ public CitibobJTable()
 	// it back on.
 	this.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 
+	setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 //javax.swing.plaf.basic.BasicComboBoxUI
 }
