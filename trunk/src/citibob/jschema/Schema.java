@@ -30,6 +30,7 @@ public interface Schema
 
 	/** Retrieve info on a column by number. */
 	Column getCol(int colNo);
+	Column getCol(String name);
 	
 	ColIterator colIterator();
 

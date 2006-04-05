@@ -16,52 +16,35 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-package citibob.sql;
+package citibob.swing.typed;
 
 import java.sql.*;
 import citibob.jschema.*;
+import citibob.sql.*;
 import citibob.util.KeyedModel;
-import citibob.swing.typed.*;
 
-/** For enumerate types...  NOTE: does NOT extend JEnum*/
-public class SqlEnum
-extends JEnum
-implements SqlType
+/** For enumerate types... Nullable depends on KeyedModel. */
+public class JEnum implements JType
 {
 	KeyedModel kmodel;
-	boolean nullable = true;
 	
 	/** nullText = string to use for null value, or else <null> if this is not nullable. */
-	public SqlEnum(KeyedModel kmodel, String nullText) {
-		super(kmodel);
-		this.nullable = (nullText != null);
-		if (nullable) {
-			if (kmodel.get(null) == null) kmodel.addItem(null, nullText);
-		}
+	public JEnum(KeyedModel kmodel) {
+		this.kmodel = kmodel;
 	}
-	
-	public SqlEnum(KeyedModel kmodel, boolean nullable) {
-		this(kmodel, nullable ? "" : null);
+	/** Shortcut, equal to new JEnum(new KeyedModel(objs)); */
+	public JEnum(Object[] objs) {
+		this(new KeyedModel(objs));
 	}
+	public KeyedModel getKeyedModel() { return kmodel; }
 	
 	/** Java class used to represent this type */
 	public Class getObjClass()
-		{ return Integer.class; }
-
-	/** Convert an element of this type to an Sql string for use in a query */
-	public String toSql(Object o)
-		{ return (o == null ? "null" : o.toString()); }
+		{ return Object.class; }
 
 	public boolean isInstance(Object o)
 	{
-		if (o == null) return nullable;
-		if (!(o instanceof Integer)) return false;
 		return (kmodel.get(o) != null);
 	}
-// ================================================
-	public static String sql(Integer ii)
-		{ return ii == null ? "null" : ii.toString(); }
-	public static String sql(int i)
-		{ return ""+i; }
 
 }

@@ -28,13 +28,13 @@ public class ColPermuteTable extends CitibobJTable
 
 //TableModel uModel;		// The underlying model
 
-public void setModelU(CitibobTableModel uModel, String[] colNames, String[] sColMap)
+public void setModelU(CitibobTableModel uModel, String[] colNames, String[] sColMap, boolean[] editable)
 {
 //	this.uModel = uModel;
 	
 	// Set it up
 	ColPermuteTableModel model = new ColPermuteTableModel(
-		uModel, colNames, sColMap);
+		uModel, colNames, sColMap, editable);
 	setModel(model);
 }
 

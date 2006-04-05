@@ -42,33 +42,48 @@ int colNo;
 TypedWidget tw;
 
 // --------------------------------------------------------------------
+public void bind(TypedWidget tw, SchemaRowModel bufRow, SwingerMap map)
+	{ bind(tw, bufRow, null, map); }
+public void bind(TypedWidget tw, TableRowModel bufRow)
+	{ bind(tw, bufRow, null); }
 /** Bind widget and set its type. */
-public void bind(TypedWidget tw, SchemaBufRowModel bufRow, String colName, SwingerMap map)
+public void bind(TypedWidget tw, SchemaRowModel bufRow, String colName, SwingerMap map)
 {
 	// Set the type
 	Schema schema = bufRow.getSchema();
-	SqlType sqlType = schema.getCol(schema.findCol(colName)).getType();
-	SqlSwinger f = map.getSwinger(sqlType);		// Default ways to render & edit
-	tw.setSqlType(f);
+	JType sqlType = schema.getCol(schema.findCol(colName)).getType();
+	JTypeSwinger f = map.newSwinger(sqlType);		// Default ways to render & edit
+	tw.setJType(f);
 	
-	bind(tw, bufRow, colName);
+	bind(tw, (TableRowModel)bufRow, colName);
 }
 
-/** Just bind widget, don't much with its type. */
+/** Just bind widget, don't mess with its type. */
 public void bind(TypedWidget tw, TableRowModel bufRow, String colName)
 {
+	if (colName == null) colName = tw.getColName();
 	colNo = bufRow.findColumn(colName);
 	
+	bindRowModel(bufRow, colNo);
+	bindWidget(tw);
+	
+	/* Now, set the initial value. */
+	valueChanged(colNo);
+}
+
+// --------------------------------------------------------------------
+public void bindRowModel(TableRowModel bufRow, int colNo)
+{
 	// Bind as a listener to the RowModel (which fronts a SchemaBuf)...
 	this.bufRow = bufRow;
-	bufRow.addColListener(colNo, this);
-
+	bufRow.addColListener(colNo, this);	
+}
+public void bindWidget(TypedWidget tw)
+{
 	// Bind as listener to the TypedWidget
 	Component c = (Component)tw;
 	c.addPropertyChangeListener("value", this);
-
-	/* Now, set the initial value. */
-	valueChanged(colNo);
+	
 }
 // --------------------------------------------------------------------
 public void unBind()
@@ -114,4 +129,24 @@ public void propertyChange(java.beans.PropertyChangeEvent evt)
 	bufRow.set(colNo, evt.getNewValue());
 }
 // ===============================================================
+/** Binds all components in a widget tree to a (Schema, RowModel), if they implement SchemaRowBinder. */
+public static void bindRecursive(Component c, SchemaRowModel bufRow, SwingerMap map)
+{
+	// Take care of yourself
+	if (c instanceof TypedWidget) {
+		TypedWidget tw = (TypedWidget)c;
+		if (tw.getColName() != null) {
+			new TypedWidgetBinder().bind(tw, bufRow, tw.getColName(), map);
+		}
+	}
+
+	// Take care of your children
+	if (c instanceof Container) {
+	    Component[] child = ((Container)c).getComponents();
+	    for (int i = 0; i < child.length; ++i) {
+			bindRecursive(child[i], bufRow, map);
+		}
+	}
+}
+
 }

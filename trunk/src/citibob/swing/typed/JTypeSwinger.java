@@ -15,12 +15,12 @@ package citibob.swing.typed;
  * based on an SqlType.
  * @author citibob
  */
-public interface SqlSwinger {
+public interface JTypeSwinger {
 	
 	/** Set up which type this Swinger is making stuff for. */
 	//public void setSqlType(citibob.sql.SqlType sqlType);
 	
-	public citibob.sql.SqlType getSqlType();
+	public citibob.swing.typed.JType getJType();
 	
 	/** Renderer and editor for a CitibobJTable.  If JTable's default
 	 renderer and editor is desired, just return null.  Normally, this will

@@ -10,26 +10,27 @@
 
 package citibob.swing.typed;
 
-import citibob.sql.*;
+//import citibob.sql.*;
+//import citibob.jschema.JType;
 
 /**
  *
  * @author citibob
  */
-public abstract class TypedWidgetSwinger implements SqlSwinger
+public abstract class TypedWidgetSwinger implements JTypeSwinger
 {
 
 //TypedWidget tw;
-protected SqlType sqlType;
+protected JType jType;
 
 
 /** Creates a new instance of TypedWidgetSTFactory */
-public TypedWidgetSwinger(SqlType sqlType) {
+public TypedWidgetSwinger(JType jType) {
 	//this.tw = tw;
-	this.sqlType = sqlType;
+	this.jType = jType;
 }
 
-public SqlType getSqlType() { return sqlType; }
+public JType getJType() { return jType; }
 
 /** Renderer and editor for a CitibobJTable.  If JTable's default
  renderer and editor is desired, just return null.  Normally, this will
@@ -46,7 +47,7 @@ public boolean renderWithWidget() { return true; }
 public citibob.swing.typed.TypedWidget newTypedWidget()
 {
 	TypedWidget tww = createTypedWidget();
-	tww.setSqlType(this);	// relies on newFormatterFactory
+	tww.setJType(this);	// relies on newFormatterFactory
 	return tww;	
 }
 

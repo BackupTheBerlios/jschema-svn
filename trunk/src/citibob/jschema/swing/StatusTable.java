@@ -42,20 +42,23 @@ public class StatusTable extends SchemaBufTable {
 StatusSchemaBuf ssb;
 
 public void setModelU(SchemaBuf schemaBuf,
-		String[] xColNames, String[] xSColMap, SwingerMap swingers)
+String[] xColNames, String[] xSColMap,
+boolean[] xEditable, SwingerMap swingers)
 {
 	// Prepend 1 column to column list
+	boolean[] editable = (xEditable == null ? null : new boolean[xEditable.length + 1]);
 	String[] colNames = new String[xColNames.length + 1];
 	String[] sColMap = new String[xSColMap.length + 1];
 	colNames[0] = "Status";
 	sColMap[0] = "__status__";
 	for (int i=0; i<xColNames.length; ++i) {
+		if (editable != null) editable[i+1] = xEditable[i];
 		colNames[i+1] = xColNames[i];
 		sColMap[i+1] = xSColMap[i];
 	}
 	// Set it up
 	ssb = new StatusSchemaBuf(schemaBuf);
-	super.setModelU(ssb, colNames, sColMap, swingers);
+	super.setModelU(ssb, colNames, sColMap, editable, swingers);
 
 	setRenderEditU("__status__", new citibob.swing.table.StatusRenderEdit());
 }	

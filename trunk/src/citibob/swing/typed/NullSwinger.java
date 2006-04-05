@@ -17,12 +17,12 @@ import citibob.sql.*;
  * based on an SqlType.
  * @author citibob
  */
-public class NullSwinger implements SqlSwinger
+public class NullSwinger implements JTypeSwinger
 {
-	SqlType sqlType;
-	public NullSwinger(SqlType t) { sqlType = t; }
+	JType sqlType;
+	public NullSwinger(JType t) { sqlType = t; }
 	
-	public citibob.sql.SqlType getSqlType() { return sqlType; }
+	public citibob.swing.typed.JType getJType() { return sqlType; }
 	
 	/** Renderer and editor for a CitibobJTable.  If JTable's default
 	 renderer and editor is desired, just return null.  Normally, this will

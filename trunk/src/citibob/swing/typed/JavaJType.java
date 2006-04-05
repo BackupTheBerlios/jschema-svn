@@ -16,14 +16,27 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-package citibob.swing.table;
+package citibob.swing.typed;
 
-import java.util.*;
-import javax.swing.table.*;
-import javax.swing.event.*;
-import citibob.sql.*;
+import java.sql.*;
 
-public interface SqlTypeTableModel extends CitibobTableModel
-{
-	public SqlType getColumnSqlType(int colIndex);
+/** General JType wrapper for Java classes */
+public class JavaJType implements JType
+{	
+	boolean nullable = true;
+	Class klass;
+	
+	public JavaJType(Class klass, boolean nullable) {
+		this.klass = klass;
+		this.nullable = nullable;
+	}
+	public JavaJType(Class klass) { this(klass, true); }
+	
+	/** Java class used to represent this type */
+	public Class getObjClass()
+		{ return klass; }
+
+	public boolean isInstance(Object o)
+		{ return (klass.isInstance(o) || (nullable && o == null)); }
+
 }

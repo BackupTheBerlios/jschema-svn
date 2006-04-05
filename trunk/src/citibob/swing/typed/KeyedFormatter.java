@@ -10,7 +10,7 @@
 
 package citibob.swing.typed;
 
-import citibob.sql.KeyedModel;
+import citibob.util.KeyedModel;
 import javax.swing.*;
 
 /**

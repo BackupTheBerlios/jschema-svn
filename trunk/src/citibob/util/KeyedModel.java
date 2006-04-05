@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * TODO: Should this be in citibob.jschema package?
  */
 
-package citibob.sql;
+package citibob.util;
 
 import java.sql.*;
 import java.util.*;
@@ -68,11 +68,14 @@ public Vector getKeyList()
 	{ return keyList; }
 public Map getItemMap()
 	{ return itemMap; }
-public Object get(Object key)
-	{ return itemMap.get(key); }
+public KeyedModel.Item get(Object key)
+{
+	//KeyedModel.Item ret;
+	return (KeyedModel.Item)itemMap.get(key);
+}
 
 
-void clear()
+protected void clear()
 {
 	itemMap.clear();
 	keyList.clear();
@@ -124,6 +127,13 @@ public void KeyedModel(ResultSet rs, int keyCol, int itemCol) throws SQLExceptio
 public void KeyedModel(ResultSet rs, String keyCol, String itemCol) throws SQLException
 {
 	addAllItems(rs,keyCol,itemCol);
+}
+/** Creates a KeyedModel in which key == value. */
+public KeyedModel(Object[] objs)
+{
+	for (int i=0; i<objs.length; ++i) {
+		addItem(objs[i], objs[i]);
+	}
 }
 public KeyedModel() {}
 

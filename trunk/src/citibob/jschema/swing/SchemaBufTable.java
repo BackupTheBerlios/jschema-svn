@@ -19,6 +19,7 @@ import citibob.jschema.*;
 import citibob.swing.table.*;
 import citibob.swing.typed.*;
 import citibob.swing.*;
+import citibob.swing.typed.JType;
 
 /**
  *
@@ -31,30 +32,32 @@ public class SchemaBufTable extends ColPermuteTable
  * @param typeCol Name of type column in the schema
  * @param xColNames Columns (other than type and status) from schema to display
  */
-public void setModelU(SqlTypeTableModel schemaBuf,
-		String[] colNames, String[] sColMap, citibob.swing.typed.SwingerMap swingers)
+public void setModelU(JTypeTableModel schemaBuf,
+		String[] colNames, String[] sColMap, boolean[] editable,
+		citibob.swing.typed.SwingerMap swingers)
 {
-	super.setModelU(schemaBuf, colNames, sColMap);
+	super.setModelU(schemaBuf, colNames, sColMap, editable);
 	ColPermuteTableModel model = (ColPermuteTableModel)getModel();
+	if (editable != null) model.setEditable(editable);
 	
 	// Set the RenderEdit for each column, according to that column's SqlType.
 	for (int c=0; c<sColMap.length; ++c) {
 		int bcol = model.getColMap(c);
-		SqlType sqlType = schemaBuf.getColumnSqlType(bcol);
+		JType sqlType = schemaBuf.getColumnJType(bcol);
 		if (sqlType == null) continue;
-		SqlSwinger swing = swingers.getSwinger(sqlType);
+		JTypeSwinger swing = swingers.newSwinger(sqlType);
 		if (swing == null) continue;
 		setRenderEdit(c, swing.newRenderEdit());
 	}
 }
 //	
 ///** Sets a render/edit on a colum, by UNDERLYING column name,
-// * according to the columns declared SqlType: getColumnSqlType(). */
+// * according to the columns declared SqlType: getColumnJType(). */
 //public void setRenderEditU(String underlyingName, RenderEditSet res)
 //{
 //	int col = findColumnU(underlyingName);
 //	SchemaBuf model = (SchemaBuf)getModel();
-//	RenderEdit re = res.getRenderEdit(model.getColumnSqlType(col));
+//	RenderEdit re = res.getRenderEdit(model.getColumnJType(col));
 //	setRenderEdit(col, re);
 //}
 

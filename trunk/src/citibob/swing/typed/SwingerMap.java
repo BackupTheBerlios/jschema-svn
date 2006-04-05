@@ -28,7 +28,7 @@ HashMap makerMap = new HashMap();
 // ===========================================================
 protected static interface Maker
 {
-	SqlSwinger newSwinger(SqlType sqlType);
+	JTypeSwinger newSwinger(JType sqlType);
 }
 // ===========================================================
 //protected void addConst(SqlSwinger swing)
@@ -39,13 +39,13 @@ protected void addMaker(Class klass, Maker maker)
 {
 	makerMap.put(klass, maker);
 }
-public SqlSwinger getSwinger(SqlType t)
+public JTypeSwinger newSwinger(JType t)
 {
-//	SqlSwinger swing;
+	// Index on general class of the JType, or on its underlying
+	// Java Class (for JavaJType)
 	Class klass = t.getClass();
-//	swing = (SqlSwinger)constMap.get(klass);
-//	if (swing != null) return swing;
-	
+	if (klass == JavaJType.class) klass = ((JavaJType) t).klass;
+
 	Maker m = (Maker)makerMap.get(klass);
 	if (m != null) return m.newSwinger(t);
 	

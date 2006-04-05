@@ -49,18 +49,19 @@ public ColPermuteTableModel(CitibobTableModel model_u)
 		colNames[i] = model_u.getColumnName(i);
 		colMap[i] = i;
 	}
-	init(model_u, colNames, colMap);
+	init(model_u, colNames, colMap, null);
 }
 /** Constructor
  @param Column i in this table maps to column colMap[i] in underlying table. */
 public ColPermuteTableModel(CitibobTableModel model_u, String[] colNames, int[] colMap)
 {
-	init(model_u, colNames, colMap);
+	init(model_u, colNames, colMap, null);
 }
 
 public ColPermuteTableModel(CitibobTableModel model_u,
 String[] colNames,
-String[] sColMap)
+String[] sColMap,
+boolean[] editable)
 {
 System.out.println("ColPermuteTableModel: this = " + this);
 	int[] colMap = new int[sColMap.length];
@@ -76,18 +77,18 @@ System.out.println("    " + model_u.getColumnName(j));
 		}
 	}
 
-	init(model_u, colNames, colMap);
+	init(model_u, colNames, colMap, editable);
 }
 public void setEditable(boolean[] editable)
 {
 	this.editable = editable;
 }
-private void init(CitibobTableModel model_u, String[] colNames, int[] colMap)
+private void init(CitibobTableModel model_u, String[] colNames, int[] colMap, boolean[] editable)
 {
 	this.model_u = model_u;
 	this.colNames = colNames;
 	this.colMap = colMap;
-	this.editable = null;
+	this.editable = editable;
 
 	// Set up inverse column map
 	iColMap = new int[model_u.getColumnCount()];

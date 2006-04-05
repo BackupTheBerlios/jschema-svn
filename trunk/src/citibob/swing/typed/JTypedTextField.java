@@ -32,6 +32,7 @@ import java.awt.event.*;
 import citibob.exception.*;
 import citibob.sql.*;
 import citibob.swing.typed.SwingerMap;
+//import citibob.sql.JType;
 
 /**
  *
@@ -43,37 +44,48 @@ implements TypedWidget, KeyListener {
 
 /** Our best guess of the class this takes. */
 //Class objClass = null;
-SqlType sqlType;	
+JType jType;	
 
 public JTypedTextField()
 {
 	super();
 	addKeyListener(this);
 }
-public JTypedTextField(SqlSwinger f)
+public JTypedTextField(JTypeSwinger f)
 {
 	this();
-	setSqlType(f);
+	setJType(f);
 }
 
 // --------------------------------------------------------------
-public void setSqlType(SqlSwinger f)
+public void setJType(JTypeSwinger f)
 {
-	sqlType = f.getSqlType();
+//System.out.println("JTypedTextField.setJType: " + f + ", " + f.getJType());
+	jType = f.getJType();
 	super.setFormatterFactory(f.newFormatterFactory());
 }
 public boolean isInstance(Object o)
 {
-	return sqlType.isInstance(o);
+	return jType.isInstance(o);
 }
 public boolean stopEditing()
 {
+//System.out.println("stopEditing: value = " + super.getText() + " --> " + super.getValue());
 	try {
 		super.commitEdit();
 		return true;
 	} catch(java.text.ParseException e) {
 		return false;
 	}
+}
+// --------------------------------------------------------------
+public Object getValue()
+{
+	String text = super.getText();
+	Object o = super.getValue();
+//	Class oclass = (o == null ? null : o.getClass());
+//	System.out.println("JTypedTextField returning value: " + text + " --> " + o + "(" + oclass + ")");
+	return o;
 }
 // --------------------------------------------------------------
 //public Class getObjClass()
@@ -97,7 +109,7 @@ public Object clone() throws CloneNotSupportedException { return super.clone(); 
 // ---------------------------------------------------
 // ===================== KeyListener =====================
 public void keyTyped(KeyEvent e) {
-	if (e.getKeyChar() == '\033') setValue(getValue());
+	if (e.getKeyChar() == '\033') setValue(getValue());		// revert
 //	if (e.getKeyChar() == '\r') setLatestValue();	// Submit current value.
 }
 public void keyReleased(KeyEvent e) {

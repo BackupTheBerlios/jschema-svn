@@ -19,6 +19,7 @@ import citibob.swing.pgsql.SqlStringSwinger;
 import citibob.swing.pgsql.SqlTimeSwinger;
 import citibob.swing.pgsql.SqlTimestampSwinger;
 import citibob.sql.pgsql.*;
+import citibob.swing.typed.JType;
 
 
 /**
@@ -34,37 +35,37 @@ public DefaultSwingerMap() {
 	
 	// SqlBool
 	this.addMaker(SqlBool.class, new SwingerMap.Maker() {
-	public SqlSwinger newSwinger(SqlType sqlType) {
+	public JTypeSwinger newSwinger(JType sqlType) {
 		return new SqlBoolSwinger((SqlBool)sqlType);
 	}});
 	
 	// SqlDate
 	this.addMaker(SqlDate.class, new SwingerMap.Maker() {
-	public SqlSwinger newSwinger(SqlType sqlType) {
+	public JTypeSwinger newSwinger(JType sqlType) {
 		return new SqlDateSwinger((SqlDate)sqlType, null, "MM-dd-yyyy");
 	}});
 
 	// SqlInteger
 	this.addMaker(SqlInteger.class, new SwingerMap.Maker() {
-	public SqlSwinger newSwinger(SqlType sqlType) {
+	public JTypeSwinger newSwinger(JType sqlType) {
 		return new SqlIntegerSwinger((SqlInteger)sqlType);
 	}});
 
 	// SqlString
 	this.addMaker(SqlString.class, new SwingerMap.Maker() {
-	public SqlSwinger newSwinger(SqlType sqlType) {
+	public JTypeSwinger newSwinger(JType sqlType) {
 		return new SqlStringSwinger((SqlString)sqlType);
 	}});
 
 	// SqlTime
 	this.addMaker(SqlTime.class, new SwingerMap.Maker() {
-	public SqlSwinger newSwinger(SqlType sqlType) {
+	public JTypeSwinger newSwinger(JType sqlType) {
 		return new SqlTimeSwinger((SqlTime)sqlType, null, "HH:mm:ss");
 	}});
 
 	// SqlTimestamp
 	this.addMaker(SqlTimestamp.class, new SwingerMap.Maker() {
-	public SqlSwinger newSwinger(SqlType sqlType) {
+	public JTypeSwinger newSwinger(JType sqlType) {
 		return new SqlTimestampSwinger((SqlTimestamp)sqlType, null, "MM-dd-yyyy HH:mm");
 	}});
 }

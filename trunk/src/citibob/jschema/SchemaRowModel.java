@@ -20,7 +20,11 @@ package citibob.jschema;
 
 import citibob.swing.RowModel;
 
- /** A row model that is attached to data associated with one Schema.  The columns in the RowModel must match EXACTLY the columns in the schema.  Thus, schema.findCol() returns column indices that are relevant to the SchemaRowModel. */
+ /** A row model that is attached to data associated with one Schema.
+  * The columns in the RowModel must match EXACTLY the columns in the schema.
+  * Thus, schema.findCol() returns column indices that are relevant
+  * to the SchemaRowModel.
+  * (x instanceof SchemaRowModel) ==> (x isntanceof TableRowModel) */
 public interface SchemaRowModel extends RowModel
 {
 	Schema getSchema();

@@ -11,6 +11,8 @@
 package citibob.sql;
 
 import java.util.*;
+import citibob.swing.typed.JType;
+import citibob.jschema.*;
 
 /**
  * An SqlType for representing dates...

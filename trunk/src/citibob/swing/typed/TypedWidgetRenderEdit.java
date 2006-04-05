@@ -50,7 +50,7 @@ public TypedWidgetRenderEdit(TypedWidget widget1, TypedWidget widget2)
 //		System.exit(-1);
 //	}
 }
-public TypedWidgetRenderEdit(SqlSwinger f)
+public TypedWidgetRenderEdit(JTypeSwinger f)
 {
 	// Get formatter info for this SqlType
 	//SqlTypeMap.Factory f = map.getFactory(type);
@@ -96,9 +96,9 @@ public static class Editor extends AbstractCellEditor  implements TableCellEdito
 public Component getTableCellEditorComponent(JTable table, Object value,
 		boolean isSelected, int rowIndex, int vColIndex)
 {
-if (tw instanceof JDateChooser) {
-	((JDateChooser)tw).getModel().setTime(new java.util.Date());
-}
+//if (tw instanceof JDateChooser) {
+//	((JDateChooser)tw).getModel().setTime(new java.util.Date());
+//}
 	tw.setValue(value);
 
 	return (Component)tw;
@@ -108,7 +108,18 @@ if (tw instanceof JDateChooser) {
 // It must return the new value to be stored in the cell.
 public Object getCellEditorValue()
 {
-	return tw.getValue();
+	
+	tw.stopEditing();
+//	if (tw instanceof JFormattedTextField) {
+//		JFormattedTextField tf = (JFormattedTextField)tw;
+//		try {
+//			tf.commitEdit();
+//		} catch(ParseException e) {}
+//	}
+	
+	Object o = tw.getValue();
+	System.out.println("TypedWidgetRenderEdit.getCellEditorValue: " + o);
+	return o;
 }
 }
 // ==================================================================

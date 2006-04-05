@@ -44,7 +44,7 @@ protected citibob.swing.typed.TypedWidget createTypedWidget()
 	 factory to just store instances of 4 AbstractFormatters and return them as needed. */
 	public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 	{
-		SqlNumeric tt = (SqlNumeric)sqlType;
+		SqlNumeric tt = (SqlNumeric)jType;
 		
 		NumberFormat nf;
 		if (tt.getScale() == 0) {
@@ -63,24 +63,24 @@ protected citibob.swing.typed.TypedWidget createTypedWidget()
 	// Not part of interface
 	public javax.swing.text.DefaultFormatterFactory newFormatterFactory(NumberFormat nf)
 	{
-		NumberFormatter nff = new NumberFormatter(nf);
+		NumberFormatter nff = new LooseNumberFormatter(nf);
 		return new DefaultFormatterFactory(nff);
 	}
 
-	private NumberFormatter formatter(NumberFormat nf)
-	{
-		return (nf == null ? null : new NumberFormatter(nf));
-	}
-	
-	public javax.swing.text.DefaultFormatterFactory newFormatterFactory(
-	NumberFormat defaultNF, NumberFormat displayNF, NumberFormat editNF, NumberFormat nullNF)
-	{
-		return new DefaultFormatterFactory(
-				formatter(defaultNF),
-				formatter(displayNF),
-				formatter(editNF),
-				formatter(nullNF));
-	}
+//	private NumberFormatter formatter(NumberFormat nf)
+//	{
+//		return (nf == null ? null : new LooseNumberFormatter(nf));
+//	}
+//	
+//	public javax.swing.text.DefaultFormatterFactory newFormatterFactory(
+//	NumberFormat defaultNF, NumberFormat displayNF, NumberFormat editNF, NumberFormat nullNF)
+//	{
+//		return new DefaultFormatterFactory(
+//				formatter(defaultNF),
+//				formatter(displayNF),
+//				formatter(editNF),
+//				formatter(nullNF));
+//	}
 
 
 

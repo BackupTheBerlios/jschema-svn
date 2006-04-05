@@ -16,17 +16,19 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-package citibob.jschema;
-/** Promises that an object can be bound to a partiular column in a RowModel (which must be based on a Schema in this case). */
-public interface SchemaRowModelBindable
+package citibob.swing.table;
+
+import java.util.*;
+import javax.swing.table.*;
+import javax.swing.event.*;
+import citibob.sql.*;
+import citibob.swing.typed.JType;
+
+public interface JTypeTableModel extends CitibobTableModel
 {
+	/** Return SqlType for an entire column --- or null, if this column does not have a single SqlType. */
+	public JType getColumnJType(int col);
 
-/** What column should we be bound to? */
-String getColName();
-
-void setColName(String s);
-
-/** Do whatever you do to bind to a the named column in the schema set. */
-void bind(SchemaRowModel bufRow);
-
+	/** Return SqlType for a cell */
+	public JType getJType(int row, int col);
 }

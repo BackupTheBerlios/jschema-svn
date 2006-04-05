@@ -42,12 +42,17 @@ public void setKey(int idValue)
 	this.idValue = idValue;
 }
 // --------------------------------------------------------------
+public IntKeyedDbModel(SchemaBuf buf, String keyField, boolean doInsertKeys)
+{ this(buf, keyField, doInsertKeys, null); }
+
 public IntKeyedDbModel(SchemaBuf buf, String keyField, boolean doInsertKeys, DbChangeModel dbChange)
 {
 	super(buf, dbChange);
 	this.keyField = keyField;
 	this.doInsertKeys = doInsertKeys;	
 }
+public IntKeyedDbModel(Schema schema, String keyField, boolean doInsertKeys)
+{ this(schema, keyField, doInsertKeys, null); }
 public IntKeyedDbModel(Schema schema, String keyField, boolean doInsertKeys, DbChangeModel dbChange)
 {
 	this(new SchemaBuf(schema), keyField, doInsertKeys, dbChange);
@@ -55,6 +60,8 @@ public IntKeyedDbModel(Schema schema, String keyField, boolean doInsertKeys, DbC
 
 public IntKeyedDbModel(Schema schema, String keyField, DbChangeModel dbChange)
 	{ this(schema, keyField, true, dbChange); }
+public IntKeyedDbModel(Schema schema, String keyField)
+	{ this(schema, keyField, null); }
 // --------------------------------------------------------------
 
 public void setSelectWhere(SqlQuery q)

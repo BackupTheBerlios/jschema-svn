@@ -47,7 +47,7 @@ public boolean isInstance(Object o);
 /** Set up widget to edit a specific SqlType.  Note that this widget does not
  have to be able to edit ALL SqlTypes... it can throw a ClassCastException
  if asked to edit a SqlType it doesn't like. */
-public void setSqlType(citibob.swing.typed.SqlSwinger f) throws ClassCastException;
+public void setJType(citibob.swing.typed.JTypeSwinger f) throws ClassCastException;
 
 /** Row (if any) in a RowModel we will bind this to at runtime. */
 public String getColName();

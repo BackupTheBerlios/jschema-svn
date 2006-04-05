@@ -52,13 +52,13 @@ SchemaBufDbModel dbm;
 	
 	
 	public void initRuntime(SchemaBufDbModel dbm,
-	String[] xColNames, String[] xSColMap, SwingerMap swingers,
+	String[] xColNames, String[] xSColMap, boolean[] editable, SwingerMap swingers,
 	ActionRunner runner)
 	{
 		this.dbm = dbm;
 		this.schemaBuf = dbm.getSchemaBuf();
 		this.runner = runner;
-		table.setModelU(schemaBuf, xColNames, xSColMap, swingers);
+		table.setModelU(schemaBuf, xColNames, xSColMap, editable, swingers);
 	}
 
 	

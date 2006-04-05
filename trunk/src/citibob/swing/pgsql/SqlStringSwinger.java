@@ -41,7 +41,7 @@ protected citibob.swing.typed.TypedWidget createTypedWidget()
  factory to just store instances of 4 AbstractFormatters and return them as needed. */
 public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 {
-	SqlString tt = (SqlString)sqlType;
+	SqlString tt = (SqlString)jType;
 
 	StringFormatter sff = new StringFormatter(tt.getLimit());
 	return new DefaultFormatterFactory(sff);

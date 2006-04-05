@@ -20,7 +20,7 @@ package citibob.sql;
 
 import java.sql.*;
 
-public class SqlNumeric implements citibob.sql.SqlType
+public class SqlNumeric implements SqlType
 {
 	int precision;		// total digits
 	int scale;			// # digits after decimal point

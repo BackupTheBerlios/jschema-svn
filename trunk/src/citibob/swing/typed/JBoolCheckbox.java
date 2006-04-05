@@ -60,18 +60,18 @@ public void setValue(Object d)
 }
 
 /** Is this object an instance of the class available for this widget?
- * If so, then setValue() will work.  See SqlType.. */
+ * If so, then setValue() will work.  See JType.. */
 public boolean isInstance(Object o)
 {
 	return (o instanceof Boolean);
 }
 
-/** Set up widget to edit a specific SqlType.  Note that this widget does not
- have to be able to edit ALL SqlTypes... it can throw a ClassCastException
- if asked to edit a SqlType it doesn't like. */
-public void setSqlType(citibob.swing.typed.SqlSwinger f) throws ClassCastException
+/** Set up widget to edit a specific JType.  Note that this widget does not
+ have to be able to edit ALL JTypes... it can throw a ClassCastException
+ if asked to edit a JType it doesn't like. */
+public void setJType(citibob.swing.typed.JTypeSwinger f) throws ClassCastException
 {
-	Class klass = f.getSqlType().getObjClass();
+	Class klass = f.getJType().getObjClass();
 	if (!(Boolean.class.isInstance(klass)))
 		throw new ClassCastException("Expected Boolean type, got " + klass);
 }

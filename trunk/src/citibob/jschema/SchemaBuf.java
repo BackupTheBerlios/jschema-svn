@@ -26,10 +26,10 @@ import citibob.swing.table.*;
 
 import java.util.*;
 import citibob.sql.SqlQuery;
-import citibob.sql.SqlType;
+import citibob.swing.typed.JType;
 
 public class SchemaBuf extends AbstractTableModel
-implements SqlBuf, SqlTypeTableModel, RowStatusConst
+implements SqlBuf, JTypeTableModel, RowStatusConst
 {
 /** Data model we'll use for our columns. */
 Schema schema;
@@ -369,8 +369,10 @@ public int findColumn(String colName)
 	{ return schema.findCol(colName); }
 public Class getColumnClass(int colIndex)
 	{ return schema.getCol(colIndex).getType().getObjClass(); }
-public SqlType getColumnSqlType(int colIndex)
+public JType getColumnJType(int colIndex)
 	{ return schema.getCol(colIndex).getType(); }
+public JType getJType(int row, int col)
+	{ return getColumnJType(col); }
 public String getColumnName(int colIndex)
 	{ return schema.getCol(colIndex).getName(); }
 // --------------------------------------------------

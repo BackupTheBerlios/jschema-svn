@@ -28,7 +28,7 @@ package citibob.swing.typed;
 import javax.swing.*;
 import java.util.*;
 import java.sql.*;
-import citibob.sql.KeyedModel;
+import citibob.util.KeyedModel;
 import java.awt.*;
 import citibob.sql.*;
 
@@ -40,7 +40,7 @@ Used to make a combo box that returns one of a fixed set of integer values.  The
 public class JKeyedComboBox extends JComboBox implements TypedWidget {
 KeyedModel kmodel;
 KeyedFormatter kformatter;
-//SqlType sqlType;
+//JType jType;
 // ------------------------------------------------------
 public JKeyedComboBox()
 {
@@ -56,15 +56,16 @@ public void setKeyedModel(KeyedModel kmodel)
 {
 	this.kmodel = kmodel;
 	kformatter = new KeyedFormatter(kmodel);
-	DefaultComboBoxModel cmodel = new DefaultComboBoxModel(kmodel.getKeyList());
+	Vector keyList = kmodel.getKeyList();
+	DefaultComboBoxModel cmodel = new DefaultComboBoxModel(keyList);
 	super.setModel(cmodel);
 }
-public void setSqlType(SqlSwinger f)
+public void setJType(JTypeSwinger f)
 {
-	SqlType sqlType = f.getSqlType();
-	if (!(sqlType instanceof SqlEnum)) 
-		throw new ClassCastException("Expected Enum type, got " + sqlType);
-	SqlEnum etype = (SqlEnum)sqlType;
+	JType jType = f.getJType();
+	if (!(jType instanceof JEnum)) 
+		throw new ClassCastException("Expected Enum type, got " + jType);
+	JEnum etype = (JEnum)jType;
 	setKeyedModel(etype.getKeyedModel());
 }
 // --------------------------------------------------------------
@@ -111,7 +112,10 @@ public void setValue(int i)
 }
 	
 public Object getValue()
-	{ return getSelectedItem(); }
+{
+	Object o = getSelectedItem();
+	return o;
+}
 
 // ==============================================================
 class MyRenderer 

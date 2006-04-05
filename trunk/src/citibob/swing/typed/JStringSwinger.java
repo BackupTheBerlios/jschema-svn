@@ -13,25 +13,19 @@ package citibob.swing.typed;
 import citibob.sql.*;
 import javax.swing.text.*;
 import java.text.*;
+import citibob.swing.typed.*;
+import citibob.sql.pgsql.*;
 
 /**
  *
  * @author citibob
  */
-public class SqlEnumSwinger extends TypedWidgetSwinger
+public class JStringSwinger extends TypedTextSwinger
 {
 
 /** Creates a new instance of TypedWidgetSTFactory */
-public SqlEnumSwinger(SqlEnum sqlType) {
-	super(sqlType);
-}
-
-public boolean renderWithWidget() { return false; }
-
-/** Create a widget suitable for editing this type of data. */
-public citibob.swing.typed.TypedWidget createTypedWidget()
-{
-	return new JKeyedComboBox();
+public JStringSwinger() {
+	super(new JavaJType(String.class));
 }
 
 /** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
@@ -41,9 +35,8 @@ public citibob.swing.typed.TypedWidget createTypedWidget()
  factory to just store instances of 4 AbstractFormatters and return them as needed. */
 public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 {
-	SqlEnum tt = (SqlEnum)jType;
-	KeyedFormatter fmt = new KeyedFormatter(tt.getKeyedModel());
-	return new DefaultFormatterFactory(fmt);
+	StringFormatter sff = new StringFormatter();
+	return new DefaultFormatterFactory(sff);
 }
 
 }

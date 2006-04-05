@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package citibob.jschema;
 
+import citibob.swing.typed.JType;
 import citibob.sql.SqlType;
+//import citibob.sql.SqlType;
 
 /** Represents one column in a Schema. */
 public class Column

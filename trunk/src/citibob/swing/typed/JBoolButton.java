@@ -39,7 +39,7 @@ Boolean val;
 
 String trueLabel = "Y";
 String falseLabel = "N";
-SqlType sqlType;
+JType jType;
 
 /** Returns last legal value of the widget.  Same as method in JFormattedTextField */
 public Object getValue()
@@ -60,20 +60,20 @@ public void setValue(Object d)
 }
 
 /** Is this object an instance of the class available for this widget?
- * If so, then setValue() will work.  See SqlType.. */
+ * If so, then setValue() will work.  See JType.. */
 public boolean isInstance(Object o)
 {
-	if (o == null) return sqlType.isInstance(null);
+	if (o == null) return jType.isInstance(null);
 	return (o instanceof Boolean);
 }
 
-/** Set up widget to edit a specific SqlType.  Note that this widget does not
- have to be able to edit ALL SqlTypes... it can throw a ClassCastException
- if asked to edit a SqlType it doesn't like. */
-public void setSqlType(citibob.swing.typed.SqlSwinger f) throws ClassCastException
+/** Set up widget to edit a specific JType.  Note that this widget does not
+ have to be able to edit ALL JTypes... it can throw a ClassCastException
+ if asked to edit a JType it doesn't like. */
+public void setJType(citibob.swing.typed.JTypeSwinger f) throws ClassCastException
 {
-	sqlType = f.getSqlType();
-	Class klass = f.getSqlType().getObjClass();
+	jType = f.getJType();
+	Class klass = f.getJType().getObjClass();
 	if (!(Boolean.class.isInstance(klass)))
 		throw new ClassCastException("Expected Boolean type, got " + klass);
 }
@@ -96,7 +96,7 @@ public JBoolButton()
 	addActionListener(new java.awt.event.ActionListener() {
 	public void actionPerformed(java.awt.event.ActionEvent evt) {
 		if (val == null) setValue(Boolean.TRUE);
-		else if (!val.booleanValue()) setValue((sqlType.isInstance(null) ? null : Boolean.TRUE));
+		else if (!val.booleanValue()) setValue((jType.isInstance(null) ? null : Boolean.TRUE));
 		else setValue(Boolean.FALSE);
 	}});
 }

@@ -59,22 +59,22 @@ public void setValue(Object o)
 }
 
 /** Is this object an instance of the class available for this widget?
- * If so, then setValue() will work.  See SqlType.. */
+ * If so, then setValue() will work.  See JType.. */
 public boolean isInstance(Object o)
 {
 	return map.containsKey(o);
 }
 
-/** Set up widget to edit a specific SqlType.  Note that this widget does not
- have to be able to edit ALL SqlTypes... it can throw a ClassCastException
- if asked to edit a SqlType it doesn't like. */
-public void setSqlType(citibob.swing.typed.SqlSwinger f) throws ClassCastException
+/** Set up widget to edit a specific JType.  Note that this widget does not
+ have to be able to edit ALL JTypes... it can throw a ClassCastException
+ if asked to edit a JType it doesn't like. */
+public void setJType(citibob.swing.typed.JTypeSwinger f) throws ClassCastException
 {
 	// Could be anything...
-//	SqlType sqlType = f.getSqlType();
-//	if (!(sqlType instanceof SqlEnum)) 
-//		throw new ClassCastException("Expected Enum type, got " + sqlType);
-//	SqlEnum etype = (SqlEnum)sqlType;
+//	JType jType = f.getJType();
+//	if (!(jType instanceof SqlEnum)) 
+//		throw new ClassCastException("Expected Enum type, got " + jType);
+//	SqlEnum etype = (SqlEnum)jType;
 //	setKeyedModel(etype.getKeyedModel());
 }
 

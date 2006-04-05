@@ -37,7 +37,7 @@ import citibob.sql.*;
  */
 public class JTypedDateChooser extends JDateChooser implements TypedWidget {
 
-SqlDateType sqlType;
+SqlDateType jType;
 	
 /** Returns last legal value of the widget.  Same as method in JFormattedTextField */
 public Object getValue()
@@ -58,7 +58,7 @@ public void setValue(Object d)
 	} else {
 		// Truncate the incoming date to fit this kind of date.
 		if (!(d instanceof java.util.Date)) throw new ClassCastException("Bad type " + d);
-		dt = sqlType.truncate((java.util.Date)d);
+		dt = jType.truncate((java.util.Date)d);
 	}
 	
 	if (!isInstance(dt)) throw new ClassCastException("Bad type, but cast right.");
@@ -70,26 +70,26 @@ System.out.println("JTDC: Setting date to " + dt );
 }
 
 /** Is this object an instance of the class available for this widget?
- * If so, then setValue() will work.  See SqlType.. */
+ * If so, then setValue() will work.  See JType.. */
 public boolean isInstance(Object o)
 {
-	return sqlType.isInstance(o);
+	return jType.isInstance(o);
 }
 
-/** Set up widget to edit a specific SqlType.  Note that this widget does not
- have to be able to edit ALL SqlTypes... it can throw a ClassCastException
- if asked to edit a SqlType it doesn't like. */
-public void setSqlType(citibob.swing.typed.SqlSwinger f) throws ClassCastException
+/** Set up widget to edit a specific JType.  Note that this widget does not
+ have to be able to edit ALL JTypes... it can throw a ClassCastException
+ if asked to edit a JType it doesn't like. */
+public void setJType(citibob.swing.typed.JTypeSwinger f) throws ClassCastException
 {
-	sqlType = (SqlDateType)f.getSqlType();
+	jType = (SqlDateType)f.getJType();
 
 	// Set up the type properly
-	Class klass = sqlType.getObjClass();
+	Class klass = jType.getObjClass();
 	if (!(java.util.Date.class.isAssignableFrom(klass)))
 		throw new ClassCastException("Expected Date type, got " + klass);
-	CalModel mcal = new CalModel(sqlType.isInstance(null));
+	CalModel mcal = new CalModel(jType.isInstance(null));
 	super.setModel(mcal);
-	//super.setNullable(sqlType.isInstance(null));
+	//super.setNullable(jType.isInstance(null));
 }
 public boolean stopEditing()
 {

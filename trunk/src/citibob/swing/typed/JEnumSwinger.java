@@ -18,11 +18,11 @@ import java.text.*;
  *
  * @author citibob
  */
-public class SqlEnumSwinger extends TypedWidgetSwinger
+public class JEnumSwinger extends TypedWidgetSwinger
 {
 
 /** Creates a new instance of TypedWidgetSTFactory */
-public SqlEnumSwinger(SqlEnum sqlType) {
+public JEnumSwinger(JEnum sqlType) {
 	super(sqlType);
 }
 
@@ -41,7 +41,7 @@ public citibob.swing.typed.TypedWidget createTypedWidget()
  factory to just store instances of 4 AbstractFormatters and return them as needed. */
 public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 {
-	SqlEnum tt = (SqlEnum)jType;
+	JEnum tt = (JEnum)jType;
 	KeyedFormatter fmt = new KeyedFormatter(tt.getKeyedModel());
 	return new DefaultFormatterFactory(fmt);
 }

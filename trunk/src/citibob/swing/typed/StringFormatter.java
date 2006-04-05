@@ -10,7 +10,7 @@
 
 package citibob.swing.typed;
 
-import citibob.sql.KeyedModel;
+import citibob.util.KeyedModel;
 import javax.swing.*;
 
 /**
@@ -27,6 +27,9 @@ String nullText = "";
 public StringFormatter(int limit) {
 	this.limit = limit;
 }
+
+public StringFormatter()
+	{ this(-1); }
 
 public void setNullText(String s) { nullText = s; }
 
