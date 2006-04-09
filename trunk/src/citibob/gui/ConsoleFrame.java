@@ -54,11 +54,12 @@ public class ConsoleFrame extends javax.swing.JFrame {
 	
 //Thread thread;
 DocumentWriter logWriter;
+Document doc;
 
 public void initRuntime(String title, String guiNodePath)
 {
 	setTitle(title);
-	Document doc = new CircularPlainDocument(20000);
+	doc = new CircularPlainDocument(20000);
 	logWriter = new DocumentWriter(doc);
 
 	// Set up log window
@@ -92,6 +93,8 @@ public void initRuntime(String title, String guiNodePath)
     private void initComponents() {
         logScrollPane = new javax.swing.JScrollPane();
         logText = new javax.swing.JTextArea();
+        jToolBar1 = new javax.swing.JToolBar();
+        bClear = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("OmniFX Quote Server");
@@ -108,9 +111,32 @@ public void initRuntime(String title, String guiNodePath)
 
         getContentPane().add(logScrollPane, java.awt.BorderLayout.CENTER);
 
+        bClear.setText("Clear");
+        bClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bClearActionPerformed(evt);
+            }
+        });
+
+        jToolBar1.add(bClear);
+
+        getContentPane().add(jToolBar1, java.awt.BorderLayout.NORTH);
+
         pack();
     }
     // </editor-fold>//GEN-END:initComponents
+
+	private void bClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bClearActionPerformed
+// TODO add your handling code here:
+//		doc.clear();
+//		logText.setText("");
+		try {
+			doc.remove(0, doc.getLength());
+		} catch(BadLocationException e) {
+			e.printStackTrace();	// Shouldn't happen
+		}
+
+	}//GEN-LAST:event_bClearActionPerformed
 
 	private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
 		setVisible(false);
@@ -122,6 +148,8 @@ public void initRuntime(String title, String guiNodePath)
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bClear;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JScrollPane logScrollPane;
     private javax.swing.JTextArea logText;
     // End of variables declaration//GEN-END:variables

@@ -49,10 +49,14 @@ public void bind(TypedWidget tw, TableRowModel bufRow)
 /** Bind widget and set its type. */
 public void bind(TypedWidget tw, SchemaRowModel bufRow, String colName, SwingerMap map)
 {
+if (colName.equals("dob")) {
+	System.out.println("dob column reached!!!");
+}
 	// Set the type
 	Schema schema = bufRow.getSchema();
 	JType sqlType = schema.getCol(schema.findCol(colName)).getType();
 	JTypeSwinger f = map.newSwinger(sqlType);		// Default ways to render & edit
+//System.out.println("colName = " + colName);
 	tw.setJType(f);
 	
 	bind(tw, (TableRowModel)bufRow, colName);
@@ -81,15 +85,17 @@ public void bindRowModel(TableRowModel bufRow, int colNo)
 public void bindWidget(TypedWidget tw)
 {
 	// Bind as listener to the TypedWidget
-	Component c = (Component)tw;
-	c.addPropertyChangeListener("value", this);
-	
+//System.out.println("tw.class = " + tw.getClass());
+//	Component c = (Component)tw;
+System.out.println("registering to receive property change from: " + tw);
+	tw.addPropertyChangeListener("value", this);
+	this.tw = tw;
 }
 // --------------------------------------------------------------------
 public void unBind()
 {
-	Component c = (Component)tw;
-	c.removePropertyChangeListener("value", this);
+	//Component c = (Component)tw;
+	tw.removePropertyChangeListener("value", this);
 	bufRow.removeColListener(colNo, this);
 	
 	// Allow for garbage collection
@@ -110,19 +116,23 @@ boolean valsEqual(Object a, Object b)
 public void valueChanged(int col)
 {
 //System.out.println("valueChanged(" + col + ") = " + bufRow.get(col));
+//System.out.println("tw = " + tw + ", bufRow = " + bufRow);
 	tw.setValue(bufRow.get(col));
 }
 public void curRowChanged(int col)
 {
 	int row = bufRow.getCurRow();
-	Component c = (Component)tw;
-	c.setEnabled(row != MultiRowModel.NOROW);
+	//Component c = (Component)tw;
+	tw.setEnabled(row != MultiRowModel.NOROW);
 	tw.setValue(row == MultiRowModel.NOROW ? null : bufRow.get(col));
 }
 // ===============================================================
 // Implementation of PropertyChangeListener
 public void propertyChange(java.beans.PropertyChangeEvent evt)
 {
+System.out.println("Property change received from widget: " + evt.getSource());
+	//if (!"value".equals(evt.getPropertyName())) return;
+	
 	// Stop infinite loop of property change events between the two objects.
 	if (valsEqual(evt.getNewValue(), evt.getOldValue())) return;
 	// OK, propagate it down to the row.

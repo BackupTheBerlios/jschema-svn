@@ -148,7 +148,7 @@ ImageIcon icon, boolean mnemonic, CalModel model)
 	datePanel = new JPanel();
     datePanel.setLayout(new java.awt.CardLayout());
 	datePanel.add(dateSpinner, "date");
-	datePanel.add(new JLabel("null"), "null");
+	datePanel.add(new JLabel(""), "null");
 		
 	String tempDateFormatString = "";
 

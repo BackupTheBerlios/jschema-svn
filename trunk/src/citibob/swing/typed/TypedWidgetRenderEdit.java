@@ -35,7 +35,7 @@ import citibob.swing.table.*;
 import java.awt.*;
 
 /** Provides renderer and editor appropriate for an java.util.TypedWidget
- * (day only, no time). */
+ * (day only, no time).  Works only for TypedWidgets that extend Component. */
 public class TypedWidgetRenderEdit extends RenderEdit
 {
 

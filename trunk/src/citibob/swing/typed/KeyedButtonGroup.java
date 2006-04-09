@@ -28,24 +28,33 @@ import citibob.jschema.*;
 import java.util.*;
 import javax.swing.*;
 import java.beans.*;
+import java.awt.event.*;
+import java.beans.*;
 
 /**
  *
  * @author citibob
  */
 public class KeyedButtonGroup
-extends ButtonGroup implements TypedWidget {
+extends ButtonGroup implements TypedWidget, ActionListener {
 
 PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 protected Map map;		// key -> AbstractButton
 Map imap;		// ButtonModel -> key
-Class objClass = null;
+//Class objClass = null;
 Object val = null;
+JType jType;
 
 /** Returns last legal value of the widget.  Same as method in JFormattedTextField */
 public Object getValue()
 { return val; }
+
+///** Sets the correct button for a value. */
+//private void setValueButton(Object o)
+//{
+//	
+//}
 
 /** Sets the value.  Same as method in JFormattedTextField.  Fires a
  * propertyChangeEvent("value") when calling setValue() changes the value. */
@@ -70,6 +79,7 @@ public boolean isInstance(Object o)
  if asked to edit a JType it doesn't like. */
 public void setJType(citibob.swing.typed.JTypeSwinger f) throws ClassCastException
 {
+	jType = f.getJType();
 	// Could be anything...
 //	JType jType = f.getJType();
 //	if (!(jType instanceof SqlEnum)) 
@@ -100,16 +110,14 @@ public void add(Object key, AbstractButton b)
 	ButtonModel bm = b.getModel();
 	map.put(key, b);
 	imap.put(bm, key);
-	
+	b.addActionListener(this);
+
 	// Check the type of the item we just added.
-	if (key != null) {
-		Class c = key.getClass();
-		if (objClass == null) {
-			objClass = c;
-		} else {
-			if (objClass != c) throw new ClassCastException(
-				"KeyedButtonGroup.add() received object of class "
-				+ c + ", expected class " + objClass);
+	if (jType != null) {
+		if (!jType.isInstance(key)) {
+			throw new ClassCastException(
+				"KeyedButtonGroup.add() received object " + key +
+				", not compatible with " + jType);
 		}
 	}
 }
@@ -119,8 +127,11 @@ public AbstractButton remove(Object key)
 	Object o = map.remove(key);
 	if (o == null) return null;
 	AbstractButton b = (AbstractButton)o;
-	imap.remove(b.getModel());
-	super.remove(b);
+	if (b != null) {
+		b.removeActionListener(this);
+		imap.remove(b.getModel());
+		super.remove(b);
+	}
 	return b;
 }
 // -------------------------------------------------------------
@@ -140,6 +151,37 @@ protected void setButton(AbstractButton b)
 {
 	setSelected(b.getModel(), true);
 }
+// =====================================================
+// Methods normally implemented in java.awt.Component
+public void setEnabled(boolean enabled)
+{
+	for (Enumeration ii = super.getElements(); ii.hasMoreElements();) {
+		AbstractButton b = (AbstractButton)ii.nextElement();
+		b.setEnabled(enabled);
+	}
+}
+/** Implemented in java.awt.Component --- property will be "value" */
+public void addPropertyChangeListener(String property, java.beans.PropertyChangeListener listener)
+{
+	support.addPropertyChangeListener(listener);
+}
+/** Implemented in java.awt.Component --- property will be "value"  */
+public void removePropertyChangeListener(String property, java.beans.PropertyChangeListener listener)
+{
+	support.removePropertyChangeListener(listener);
+}
+// ===============================================================
+// Implementation of ActionListener
+
+/** Propagate data from widget to underlying model. */
+public void actionPerformed(ActionEvent e)
+{
+	Object oldVal = val;
+	AbstractButton b = (AbstractButton)(e.getSource());
+	val = getValue(b);
+	support.firePropertyChange("value", oldVal, val);
+}
+
 
 }
 

@@ -26,7 +26,7 @@ import citibob.util.KeyedModel;
 /** For enumerate types... Nullable depends on KeyedModel. */
 public class JEnum implements JType
 {
-	KeyedModel kmodel;
+	protected KeyedModel kmodel;
 	
 	/** nullText = string to use for null value, or else <null> if this is not nullable. */
 	public JEnum(KeyedModel kmodel) {

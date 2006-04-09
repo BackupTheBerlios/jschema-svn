@@ -54,6 +54,18 @@ public String getColName();
 /** Row (if any) in a RowModel we will bind this to at runtime. */
 public void setColName(String col);
 
+
+// =====================================================
+// Methods implemented in java.awt.Component
+/** Implemented in java.awt.Component */
+public void setEnabled(boolean enabled);
+/** Implemented in java.awt.Component --- property will be "value" */
+public void addPropertyChangeListener(String property, java.beans.PropertyChangeListener listener);
+/** Implemented in java.awt.Component --- property will be "value"  */
+public void removePropertyChangeListener(String property, java.beans.PropertyChangeListener listener);
+// =====================================================
+
+
 //public Object clone() throws CloneNotSupportedException;
 
 /** Sets value back to last legal value (i.e. setValue(getValue())) */

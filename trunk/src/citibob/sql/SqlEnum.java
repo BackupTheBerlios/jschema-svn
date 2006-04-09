@@ -28,7 +28,7 @@ public class SqlEnum
 extends JEnum
 implements SqlType
 {
-	KeyedModel kmodel;
+//	KeyedModel kmodel;
 	boolean nullable = true;
 	
 	/** nullText = string to use for null value, or else <null> if this is not nullable. */

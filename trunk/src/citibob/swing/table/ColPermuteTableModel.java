@@ -63,13 +63,13 @@ String[] colNames,
 String[] sColMap,
 boolean[] editable)
 {
-System.out.println("ColPermuteTableModel: this = " + this);
+//System.out.println("ColPermuteTableModel: this = " + this);
 	int[] colMap = new int[sColMap.length];
 	for (int i = 0; i < colMap.length; ++i) {
-System.out.println("sColMap[" + i + "] = " + sColMap[i]);
+//System.out.println("sColMap[" + i + "] = " + sColMap[i]);
 		for (int j = 0; j < model_u.getColumnCount(); ++j) {
 			if (sColMap[i].equals(model_u.getColumnName(j))) {
-System.out.println("    " + model_u.getColumnName(j));
+//System.out.println("    " + model_u.getColumnName(j));
 				colMap[i] = j;
 				break;
 			}
@@ -162,7 +162,7 @@ public Object getValueAt(int row, int column)
 
 public void setValueAt(Object val, int row, int column)
 {
-	System.out.println("ColpermuteTableModel: setValueAt(" + val + ", " + row + ", " + column);
+//System.out.println("ColpermuteTableModel: setValueAt(" + val + ", " + row + ", " + column);
 	model_u.setValueAt(val, row, colMap[column]);
 }
 
@@ -181,10 +181,10 @@ public void tableChanged(TableModelEvent e_u)
 			this.fireTableRowsUpdated(e_u.getFirstRow(), e_u.getLastRow());
 		} else {
 			// Re-map the columns.
-System.out.println("col_u = " + col_u);
-for (int i = 0; i < colMap.length; ++i) System.out.println(colMap[i] + " " + model_u.getColumnName(colMap[i]));
+//System.out.println("col_u = " + col_u);
+//for (int i = 0; i < colMap.length; ++i) System.out.println(colMap[i] + " " + model_u.getColumnName(colMap[i]));
 			int col_t = iColMap[col_u];
-System.out.println("ColPermuteTableModel: col_u = " + col_u + ", col_t = " + col_t + " " + this);
+//System.out.println("ColPermuteTableModel: col_u = " + col_u + ", col_t = " + col_t + " " + this);
 //System.out.println("rows = " +e_u.getFirstRow() + ", " + e_u.getLastRow());
 			if (col_t == -1) return;
 			for (int i=e_u.getFirstRow(); i <= e_u.getLastRow(); ++i)

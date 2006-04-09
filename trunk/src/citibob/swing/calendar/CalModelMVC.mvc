@@ -23,7 +23,7 @@ import java.util.*;
 listeners CalModelMVC
 {
     /** Value has changed. */
-    calChanged();
+    calChanged(java.util.Date oldVal);
 
     /** Nullness has changed. */
     nullChanged();

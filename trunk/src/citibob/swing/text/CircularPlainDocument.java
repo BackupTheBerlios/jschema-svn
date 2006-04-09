@@ -22,6 +22,16 @@ import javax.swing.text.*;
 			iMaxLength = maxlen;
 		}
 
+//		public void clear()
+//		{
+//			try {
+//				super.getContent().remove(0, super.getContent().length());
+//			} catch(BadLocationException e) {
+//				// Shouldn't happen (in single-threaded system)
+//				e.printStackTrace();
+//			}
+//		}
+		
 		public void insertString(int offset, String str, AttributeSet attr)
 		throws BadLocationException {
 			if (str == null) return;

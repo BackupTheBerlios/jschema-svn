@@ -107,10 +107,10 @@ public void useTmpDay()
 { if (tmpDay != -1) set(Calendar.DAY_OF_MONTH, tmpDay); }
 
 // ===========================================================
-public void fireCalChanged()
+public void fireCalChanged(java.util.Date oldVal)
 {
 //	System.out.println("Cal changed to: " + getTime());
-	super.fireCalChanged();
+	super.fireCalChanged(oldVal);
 }
 public void fireNullChanged()
 {
@@ -121,6 +121,7 @@ public void fireNullChanged()
 // ==== Stuff from Calendar
 public void  add(int field, int amount)
 {
+	java.util.Date dt = cal.get		Get the old value...
 	cal.add(field, amount);
 	fireCalChanged();
 }

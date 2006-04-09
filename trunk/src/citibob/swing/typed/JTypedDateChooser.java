@@ -29,6 +29,7 @@ import java.util.Date;
 import javax.swing.*;
 import citibob.swing.calendar.*;
 import citibob.sql.*;
+import java.beans.*;
 
 /**
  * TODO: This class need sthe once-over!
@@ -38,7 +39,8 @@ import citibob.sql.*;
 public class JTypedDateChooser extends JDateChooser implements TypedWidget {
 
 SqlDateType jType;
-	
+PropertyChangeSupport support = new PropertyChangeSupport(this);
+
 /** Returns last legal value of the widget.  Same as method in JFormattedTextField */
 public Object getValue()
 {
@@ -50,23 +52,23 @@ System.out.println("JTDC.getValue = " + getModel().getTime());
  * propertyChangeEvent("value") when calling setValue() changes the value. */
 public void setValue(Object d)
 {
-	java.util.Date dt;
-	if (d == null) {
-		// Set default value to current time
-		setValue(new java.util.Date());
-		dt = null;
-	} else {
-		// Truncate the incoming date to fit this kind of date.
-		if (!(d instanceof java.util.Date)) throw new ClassCastException("Bad type " + d);
-		dt = jType.truncate((java.util.Date)d);
-	}
+	if (!isInstance(d)) throw new ClassCastException("Bad type " + d);
+	java.util.Date dt = (d == null ? null :  jType.truncate((java.util.Date)d));
 	
-	if (!isInstance(dt)) throw new ClassCastException("Bad type, but cast right.");
 System.out.println("JTDC: Setting date to " + dt );
-	// TODO: Bug in JDateChooser doesn't work well with null dates.
-	// It gets confused when embedded in a table.
-//		if (val == null) val = new Date();
+	java.util.Date oldDt = getModel().getTime();
 	getModel().setTime(dt);
+	//support.firePropertyChange("value", oldDt, dt);
+	// calChanged() will be called below...
+}
+
+/** Overrides from JDateChooser to fire propertychangedevent... */
+public void calChanged()
+{
+System.out.println("calChanged to: " + getValue());
+	super.calChanged();
+System.out.println("Widget firing propertyChange: " + this);
+	support.firePropertyChange("value", null, getValue());
 }
 
 /** Is this object an instance of the class available for this widget?
@@ -104,5 +106,15 @@ public String getColName() { return colName; }
 public void setColName(String col) { colName = col; }
 public Object clone() throws CloneNotSupportedException { return super.clone(); }
 // ---------------------------------------------------
+/** Implemented in java.awt.Component --- property will be "value" */
+public void addPropertyChangeListener(String property, java.beans.PropertyChangeListener listener)
+{
+	support.addPropertyChangeListener(listener);
+}
+/** Implemented in java.awt.Component --- property will be "value"  */
+public void removePropertyChangeListener(String property, java.beans.PropertyChangeListener listener)
+{
+	support.removePropertyChangeListener(listener);
+}
 
 }

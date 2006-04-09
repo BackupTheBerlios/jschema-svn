@@ -32,6 +32,7 @@ import java.awt.event.*;
 import citibob.exception.*;
 import citibob.sql.*;
 import citibob.swing.typed.SwingerMap;
+import java.beans.*;
 //import citibob.sql.JType;
 
 /**
