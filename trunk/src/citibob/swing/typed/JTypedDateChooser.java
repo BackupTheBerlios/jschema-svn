@@ -39,7 +39,7 @@ import java.beans.*;
 public class JTypedDateChooser extends JDateChooser implements TypedWidget {
 
 SqlDateType jType;
-PropertyChangeSupport support = new PropertyChangeSupport(this);
+//PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 /** Returns last legal value of the widget.  Same as method in JFormattedTextField */
 public Object getValue()
@@ -65,10 +65,18 @@ System.out.println("JTDC: Setting date to " + dt );
 /** Overrides from JDateChooser to fire propertychangedevent... */
 public void calChanged()
 {
-System.out.println("calChanged to: " + getValue());
+//System.out.println("calChanged to: " + getValue());
 	super.calChanged();
-System.out.println("Widget firing propertyChange: " + this);
-	support.firePropertyChange("value", null, getValue());
+//System.out.println("Widget firing propertyChange: " + this);
+	firePropertyChange("value", null, getValue());
+}
+
+//static java.util.Date oldDt = new java.util.Date();
+
+/** Overrides from JDateChooser to fire propertychangedevent... */
+public void nullChanged() {
+	super.nullChanged();
+	firePropertyChange("value", null, getValue());
 }
 
 /** Is this object an instance of the class available for this widget?
@@ -106,15 +114,15 @@ public String getColName() { return colName; }
 public void setColName(String col) { colName = col; }
 public Object clone() throws CloneNotSupportedException { return super.clone(); }
 // ---------------------------------------------------
-/** Implemented in java.awt.Component --- property will be "value" */
-public void addPropertyChangeListener(String property, java.beans.PropertyChangeListener listener)
-{
-	support.addPropertyChangeListener(listener);
-}
-/** Implemented in java.awt.Component --- property will be "value"  */
-public void removePropertyChangeListener(String property, java.beans.PropertyChangeListener listener)
-{
-	support.removePropertyChangeListener(listener);
-}
+///** Implemented in java.awt.Component --- property will be "value" */
+//public void addPropertyChangeListener(String property, java.beans.PropertyChangeListener listener)
+//{
+//	support.addPropertyChangeListener(listener);
+//}
+///** Implemented in java.awt.Component --- property will be "value"  */
+//public void removePropertyChangeListener(String property, java.beans.PropertyChangeListener listener)
+//{
+//	support.removePropertyChangeListener(listener);
+//}
 
 }

@@ -70,6 +70,7 @@
 
 <target name="mvc">
     <mvcgen file="src/citibob/multithread/TaskQueueMVC.mvc"/>
+    <mvcgen file="src/citibob/swing/calendar/CalModelMVC.mvc"/>
 </target>
 
 <target name="-post-jar">

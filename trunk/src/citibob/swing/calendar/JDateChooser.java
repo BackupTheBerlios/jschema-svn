@@ -119,13 +119,13 @@ public JDateChooser(String dateFormatString)
 * @param mnemonic false, if you wish to disable the mnemonic code
 */
 public JDateChooser(String dateFormatString,
-ImageIcon icon, boolean mnemonic, CalModel model)
+ImageIcon icon, boolean mnemonic, CalModel xmodel)
 {
 	
 	jcalendar = new JCalendar();
 
 //	if (dateFormatString == null) dateFormatString = "MMMMM d, yyyy";
-	if (dateFormatString == null) dateFormatString = "MM/dd/yyyy";
+	if (dateFormatString == null) dateFormatString = "MM-dd-yyyy";
 	this.dateFormatString = dateFormatString;
 
 //	this.startEmpty = startEmpty;
@@ -137,6 +137,22 @@ ImageIcon icon, boolean mnemonic, CalModel model)
 	sModel = new ReverseSpinnerDateModel();
 	setSModel(sModel);
 	dateSpinner = new JSpinner(sModel);
+//	JComponent jc = dateSpinner.getEditor();
+//System.out.println("jc = " + jc);
+//	if (jc instanceof JSpinner.DefaultEditor) {
+//		final JFormattedTextField tf = ((JSpinner.DefaultEditor)jc).getTextField();
+////		tf.addFocusListener(new FocusAdapter() {
+////		public void focusGained(FocusEvent e) {
+//		dateSpinner.addMouseListener(new MouseAdapter() {
+//		public void mouseClicked(MouseEvent e) {
+//
+//			if (e.getClickCount() != 1) return;
+//System.out.println("focus gained!!!");
+//			tf.setSelectionStart(0);
+//			tf.setSelectionEnd(tf.getDocument().getLength());
+//		}});
+//	}
+
 //	{
 //	public void setEnabled(boolean enabled) {
 //		// TODO: I don't know why this is.
@@ -144,11 +160,19 @@ ImageIcon icon, boolean mnemonic, CalModel model)
 //		calendarButton.setEnabled(enabled);
 //	}};
 
+
+	javax.swing.JButton nullLabel = new javax.swing.JButton("null");
+	nullLabel.addActionListener(new ActionListener() {
+	public void actionPerformed(ActionEvent e) {
+		System.out.println("Unsetting null!!!");
+		model.setNull(false);
+	}});
+
 	// Allow to have either date or null showing.
 	datePanel = new JPanel();
     datePanel.setLayout(new java.awt.CardLayout());
 	datePanel.add(dateSpinner, "date");
-	datePanel.add(new JLabel("null"), "null");
+	datePanel.add(nullLabel, "null");
 		
 	String tempDateFormatString = "";
 
@@ -214,8 +238,8 @@ ImageIcon icon, boolean mnemonic, CalModel model)
 //	});
 	
 	
-	if (model == null) model = new CalModel();
-	setModel(model);
+	if (xmodel == null) xmodel = new CalModel();
+	setModel(xmodel);
 }
 
 //public void setButtonsEnabled(boolean e)

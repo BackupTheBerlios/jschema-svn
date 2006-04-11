@@ -37,6 +37,10 @@ public class TypedWidgetBinder
 implements RowModel.ColListener, java.beans.PropertyChangeListener
 {
 
+boolean inValueChanged = false;
+boolean inCurRowChanged = false;
+boolean inPropertyChange = false;
+
 TableRowModel bufRow;
 int colNo;
 TypedWidget tw;
@@ -117,26 +121,41 @@ public void valueChanged(int col)
 {
 //System.out.println("valueChanged(" + col + ") = " + bufRow.get(col));
 //System.out.println("tw = " + tw + ", bufRow = " + bufRow);
+	if (inValueChanged) return;
+	inValueChanged = true;
+
 	tw.setValue(bufRow.get(col));
+
+	inValueChanged = false;
 }
 public void curRowChanged(int col)
 {
+	if (inCurRowChanged) return;
+	inCurRowChanged = true;
+
 	int row = bufRow.getCurRow();
 	//Component c = (Component)tw;
 	tw.setEnabled(row != MultiRowModel.NOROW);
 	tw.setValue(row == MultiRowModel.NOROW ? null : bufRow.get(col));
+
+	inCurRowChanged = false;
 }
 // ===============================================================
 // Implementation of PropertyChangeListener
 public void propertyChange(java.beans.PropertyChangeEvent evt)
 {
+	if (inPropertyChange) return;
+	inPropertyChange = true;
+
 System.out.println("Property change received from widget: " + evt.getSource());
 	//if (!"value".equals(evt.getPropertyName())) return;
 	
-	// Stop infinite loop of property change events between the two objects.
-	if (valsEqual(evt.getNewValue(), evt.getOldValue())) return;
-	// OK, propagate it down to the row.
+//	// Stop infinite loop of property change events between the two objects.
+//	if (!valsEqual(evt.getNewProperty(), evt.getOldProperty())) return;
+//	// OK, propagate it down to the row.
 	bufRow.set(colNo, evt.getNewValue());
+
+	inPropertyChange = false;
 }
 // ===============================================================
 /** Binds all components in a widget tree to a (Schema, RowModel), if they implement SchemaRowBinder. */
