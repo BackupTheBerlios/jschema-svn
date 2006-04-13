@@ -384,6 +384,8 @@ public boolean isCellEditable(int rowIndex, int columnIndex)
 // --------------------------------------------------
 public void setValueAt(Object val, int row, int col)
 {
+	
+System.out.println("SchemaBuf.setValueAt(" + val + ")");
 	// Figure out whether our new value is same or different from original
 	SqlRow srow = (SqlRow)rows.get(row);
 

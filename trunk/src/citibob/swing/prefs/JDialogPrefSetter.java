@@ -45,7 +45,7 @@ public void setPrefs(Component c, final String prefix, final Preferences prefs)
 	sz.height = prefs.getInt(prefix + ".size.height", sz.height);
 	cc.setSize(sz);
 //System.out.println("JDialog: got size = " + sz);
-    
+	
     // Set up listener(s) to save preferences as our geometry changes.
 	cc.addComponentListener(new ComponentAdapter() {
 	public void componentResized(ComponentEvent e) {

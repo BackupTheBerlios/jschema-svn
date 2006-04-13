@@ -44,7 +44,7 @@ SqlDateType jType;
 /** Returns last legal value of the widget.  Same as method in JFormattedTextField */
 public Object getValue()
 {
-System.out.println("JTDC.getValue = " + getModel().getTime());
+//System.out.println("JTDC.getValue = " + getModel().getTime());
 	return getModel().getTime();
 }
 
@@ -103,7 +103,8 @@ public void setJType(citibob.swing.typed.JTypeSwinger f) throws ClassCastExcepti
 }
 public boolean stopEditing()
 {
-	getModel().useTmpDay();
+System.out.println("stopEditing: value = " + getValue());
+//	getModel().useTmpDay();
 	return true;
 }
 // ---------------------------------------------------

@@ -56,6 +56,8 @@ public class ConsoleFrame extends javax.swing.JFrame {
 DocumentWriter logWriter;
 Document doc;
 
+public Document getDocument() { return doc; }
+
 public void initRuntime(String title, String guiNodePath)
 {
 	setTitle(title);
