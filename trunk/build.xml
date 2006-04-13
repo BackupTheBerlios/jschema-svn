@@ -66,7 +66,7 @@
     nbproject/build-impl.xml file. 
 
     -->
-<taskdef name="mvcgen" classname="citibob.mvcgen.MVCGenTask" classpath="../MVCGen/dist/MVCGen.jar"/>
+<taskdef name="mvcgen" classname="citibob.mvcgen.MVCGenTask" classpath="lib/MVCGen.jar"/>
 
 <target name="mvc">
     <mvcgen file="src/citibob/multithread/TaskQueueMVC.mvc"/>
