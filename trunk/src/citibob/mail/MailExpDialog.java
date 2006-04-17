@@ -20,7 +20,7 @@ public boolean getOK() { return okPressed; }
 public String getMsg() { return taMessage.getText(); }
 
     /** Creates new form AuthenticatorDialog */
-    public MailExpDialog(java.awt.Frame parent, MailSender sender, String expText)
+    public MailExpDialog(java.awt.Frame parent, MailSender sender, String expText, String guiNodePath)
 	{
         super(parent, true);
         initComponents();
@@ -30,8 +30,8 @@ public String getMsg() { return taMessage.getText(); }
 		
 		// Mess with preferences
 		this.setName("dialog");
-		Preferences guiPrefs = Preferences.userNodeForPackage(this.getClass());
-		guiPrefs = guiPrefs.node("MailExpDialog");
+		Preferences guiPrefs = Preferences.userRoot();
+		guiPrefs = guiPrefs.node(guiNodePath);
 		new citibob.swing.prefs.SwingPrefs().setPrefs(this, "", guiPrefs);
     }
     

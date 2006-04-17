@@ -271,7 +271,7 @@ void setPopupVisible(boolean b)
 public void actionPerformed(ActionEvent e)
 {
 //	if (!buttonsEnabled) return;
-System.out.println("Cal button action performed!");
+//System.out.println("Cal button action performed!");
 	if (lastPopupVisible) return;		// Do nothing; already visible.
 //	System.out.println("hiding popup");
 //		calendarButton.requestFocus();

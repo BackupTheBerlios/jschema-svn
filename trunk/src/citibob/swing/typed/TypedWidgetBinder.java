@@ -91,7 +91,7 @@ public void bindWidget(TypedWidget tw)
 	// Bind as listener to the TypedWidget
 //System.out.println("tw.class = " + tw.getClass());
 //	Component c = (Component)tw;
-System.out.println("registering to receive property change from: " + tw);
+//System.out.println("registering to receive property change from: " + tw);
 	tw.addPropertyChangeListener("value", this);
 	this.tw = tw;
 }
@@ -147,7 +147,7 @@ public void propertyChange(java.beans.PropertyChangeEvent evt)
 	if (inPropertyChange) return;
 	inPropertyChange = true;
 
-System.out.println("Property change received from widget: " + evt.getSource());
+//System.out.println("Property change received from widget: " + evt.getSource());
 	//if (!"value".equals(evt.getPropertyName())) return;
 	
 //	// Stop infinite loop of property change events between the two objects.

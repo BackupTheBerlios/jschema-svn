@@ -48,6 +48,7 @@ private SqlRow newRow()
 	// Put in default values
 	for (int i=0; i<n; ++i) {
 		row.data[i] = schema.getCol(i).getDefault();
+System.out.println("default["+i+"] = "+row.data[i]);
 	}
 	
 	return row;

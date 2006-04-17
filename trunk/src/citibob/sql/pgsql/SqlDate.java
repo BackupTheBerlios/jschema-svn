@@ -56,6 +56,9 @@ public boolean isInstance(Object o)
 {
 	if (o == null) return nullable;
 	if (!(o instanceof java.util.Date)) return false;
+//
+//	return true;
+// TODO: This is too strict, it just results in class
 	java.util.Date dt = (java.util.Date)o;
 	cal.setTime(dt);
 	return (
@@ -78,13 +81,12 @@ public java.util.Date get(java.sql.ResultSet rs, String col)
 }
 public java.util.Date truncate(java.util.Date dt)
 {
-return dt;
-//	cal.setTime(dt);
-//	cal.set(Calendar.HOUR_OF_DAY, 0);
-//	cal.set(Calendar.MINUTE, 0);
-//	cal.set(Calendar.SECOND, 0);
-//	cal.set(Calendar.MILLISECOND, 0);
-//	return cal.getTime();
+	cal.setTime(dt);
+	cal.set(Calendar.HOUR_OF_DAY, 0);
+	cal.set(Calendar.MINUTE, 0);
+	cal.set(Calendar.SECOND, 0);
+	cal.set(Calendar.MILLISECOND, 0);
+	return cal.getTime();
 }
 // ==================================================	
 	private static DateFormat sqlFmt;

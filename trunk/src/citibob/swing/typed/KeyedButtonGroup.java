@@ -62,6 +62,7 @@ public void setValue(Object o)
 {
 	Object oldVal = val;
 	val = o;
+System.out.println("o = " + o);
 	AbstractButton b = (AbstractButton)map.get(o);
 	setSelected(b.getModel(), true);
 	support.firePropertyChange("value", oldVal, val);

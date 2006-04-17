@@ -56,10 +56,11 @@ public class MailExpHandler implements ExpHandler
 		PrintWriter pw = new PrintWriter(ss);
 		e.printStackTrace(pw);
 		String msgText = outMsg + "\n\n" + ss.getBuffer().toString();
+		System.out.println(pw);
 		System.err.println(msgText);
 		
 		// Let user fiddle with the stack trace
-		final MailExpDialog dialog = new MailExpDialog(null, sender, msgText);
+		final MailExpDialog dialog = new MailExpDialog(null, sender, msgText,"citibob/mail");
 		dialog.setVisible(true);
 		if (!dialog.getOK()) return;
 		

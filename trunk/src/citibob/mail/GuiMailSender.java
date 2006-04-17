@@ -21,7 +21,7 @@ public GuiMailSender() throws IOException
 {
 	// Get session
 	props = new Properties();
-	auth = new GuiAuthenticator();
+	auth = new GuiAuthenticator("citibob/mail", "citibob/mail");
 	session = Session.getInstance(props, auth);
 
 	updateMailProps();

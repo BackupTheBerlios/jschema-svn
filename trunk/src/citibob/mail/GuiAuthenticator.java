@@ -6,6 +6,7 @@ import java.util.prefs.*;
 import javax.mail.*;
 //import java.net.*;
 import javax.mail.internet.*;
+import org.solinger.cvspass.Scramble;
 
 public class GuiAuthenticator extends Authenticator
 {
@@ -15,6 +16,14 @@ public static final int CANCEL = 1;
 int buttonPressed;
 String statusMessage = "";
 String lastPassword = "";
+String nodePath;
+String guiNodePath;
+
+public GuiAuthenticator(String nodePath, String guiNodePath)
+{
+	this.nodePath = nodePath;
+	this.guiNodePath = nodePath;
+}
 
 public int getButtonPressed()
 	{ return buttonPressed; }
@@ -28,11 +37,12 @@ public void setStatusMessage(String statusMessage)
 protected  PasswordAuthentication getPasswordAuthentication()
 {
 	// Preferences p = Preferences.userNodeForPackage(this.getClass());
-	Preferences p = Preferences.userNodeForPackage(GuiMailSender.class);
-	String host = p.get("mail.smtp.host", "<nohost>");
-	String username = p.get("mail.smtp.user", "<nouser>");
-	String password = p.get("mail.password", null);
-	boolean rememberPassword = p.getBoolean("mail.rememberPassword", false);
+	Preferences prefs = Preferences.userRoot();
+	prefs = prefs.node(nodePath);
+	String host = prefs.get("mail.smtp.host", "<nohost>");
+	String username = prefs.get("mail.smtp.user", "<nouser>");
+	String password = Scramble.descramble(prefs.get("mail.password", null));
+	boolean rememberPassword = prefs.getBoolean("mail.rememberPassword", false);
 
 	AuthenticatorDialog d = new AuthenticatorDialog(null,
 		host, username,
@@ -51,11 +61,12 @@ System.err.println("x OK");
 	if (d.getPasswordChanged()) password = d.getPassword();
 
 	rememberPassword = d.getRememberPassword();
-	p.putBoolean("mail.rememberPassword", rememberPassword);
-	if (rememberPassword) p.put("mail.password", password);
-	else p.remove("mail.password");
+	prefs.putBoolean("mail.rememberPassword", rememberPassword);
+	if (rememberPassword) prefs.put("mail.password", Scramble.scramble(password));
+	else prefs.remove("mail.password");
 
 	return new PasswordAuthentication(username, password);
 }
+
 
 }

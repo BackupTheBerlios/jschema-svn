@@ -55,7 +55,7 @@ public void setValue(Object d)
 	if (!isInstance(d)) throw new ClassCastException("Bad type " + d);
 	java.util.Date dt = (d == null ? null :  jType.truncate((java.util.Date)d));
 	
-System.out.println("JTDC: Setting date to " + dt );
+//System.out.println("JTDC: Setting date to " + dt );
 	java.util.Date oldDt = getModel().getTime();
 	getModel().setTime(dt);
 	//support.firePropertyChange("value", oldDt, dt);

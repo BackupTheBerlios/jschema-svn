@@ -32,7 +32,10 @@ public ColumnDefaultNow(SqlDateType dateType, String name, boolean key)
  This method will be overridden. */
 public Object getDefault()
 {
-	return ((SqlDateType)super.getType()).truncate(new Date());
+	SqlDateType jtype = (SqlDateType)super.getType();
+	java.util.Date dt = jtype.truncate(new Date());
+System.out.println("DefaultNow = " + dt + "(jtype = " + jtype.getClass());
+	return dt;
 }
 	
 }

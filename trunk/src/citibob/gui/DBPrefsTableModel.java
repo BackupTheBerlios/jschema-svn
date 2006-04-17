@@ -71,7 +71,11 @@ throws BackingStoreException
 	addField(DEFPASSWORD, "");
 	this.setPreferences(prefs);
 }
-
+public ConnPool newConnPool(String password)
+throws SQLException, java.lang.ClassNotFoundException
+{
+	return new DBConnPool(getPrefs(), password);
+}
 
 // ==========================================================
 static class DBConnPool extends SimpleConnPool

@@ -63,7 +63,7 @@ public JDayTFChooser() {
 			Number Day = (Number)o;
 			int day = Day.intValue();
 	//		if (day == getDay()) return;
-	System.out.println("TF day set to " + day + " (vs " + getDay() + " in model)");
+//	System.out.println("TF day set to " + day + " (vs " + getDay() + " in model)");
 			setDay(day);
 		}
 	}});
