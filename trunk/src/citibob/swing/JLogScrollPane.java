@@ -76,20 +76,20 @@ public class JLogScrollPane extends JScrollPane
 	
 	public void scrollToEnd()
 	{
-//		this.textArea.setCaretPosition(this.textArea.getDocument().getLength());
+		this.textArea.setCaretPosition(this.textArea.getDocument().getLength());
 	
 		// Scroll to end
-		final JScrollBar sb = getVerticalScrollBar();
-		if (sb.getValue() != sb.getMaximum())
-		{
-			java.awt.EventQueue.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					sb.setValue(sb.getMaximum());
-				}
-			});
-		}
+//		final JScrollBar sb = getVerticalScrollBar();
+//		if (sb.getValue() != sb.getMaximum())
+//		{
+//			java.awt.EventQueue.invokeLater(new Runnable()
+//			{
+//				public void run()
+//				{
+//					sb.setValue(sb.getMaximum());
+//				}
+//			});
+//		}
 	}
 	
 	public void newDocument(int nlines)
