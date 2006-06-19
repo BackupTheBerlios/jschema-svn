@@ -78,7 +78,7 @@ throws SQLException, java.lang.ClassNotFoundException
 }
 
 // ==========================================================
-static class DBConnPool extends SimpleConnPool
+static class DBConnPool extends RealConnPool
 {
 
 Properties props = new Properties();

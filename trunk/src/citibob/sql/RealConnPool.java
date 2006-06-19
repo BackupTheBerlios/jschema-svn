@@ -20,13 +20,15 @@ package citibob.sql;
 
 import java.sql.*;
 import citibob.multithread.*;
-
+import java.util.*;
 /**
  *
  * @author fiscrob
  */
-public abstract class SimpleConnPool implements ConnPool
+public abstract class RealConnPool extends SimpleConnPool
 {
+
+LinkedList reserves = new LinkedList();	// Our reserve connections, not being used for now
 
 //ExceptionHandler ehandler;
 //
@@ -35,21 +37,18 @@ public abstract class SimpleConnPool implements ConnPool
 //	this.ehandler = eh;
 //}
 
-/** Create an actual connection --- used by pool implementations, should not
- * be called by user. */
-protected abstract Connection create() throws SQLException;
-
 /** Get a connection from the pool. */
 public Connection checkout() throws SQLException
 {
-	//return new WrapperConn(create(), this);	// Caused inifinte recursion on checkin
-	return create();
+	if (reserves.size() == 0) return create();
+	else return (Connection)reserves.removeFirst();
 }
 
 /** Return a connection */
 public void checkin(Connection c) throws SQLException
 {
-	c.close();
+	if (reserves.size() >= 5) c.close();
+	else reserves.addLast(c);
 }
 public void dispose() {}
 
