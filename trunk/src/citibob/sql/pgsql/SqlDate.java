@@ -31,6 +31,7 @@ Calendar cal;	// Calendar (& TimeZone) used to convert SQL to Java dates
 public SqlDate(Calendar cal, boolean nullable)
 {
 	this.cal = cal;
+
 	this.nullable = nullable;
 }
 public SqlDate(boolean nullable)

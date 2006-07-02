@@ -52,7 +52,11 @@ public Object getValue()
  * propertyChangeEvent("value") when calling setValue() changes the value. */
 public void setValue(Object d)
 {
+// TODO: Temporarily allow null in ALL fields --- to make it work
+// in the query editor for dates...
+if (d != null) {
 	if (!isInstance(d)) throw new ClassCastException("Bad type " + d);
+}
 	java.util.Date dt = (d == null ? null :  jType.truncate((java.util.Date)d));
 	
 //System.out.println("JTDC: Setting date to " + dt );

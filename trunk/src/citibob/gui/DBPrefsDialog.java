@@ -27,13 +27,13 @@ DBPrefsTableModel model;
 boolean okPressed;
 
     /** Creates new form DBPrefsDialog */
-    public DBPrefsDialog(java.awt.Frame parent, String nodePath, String guiNodePath)
+    public DBPrefsDialog(java.awt.Frame parent, Preferences pref, Preferences guiPref)
 	throws BackingStoreException {
         super(parent, "Database Connection", true);
         initComponents();
 
 
-		model = new DBPrefsTableModel(nodePath);
+		model = new DBPrefsTableModel(pref);
 		prefsTable.setModel(model);
 
 		// Pressing ENTER will initiate search.
@@ -50,9 +50,7 @@ boolean okPressed;
 		}});
 
 		// Save GUI Preferences preferences
-		Preferences guiPrefs = Preferences.userRoot();
-		guiPrefs = guiPrefs.node(guiNodePath);
-		new SwingPrefs().setPrefs(this, "", guiPrefs);
+		new SwingPrefs().setPrefs(this, "", guiPref);
 
     }
 
@@ -164,14 +162,14 @@ private void bOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:eve
 	doOK();
 }//GEN-LAST:event_bOKActionPerformed
 
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) throws Exception {
-		DBPrefsDialog d = new DBPrefsDialog(new javax.swing.JFrame(), "offstage/db", "offstage/gui/DBPrefsDialog");
-		d.setVisible(true);
-		System.out.println(d.getPassword());
-    }
+//    /**
+//    * @param args the command line arguments
+//    */
+//    public static void main(String args[]) throws Exception {
+//		DBPrefsDialog d = new DBPrefsDialog(new javax.swing.JFrame(), "offstage/db", "offstage/gui/DBPrefsDialog");
+//		d.setVisible(true);
+//		System.out.println(d.getPassword());
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bCancel;

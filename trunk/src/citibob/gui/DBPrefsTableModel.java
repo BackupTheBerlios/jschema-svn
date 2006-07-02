@@ -47,13 +47,13 @@ private void addField(String key, String dflt)
 public Preferences getPrefs() { return prefs; }
 
 /** Creates new form DBPrefsPanel */
-public DBPrefsTableModel(String nodePath)
+public DBPrefsTableModel(Preferences prefs)
 throws BackingStoreException
 {
 	super();
-
-	prefs = Preferences.userRoot();
-	prefs = prefs.node(nodePath);
+	this.prefs = prefs;
+//	prefs = Preferences.userRoot();
+//	prefs = prefs.node(nodePath);
 
 	// Set up to add defaults
 	String[] keys = prefs.keys();
