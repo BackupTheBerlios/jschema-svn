@@ -16,22 +16,22 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-package citibob.swing;
+package citibob.swing.table;
 
 import java.sql.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
-
-import citibob.swing.table.CitibobTableModel;
-
+import citibob.swing.typed.*;
 import java.util.*;
 
 /** Reads in a record set and makes the data available as a (read-only) table model. */
-public class RSTableModel extends DefaultTableModel
-implements CitibobTableModel
+public class RSTableModel
+extends DefaultTableModel
+implements JTypeTableModel
 {
 
 List proto;		// Prototypes for CitibobTableModel
+JType[] jTypes;		// JType of each column
 
 // =====================================================
 // DefaultTableModel handles data storage
@@ -74,9 +74,10 @@ public RSTableModel()
 {
 	super();
 }
-public RSTableModel(Statement st, String sql) throws SQLException
+public RSTableModel(Statement st, String sql, JType[] jTypes) throws SQLException
 {
 	super();
+	this.jTypes = jTypes;
 	ResultSet rs = null;
 	try {
 		rs = st.executeQuery(sql);
@@ -105,18 +106,27 @@ public boolean isCellEditable(int rowIndex, int columnIndex)
 public void setValueAt(Object val, int rowIndex, int colIndex)
 	{ }
 // --------------------------------------------------
+
 // ===============================================================
-// Implementation of CitibobTableModel (prototype stuff)
-public List getPrototypes()
-	{ return proto; }
-public void setPrototypes(List proto)
-	{ this.proto = proto; }
-public void setPrototypes(Object[] pr)
-{
-	proto = new ArrayList(pr.length);
-	for (int i = 0; i < pr.length; ++i) {
-		proto.add(pr[i]);
-	}
-}
+/** Return SqlType for an entire column --- or null, if this column does not have a single SqlType. */
+public JType getColumnJType(int col) { return jTypes[col]; }
+
+/** Return SqlType for a cell */
+public JType getJType(int row, int col) { return jTypes[col]; }
+
+
+//// ===============================================================
+//// Implementation of CitibobTableModel (prototype stuff)
+//public List getPrototypes()
+//	{ return proto; }
+//public void setPrototypes(List proto)
+//	{ this.proto = proto; }
+//public void setPrototypes(Object[] pr)
+//{
+//	proto = new ArrayList(pr.length);
+//	for (int i = 0; i < pr.length; ++i) {
+//		proto.add(pr[i]);
+//	}
+//}
 
 }
