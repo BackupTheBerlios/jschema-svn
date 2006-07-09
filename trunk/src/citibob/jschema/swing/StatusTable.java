@@ -31,6 +31,7 @@ import citibob.jschema.*;
 import citibob.swing.table.*;
 import citibob.swing.typed.*;
 import citibob.swing.*;
+import citibob.swing.JTypeJTable;
 
 
 /**

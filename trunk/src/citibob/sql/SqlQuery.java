@@ -89,14 +89,14 @@ public boolean containsTable(String t)
 
 /** Adds a where clause (used when joining tables */
 public void addWhereClause(String wc)
-	{ whereClauses.add(wc); }
+	{ if (wc != null) whereClauses.add(wc); }
 /** Returns the number of where clauses in the query. */
 public int numWhereClauses()
 	{ return whereClauses.size(); }
 
 /** Adds a where clause (used when joining tables */
 public void addOrderClause(String wc)
-	{ orderClauses.add(wc); }
+	{ if (wc != null) orderClauses.add(wc); }
 
 
 /** Sets the "special" table (for UPDATE and INSERT, not SELECT) */

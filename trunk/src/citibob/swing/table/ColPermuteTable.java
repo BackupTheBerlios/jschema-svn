@@ -56,6 +56,11 @@ public void setRenderEditU(String underlyingName, RenderEdit re)
 	setRenderEdit(findColumnU(underlyingName), re);
 }
 
+/** Sets a render/edit on a colum, by UNDERLYING column name. */
+public void setRenderU(String underlyingName, javax.swing.table.TableCellRenderer re)
+{
+	setRender(findColumnU(underlyingName), re);
+}
 ///** Sets a render/edit on a colum, by UNDERLYING column name,
 // * according to the columns declared class getColumnClass(). */
 //public void setRenderEditU(String underlyingName, RenderEditSet res)

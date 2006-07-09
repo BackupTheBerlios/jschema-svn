@@ -25,20 +25,28 @@ import citibob.sql.*;
 
 public class SchemaBufDbModel extends SqlGenDbModel
 {
+String whereClause;
+String orderClause;
 
 //Statement st;
 	
+// -------------------------------------------------------------
 public SchemaBufDbModel(String table, SchemaBuf buf)
 {
 	super(table, buf);
 }
-
 /** Uses the default table for the Schema in buf. */
 public SchemaBufDbModel(SchemaBuf buf, DbChangeModel dbChange)
 {
 	super(buf.getSchema().getDefaultTable(), buf, dbChange);
 }
-
+public void setWhereClause(String whereClause)
+{
+	this.whereClause = whereClause;
+}
+public void setOrderClause(String orderClause)
+	{ this.orderClause = orderClause; }
+// -------------------------------------------------------------
 public void doSelect(Statement st) throws java.sql.SQLException
 {
 	getSchemaBuf().clear();
@@ -55,7 +63,19 @@ public void doClear()
 	{ ((SchemaBuf)getSqlGen()).clear(); }
 
 // -----------------------------------------------------------
+public void setSelectWhere(SqlQuery q)
+{
+	q.addWhereClause(whereClause);
+	q.addOrderClause(orderClause);
+}
+
+/** @see SqlGenDbModel */
+public void setInsertKeys(int row, SqlQuery q) {}
+
+
 // ===========================================================
+InstantUpdateListener instantUpdateListener;
+
 /** This should NOT be used by subclasses.  In general, instant update is a property
 assigned by enclosing objects --- panels that USE this DbModel.
 TODO: Make instant updates delete instantly when user hits "delete". */
@@ -63,12 +83,12 @@ public void setInstantUpdate(ActionRunner runner, boolean instantUpdate)
 {
 	if (instantUpdate) {
 		if (instantUpdateListener == null) {
-			instantUpdateListener = new InstantUpdateListener(runner);
-			getSchemaBuf().addTableModelListener(instantUpdateListener);
+			instantUpdateListener = new InstantUpdateListener(this, runner);
+			this.getSchemaBuf().addTableModelListener(instantUpdateListener);
 		}
 	} else {
 		if (instantUpdateListener != null) {
-			getSchemaBuf().removeTableModelListener(instantUpdateListener);
+			this.getSchemaBuf().removeTableModelListener(instantUpdateListener);
 			instantUpdateListener = null;
 		}
 	}
@@ -78,12 +98,14 @@ public boolean isInstantUpdate()
 	return (instantUpdateListener != null);
 }
 // ==============================================
-private class InstantUpdateListener implements TableModelListener {
+private static class InstantUpdateListener implements TableModelListener {
 //	Statement st;
 	ActionRunner runner;
-	public InstantUpdateListener(ActionRunner runner)
+	SqlGenDbModel dbModel;
+	public InstantUpdateListener(SqlGenDbModel dbModel, ActionRunner runner)
 	{
 		this.runner = runner;
+		this.dbModel = dbModel;
 	}
 	public void tableChanged(final TableModelEvent e) {
 System.out.println("InstantUpdateListener.tableChanged()");
@@ -95,12 +117,13 @@ System.out.println("InstantUpdateListener.tableChanged()");
 				case TableModelEvent.UPDATE :
 					for (int r=e.getFirstRow(); r <= e.getLastRow(); ++r) {
 System.out.println("InstantUpdateListener.doUpdate row = " + r);
-						doUpdate(st, r);
+						dbModel.doUpdate(st, r);
 					}
 				break;
 			}
 		}});
  	}
 }
+
 
 }

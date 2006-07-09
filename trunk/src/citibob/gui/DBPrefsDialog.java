@@ -95,8 +95,6 @@ public ConnPool newConnPool() throws SQLException, ClassNotFoundException
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
-
         jScrollPane1 = new javax.swing.JScrollPane();
         prefsTable = new citibob.swing.CitibobJTable();
         jPanel1 = new javax.swing.JPanel();

@@ -78,6 +78,15 @@ public void setRenderEdit(int colNo, RenderEdit re)
 	if (re.getEditor() != null) col.setCellEditor(re.getEditor());
 }
 
+/** Sets a renderer and editor pair at once, for a column. */
+public void setRender(int colNo, TableCellRenderer re)
+{
+	if (re == null) return;		// Don't change, if we don't know what to set it TO.
+	
+	TableColumn col = getColumnModel().getColumn(colNo);
+	col.setCellRenderer(re);
+}
+
 ///** Sets a renderer and editor pair at once, for a column. */
 //public void setDefaultRenderEdit(Class klass, RenderEdit re)
 //{

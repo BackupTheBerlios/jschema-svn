@@ -31,6 +31,7 @@ public class IntKeyedDbModel extends SchemaBufDbModel
 /** Key fields to control who gets displayed. */
 int idValue;
 String keyField;
+int keyCol;
 
 /** Should we add the key field to the SQL statement when we insert records?  Generally,
 this will be false for main tables (because they have auto-insert), and
@@ -41,6 +42,13 @@ public void setKey(int idValue)
 {
 	this.idValue = idValue;
 }
+public int getKey() { return idValue; }
+///** Gets the key column of a row from the underlying SchemaBuf */
+//public int getKeyValueAt(int row)
+//{
+//	Integer I = (Integer)getSchemaBuf().getValueAt(row, keyCol);
+//	return (I == null ? -1 : I.intValue());
+//}
 // --------------------------------------------------------------
 public IntKeyedDbModel(SchemaBuf buf, String keyField, boolean doInsertKeys)
 { this(buf, keyField, doInsertKeys, null); }
@@ -49,6 +57,7 @@ public IntKeyedDbModel(SchemaBuf buf, String keyField, boolean doInsertKeys, DbC
 {
 	super(buf, dbChange);
 	this.keyField = keyField;
+	this.keyCol = buf.findColumn(keyField);
 	this.doInsertKeys = doInsertKeys;	
 }
 public IntKeyedDbModel(Schema schema, String keyField, boolean doInsertKeys)
@@ -66,10 +75,12 @@ public IntKeyedDbModel(Schema schema, String keyField)
 
 public void setSelectWhere(SqlQuery q)
 {
+	super.setSelectWhere(q);
 	q.addWhereClause(keyField + " = " + idValue);
 }
 public void setInsertKeys(int row, SqlQuery q)
 {
+	super.setInsertKeys(row, q);
 	if (doInsertKeys) q.addColumn(keyField, SqlInteger.sql(idValue));
 //	q.addColumn("lastupdated", "now()");
 }

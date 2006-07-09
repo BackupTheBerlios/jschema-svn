@@ -89,7 +89,7 @@ throws SQLException, ClassNotFoundException
 {
 	Class.forName(prefs.get(DRIVERCLASS, null));
 	props.setProperty("user", prefs.get(USER, null));
-	props.setProperty("ssl", prefs.get(SSL, null));
+//	props.setProperty("ssl", prefs.get(SSL, null));
 	
 	String pwd = password;
 	if (pwd == null || "".equals(pwd)) pwd = prefs.get(DEFPASSWORD, null);
