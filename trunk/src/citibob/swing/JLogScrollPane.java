@@ -34,6 +34,9 @@ public class JLogScrollPane extends JScrollPane
 	final JTextArea textArea;
 	Writer logWriter;
 	boolean autoScroll;
+	boolean timed_buffer;
+	int time_delay;
+	int buffersize;
 	
 //public JTextArea getTextArea() { return textArea; }
 	
@@ -47,6 +50,32 @@ public class JLogScrollPane extends JScrollPane
 		textArea.setEditable(false);
 		
 		setViewportView(textArea);
+		
+		this.timed_buffer = false;
+		this.time_delay = 0;
+		this.buffersize=0;
+	}
+	
+	public JLogScrollPane(boolean timed_buffer, int delay, int bufsize)
+	{
+		super();
+		textArea = new JTextArea();
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setEditable(false);
+		
+		this.timed_buffer = timed_buffer;
+		this.time_delay = delay;
+		this.buffersize = bufsize;
+		
+		setViewportView(textArea);
+	}
+	
+	public void setTimedBuffering(boolean timed_buffering, int delay, int bufsize)
+	{
+		this.timed_buffer = timed_buffering;
+		this.time_delay = delay;
+		this.buffersize = bufsize;
 	}
 	
 	public Writer getWriter()
@@ -110,7 +139,17 @@ public class JLogScrollPane extends JScrollPane
 				//if (autoScroll) scrollToEnd();
 			}
 		});
-		logWriter = new LineBufferWriter(new DocumentWriter(doc));
+		
+		if (timed_buffer)
+		{
+			System.err.println("Making TimedBufferedWriter");
+			logWriter = new TimedBufferedWriter(new DocumentWriter(doc), time_delay, buffersize);
+		}
+		else
+		{
+			System.err.println("Making LineBufferWriter");
+			logWriter = new LineBufferWriter(new DocumentWriter(doc));
+		}
 		setDocument(doc);
 //try {
 //logWriter.write("Hello World\n");

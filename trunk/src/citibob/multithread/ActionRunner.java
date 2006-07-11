@@ -33,10 +33,6 @@ package citibob.multithread;
  * @author citibob
  */
 public interface ActionRunner {
-	
-//public void run(ERunnable r);
-//public void run(StRunnable r);
-//public void run(DbRunnable r);
 
 public void doRun(CBRunnable r);
 
