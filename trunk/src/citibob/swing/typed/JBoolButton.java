@@ -75,6 +75,7 @@ public void setJType(citibob.swing.typed.JTypeSwinger f) throws ClassCastExcepti
 	jType = f.getJType();
 	Class klass = f.getJType().getObjClass();
 	if (!(Boolean.class.isAssignableFrom(
+
 klass)))
 		throw new ClassCastException("Expected Boolean type, got " + klass);
 }
