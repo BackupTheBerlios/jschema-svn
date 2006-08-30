@@ -1,47 +1,46 @@
-/* TimedBufferedFilterWriter.java
+/* TimedBufferedFilterOutputStream.java
  * Created on June 29, 2006, 10:18 AM
  */
 
-package citibob.swing;
+package citibob.io;
 
 import java.awt.event.ActionEvent;
-import java.io.FilterWriter;
+import java.io.FilterOutputStream;
 import java.io.IOException;
-import java.io.Writer;
-import java.nio.CharBuffer;
+import java.io.OutputStream;
 
 /**
  * @author crowjon
  */
-public class TimedBufferedWriter extends FilterWriter implements java.awt.event.ActionListener
+public class TimedBufferedOutputStream extends FilterOutputStream implements java.awt.event.ActionListener
 {
-	char buffer[];
+	byte buffer[];
 	int index=0;
 	
-	/** Creates a new instance of TimedBufferedFilterWriter */
-	public TimedBufferedWriter(Writer writer)
+	/** Creates a new instance of TimedBufferedFilterOutputStream */
+	public TimedBufferedOutputStream(OutputStream writer)
 	{
 		super(writer);
-		buffer = new char[25000];
+		buffer = new byte[25000];
 		javax.swing.Timer timer = new javax.swing.Timer(3000, this);
 		timer.start();
 		System.err.println("timer writer delay is 3000 ms");
 	}
 	
-	public TimedBufferedWriter(Writer writer, int millisec_delay, int buffersize)
+	public TimedBufferedOutputStream(OutputStream writer, int millisec_delay, int buffersize)
 	{
 		super(writer);
 		if (buffersize>1000 && buffersize<1000000) // between 1,000 and 1,000,000
 		{
-			buffer = new char[buffersize];
+			buffer = new byte[buffersize];
 		}
 		else if (buffersize<=1000)
 		{
-			buffer = new char[1000];
+			buffer = new byte[1000];
 		}
 		else if (buffersize>=1000000)
 		{
-			buffer = new char[1000000];
+			buffer = new byte[1000000];
 		}
 		
 		javax.swing.Timer timer = new javax.swing.Timer(millisec_delay, this);
@@ -49,26 +48,23 @@ public class TimedBufferedWriter extends FilterWriter implements java.awt.event.
 		System.err.println("timer writer delay is "+millisec_delay+" ms");
 	}
 
-	public void write(int c) throws IOException
+	public void write(int b) throws IOException
 	{
-		buffer[index++] = (char) c;
+		buffer[index++] = (byte)b;
 		if (index > buffer.length-1)
 		{
 			flush();
 		}
 	}
 
-	public void write(String str, int off, int len) throws IOException
-	{
-		char chars[] = str.toCharArray();
-		write(chars, off, len);
-	}
-
-	public void write(char[] cbuf, int off, int len) throws IOException
+	public void write(byte[] cbuf, int off, int len) throws IOException
 	{
 		for (int i=off; i<len; i++) write(cbuf[i]);
 	}
 
+	public void write(byte[] cbuf) throws IOException
+		{ write(cbuf, 0, cbuf.length); }
+	
 	public synchronized void flush()
 	{
 		try
