@@ -303,6 +303,12 @@ for (int i = 0; i < colNames.length; ++i) System.out.println("    insertRow " + 
 		if (isKey(coli[i])) ++numKey;
 	}
 
+	// Count # of keys in Schema.  If we haven't inserted into all of them
+	// assume we're using an auto-increment or default key field, and thus
+	// no key violation.
+	int fullKeyCount = 0;
+	for (int i=0; i<this.getColumnCount(); ++i) if (isKey(i)) ++fullKeyCount;
+
 	if (numKey == 0) {
 		// No keys: just insert the row and be done with it.
 		rowInserted = insertRow(rowIndex);
@@ -318,7 +324,7 @@ for (int i = 0; i < colNames.length; ++i) System.out.println("    insertRow " + 
 			// See if this row matches
 			boolean beq = true;
 			for (int i=0; i<colNames.length; ++i) {
-//System.out.println("r = " + r + " col " + i + " coli = " + coli[i] + " valueAt = " + getValueAt(r,coli[i]) + " val = " + vals[i]);
+System.out.println("r = " + r + " col " + i + " coli = " + coli[i] + " valueAt = " + getValueAt(r,coli[i]) + " val = " + vals[i]);
 				if (isKey(coli[i]) && !getValueAt(r,coli[i]).equals(vals[i])) {
 					beq = false;
 					break;
@@ -334,7 +340,7 @@ for (int i = 0; i < colNames.length; ++i) System.out.println("    insertRow " + 
 					setStatus(r, getStatus(r) & ~DELETED);
 					rowInserted = r;
 					break;
-				} else {
+				} else if (numKey == fullKeyCount) {
 					// An actual duplicate; throw exception
 					throw new KeyViolationException("Key violation");	// Keep msg simple for now
 				}
