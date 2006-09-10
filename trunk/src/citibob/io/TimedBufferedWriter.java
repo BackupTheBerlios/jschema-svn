@@ -10,8 +10,10 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
+ * Used to make console output window with low refresh rate (for efficiency).
  * @author crowjon
  */
+
 public class TimedBufferedWriter extends FilterWriter implements java.awt.event.ActionListener
 {
 	char buffer[];
