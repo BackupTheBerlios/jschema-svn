@@ -8,7 +8,7 @@
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.table;
+package citibob.swing;
 
 import javax.swing.table.*;
 import javax.swing.*;
@@ -17,7 +17,7 @@ import java.sql.*;
 import citibob.jschema.*;
 import citibob.swing.table.*;
 import citibob.swing.typed.*;
-import citibob.swing.*;
+
 
 /**
  *

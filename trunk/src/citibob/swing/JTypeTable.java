@@ -8,12 +8,11 @@
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.typed;
+package citibob.swing;
 
 import javax.swing.*;
 import javax.swing.table.*;
 import java.util.*;
-import citibob.swing.*;
 import citibob.sql.*;
 import citibob.swing.table.*;
 import citibob.swing.typed.*;
@@ -42,7 +41,7 @@ public class JTypeTable extends CitibobJTable
 	public TableCellEditor getCellEditor(int row, int col)
 	{
 		RenderEdit re = getRenderEdit(row, col);
-System.out.println("JTypeTable: got RenderEdit for edit: " + re + "(JType = " + ((JTypeTableModel)getModel()).getJType(row, col));
+//System.out.println("JTypeTable: got RenderEdit for edit: " + re + "(JType = " + ((JTypeTableModel)getModel()).getJType(row, col));
 		return (re != null ? re.getEditor() : super.getCellEditor(row, col));
 	}
 	public TableCellRenderer getCellRenderer(int row, int col)

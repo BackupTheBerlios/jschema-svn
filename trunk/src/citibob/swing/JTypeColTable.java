@@ -1,5 +1,5 @@
 /*
- * JTypeJTable.java
+ * JTypeColTable.java
  *
  * Created on March 13, 2006, 9:28 PM
  *
@@ -21,10 +21,11 @@ import citibob.swing.typed.*;
 import citibob.swing.typed.JType;
 
 /**
- *
+ * A table with one type per column.  Integrated with ColPermuteTable, so it's
+ * convenient for editing SchemaBufs.
  * @author citibob
  */
-public class JTypeJTable extends ColPermuteTable
+public class JTypeColTable extends ColPermuteTable
 {
 	
 /** @param schemaBuf Underling data buffer to use
@@ -42,7 +43,7 @@ public void setModelU(JTypeTableModel schemaBuf,
 	// Set the RenderEdit for each column, according to that column's SqlType.
 	for (int c=0; c<sColMap.length; ++c) {
 		int bcol = model.getColMap(c);
-		JType sqlType = schemaBuf.getColumnJType(bcol);
+		JType sqlType = schemaBuf.getJType(0,bcol);
 		if (sqlType == null) continue;
 		JTypeSwinger swing = swingers.newSwinger(sqlType);
 		if (swing == null) continue;
