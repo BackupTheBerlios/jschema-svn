@@ -26,9 +26,9 @@ import citibob.swing.typed.JType;
 
 public interface JTypeTableModel extends CitibobTableModel
 {
-	/** Return SqlType for an entire column --- or null, if this column does not have a single SqlType. */
-	public JType getColumnJType(int col);
+//	/** Return SqlType for an entire column --- or null, if this column does not have a single SqlType. */
+//	public JType getColumnJType(int col);
 
-	/** Return SqlType for a cell */
+	/** Return SqlType for a cell.  If type depends only on col, ignores the row argument. */
 	public JType getJType(int row, int col);
 }

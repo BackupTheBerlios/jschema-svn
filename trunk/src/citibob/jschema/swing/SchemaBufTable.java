@@ -21,7 +21,7 @@ import java.sql.*;
  *
  * @author citibob
  */
-public class SchemaBufTable extends JTypeJTable
+public class SchemaBufTable extends JTypeColTable
 {
 
 SchemaBufDbModel dbModel;

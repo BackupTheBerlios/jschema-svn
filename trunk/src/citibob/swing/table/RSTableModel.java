@@ -108,11 +108,17 @@ public void setValueAt(Object val, int rowIndex, int colIndex)
 // --------------------------------------------------
 
 // ===============================================================
-/** Return SqlType for an entire column --- or null, if this column does not have a single SqlType. */
-public JType getColumnJType(int col) { return jTypes[col]; }
-
 /** Return SqlType for a cell */
-public JType getJType(int row, int col) { return jTypes[col]; }
+public JType getJType(int row, int col)
+	{ return jTypes[col]; }
+
+///** Return SqlType for an entire column --- or null, if this column does not have a single SqlType. */
+//public JType getColumnJType(int col)
+//	{ return jTypes[col]; }
+//
+///** Return SqlType for a cell */
+//public JType getJType(int row, int col)
+//	{ return jTypes[col]; }
 
 
 //// ===============================================================

@@ -376,10 +376,12 @@ public int findColumn(String colName)
 	{ return schema.findCol(colName); }
 public Class getColumnClass(int colIndex)
 	{ return schema.getCol(colIndex).getType().getObjClass(); }
-public JType getColumnJType(int colIndex)
-	{ return schema.getCol(colIndex).getType(); }
 public JType getJType(int row, int col)
-	{ return getColumnJType(col); }
+	{ return schema.getCol(col).getType(); }
+//public JType getColumnJType(int colIndex)
+//	{ return schema.getCol(colIndex).getType(); }
+//public JType getJType(int row, int col)
+//	{ return getColumnJType(col); }
 public String getColumnName(int colIndex)
 	{ return schema.getCol(colIndex).getName(); }
 // --------------------------------------------------

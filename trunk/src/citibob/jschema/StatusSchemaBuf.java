@@ -53,13 +53,18 @@ public Class getColumnClass(int colIndex)
 	if (colIndex == 0) return Integer.class;
 	return sb.getColumnClass(colIndex-1);
 }
-public JType getColumnJType(int colIndex)
-{
-	if (colIndex == 0) return null;
-	return sb.getColumnJType(colIndex-1);
-}
 public JType getJType(int row, int col)
-	{ return getColumnJType(col); }
+{
+	if (col == 0) return null;
+	return sb.getJType(row, col-1);
+}
+//public JType getColumnJType(int colIndex)
+//{
+//	if (colIndex == 0) return null;
+//	return sb.getColumnJType(colIndex-1);
+//}
+//public JType getJType(int row, int col)
+//	{ return getColumnJType(col); }
 public String getColumnName(int colIndex)
 {
 	if (colIndex == 0) return "__status__";

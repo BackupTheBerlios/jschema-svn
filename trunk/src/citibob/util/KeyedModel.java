@@ -135,6 +135,14 @@ public KeyedModel(Object[] objs)
 		addItem(objs[i], objs[i]);
 	}
 }
+/** items is the displayed values in the listbox. */
+public KeyedModel(Object[] keys, Object[] items)
+{
+	for (int i=0; i<keys.length; ++i) {
+		addItem(keys[i], items[i]);
+	}
+	
+}
 public KeyedModel() {}
 
 // -------------------------------------------------------------------
