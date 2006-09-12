@@ -26,7 +26,7 @@ import foundry.io.DocumentWriter;
 import javax.swing.event.*;
 import java.io.*;
 import citibob.swing.text.CircularPlainDocument;
-import citibob.io.LineBufferWriter;
+import citibob.io.*;
 
 public class JLogScrollPane extends JScrollPane
 {
