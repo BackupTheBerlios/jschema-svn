@@ -13,7 +13,7 @@ package citibob.sql.pgsql;
 import citibob.swing.typed.*;
 import citibob.sql.*;
 import citibob.swing.pgsql.SqlBoolSwinger;
-import citibob.swing.pgsql.SqlDateSwinger;
+import citibob.swing.typed.JDateSwinger;
 import citibob.swing.pgsql.SqlIntegerSwinger;
 import citibob.swing.pgsql.SqlStringSwinger;
 import citibob.swing.pgsql.SqlTimeSwinger;
@@ -42,7 +42,7 @@ public DefaultSwingerMap() {
 	// SqlDate
 	this.addMaker(SqlDate.class, new SwingerMap.Maker() {
 	public JTypeSwinger newSwinger(JType sqlType) {
-		return new SqlDateSwinger((SqlDate)sqlType, null, "MM-dd-yyyy");
+		return new JDateSwinger((SqlDate)sqlType, null, "MM-dd-yyyy");
 	}});
 
 	// SqlInteger

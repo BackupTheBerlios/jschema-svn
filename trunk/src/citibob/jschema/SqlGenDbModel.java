@@ -205,7 +205,7 @@ System.out.println("doSimpleDelete: " + sql);
 // -----------------------------------------------------------
 /** Get Sql query to insert record into database,
 * assuming it isn't already there. */
-private void doSimpleInsert(int row, Statement st) throws java.sql.SQLException
+protected SqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQLException
 {
 	SqlQuery q = new SqlQuery(SqlQuery.INSERT);
 	q.setMainTable(table);
@@ -216,6 +216,7 @@ System.out.println("doSimpleInsert: ");
 System.out.println("   sql = " + sql);
 	st.executeUpdate(sql);
 	gen.setStatus(row, 0);
+	return q;
 }
 // -----------------------------------------------------------
 

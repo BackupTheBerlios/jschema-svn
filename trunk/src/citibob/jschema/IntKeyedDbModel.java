@@ -84,5 +84,6 @@ public void setInsertKeys(int row, SqlQuery q)
 	if (doInsertKeys) q.addColumn(keyField, SqlInteger.sql(idValue));
 //	q.addColumn("lastupdated", "now()");
 }
+// -----------------------------------------------------------
 
 }

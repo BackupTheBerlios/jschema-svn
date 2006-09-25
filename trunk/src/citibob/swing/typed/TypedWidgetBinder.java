@@ -57,12 +57,14 @@ if (colName.equals("dob")) {
 	System.out.println("dob column reached!!!");
 }
 	// Set the type
-	Schema schema = bufRow.getSchema();
-	JType sqlType = schema.getCol(schema.findCol(colName)).getType();
-	JTypeSwinger f = map.newSwinger(sqlType);		// Default ways to render & edit
-//System.out.println("colName = " + colName);
-	tw.setJType(f);
-	
+	if (map != null) {
+		Schema schema = bufRow.getSchema();
+		JType sqlType = schema.getCol(schema.findCol(colName)).getType();
+		JTypeSwinger f = map.newSwinger(sqlType);		// Default ways to render & edit
+	//System.out.println("colName = " + colName);
+		tw.setJType(f);
+	}
+
 	bind(tw, (TableRowModel)bufRow, colName);
 }
 

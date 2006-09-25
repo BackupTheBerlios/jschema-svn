@@ -38,7 +38,7 @@ import java.beans.*;
  */
 public class JTypedDateChooser extends JDateChooser implements TypedWidget {
 
-SqlDateType jType;
+JDateType jType;
 //PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 /** Returns last legal value of the widget.  Same as method in JFormattedTextField */
@@ -95,7 +95,8 @@ public boolean isInstance(Object o)
  if asked to edit a JType it doesn't like. */
 public void setJType(citibob.swing.typed.JTypeSwinger f) throws ClassCastException
 {
-	jType = (SqlDateType)f.getJType();
+//	jType = (SqlDateType)f.getJType();
+	jType = (JDateType)f.getJType();
 
 	// Set up the type properly
 	Class klass = jType.getObjClass();

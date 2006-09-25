@@ -15,20 +15,22 @@ import javax.swing.text.*;
 import java.text.*;
 import citibob.swing.typed.*;
 import java.util.*;
+import citibob.swing.typed.JDateType;
+import citibob.swing.typed.JDateSwinger;
 
 
 /**
  *
  * @author citibob
  */
-public class SqlTimeSwinger extends SqlDateSwinger
+public class SqlTimeSwinger extends JDateSwinger
 {
 String fmt;
 DateFormat dfmt;
 
 // -------------------------------------------------------------------------
 /** Creates a new instance of TypedWidgetSTFactory */
-public SqlTimeSwinger(SqlDateType sqlType, DateFormat dfmt) {
+public SqlTimeSwinger(JDateType sqlType, DateFormat dfmt) {
 	super(sqlType, dfmt);
 }
 public static DateFormat newTimeFormat(Calendar cal, String fmt)
@@ -38,7 +40,7 @@ public static DateFormat newTimeFormat(Calendar cal, String fmt)
 	if (cal != null) dff.setCalendar(cal);
 	return dff;
 }
-public SqlTimeSwinger(SqlDateType sqlType, Calendar cal, String fmt)
+public SqlTimeSwinger(JDateType sqlType, Calendar cal, String fmt)
 {
 	this(sqlType, newTimeFormat(cal, fmt));
 	this.fmt = fmt;

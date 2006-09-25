@@ -20,7 +20,7 @@ package citibob.sql.pgsql;
 
 import java.util.*;
 
-public class SqlTimestamp  implements citibob.sql.SqlDateType
+public class SqlTimestamp  implements citibob.sql.SqlDateType //swing.typed.JDateType
 {
 
 Calendar cal;

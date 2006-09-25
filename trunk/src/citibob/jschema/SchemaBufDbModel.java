@@ -22,12 +22,14 @@ import java.sql.*;
 import javax.swing.event.*;
 import citibob.multithread.*;
 import citibob.sql.*;
+import java.util.*;
 
 public class SchemaBufDbModel extends SqlGenDbModel
 {
 String whereClause;
 String orderClause;
 
+boolean updateBufOnUpdate = false;	// Should we update sequence columns on insert?
 //Statement st;
 	
 // -------------------------------------------------------------
@@ -40,6 +42,9 @@ public SchemaBufDbModel(SchemaBuf buf, DbChangeModel dbChange)
 {
 	super(buf.getSchema().getDefaultTable(), buf, dbChange);
 }
+
+public void setUpdateBufOnUpdate(boolean b) { updateBufOnUpdate = b; }
+
 public void setWhereClause(String whereClause)
 {
 	this.whereClause = whereClause;
@@ -97,6 +102,44 @@ public boolean isInstantUpdate()
 {
 	return (instantUpdateListener != null);
 }
+
+protected SqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQLException
+{
+	SqlQuery q = super.doSimpleInsert(row, st);
+	
+//	SqlQuery q = new SqlQuery(SqlQuery.INSERT);
+//	q.setMainTable(table);
+//System.out.println("doSimpleInsert: ");
+//	gen.getInsertCols(row, q, false);
+//	setInsertKeys(row, q);
+//	String sql = q.toString();
+//System.out.println("   sql = " + sql);
+//	st.executeUpdate(sql);
+//	gen.setStatus(row, 0);
+	
+	/** Figure out which sequence columns were not inserted, and find their keys */
+	SchemaBuf sb = (SchemaBuf)gen;
+	Schema schema = sb.getSchema();
+	String[] sinserted = q.getColumnNames();
+	TreeSet inserted = new TreeSet();
+	for (int i=0; i<sinserted.length; ++i) inserted.add(sinserted[i]);
+	
+	if (!updateBufOnUpdate) return q;
+	for (int i=0; i<schema.getColCount(); ++i) {
+		Column col = schema.getCol(i);
+		if ((col.type instanceof SqlSequence) && !inserted.contains(col.name)) {
+			// Update this in the SchemaBuf if it wasn't inserted...
+			SqlSequence seq = (SqlSequence)col.type;
+			int val = seq.getCurVal(st);
+			sb.setValueAt(new Integer(val), row, i);
+		}
+	}
+	
+	return q;
+}
+// -----------------------------------------------------------
+
+
 // ==============================================
 private static class InstantUpdateListener implements TableModelListener {
 //	Statement st;

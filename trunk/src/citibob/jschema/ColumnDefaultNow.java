@@ -12,6 +12,7 @@ package citibob.jschema;
 
 import citibob.sql.*;
 import java.util.*;
+import citibob.swing.typed.JDateType;
 
 /**
  *
@@ -32,7 +33,7 @@ public ColumnDefaultNow(SqlDateType dateType, String name, boolean key)
  This method will be overridden. */
 public Object getDefault()
 {
-	SqlDateType jtype = (SqlDateType)super.getType();
+	JDateType jtype = (JDateType)super.getType();
 	java.util.Date dt = jtype.truncate(new Date());
 System.out.println("DefaultNow = " + dt + "(jtype = " + jtype.getClass());
 	return dt;

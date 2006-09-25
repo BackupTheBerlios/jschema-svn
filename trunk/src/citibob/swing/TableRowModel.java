@@ -75,7 +75,7 @@ public void set(int col, Object val)
 }
 public Object get(int col)
 {
-//System.out.println("   XXcurRow = " + curRow);
+System.out.println("   Xxtmodel = " + tmodel);
 	if (curRow == NOROW) return null;
 	return tmodel.getValueAt(curRow, col);
 }

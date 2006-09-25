@@ -43,5 +43,7 @@ implements SchemaRowModel
 	}
 	public Object getOrigValue(int col)
 		{ return schemaBuf.getOrigValueAt(getCurRow(), col); }
+	public void resetValue(int col)
+		{ set(col, getOrigValue(col)); }
 
 }

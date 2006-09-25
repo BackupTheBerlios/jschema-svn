@@ -118,6 +118,10 @@ public Object getOrigValueAt(int rowIndex, int colIndex)
 	SqlRow r = (SqlRow)rows.get(rowIndex);
  	return r.origData[colIndex];
 }
+public void resetValueAt(int rowIndex, int colIndex)
+{
+	setValueAt(getOrigValueAt(rowIndex, colIndex), rowIndex, colIndex);
+}
 // --------------------------------------------------
 
 public int getStatus(int row)

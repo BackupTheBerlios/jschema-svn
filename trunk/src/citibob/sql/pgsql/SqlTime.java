@@ -21,7 +21,7 @@ package citibob.sql.pgsql;
 import java.text.*;
 import java.util.*;
 
-public class SqlTime implements citibob.sql.SqlDateType
+public class SqlTime implements citibob.sql.SqlDateType //citibob.swing.typed.JDateType, citibob.swing.typed.SqlType
 {
 boolean nullable = true;
 

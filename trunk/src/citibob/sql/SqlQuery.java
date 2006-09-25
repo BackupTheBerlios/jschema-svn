@@ -176,6 +176,18 @@ public String getColumnList()
 	return ret.toString();
 }
 
+/** Returns names of the columns involved in the query */
+public String[] getColumnNames()
+{
+	String[] ret = new String[columns.size()];
+	int n=0;
+	for (Iterator ii = columns.iterator(); ii.hasNext(); ) {
+		NVPair nv = (NVPair)ii.next();
+		ret[n++] = nv.name;
+	}
+	return ret;
+}
+
 /** Returns a permuted list of columns. */
 public String getColumnList(int[] selectList)
 {

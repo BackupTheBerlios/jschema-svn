@@ -21,19 +21,22 @@ public class ArrayListUtil {
 public static void shift(ArrayList al, int ix, int n, int shift)
 {
 //	int oldsize = al.size();
-	int lastix = ix + n + shift;	// last index (+1) of last item being shifted
+//	int lastix = ix + n + shift;	// last index (+1) of last item being shifted
 	if (shift > 0) {
 //		while (al.size() < lastix) al.add(null);	// potentially add...
-		for (int i=n-1; i>=0; --i) al.set(ix+i+shift, al.get(ix));
+		for (int i=n-1; i>=0; --i) al.set(ix+i+shift, al.get(ix+i));
 	} else {
-		for (int i=0; i<n; ++i) al.set(ix+i+shift, al.get(ix));
+		for (int i=0; i<n; ++i) al.set(ix+i+shift, al.get(ix+i));
 	}
 }
 
 public static void shift(ArrayList al, int ix, int shift)
 {
-	shift(al, ix, al.size() - ix, shift);
+	int n = al.size() - ix;
+	if (shift > 0) n -= shift;
+	shift(al, ix, n, shift);
 }
+
 /** Adds or deletes items to attain a particular size. */
 public static void setSize(ArrayList al, int n)
 {

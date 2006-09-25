@@ -8,42 +8,40 @@
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.pgsql;
+package citibob.swing.typed;
 
 import citibob.sql.*;
 import javax.swing.text.*;
 import java.text.*;
-import citibob.swing.typed.*;
 import java.util.*;
-import citibob.swing.typed.JDateType;
-import citibob.swing.typed.JDateSwinger;
 
 
 /**
  *
  * @author citibob
  */
-public class SqlTimestampSwinger extends JDateSwinger
+public class JDateSwinger extends TypedWidgetSwinger
 {
 String fmt;
 DateFormat dfmt;
 
 // -------------------------------------------------------------------------
 /** Creates a new instance of TypedWidgetSTFactory */
-public SqlTimestampSwinger(JDateType sqlType, DateFormat dfmt) {
-	super(sqlType, dfmt);
+public JDateSwinger(JDateType sqlType, DateFormat dfmt) {
+	super(sqlType);
+	this.dfmt = dfmt;
 }
-public static DateFormat newTimestampFormat(Calendar cal, String fmt)
+public static DateFormat newDateFormat(Calendar cal, String fmt)
 {
 	DateFormat dff;
-	if (fmt == null) dff = DateFormat.getTimeInstance();
+	if (fmt == null) dff = DateFormat.getDateInstance();
 	else dff = new SimpleDateFormat(fmt);
 	if (cal != null) dff.setCalendar(cal);
 	return dff;
 }
-public SqlTimestampSwinger(JDateType sqlType, Calendar cal, String fmt)
+public JDateSwinger(JDateType sqlType, Calendar cal, String fmt)
 {
-	this(sqlType, newTimestampFormat(cal, fmt));
+	this(sqlType, newDateFormat(cal, fmt));
 	this.fmt = fmt;
 }
 // -------------------------------------------------------------------------
