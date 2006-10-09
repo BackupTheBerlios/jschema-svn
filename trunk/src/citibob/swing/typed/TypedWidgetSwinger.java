@@ -17,7 +17,7 @@ package citibob.swing.typed;
  *
  * @author citibob
  */
-public abstract class TypedWidgetSwinger implements JTypeSwinger
+public abstract class TypedWidgetSwinger implements Swinger
 {
 
 //TypedWidget tw;

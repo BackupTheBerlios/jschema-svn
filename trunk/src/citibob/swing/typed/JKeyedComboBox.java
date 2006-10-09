@@ -60,7 +60,7 @@ public void setKeyedModel(KeyedModel kmodel)
 	DefaultComboBoxModel cmodel = new DefaultComboBoxModel(keyList);
 	super.setModel(cmodel);
 }
-public void setJType(JTypeSwinger f)
+public void setJType(Swinger f)
 {
 	JType jType = f.getJType();
 	if (!(jType instanceof JEnum)) 

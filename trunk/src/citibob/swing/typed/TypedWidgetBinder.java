@@ -60,7 +60,7 @@ if (colName.equals("dob")) {
 	if (map != null) {
 		Schema schema = bufRow.getSchema();
 		JType sqlType = schema.getCol(schema.findCol(colName)).getType();
-		JTypeSwinger f = map.newSwinger(sqlType);		// Default ways to render & edit
+		Swinger f = map.newSwinger(sqlType);		// Default ways to render & edit
 	//System.out.println("colName = " + colName);
 		tw.setJType(f);
 	}

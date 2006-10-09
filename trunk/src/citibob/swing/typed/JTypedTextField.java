@@ -27,6 +27,7 @@ package citibob.swing.typed;
 import java.text.DateFormat;
 import java.util.Date;
 import javax.swing.*;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
 import citibob.exception.*;
@@ -52,19 +53,39 @@ public JTypedTextField()
 	super();
 	addKeyListener(this);
 }
-public JTypedTextField(JTypeSwinger f)
+public JTypedTextField(Swinger f)
 {
 	this();
 	setJType(f);
 }
 
 // --------------------------------------------------------------
-public void setJType(JTypeSwinger f)
+public void setJType(Swinger f)
 {
 //System.out.println("JTypedTextField.setJType: " + f + ", " + f.getJType());
 	jType = f.getJType();
 	super.setFormatterFactory(f.newFormatterFactory());
 }
+public void setJType(JType jt, AbstractFormatterFactory ffactory)
+{
+	jType = jt;
+	super.setFormatterFactory(ffactory);	
+}
+public void setJType(Class klass, AbstractFormatterFactory ffactory)
+{
+	jType = new JavaJType(klass);
+	super.setFormatterFactory(ffactory);	
+}
+public void setJType(JType jt, JFormattedTextField.AbstractFormatter defaultFormatter)
+{
+	setJType(jt, new DefaultFormatterFactory(defaultFormatter));
+}
+public void setJType(Class klass, JFormattedTextField.AbstractFormatter defaultFormatter)
+{
+	setJType(klass, new DefaultFormatterFactory(defaultFormatter));
+}
+// --------------------------------------------------------------
+
 public boolean isInstance(Object o)
 {
 	return jType.isInstance(o);

@@ -45,7 +45,7 @@ public void setModelU(JTypeTableModel schemaBuf,
 		int bcol = model.getColMap(c);
 		JType sqlType = schemaBuf.getJType(0,bcol);
 		if (sqlType == null) continue;
-		JTypeSwinger swing = swingers.newSwinger(sqlType);
+		Swinger swing = swingers.newSwinger(sqlType);
 		if (swing == null) continue;
 		setRenderEdit(c, swing.newRenderEdit());
 	}

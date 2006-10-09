@@ -62,7 +62,7 @@ public class JTypeTable extends CitibobJTable
 		if (re != null) return re;
 		
 		// Get the swinger to make us a new RenderEdit
-		JTypeSwinger swinger = smap.newSwinger(jType);
+		Swinger swinger = smap.newSwinger(jType);
 		if (swinger == null) return null;
 		re = swinger.newRenderEdit();
 		RenderEditMap.put(jType, re);

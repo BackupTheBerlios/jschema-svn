@@ -17,7 +17,7 @@ import citibob.sql.*;
  * based on an SqlType.
  * @author citibob
  */
-public class NullSwinger implements JTypeSwinger
+public class NullSwinger implements Swinger
 {
 	JType sqlType;
 	public NullSwinger(JType t) { sqlType = t; }

@@ -42,6 +42,8 @@ public Connection checkout() throws SQLException
 {
 	if (reserves.size() == 0) return create();
 	else return (Connection)reserves.removeFirst();
+//TODO: Keep track of lastused date --- throw out connections after 10 minutes
+//Also.... in Exception handler, an SQLException should cause that connection to be closed and NOT returned.
 }
 
 /** Return a connection */

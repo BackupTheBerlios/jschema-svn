@@ -50,7 +50,7 @@ public TypedWidgetRenderEdit(TypedWidget widget1, TypedWidget widget2)
 //		System.exit(-1);
 //	}
 }
-public TypedWidgetRenderEdit(JTypeSwinger f)
+public TypedWidgetRenderEdit(Swinger f)
 {
 	// Get formatter info for this SqlType
 	//SqlTypeMap.Factory f = map.getFactory(type);

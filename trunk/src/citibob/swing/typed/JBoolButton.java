@@ -70,7 +70,7 @@ public boolean isInstance(Object o)
 /** Set up widget to edit a specific JType.  Note that this widget does not
  have to be able to edit ALL JTypes... it can throw a ClassCastException
  if asked to edit a JType it doesn't like. */
-public void setJType(citibob.swing.typed.JTypeSwinger f) throws ClassCastException
+public void setJType(citibob.swing.typed.Swinger f) throws ClassCastException
 {
 	jType = f.getJType();
 	Class klass = f.getJType().getObjClass();

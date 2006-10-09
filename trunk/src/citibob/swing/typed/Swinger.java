@@ -15,7 +15,7 @@ package citibob.swing.typed;
  * based on an SqlType.
  * @author citibob
  */
-public interface JTypeSwinger {
+public interface Swinger {
 	
 	/** Set up which type this Swinger is making stuff for. */
 	//public void setSqlType(citibob.sql.SqlType sqlType);
