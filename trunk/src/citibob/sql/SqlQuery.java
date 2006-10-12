@@ -38,7 +38,8 @@ private static class NVPair
 // ========================================
 protected String mainTable = null;
 protected ArrayList columns = new ArrayList();
-protected TreeSet tables = new TreeSet();
+protected ArrayList tables = new ArrayList();
+protected TreeSet tableSet = new TreeSet();
 protected ArrayList whereClauses = new ArrayList();
 protected int type = SELECT;
 protected ArrayList orderClauses = new ArrayList();
@@ -50,7 +51,8 @@ public Object clone()
 	SqlQuery ret = new SqlQuery();
 	ret.mainTable = mainTable;
 	ret.columns = (ArrayList)columns.clone();
-	ret.tables = (TreeSet)tables.clone();
+	ret.tables = (ArrayList)tables.clone();
+	ret.tableSet = (TreeSet)tableSet.clone();
 	return ret;
 }
 // --------------------------------------------------------
@@ -83,9 +85,12 @@ public void addColumn(String name)
 
 /** Adds to the list of tables being joined in this query */
 public void addTable(String t)
-	{ tables.add(t); }
+{
+	tables.add(t);
+	tableSet.add(t);
+}
 public boolean containsTable(String t)
-{ return (tables.contains(t)); }
+{ return (tableSet.contains(t)); }
 
 /** Adds a where clause (used when joining tables */
 public void addWhereClause(String wc)
@@ -156,7 +161,9 @@ public String getFromClause()
 		if (first) {
 			ret.append(" FROM ");
 			first = false;
-		} else ret.append(", ");
+		} else {
+			if (!s.contains("join")) ret.append(", ");
+		}
 		ret.append(s);
 	}
 	return ret.toString();
