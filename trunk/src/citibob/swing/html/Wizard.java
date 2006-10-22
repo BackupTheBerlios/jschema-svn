@@ -69,37 +69,44 @@ public Wizard(java.awt.Frame frame, String startState)
 	states = new HashMap();
 }
 
-public void runWizard() throws Exception
+/** Returns the values collected from the Wizard (for any work not
+accomplished by Wizard already). */
+public TypedHashMap runWizard() throws Exception
 {
-	state = startState;
-	v = new TypedHashMap();
-	wizCache = new HashMap();
-	for (state = startState; state != null;) {
-		stateRec = (State)states.get(state);
-		if (stateRec == null) return;		// Fell off the state graph
-		wiz = (HtmlDialog)wizCache.get(state);
-		if (wiz == null) {
-			wiz = stateRec.newWiz();
-			wizCache.put(state, wiz);
+	try {
+		state = startState;
+		v = new TypedHashMap();
+		wizCache = new HashMap();
+		for (state = startState; state != null;) {
+			stateRec = (State)states.get(state);
+			if (stateRec == null) return v;		// Fell off the state graph
+			wiz = (HtmlDialog)wizCache.get(state);
+			if (wiz == null) {
+				wiz = stateRec.newWiz();
+				wizCache.put(state, wiz);
+			}
+			wiz.setVisible(true);
+			wiz.getAllValues(v);
+
+			// Do default navigation; process() can change this.
+			String submit = v.getString("submit");
+	System.out.println("submit = " + submit);
+			if ("next".equals(submit)) state = stateRec.next;
+			else if ("back".equals(submit)) state = stateRec.back;
+			else if ("cancel".equals(submit)) {
+				int ret = JOptionPane.showConfirmDialog(wiz,
+					"Are you sure you wish to cancel the Wizard?",
+					"Really Cancel?", JOptionPane.YES_NO_OPTION);
+				if (ret == JOptionPane.YES_OPTION) break;
+				continue;
+			}
+
+			// Do screen-specific processing
+			stateRec.process();
 		}
-		wiz.setVisible(true);
-		wiz.getAllValues(v);
-		
-		// Do default navigation; process() can change this.
-		String submit = v.getString("submit");
-System.out.println("submit = " + submit);
-		if ("next".equals(submit)) state = stateRec.next;
-		else if ("back".equals(submit)) state = stateRec.back;
-		else if ("cancel".equals(submit)) {
-			int ret = JOptionPane.showConfirmDialog(wiz,
-				"Are you sure you wish to cancel the Wizard?",
-				"Really Cancel?", JOptionPane.YES_NO_OPTION);
-			if (ret == JOptionPane.YES_OPTION) break;
-			continue;
-		}
-		
-		// Do screen-specific processing
-		stateRec.process();
+		return v;
+	} finally {
+		wizCache = null;		// Free memory...
 	}
 }
 

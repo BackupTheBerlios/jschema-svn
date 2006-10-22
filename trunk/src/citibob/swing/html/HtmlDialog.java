@@ -87,6 +87,7 @@ throws org.xml.sax.SAXException, java.io.IOException
 {
 	Class klass = getClass();
 	String resourceName = klass.getName().replace('.', '/') + ".html";
+System.out.println("HtmlDialog: loading resourceName " + resourceName);
 	Reader in = null;
 	try {
 		in = new InputStreamReader(klass.getClassLoader().getResourceAsStream(resourceName));
