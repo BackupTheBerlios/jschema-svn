@@ -28,15 +28,16 @@ protected String startState = "start";
 
 protected String state;
 protected State stateRec;
-protected HtmlDialog wiz;			// The current Wizard for the current state
+protected HtmlWiz wiz;			// The current Wizard for the current state
 protected TypedHashMap v;		// Info we get out of the wizard screens
 protected HashMap states;
+protected String wizardName;
 
 protected abstract class State {
 	public String name;		// Name of this Wiz screen.
 	public String back;		// Wiz normally traversed to on back button
 	public String next;
-	public abstract HtmlDialog newWiz() throws Exception;
+	public abstract HtmlWiz newWiz() throws Exception;
 	public abstract void process() throws Exception;
 	
 	public State(String name, String back, String next) {
@@ -48,7 +49,7 @@ protected abstract class State {
 
 /*   --------- Sample Wizard creation code
 new State("", "", "") {
-	public HtmlDialog newWiz()
+	public HtmlWiz newWiz()
 		{ return new }
 	public void process()
 	{
@@ -62,8 +63,9 @@ protected void addState(State st)
 	states.put(st.name, st);
 }
 
-public Wizard(java.awt.Frame frame, String startState)
+public Wizard(String wizardName, java.awt.Frame frame, String startState)
 {
+	this.wizardName = wizardName;
 	this.frame = frame;
 	this.startState = startState;
 	states = new HashMap();
@@ -80,11 +82,12 @@ public TypedHashMap runWizard() throws Exception
 		for (state = startState; state != null;) {
 			stateRec = (State)states.get(state);
 			if (stateRec == null) return v;		// Fell off the state graph
-			wiz = (HtmlDialog)wizCache.get(state);
+			wiz = (HtmlWiz)wizCache.get(state);
 			if (wiz == null) {
 				wiz = stateRec.newWiz();
-				wizCache.put(state, wiz);
+				if (wiz.getCacheWiz()) wizCache.put(state, wiz);
 			}
+			wiz.setTitle(wizardName);
 			wiz.setVisible(true);
 			wiz.getAllValues(v);
 
@@ -94,7 +97,7 @@ public TypedHashMap runWizard() throws Exception
 			if ("next".equals(submit)) state = stateRec.next;
 			else if ("back".equals(submit)) state = stateRec.back;
 			else if ("cancel".equals(submit)) {
-				int ret = JOptionPane.showConfirmDialog(wiz,
+				int ret = JOptionPane.showConfirmDialog(frame,
 					"Are you sure you wish to cancel the Wizard?",
 					"Really Cancel?", JOptionPane.YES_NO_OPTION);
 				if (ret == JOptionPane.YES_OPTION) break;
