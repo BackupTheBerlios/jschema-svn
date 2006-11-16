@@ -1,0 +1,8 @@
+package citibob.swing.html;
+
+import java.net.*;
+
+listeners ObjHtmlPanelMVC extends org.xamjwg.html.gui.HtmlPanel
+{
+    linkSelected(URL href, String target);
+}

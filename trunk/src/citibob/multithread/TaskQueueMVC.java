@@ -25,23 +25,23 @@ public abstract class TaskQueueMVC extends Thread implements TaskRunner
 {
 public static interface Listener {
     /**  Task added to queue. */
-    public void taskAdded(CBTask t) ;
+    public void taskAdded(CBTask t);
 
 
     /**  Task removed from the queue */
-    public void taskRemoved(CBTask t) ;
+    public void taskRemoved(CBTask t);
 
 
     /**  Task being executed */
-    public void taskStarting(CBTask t) ;
+    public void taskStarting(CBTask t);
 
 
     /**  Task finished running --- exception (if any) is passed along */
-    public void taskFinished(CBTask t, Throwable e) ;
+    public void taskFinished(CBTask t, Throwable e);
 
 
     /**  Queue cleared (usually, the running task will be finished here as well.) */
-    public void queueCleared() ;
+    public void queueCleared();
 }
 // ======================================================
 public static class Adapter implements TaskQueueMVC.Listener {
@@ -72,35 +72,35 @@ public void removeListener(TaskQueueMVC.Listener l)
 	{ listeners.remove(l); }
 
 // ======================================================
-public void fireTaskAdded(CBTask t) 
+public void fireTaskAdded(CBTask t)
 {
 	for (java.util.Iterator ii=listeners.iterator(); ii.hasNext(); ) {
 		TaskQueueMVC.Listener l = (TaskQueueMVC.Listener)ii.next();
 		l.taskAdded(t);
 	}
 }
-public void fireTaskRemoved(CBTask t) 
+public void fireTaskRemoved(CBTask t)
 {
 	for (java.util.Iterator ii=listeners.iterator(); ii.hasNext(); ) {
 		TaskQueueMVC.Listener l = (TaskQueueMVC.Listener)ii.next();
 		l.taskRemoved(t);
 	}
 }
-public void fireTaskStarting(CBTask t) 
+public void fireTaskStarting(CBTask t)
 {
 	for (java.util.Iterator ii=listeners.iterator(); ii.hasNext(); ) {
 		TaskQueueMVC.Listener l = (TaskQueueMVC.Listener)ii.next();
 		l.taskStarting(t);
 	}
 }
-public void fireTaskFinished(CBTask t, Throwable e) 
+public void fireTaskFinished(CBTask t, Throwable e)
 {
 	for (java.util.Iterator ii=listeners.iterator(); ii.hasNext(); ) {
 		TaskQueueMVC.Listener l = (TaskQueueMVC.Listener)ii.next();
 		l.taskFinished(t, e);
 	}
 }
-public void fireQueueCleared() 
+public void fireQueueCleared()
 {
 	for (java.util.Iterator ii=listeners.iterator(); ii.hasNext(); ) {
 		TaskQueueMVC.Listener l = (TaskQueueMVC.Listener)ii.next();

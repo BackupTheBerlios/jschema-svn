@@ -48,7 +48,7 @@ private SqlRow newRow()
 	// Put in default values
 	for (int i=0; i<n; ++i) {
 		row.data[i] = schema.getCol(i).getDefault();
-System.out.println("default["+i+"] = "+row.data[i]);
+//System.out.println("default["+i+"] = "+row.data[i]);
 	}
 	
 	return row;
@@ -142,7 +142,7 @@ private int addRow(ResultSet rs, int rowIndex) throws SQLException
 		// Should we be using column numbers here instead of names?  After all,
 		// we know col numbers because of the schema (or do we)?
 		Column col = schema.getCol(i);
-		row.data[i] = rs.getObject(col.getName());
+		row.data[i] = rs.getObject(col.getName()); //xyzqqq
 		row.origData[i] = row.data[i];
 //System.out.println("     col[" + i + "] = " + row.data[i] + " name = " + col.getName());
 //if (row.data[i] == null) System.out.println("             " + rs.getString(col.getName()));
@@ -167,12 +167,15 @@ public void addAllRows(ResultSet rs) throws java.sql.SQLException
 	while (rs.next()) {
 		addRow(rs, rows.size());
 		++n;
+//if (n % 1000 == 0) System.out.println("SchemaBuf.addAllRows: " + n);
 	}
 //System.err.println("addAllRows: " + n);
 
 	rs.close();
 	int lastRow = rows.size()-1;
+System.out.println("SchemaBuf Firing event...");
 	if (lastRow >= firstRow) fireTableRowsInserted(firstRow, lastRow);
+System.out.println("SchemaBuf Done firing event!");
 	rs.close();
 //System.err.println("addAllRows: count = " + getRowCount());
 }

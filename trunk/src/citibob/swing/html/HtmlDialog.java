@@ -17,16 +17,17 @@ import java.io.*;
 //import org.xamjwg.html.gui.*;
 import java.util.*;
 import citibob.swing.typed.*;
-import citibob.swing.html.HtmlPanel;
+import citibob.swing.html.ObjHtmlPanel;
+import java.net.URL;
 
 /**
  * Meant to be subclassed to produce Wizards, etc...
  * @author citibob
  */
-public class HtmlDialog extends JDialog
+public class HtmlDialog extends JDialog implements ObjHtmlPanel.Listener
 {
 
-protected HtmlPanel html;
+protected ObjHtmlPanel html;
 String submitName;
 JButton submitButton;
 
@@ -40,8 +41,10 @@ public HtmlDialog(Frame owner, String title, boolean modal)
 {
 	super(owner, title, modal);
 //	super(title);
-	html = new HtmlPanel();
+	html = new ObjHtmlPanel();
+	getContentPane().add(html);
 //	this.setSize(600, 400);
+	html.addListener(this);
 }
 
 public JTypedTextField addTextField(String name, Swinger swinger)
@@ -76,27 +79,10 @@ protected JButton setSubmit(final String name)
 	return setSubmit(name, button);
 }
 
-protected void loadHtml(Reader in)
-throws org.xml.sax.SAXException, java.io.IOException
-{
-	html.setDocument(in, null);	
-}
-
 protected void loadHtml()
 throws org.xml.sax.SAXException, java.io.IOException
 {
-	Class klass = getClass();
-	String resourceName = klass.getName().replace('.', '/') + ".html";
-System.out.println("HtmlDialog: loading resourceName " + resourceName);
-	Reader in = null;
-	try {
-		in = new InputStreamReader(klass.getClassLoader().getResourceAsStream(resourceName));
-		html.setDocument(in, null);
-		getContentPane().add(html);
-		in.close();
-	} finally {
-		try { in.close(); } catch(Exception e) {}
-	}
+	html.loadHtml(getClass());
 }
 
 
@@ -106,4 +92,31 @@ public void getAllValues(Map map)
 	html.getAllValues(map);
 	map.put("submit", getSubmitName());
 }
+// ==========================================================
+// ObjHtmlPanel.Listener
+public void linkSelected(URL href, String target)
+{
+	String url = href.toExternalForm();
+	int slash = url.lastIndexOf('/');
+	if (slash > 0) url = url.substring(slash+1);
+	submitName = url;
+	submitButton = null;
+	setVisible(false);
+}
+
+//// ====================================================================
+//class MyRendererContext extends org.xamjwg.html.gui.NullHtmlRendererContext
+//{
+//	public MyRendererContext() { super(null); }
+//	public void navigate(URL href, String target) {
+//System.out.println("MyRenderer.navigate(): " + href + ", " + target);
+//		String url = href.toExternalForm();
+//		int slash = url.lastIndexOf('/');
+//		if (slash > 0) url = url.substring(slash+1);
+//		submitName = url;
+//		submitButton = null;
+//		setVisible(false);
+//		
+//	}
+//}
 }

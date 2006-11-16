@@ -111,7 +111,7 @@ public boolean valueChanged()
 * if nothing has changed. */
 public void doUpdate(Statement st, int row) throws java.sql.SQLException
 {
-System.out.println("doUpdate.status(" + row + ") = " + gen.getStatus(row));
+//System.out.println("doUpdate.status(" + row + ") = " + gen.getStatus(row));
 	int status = gen.getStatus(row); // & ~CHANGED;
 	switch(status) {
 		// case DELETED || INSERTED :

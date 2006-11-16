@@ -66,7 +66,10 @@ public void initRuntime(String title, String guiNodePath)
 
 	// Set up log window
 	logText.setDocument(doc);
-	System.setOut(new PrintStream(new WriterOutputStream(logWriter)));
+	OutputStream tee = new citibob.io.TeeOutputStream(
+		new OutputStream[] {System.out, new WriterOutputStream(logWriter) });
+	System.setOut(new PrintStream(tee));
+// This actually DISPLAYS the stuff in the window...
 	doc.addDocumentListener(new DocumentListener() {
 		public void changedUpdate(DocumentEvent e) {} 
 		public void removeUpdate(DocumentEvent e) {}
