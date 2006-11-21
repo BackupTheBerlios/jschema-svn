@@ -15,7 +15,6 @@ import java.util.*;
 
 /**
  * Buffers one line at a time
- * @author fiscrob
  */
 public class LineBufferWriter extends AbstractLineWriter
 {

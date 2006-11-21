@@ -12,10 +12,6 @@ package citibob.io;
 
 import java.io.*;
 
-/**
- *
- * @author fiscrob
- */
 public class FlushedOutputStream extends FilterOutputStream
 {
 

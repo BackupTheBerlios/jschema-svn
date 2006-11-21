@@ -25,10 +25,6 @@ import citibob.sql.*;
 import citibob.multithread.ExpHandler;
 
 
-/**
- *
- * @author fiscrob
- */
 public class TaskQueue extends TaskQueueMVC
 {
 

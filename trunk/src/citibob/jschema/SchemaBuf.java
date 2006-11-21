@@ -331,7 +331,7 @@ for (int i = 0; i < colNames.length; ++i) System.out.println("    insertRow " + 
 			// See if this row matches
 			boolean beq = true;
 			for (int i=0; i<colNames.length; ++i) {
-System.out.println("r = " + r + " col " + i + " coli = " + coli[i] + " valueAt = " + getValueAt(r,coli[i]) + " val = " + vals[i]);
+//System.out.println("r = " + r + " col " + i + " coli = " + coli[i] + " valueAt = " + getValueAt(r,coli[i]) + " val = " + vals[i]);
 				if (isKey(coli[i]) && !getValueAt(r,coli[i]).equals(vals[i])) {
 					beq = false;
 					break;

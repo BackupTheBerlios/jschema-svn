@@ -22,7 +22,6 @@ import citibob.multithread.ExpHandler;
 
 /**
  * Collects any exceptions received...
- * @author fiscrob
  */
 public class CollectExpHandler
 extends java.util.LinkedList

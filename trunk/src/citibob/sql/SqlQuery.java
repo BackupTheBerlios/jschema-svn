@@ -162,7 +162,9 @@ public String getFromClause()
 			ret.append(" FROM ");
 			first = false;
 		} else {
-			if (s.indexOf("join") != -1) ret.append(", ");
+			if (s.indexOf("join") < 0) {
+				ret.append(", ");
+			}
 		}
 		ret.append(s);
 	}

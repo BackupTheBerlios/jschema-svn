@@ -1,7 +1,3 @@
-/* TimedBufferedFilterOutputStream.java
- * Created on June 29, 2006, 10:18 AM
- */
-
 package citibob.io;
 
 import java.awt.event.ActionEvent;
@@ -9,10 +5,6 @@ import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**
- * Used to make console output window with low refresh rate (for efficiency).
- * @author crowjon
- */
 public class TimedBufferedOutputStream extends FilterOutputStream implements java.awt.event.ActionListener
 {
 	byte buffer[];

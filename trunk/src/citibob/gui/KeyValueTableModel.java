@@ -23,7 +23,6 @@ import javax.swing.table.*;
 /**
  * Displays a bunch of key-value pairs; key in the left-hand column,
  * value in the right-hand column.
- * @author fiscrob
  */
 public class KeyValueTableModel extends DefaultTableModel
 {

@@ -13,10 +13,6 @@ package citibob.io;
 import java.io.*;
 import java.util.*;
 
-/**
- *
- * @author fiscrob
- */
 public abstract class AbstractLineWriter extends Writer
 {
 StringBuffer line = new StringBuffer();

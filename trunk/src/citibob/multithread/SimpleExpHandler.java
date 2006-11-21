@@ -20,10 +20,6 @@ package citibob.multithread;
 
 import citibob.multithread.ExpHandler;
 
-/**
- *
- * @author fiscrob
- */
 public class SimpleExpHandler implements ExpHandler
 {
 

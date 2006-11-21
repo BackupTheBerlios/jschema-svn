@@ -21,10 +21,7 @@ package citibob.sql;
 import java.sql.*;
 import citibob.multithread.*;
 import java.util.*;
-/**
- *
- * @author fiscrob
- */
+
 public abstract class RealConnPool extends SimpleConnPool
 {
 
