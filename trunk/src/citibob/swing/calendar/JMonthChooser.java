@@ -49,7 +49,7 @@ public JMonthChooser() {
     }});
 //	// TODO: Java 1.4.2 doesn't work with a JComboBox in a JPopupMenu
 //	// For now, disable the combo box.
-//	monthBox.setEnabled(false);
+	monthBox.setEnabled(false);
 	
 	spinner.getUp().addMouseListener(new SpinnerListener(-1));
 	spinner.getDown().addMouseListener(new SpinnerListener(1));

@@ -25,7 +25,18 @@ import java.util.*;
 public abstract class RealConnPool extends SimpleConnPool
 {
 
-LinkedList reserves = new LinkedList();	// Our reserve connections, not being used for now
+static class DbbDate
+{
+	Connection dbb;
+	long lastUsedMS;
+	
+	public DbbDate(Connection dbb) {
+		this.dbb = dbb;
+		this.lastUsedMS = System.currentTimeMillis();
+	}
+}
+	
+LinkedList<DbbDate> reserves = new LinkedList();	// Our reserve connections, not being used for now
 
 //ExceptionHandler ehandler;
 //
@@ -37,8 +48,23 @@ LinkedList reserves = new LinkedList();	// Our reserve connections, not being us
 /** Get a connection from the pool. */
 public Connection checkout() throws SQLException
 {
-	if (reserves.size() == 0) return create();
-	else return (Connection)reserves.removeFirst();
+//return create();
+	long ms = System.currentTimeMillis();
+	while (reserves.size() > 0) {
+		DbbDate dd = reserves.removeFirst();
+		if (ms - dd.lastUsedMS < 60 * 1000L) {
+			// Good connection, less than 1 minute stale
+System.out.println("Re-using good connection: " + dd.dbb);
+			return dd.dbb;
+		}
+		// Throw out connections > 1 minute stale
+System.out.println("Throwing out connection: " + dd.dbb);
+		try { dd.dbb.close(); } catch(SQLException e) {}
+	}
+	
+	// No reserves left; create a new connection
+System.out.println("Creating new connection");
+	return create();
 //TODO: Keep track of lastused date --- throw out connections after 10 minutes
 //Also.... in Exception handler, an SQLException should cause that connection to be closed and NOT returned.
 }
@@ -46,8 +72,9 @@ public Connection checkout() throws SQLException
 /** Return a connection */
 public void checkin(Connection c) throws SQLException
 {
+//	c.close();
 	if (reserves.size() >= 5) c.close();
-	else reserves.addLast(c);
+	else reserves.addLast(new DbbDate(c));
 }
 public void dispose() {}
 
