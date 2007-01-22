@@ -42,6 +42,11 @@ public SchemaBufDbModel(SchemaBuf buf, DbChangeModel dbChange)
 {
 	super(buf.getSchema().getDefaultTable(), buf, dbChange);
 }
+/** Uses the default table for the Schema in buf. */
+public SchemaBufDbModel(SchemaBuf buf)
+{
+	super(buf.getSchema().getDefaultTable(), buf);
+}
 
 public void setUpdateBufOnUpdate(boolean b) { updateBufOnUpdate = b; }
 

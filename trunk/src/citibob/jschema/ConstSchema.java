@@ -45,8 +45,8 @@ public Column getCol(int colNo)
 	{ return cols[colNo]; }
 public Column getCol(String col)
 	{ return getCol(findCol(col)); }
-public ColIterator colIterator()
-	{ return new MyColIterator(); }
+//public ColIterator colIterator()
+//	{ return new MyColIterator(); }
 
 public int findCol(String name)
 {
@@ -67,15 +67,15 @@ protected void appendCols(Column[] add)
 
 // ===================================================
 
-// ===============================================
-private class MyColIterator implements ColIterator
-{
-	int i;
-	public boolean hasNext()
-		{ return (i < cols.length); }
-	public Column next()
-		{ return cols[i++]; }
-}
+//// ===============================================
+//private class MyColIterator implements ColIterator
+//{
+//	int i;
+//	public boolean hasNext()
+//		{ return (i < cols.length); }
+//	public Column next()
+//		{ return cols[i++]; }
+//}
 // --------------------------------------------------------
 
 

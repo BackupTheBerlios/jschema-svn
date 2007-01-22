@@ -32,7 +32,7 @@ public interface Schema
 	Column getCol(int colNo);
 	Column getCol(String name);
 	
-	ColIterator colIterator();
+//	ColIterator colIterator();
 
 	/** Retrieve a column's index by name. */
 	int findCol(String name);
