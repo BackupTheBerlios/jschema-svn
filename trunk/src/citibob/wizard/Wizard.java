@@ -1,34 +1,33 @@
 /*
- * NewRecordWizard.java
+ * Wizard.java
  *
- * Created on October 8, 2006, 10:41 PM
+ * Created on January 27, 2007, 6:51 PM
  *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
+ * To change this template, choose Tools | Template Manager
+ * and open the template in the editor.
  */
 
-package citibob.swing.html;
+package citibob.wizard;
 
-import javax.swing.*;
+
 import java.util.*;
 
 /**
  *
  * @author citibob
  */
-public class Wizard {
-
-HashMap wizCache;	// Wiz screens are cached through course of a run...
+public abstract class Wizard
+{
+	
+protected HashMap wizCache;	// Wiz screens are cached through course of a run...
 	// This allows us to go back to previous screens without having to re-load
 	// their data.
 
-protected java.awt.Frame frame;
 protected String startState = "start";
 
 protected String state;
 protected State stateRec;
-protected HtmlWiz wiz;			// The current Wizard for the current state
+protected Wiz wiz;			// The current Wizard for the current state
 protected TypedHashMap v;		// Info we get out of the wizard screens
 protected HashMap states;
 protected String wizardName;
@@ -37,7 +36,11 @@ protected abstract class State {
 	public String name;		// Name of this Wiz screen.
 	public String back;		// Wiz normally traversed to on back button
 	public String next;
-	public abstract HtmlWiz newWiz() throws Exception;
+	public abstract Wiz newWiz() throws Exception;	// User implements this
+	public Wiz createWiz() throws Exception { return newWiz(); }		// Override this to post-process wiz after it's created
+	/** Runs before the Wiz */
+	public void pre() throws Exception {}
+	/** Runs after the Wiz */
 	public abstract void process() throws Exception;
 	
 	public State(String name, String back, String next) {
@@ -47,28 +50,32 @@ protected abstract class State {
 	}
 }
 
-/*   --------- Sample Wizard creation code
-new State("", "", "") {
-	public HtmlWiz newWiz()
-		{ return new }
-	public void process()
-	{
-		
-	}
+/** Presents one Wiz to the user */
+protected abstract void runWiz(Wiz wiz) throws Exception;
+protected boolean reallyCancel() throws Exception { return true; }
+
+public Wizard(String wizardName, String startState)
+{
+	this.wizardName = wizardName;
+	this.startState = startState;
+	states = new HashMap();
 }
-*/
 
 protected void addState(State st)
 {
 	states.put(st.name, st);
 }
 
-public Wizard(String wizardName, java.awt.Frame frame, String startState)
+protected boolean checkFieldsFilledIn()
 {
-	this.wizardName = wizardName;
-	this.frame = frame;
-	this.startState = startState;
-	states = new HashMap();
+	// Make sure all fields are filled in
+	TypedHashMap m = new TypedHashMap();
+	wiz.getAllValues(m);
+	if (m.containsNull()) {
+		state = stateRec.name;
+		return false;
+	}
+	return true;
 }
 
 /** Returns the values collected from the Wizard (for any work not
@@ -82,13 +89,13 @@ public TypedHashMap runWizard() throws Exception
 		for (state = startState; state != null;) {
 			stateRec = (State)states.get(state);
 			if (stateRec == null) return v;		// Fell off the state graph
-			wiz = (HtmlWiz)wizCache.get(state);
+			wiz = (Wiz)wizCache.get(state);
 			if (wiz == null) {
-				wiz = stateRec.newWiz();
+				wiz = stateRec.createWiz();
 				if (wiz.getCacheWiz()) wizCache.put(state, wiz);
 			}
-			wiz.setTitle(wizardName);
-			wiz.setVisible(true);
+			stateRec.pre();		// Prepare the Wiz...
+			runWiz(wiz);
 			wiz.getAllValues(v);
 
 			// Do default navigation; process() can change this.
@@ -96,13 +103,7 @@ public TypedHashMap runWizard() throws Exception
 	System.out.println("submit = " + submit);
 			if ("next".equals(submit)) state = stateRec.next;
 			else if ("back".equals(submit)) state = stateRec.back;
-			else if ("cancel".equals(submit)) {
-				int ret = JOptionPane.showConfirmDialog(frame,
-					"Are you sure you wish to cancel the Wizard?",
-					"Really Cancel?", JOptionPane.YES_NO_OPTION);
-				if (ret == JOptionPane.YES_OPTION) break;
-				continue;
-			}
+			else if ("cancel".equals(submit) && reallyCancel()) break;
 
 			// Do screen-specific processing
 			stateRec.process();
@@ -113,18 +114,4 @@ public TypedHashMap runWizard() throws Exception
 	}
 }
 
-protected boolean checkFieldsFilledIn()
-{
-	// Make sure all fields are filled in
-	TypedHashMap m = new TypedHashMap();
-	wiz.getAllValues(m);
-	if (m.containsNull()) {
-		JOptionPane.showMessageDialog(wiz,
-			"You must fill in all the fields.");
-		state = stateRec.name;
-		return false;
-	}
-	return true;
-}
-	
 }

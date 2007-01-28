@@ -30,7 +30,8 @@ public interface CitibobTableModel extends TableModel
 	/** These, you will get for free if you subclass AbstractTableModel. */
 	void fireTableChanged(TableModelEvent e);
 
-	/** Finds a column's index by name --- also implemented in AbstractTableModel. */
+	/** Finds a column's index by name --- also implemented in AbstractTableModel.
+	 Returns -1 if column names doesn't exist or is null. */
 	int findColumn(String name);
 
 }

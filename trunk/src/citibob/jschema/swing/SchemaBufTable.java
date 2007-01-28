@@ -34,17 +34,24 @@ citibob.swing.typed.SwingerMap swingers)
 	super.setModelU(dbModel.getSchemaBuf(), colNames, sColMap, editable, swingers);
 }
 
-/** Creates a SubSchema & SchemaBuf for this table. */
+/** Creates a SubSchema & SchemaBuf for this table.
+ @param colNames Display name of each column.  If null, the column will be
+ included in the SubSchema but will not be displayed in the TableModel
+ @param sColMap Name of each column in the Schema. */
 public SchemaBuf setSubSchema(Schema schema,
 String[] colNames, String[] sColMap, boolean[] editable,
 citibob.swing.typed.SwingerMap swingers)
 {	
-	Schema subSchema = new SubSchema(schema, colNames);
+	Schema subSchema = new SubSchema(schema, sColMap);
 	SchemaBuf buf = new SchemaBuf(subSchema);
 	super.setModelU(buf, colNames, sColMap, editable, swingers);
 	return buf;
 }
 
+/** Creates a SubSchema &amp; SchemaBuf &amp; SchemaBufDbModel for this table.
+ @param colNames Display name of each column.  If null, the column will be
+ included in the SubSchema but will not be displayed in the TableModel
+ @param sColMap Name of each column in the Schema. */
 public SchemaBufDbModel setSubSchemaDm(Schema schema,
 String[] colNames, String[] sColMap, boolean[] editable,
 citibob.swing.typed.SwingerMap swingers)

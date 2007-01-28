@@ -18,6 +18,13 @@ public MailSender getMailSender();
 public SwingerMap getSwingerMap();
 public SchemaSet getSchemaSet();
 public Schema getSchema(String name);	// Get schema by name
+/** @returns Root user preferences node for this application */
+public java.util.prefs.Preferences userRoot();
+
+/** @returns Root system preferences node for this application */
+public java.util.prefs.Preferences systemRoot();
+
+
 //protected ConnPool pool;
 //protected SwingerMap swingerMap;
 //protected ActionRunner guiRunner;		// Run user-initiated actions; when user hits button, etc.

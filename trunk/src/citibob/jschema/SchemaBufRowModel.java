@@ -31,6 +31,10 @@ implements SchemaRowModel
 		super(buf);
 		schemaBuf = buf;
 	}
+
+	/** Should we listen to the underlying CitibobTableModel for insert/delete events?
+It's appropriate to be false only when this has been used as a JTable's
+ListSelectionModel. */
 	public SchemaBufRowModel(SchemaBuf buf, boolean listen)
 	{
 		super(buf,listen);

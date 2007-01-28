@@ -8,7 +8,7 @@
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.html;
+package citibob.wizard;
 
 import java.util.*;
 
@@ -21,7 +21,7 @@ public class TypedHashMap extends HashMap
 
 public int getInt(Object key) { return ((Integer)get(key)).intValue(); }
 public String getString(Object key) { return ((String)get(key)); }
-
+public boolean getBool(Object key) { return ((Boolean)get(key)).booleanValue(); }
 /** Sees if there's a key associated with a null value... */
 public boolean containsNull()
 {

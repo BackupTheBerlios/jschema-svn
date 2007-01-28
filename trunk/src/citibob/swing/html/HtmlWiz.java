@@ -10,6 +10,8 @@
 
 package citibob.swing.html;
 
+import citibob.swing.SwingWizard;
+import citibob.wizard.*;
 import java.awt.*;
 import javax.swing.*;
 import java.io.*;
@@ -21,7 +23,7 @@ import citibob.swing.typed.*;
  *
  * @author citibob
  */
-public class HtmlWiz extends HtmlDialog
+public class HtmlWiz extends HtmlDialog implements citibob.swing.SwingWiz
 {
 
 //protected HtmlPanel html;
@@ -42,7 +44,16 @@ public HtmlWiz(Frame owner, String title, boolean modal)
 	addSubmitButton("back", "<< Back");
 	addSubmitButton("next", ">> Next");
 	addSubmitButton("cancel", "Cancel");
+	super.setTitle("hoi");
 }
+
+///** Presents the Wiz to the user; when it is finished, reports output values into map. */
+//public void showWiz(java.util.Map map)
+//{
+//	setVisible(true);
+//	this.getAllValues(map);
+//}
+
 
 	
 }

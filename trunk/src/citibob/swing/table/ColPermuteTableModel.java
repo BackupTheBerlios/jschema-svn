@@ -59,21 +59,22 @@ public ColPermuteTableModel(CitibobTableModel model_u, String[] colNames, int[] 
 }
 
 public ColPermuteTableModel(CitibobTableModel model_u,
-String[] colNames,
-String[] sColMap,
-boolean[] editable)
+String[] colNames,			// Display names
+String[] sColMap,			// Underlying names
+boolean[] editable)			// Is each column editable?
 {
 //System.out.println("ColPermuteTableModel: this = " + this);
 	int[] colMap = new int[sColMap.length];
 	for (int i = 0; i < colMap.length; ++i) {
 //System.out.println("sColMap[" + i + "] = " + sColMap[i]);
 		for (int j = 0; j < model_u.getColumnCount(); ++j) {
-			if (sColMap[i].equals(model_u.getColumnName(j))) {
-//System.out.println("    " + model_u.getColumnName(j));
-				colMap[i] = j;
-				break;
-			}
-			colMap[i] = -1;
+			colMap[i] = (sColMap[i] == null ? -1 : model_u.findColumn(sColMap[i]));
+//			if (sColMap[i].equals(model_u.getColumnName(j))) {
+////System.out.println("    " + model_u.getColumnName(j));
+//				colMap[i] = j;
+//				break;
+//			}
+//			colMap[i] = -1;
 		}
 	}
 
@@ -83,8 +84,22 @@ public void setEditable(boolean[] editable)
 {
 	this.editable = editable;
 }
-private void init(CitibobTableModel model_u, String[] colNames, int[] colMap, boolean[] editable)
+private void init(CitibobTableModel model_u, String[] xColNames, int[] xColMap, boolean[] editable)
 {
+	// Remove null columns -- they can get here if a null was included in colNames or colMap
+	int ncol = 0;
+	for (int i=0; i<xColMap.length; ++i) if (xColNames[i] != null && xColMap[i] != -1) ++ncol;
+	String[] colNames = new String[ncol];
+	int[] colMap = new int[ncol];
+	int j = 0;
+	for (int i=0; i<xColMap.length; ++i) {
+		if (xColNames[i] != null && xColMap[i] != -1) {
+			colNames[j] = xColNames[i];
+			colMap[j] = xColMap[i];
+			++j;
+		}
+	}
+		
 	this.model_u = model_u;
 	this.colNames = colNames;
 	this.colMap = colMap;
