@@ -27,9 +27,10 @@ import citibob.swing.table.*;
 import java.util.*;
 import citibob.sql.SqlQuery;
 import citibob.swing.typed.JType;
+import static citibob.jschema.RowStatusConst.*;
 
 public class SchemaBuf extends AbstractTableModel
-implements SqlBuf, JTypeTableModel, RowStatusConst
+implements SqlBuf, JTypeTableModel
 {
 /** Data model we'll use for our columns. */
 Schema schema;
@@ -295,7 +296,9 @@ public int insertRow(int rowIndex)
 }
 // --------------------------------------------------
 /** Insert a row and initialize it with data.  colNames[] and
-vals[] must have the same length. */
+vals[] must have the same length.
+ @param vals initial values for the columns
+ @param colNames columns for which we want initial values */
 public int insertRow(int rowIndex, String[] colNames, Object[] vals)
 throws KeyViolationException
 {

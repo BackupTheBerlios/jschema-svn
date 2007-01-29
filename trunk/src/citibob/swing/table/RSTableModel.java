@@ -23,6 +23,7 @@ import javax.swing.table.*;
 import javax.swing.event.*;
 import citibob.swing.typed.*;
 import java.util.*;
+import citibob.sql.*;
 
 /** Reads in a record set and makes the data available as a (read-only) table model. */
 public class RSTableModel
@@ -40,6 +41,50 @@ JType[] jTypes;		// JType of each column
 // Implementation of SqlGen: Read rows from the database
 
 
+// --------------------------------------------------
+public void setColTypes(ResultSet rs, SqlTypeSet tset) throws SQLException
+{
+	ResultSetMetaData md = rs.getMetaData();
+	jTypes = new JType[md.getColumnCount()];
+	for (int i=0; i<md.getColumnCount(); ++i) {
+		jTypes[i] = tset.getSqlType(md, i+1);
+	}
+	setColumnCount(md.getColumnCount());
+}
+/** Used to make reports involving client-side joins --- some of the columns will
+ come from a ResultSet (or even a table), and some from ad-hoc computation.
+ @params types Describes types of the columns.  Each element can be of type
+ ResultSet or JType[] */
+public void setColTypes(Object[] types, SqlTypeSet tset) throws SQLException
+{
+	// Count total columns
+	int ncol = 0;
+	for (Object o : types) {
+		if (o instanceof ResultSet) {
+			ResultSetMetaData md = ((ResultSet)o).getMetaData();
+			ncol += md.getColumnCount();
+		} else {
+			// Will throw ClassCastException if arg of wrong type.
+			ncol += ((JType[])o).length;
+		}
+	}
+	
+	// Set it up
+	jTypes = new JType[ncol];
+	int j=0;
+	for (Object o : types) {
+		if (o instanceof ResultSet) {
+			ResultSetMetaData md = ((ResultSet)o).getMetaData();
+			for (int i=0; i<md.getColumnCount(); ++i) {
+				jTypes[j++] = tset.getSqlType(md, i+1);
+			}
+		} else {
+			for (JType t : (JType[])o) jTypes[j++] = t;
+		}
+	}
+	setColumnCount(ncol);
+}
+// --------------------------------------------------
 /** Appends a row in the data */
 public void addRow(ResultSet rs) throws java.sql.SQLException
 {
@@ -50,7 +95,8 @@ public void addRow(ResultSet rs) throws java.sql.SQLException
 	addRow(data);
 }
 // --------------------------------------------------
-/** Add data from a result set */
+/** Add data from a result set; and set up the columns too!
+ @deprecated */
 public void addAllRows(ResultSet rs) throws java.sql.SQLException
 {
 	// Set number of columns
@@ -69,18 +115,21 @@ System.out.println("addAllRows: ids = " + ids[i]);
 	// Set data
 	while (rs.next()) addRow(rs);
 }
+//public void addAllRows(ResultSet rs) throws java.sql.SQLException
+//{ addAllRows(rs, 0); 
 // ===============================================================
 public RSTableModel()
 {
 	super();
 }
-public RSTableModel(Statement st, String sql, JType[] jTypes) throws SQLException
+public RSTableModel(Statement st, String sql, SqlTypeSet tset) throws SQLException
 {
 	super();
 	this.jTypes = jTypes;
 	ResultSet rs = null;
 	try {
 		rs = st.executeQuery(sql);
+		this.setColTypes(rs, tset);
 		addAllRows(rs);
 	} finally {
 		try { rs.close(); } catch(Exception e) {}
@@ -108,7 +157,7 @@ public void setValueAt(Object val, int rowIndex, int colIndex)
 // --------------------------------------------------
 
 // ===============================================================
-/** Return SqlType for a cell */
+/** Return SqlType for a cell.  Only needed if this is a model for JTypeTable or subclass */
 public JType getJType(int row, int col)
 	{ return jTypes[col]; }
 

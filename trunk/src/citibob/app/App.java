@@ -18,6 +18,8 @@ public MailSender getMailSender();
 public SwingerMap getSwingerMap();
 public SchemaSet getSchemaSet();
 public Schema getSchema(String name);	// Get schema by name
+/** Get default conversion between database types and SqlType objects */
+public citibob.sql.SqlTypeSet getSqlTypeSet();
 /** @returns Root user preferences node for this application */
 public java.util.prefs.Preferences userRoot();
 
