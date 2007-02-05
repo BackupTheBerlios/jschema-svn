@@ -24,11 +24,12 @@ import citibob.sql.SqlQuery;
 public class SchemaHelper
 {
 
-public static void getSelectCols(Schema schema, SqlQuery q, String table)
+public static void getSelectCols(Schema schema, SqlQuery q, String table, String colPrefix)
 {
 	for (int col = 0; col < schema.getColCount(); ++col) {
 		Column c = schema.getCol(col);
-		q.addColumn(table + "." + c.getName());
+		q.addColumn(table + "." + c.getName() +
+			(colPrefix == null ? "" : " as " + colPrefix + "_" + c.getName()));
 	}
 }
 // --------------------------------------------------------

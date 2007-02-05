@@ -89,6 +89,34 @@ public void addTable(String t)
 	tables.add(t);
 	tableSet.add(t);
 }
+
+/** Adds table: A as A' */
+public void addTable(String tableName, String asName)
+{
+	String name = tableName;
+	if (!(asName == null || asName.equals(tableName))) {
+		// asName is different
+		name = name + " as " + asName;
+	}
+	addTable(name);
+}
+
+/** Adds table: A as A' Inner/Outer JOIN (xxxxxxx) */
+public void addTable(String tableName, String asName, String joinLogic)
+{
+	String name = tableName;
+	if (!(asName == null || asName.equals(tableName))) {
+		// asName is different
+		name = name + " as " + asName;
+		asName = tableName;
+	}
+	if (joinLogic != null) {
+		name = name + " " + joinLogic;
+	}
+	addTable(name);
+}
+
+
 public boolean containsTable(String t)
 { return (tableSet.contains(t)); }
 

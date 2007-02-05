@@ -38,6 +38,14 @@ public void setStatus(int row, int status);
 // ===============================================================
 // Read rows from the database
 
+/** Adds a row, but doesn't fire any events; it's the caller's responsibility to
+ fire events when all rows are added. */
+public int addRowNoFire(ResultSet rs, int rowIndex) throws SQLException;
+
+/** Fire event after addRowNoFire() calls.  Generally will be implemented by AbstractTableModel */
+public void fireTableRowsInserted(int firstRow, int lastRow);
+
+
 /** Add a new row from the current place in a result set */
 void addRow(ResultSet rs) throws java.sql.SQLException;
 

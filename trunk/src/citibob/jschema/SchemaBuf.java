@@ -35,6 +35,9 @@ implements SqlBuf, JTypeTableModel
 /** Data model we'll use for our columns. */
 Schema schema;
 
+/** Prefex all reported column names in the JTable with this string. */
+String colPrefix = null;		// null = don't use any
+
 /** Should the first column of this TableModel display the status? */
 //boolean statusCol = true;
 
@@ -134,16 +137,17 @@ public int getStatus(int row)
 // --------------------------------------------------
 // ===============================================================
 // Implementation of SqlGen: Read rows from the database
-
-private int addRow(ResultSet rs, int rowIndex) throws SQLException
+public int addRowNoFire(ResultSet rs, int rowIndex) throws SQLException
 {
+	String pre = (colPrefix == null ? "" : colPrefix + "_");
 //System.out.println("SchemaBuf.addRow: " + rowIndex);
+//	String asNameDot = (asName == null || "".equals(asName) ? "" : asName + ".");
 	SqlRow row = newRow();
 	for (int i = 0; i < getColumnCount(); ++i) {
 		// Should we be using column numbers here instead of names?  After all,
 		// we know col numbers because of the schema (or do we)?
 		Column col = schema.getCol(i);
-		row.data[i] = rs.getObject(col.getName()); //xyzqqq
+		row.data[i] = rs.getObject(pre + col.getName()); //xyzqqq
 		row.origData[i] = row.data[i];
 //System.out.println("     col[" + i + "] = " + row.data[i] + " name = " + col.getName());
 //if (row.data[i] == null) System.out.println("             " + rs.getString(col.getName()));
@@ -155,7 +159,7 @@ private int addRow(ResultSet rs, int rowIndex) throws SQLException
 /** Appends a row in the data */
 public void addRow(ResultSet rs) throws java.sql.SQLException
 {
-	int rowIndex = addRow(rs, rows.size());
+	int rowIndex = addRowNoFire(rs, rows.size());
 	fireTableRowsInserted(rowIndex, rowIndex);
 //	fireTableDataChanged();
 }
@@ -166,7 +170,7 @@ public void addAllRows(ResultSet rs) throws java.sql.SQLException
 	int firstRow = rows.size();
 	int n = 0;
 	while (rs.next()) {
-		addRow(rs, rows.size());
+		addRowNoFire(rs, rows.size());
 		++n;
 //if (n % 1000 == 0) System.out.println("SchemaBuf.addAllRows: " + n);
 	}
@@ -232,9 +236,10 @@ public void getWhereKey(int row, SqlQuery q, String table)
 	SchemaHelper.getWhereKey(schema, q, table, r.data);
 }
 // --------------------------------------------------
-public void getSelectCols(SqlQuery q, String table)
+public void setColPrefix(String colPrefix) { this.colPrefix = colPrefix; }
+public void getSelectCols(SqlQuery q, String asName)
 {
-	SchemaHelper.getSelectCols(schema, q, table);
+	SchemaHelper.getSelectCols(schema, q, asName, colPrefix);
 }
 // --------------------------------------------------
 // ===============================================================
@@ -370,7 +375,7 @@ throws KeyViolationException
 {
 	return insertRow(rowIndex, new String[] {colName}, new Object[] {val});
 }
-/** Undoes any edits... */
+///** Undoes any edits... */
 // Not really needed... undo is done by re-querying DB through DBModel
 //public void resetRow(int row)
 //{
@@ -393,7 +398,8 @@ public JType getJType(int row, int col)
 //public JType getJType(int row, int col)
 //	{ return getColumnJType(col); }
 public String getColumnName(int colIndex)
-	{ return schema.getCol(colIndex).getName(); }
+	{ return (colPrefix == null ? "" : colPrefix + "_") +
+		  schema.getCol(colIndex).getName(); }
 // --------------------------------------------------
 public boolean isKey(int columnIndex)
 	{ return schema.getCol(columnIndex).isKey(); }
