@@ -92,7 +92,7 @@ public abstract class Adapter implements Listener
 //	{ statusCol = b; }
 // ===============================================================
 // Implementation of SqlGen
-
+public String getDefaultTable() { return schema.getDefaultTable(); }
 // --------------------------------------------------
 // (shared with TableModel)
 // public int getRowCount()

@@ -23,34 +23,40 @@ import javax.swing.event.*;
 import citibob.multithread.*;
 import citibob.sql.*;
 import java.util.*;
-import citibob.swing.table.MultiJTypeTableModel;
+import citibob.swing.table.*;
 
-public class MultiSchemaBufDbModel extends MultiSqlGenDbModel
+public class JoinedSchemaBufDbModel extends JoinedSqlGenDbModel
 {
 String whereClause;
 String orderClause;
 
 boolean updateBufOnUpdate = false;	// Should we update sequence columns on insert?
 //Statement st;
-	
+//JTypeTableModel xtra;
+MultiJTypeTableModel model;
+
 // -------------------------------------------------------------
 //public MultiSchemaBufDbModel(String[] tables, SchemaBuf[] bufs)
 //{
 //	super(tables, bufs);
 //}
-/** Uses the default table for the Schema in buf. */
-public MultiSchemaBufDbModel(DbChangeModel dbChange, TableSpec[] specs)
+/** Uses the default table for the Schema in buf.
+ @param xtra Report columns not derived from the database in a standard way. */
+public JoinedSchemaBufDbModel(DbChangeModel dbChange, TableSpec[] specs)
 {
 	super(dbChange, specs);
+//	this.xtra = xtra;
+	
+	JTypeTableModel[] models = new JTypeTableModel[specs.length];
+	int i;
+	for (i=0; i<specs.length; ++i) models[i] = (JTypeTableModel)specs[i].gen;
+	MultiJTypeTableModel model = new MultiJTypeTableModel(models);
 }
 
 /** Returns a JTypeTableModel that can be displayed in a JTable */
-public MultiJTypeTableModel newJTypeTableModel()
+public JTypeTableModel getTableModel()
 {
-	SchemaBuf[] models = new SchemaBuf[specs.length];
-	for (int i=0; i<specs.length; ++i) models[i] = specs[i].gen;
-	MultiJTypeTableModel mtm = new MultiJTypeTableModel(models);
-	return mtm;
+	return model;
 }
 
 //public void setUpdateBufOnUpdate(boolean b) { updateBufOnUpdate = b; }
@@ -64,8 +70,9 @@ public void setOrderClause(String orderClause)
 // -------------------------------------------------------------
 public void doSelect(Statement st) throws java.sql.SQLException
 {
-	for (int i=0; i<specs.length; ++i)
-		getSchemaBuf(i).clear();
+//	for (int i=0; i<specs.length; ++i)
+//		getSchemaBuf(i).clear();
+	doClear();
 	super.doSelect(st);
 }
 
@@ -77,8 +84,10 @@ public Schema getSchema(int i)
 
 public void doClear()
 {
-	for (int i=0; i<specs.length; ++i)
+	for (int i=0; i<specs.length; ++i) {
 		getSchemaBuf(i).clear();
+//		if (xtra != null) xtra.clear();
+	}
 }
 
 // -----------------------------------------------------------

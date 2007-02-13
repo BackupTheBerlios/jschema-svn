@@ -25,7 +25,7 @@ import citibob.sql.*;
 import static citibob.jschema.RowStatusConst.*;
 import java.util.*;
 
-public abstract class MultiSqlGenDbModel
+public abstract class JoinedSqlGenDbModel
 implements DbModel
 {
 
@@ -48,7 +48,7 @@ public static class TableSpec
 	String tableName;
 	String asName;
 	String joinLogic;
-	SchemaBuf gen;
+	SqlGen gen;
 	boolean insertBlankRow;
 
 	public TableSpec(String tableName, String asName, String joinLogic,
@@ -82,14 +82,15 @@ public static class TableSpec
 //public boolean getInsertBlankRow(int tab) { return insertBlankRow[tab]; }
 
 // -----------------------------------------------------------
-public MultiSqlGenDbModel(DbChangeModel dbChange, TableSpec[] specs)
+public JoinedSqlGenDbModel(DbChangeModel dbChange, TableSpec[] specs)
 {
 	// Process table names, filling in missing names
 	Set asNamesSet = new TreeSet();
 	for (int i=0; i<specs.length; ++i) {
 		TableSpec spc = specs[i];
-		spc.tableName = (spc.tableName != null ?
-			spc.tableName : spc.gen.getSchema().getDefaultTable());
+		if (spc.tableName == null) {
+			spc.tableName = spc.gen.getDefaultTable();
+		}
 
 		// Find first unique as-name
 		String aname = (spc.asName != null ? spc.asName : spc.tableName);

@@ -21,11 +21,18 @@ package citibob.jschema;
 import java.util.*;
 import java.sql.*;
 
+/** A DbModel that controls many sub DbModels */
 public class MultiDbModel implements DbModel
 {
 
 ArrayList models = new ArrayList();
 
+public MultiDbModel() {}
+public MultiDbModel(DbModel[] mm) {init(mm); }
+public void init(DbModel[] mm)
+{
+	for (DbModel m : mm) add(m);
+}
 // ---------------------------------------------------
 public void add(DbModel m)
 	{ models.add(m); }

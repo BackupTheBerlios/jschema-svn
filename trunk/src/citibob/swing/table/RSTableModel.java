@@ -42,48 +42,52 @@ JType[] jTypes;		// JType of each column
 
 
 // --------------------------------------------------
-public void setColTypes(ResultSet rs, SqlTypeSet tset) throws SQLException
+public void setColHeaders(ResultSet rs, SqlTypeSet tset) throws SQLException
 {
 	ResultSetMetaData md = rs.getMetaData();
+	int ncol = md.getColumnCount();
+	Object[] ids = new Object[ncol];
 	jTypes = new JType[md.getColumnCount()];
-	for (int i=0; i<md.getColumnCount(); ++i) {
+	for (int i=0; i<ncol; ++i) {
 		jTypes[i] = tset.getSqlType(md, i+1);
+		ids[i] = md.getColumnLabel(i+1);
 	}
+	setColumnIdentifiers(ids);
 	setColumnCount(md.getColumnCount());
 }
-/** Used to make reports involving client-side joins --- some of the columns will
- come from a ResultSet (or even a table), and some from ad-hoc computation.
- @params types Describes types of the columns.  Each element can be of type
- ResultSet or JType[] */
-public void setColTypes(Object[] types, SqlTypeSet tset) throws SQLException
-{
-	// Count total columns
-	int ncol = 0;
-	for (Object o : types) {
-		if (o instanceof ResultSet) {
-			ResultSetMetaData md = ((ResultSet)o).getMetaData();
-			ncol += md.getColumnCount();
-		} else {
-			// Will throw ClassCastException if arg of wrong type.
-			ncol += ((JType[])o).length;
-		}
-	}
-	
-	// Set it up
-	jTypes = new JType[ncol];
-	int j=0;
-	for (Object o : types) {
-		if (o instanceof ResultSet) {
-			ResultSetMetaData md = ((ResultSet)o).getMetaData();
-			for (int i=0; i<md.getColumnCount(); ++i) {
-				jTypes[j++] = tset.getSqlType(md, i+1);
-			}
-		} else {
-			for (JType t : (JType[])o) jTypes[j++] = t;
-		}
-	}
-	setColumnCount(ncol);
-}
+///** Used to make reports involving client-side joins --- some of the columns will
+// come from a ResultSet (or even a table), and some from ad-hoc computation.
+// @params types Describes types of the columns.  Each element can be of type
+// ResultSet or JType[] */
+//public void setColTypes(Object[] types, SqlTypeSet tset) throws SQLException
+//{
+//	// Count total columns
+//	int ncol = 0;
+//	for (Object o : types) {
+//		if (o instanceof ResultSet) {
+//			ResultSetMetaData md = ((ResultSet)o).getMetaData();
+//			ncol += md.getColumnCount();
+//		} else {
+//			// Will throw ClassCastException if arg of wrong type.
+//			ncol += ((JType[])o).length;
+//		}
+//	}
+//	
+//	// Set it up
+//	jTypes = new JType[ncol];
+//	int j=0;
+//	for (Object o : types) {
+//		if (o instanceof ResultSet) {
+//			ResultSetMetaData md = ((ResultSet)o).getMetaData();
+//			for (int i=0; i<md.getColumnCount(); ++i) {
+//				jTypes[j++] = tset.getSqlType(md, i+1);
+//			}
+//		} else {
+//			for (JType t : (JType[])o) jTypes[j++] = t;
+//		}
+//	}
+//	setColumnCount(ncol);
+//}
 // --------------------------------------------------
 /** Appends a row in the data */
 public void addRow(ResultSet rs) throws java.sql.SQLException
@@ -95,45 +99,50 @@ public void addRow(ResultSet rs) throws java.sql.SQLException
 	addRow(data);
 }
 // --------------------------------------------------
-/** Add data from a result set; and set up the columns too!
- @deprecated */
-public void addAllRows(ResultSet rs) throws java.sql.SQLException
-{
-	// Set number of columns
-	ResultSetMetaData meta = rs.getMetaData();
-	int ncol = meta.getColumnCount();
-	setColumnCount(ncol);
-
-	// Set column headers
-	Object[] ids = new Object[ncol];
-	for (int i = 0; i < ncol; ++i) {
-		ids[i] = meta.getColumnLabel(i+1);
-System.out.println("addAllRows: ids = " + ids[i]);
-	}
-	setColumnIdentifiers(ids);
-	
-	// Set data
-	while (rs.next()) addRow(rs);
-}
+///** Add data from a result set; and set up the columns too!
+// @deprecated */
+//public void addAllRows(ResultSet rs) throws java.sql.SQLException
+//{
+//	// Set number of columns
+//	ResultSetMetaData meta = rs.getMetaData();
+//	int ncol = meta.getColumnCount();
+//	setColumnCount(ncol);
+//
+//	// Set column headers
+//	Object[] ids = new Object[ncol];
+//	for (int i = 0; i < ncol; ++i) {
+//		ids[i] = meta.getColumnLabel(i+1);
+//System.out.println("addAllRows: ids = " + ids[i]);
+//	}
+//	setColumnIdentifiers(ids);
+//	
+//	// Set data
+//	while (rs.next()) addRow(rs);
+//}
 //public void addAllRows(ResultSet rs) throws java.sql.SQLException
 //{ addAllRows(rs, 0); 
 // ===============================================================
-public RSTableModel()
+SqlTypeSet tset;
+public RSTableModel(SqlTypeSet tset)
 {
 	super();
+	this.tset = tset;
 }
-public RSTableModel(Statement st, String sql, SqlTypeSet tset) throws SQLException
+public void executeQuery(Statement st, String sql) throws SQLException
 {
-	super();
-	this.jTypes = jTypes;
+	setNumRows(0);
 	ResultSet rs = null;
 	try {
 		rs = st.executeQuery(sql);
-		this.setColTypes(rs, tset);
+		this.setColHeaders(rs, tset);
 		addAllRows(rs);
 	} finally {
 		try { rs.close(); } catch(Exception e) {}
 	}
+}
+public void addAllRows(ResultSet rs) throws SQLException
+{
+	while (rs.next()) addRow(rs);	
 }
 // ===============================================================
 // Implementation of TableModel
@@ -183,5 +192,7 @@ public JType getJType(int row, int col)
 //		proto.add(pr[i]);
 //	}
 //}
+
+
 
 }

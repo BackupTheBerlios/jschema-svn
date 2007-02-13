@@ -22,7 +22,7 @@ import java.sql.*;
 import citibob.sql.SqlQuery;
 
 /** NOTE: Implementations of this interface do not NECESSARILY have to be Schema-based; however, it is expected that most will be. */
-public interface SqlGen extends RowStatusConst
+public interface SqlGen extends RowStatusConst //, citibob.swing.table.JTypeTableModel
 {
 int getRowCount();
 
@@ -34,6 +34,13 @@ public int getStatus(int row);
 
 /** After we've updated the DB, use this to clear status bits. */
 public void setStatus(int row, int status);
+
+// ==============================================================
+// Interface as a Table or portion of a SQL query
+
+public void setColPrefix(String colPrefix);
+
+public String getDefaultTable();
 
 // ===============================================================
 // Read rows from the database

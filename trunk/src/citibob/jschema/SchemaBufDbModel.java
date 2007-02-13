@@ -24,7 +24,7 @@ import citibob.multithread.*;
 import citibob.sql.*;
 import java.util.*;
 
-public class SchemaBufDbModel extends SqlGenDbModel
+public class SchemaBufDbModel extends SqlGenDbModel implements TableDbModel
 {
 String whereClause;
 String orderClause;
@@ -65,6 +65,7 @@ public void doSelect(Statement st) throws java.sql.SQLException
 
 public SchemaBuf getSchemaBuf()
 	{ return (SchemaBuf)getSqlGen(); }
+public citibob.swing.table.JTypeTableModel getTableModel() { return getSchemaBuf(); }
 
 public Schema getSchema()
 	{ return getSchemaBuf().getSchema(); }
