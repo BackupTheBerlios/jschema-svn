@@ -16,14 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-package citibob.swing.table;
+package citibob.sql;
 
+import citibob.swing.table.*;
 import java.sql.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
 import citibob.swing.typed.*;
 import java.util.*;
-import citibob.sql.*;
 
 /** Reads in a record set and makes the data available as a (read-only) table model. */
 public class RSTableModel
@@ -40,6 +40,16 @@ JType[] jTypes;		// JType of each column
 // ===============================================================
 // Implementation of SqlGen: Read rows from the database
 
+/** To be used by subclasses */
+public void setColHeaders(Col[] cols)
+{
+	jTypes = new JType[cols.length];
+	Object[] ids = new Object[cols.length];
+	for (int i=0; i<cols.length; ++i) {
+		ids[i] = cols[i].name;
+		jTypes[i] = cols[i].type;
+	}
+}
 
 // --------------------------------------------------
 public void setColHeaders(ResultSet rs, SqlTypeSet tset) throws SQLException
@@ -193,6 +203,16 @@ public JType getJType(int row, int col)
 //	}
 //}
 
-
+// ==========================================================
+/** This is a lot like citibob.jschema.Column */
+public static class Col
+{
+	public String name;
+	public JType type;
+	public Col(String name, JType type) {
+		this.name = name;
+		this.type = type;
+	}
+}
 
 }
