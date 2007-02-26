@@ -31,18 +31,22 @@ public JDateSwinger(JDateType sqlType, DateFormat dfmt) {
 	super(sqlType);
 	this.dfmt = dfmt;
 }
-public static DateFormat newDateFormat(Calendar cal, String fmt)
+public static DateFormat newDateFormat(TimeZone tz, String fmt)
 {
 	DateFormat dff;
 	if (fmt == null) dff = DateFormat.getDateInstance();
 	else dff = new SimpleDateFormat(fmt);
-	if (cal != null) dff.setCalendar(cal);
+	if (tz != null) dff.setTimeZone(tz);
 	return dff;
 }
-public JDateSwinger(JDateType sqlType, Calendar cal, String fmt)
+public JDateSwinger(JDateType sqlType, TimeZone tz, String fmt)
 {
-	this(sqlType, newDateFormat(cal, fmt));
+	this(sqlType, newDateFormat(tz, fmt));
 	this.fmt = fmt;
+}
+public JDateSwinger(JDateType sqlType, String fmt)
+{
+	this(sqlType, TimeZone.getDefault(), fmt);
 }
 // -------------------------------------------------------------------------
 public boolean renderWithWidget() { return true; }

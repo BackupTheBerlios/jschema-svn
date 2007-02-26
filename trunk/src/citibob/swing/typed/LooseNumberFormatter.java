@@ -20,10 +20,28 @@ import java.text.*;
  * @author citibob
  */
 public class LooseNumberFormatter extends NumberFormatter
+implements citibob.text.SFormatter
 {
+
+public LooseNumberFormatter() { super(); }
 
 public LooseNumberFormatter(NumberFormat nf)
 { super(nf); }
+
+public LooseNumberFormatter(citibob.sql.SqlNumeric tt)
+{
+	NumberFormat nf;
+	if (tt.getScale() == 0) {
+		nf = NumberFormat.getIntegerInstance();
+	} else {
+		nf = NumberFormat.getInstance();
+		nf.setMinimumIntegerDigits(0);
+		nf.setMaximumIntegerDigits(tt.getPrecision() - tt.getScale());
+		nf.setMinimumFractionDigits(tt.getScale());
+		nf.setMaximumFractionDigits(tt.getScale());
+	}
+	setFormat(nf);
+}
 
 /** Convert any valid numeric entry to the correct format. */
 public Object  stringToValue(String text)

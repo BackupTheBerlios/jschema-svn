@@ -146,6 +146,8 @@ public int getColumnCount()
 public Object getValueAt(int row, int col)
 {
 	int tab = getTableOfCol(col);
+//System.out.println("getting value of col " + col +
+//" (" + tab + ":" + (col - tabStart[tab]) + ") ncols=" + models[tab].getColumnCount());
 	return models[tab].getValueAt(row, col - tabStart[tab]);	
 }
 public Class  getColumnClass(int columnIndex) 

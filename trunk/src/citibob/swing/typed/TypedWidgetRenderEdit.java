@@ -50,7 +50,7 @@ public TypedWidgetRenderEdit(TypedWidget widget1, TypedWidget widget2)
 //		System.exit(-1);
 //	}
 }
-public TypedWidgetRenderEdit(Swinger f)
+public TypedWidgetRenderEdit(Swinger f, boolean editable)
 {
 	// Get formatter info for this SqlType
 	//SqlTypeMap.Factory f = map.getFactory(type);
@@ -60,7 +60,7 @@ public TypedWidgetRenderEdit(Swinger f)
 	editor = new Editor(widget);
 
 	// Set the renderer --- use either the widget, or a formatted label
-	if (!f.renderWithWidget()) {
+	if (!editable || !f.renderWithWidget()) {
 		DefaultFormatterFactory ffactory = f.newFormatterFactory();
 		if (ffactory != null) renderer = new FormattedTableCellRenderer(ffactory);
 	}

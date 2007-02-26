@@ -12,36 +12,43 @@ package citibob.swing.typed;
 
 import citibob.util.KeyedModel;
 import javax.swing.*;
+import java.util.*;
 
 /**
  *
  * @author citibob
  */
-public class KeyedFormatter extends JFormattedTextField.AbstractFormatter
+public class BoolFormatter extends JFormattedTextField.AbstractFormatter
 implements citibob.text.SFormatter
 {
 
-KeyedModel kmodel;
-String nullText;
+int limit;
+String nullText = "";
 
-/** Creates a new instance of KeyedFormatter */
-public KeyedFormatter(KeyedModel kmodel) {
-	this.kmodel = kmodel;
+static TreeMap<String, Boolean> vals;
+static {
+	vals = new TreeMap();
+	vals.put("false", Boolean.FALSE);
+	vals.put("no", Boolean.FALSE);
+	vals.put("f", Boolean.FALSE);
+	vals.put("n", Boolean.FALSE);
+	vals.put("true", Boolean.TRUE);
+	vals.put("yes", Boolean.TRUE);
+	vals.put("t", Boolean.TRUE);
+	vals.put("y", Boolean.TRUE);
 }
-
 public void setNullText(String s) { nullText = s; }
 
 /** Not to be used */
 public Object  stringToValue(String text)
 {
-	return null;
+	if (text == null || text.equals(nullText)) return null;
+	return vals.get(text.toLowerCase());
 }
 public String  valueToString(Object value)
 {
 	if (value == null) return nullText;
-	String s = kmodel.toString(value);
-	if (s != null) return s;
-	return "x" + value.toString();
-	
+	boolean b = ((Boolean)value).booleanValue();
+	return (b ? "true" : "false");
 }
 }

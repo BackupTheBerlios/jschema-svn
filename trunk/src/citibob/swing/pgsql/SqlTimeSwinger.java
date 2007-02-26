@@ -33,17 +33,21 @@ DateFormat dfmt;
 public SqlTimeSwinger(JDateType sqlType, DateFormat dfmt) {
 	super(sqlType, dfmt);
 }
-public static DateFormat newTimeFormat(Calendar cal, String fmt)
+public static DateFormat newTimeFormat(TimeZone tz, String fmt)
 {
 	DateFormat dff;
 	dff = new SimpleDateFormat(fmt);
-	if (cal != null) dff.setCalendar(cal);
+	if (tz != null) dff.setTimeZone(tz);
 	return dff;
 }
-public SqlTimeSwinger(JDateType sqlType, Calendar cal, String fmt)
+public SqlTimeSwinger(JDateType sqlType, TimeZone tz, String fmt)
 {
-	this(sqlType, newTimeFormat(cal, fmt));
+	this(sqlType, newTimeFormat(tz, fmt));
 	this.fmt = fmt;
+}
+public SqlTimeSwinger(JDateType sqlType, String fmt)
+{
+	this(sqlType, TimeZone.getDefault(), fmt);
 }
 // -------------------------------------------------------------------------
 public boolean renderWithWidget() { return true; }

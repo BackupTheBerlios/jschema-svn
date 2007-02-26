@@ -49,6 +49,8 @@ public void setColHeaders(Col[] cols)
 		ids[i] = cols[i].name;
 		jTypes[i] = cols[i].type;
 	}
+	setColumnIdentifiers(ids);
+	setColumnCount(jTypes.length);
 }
 
 // --------------------------------------------------
@@ -170,9 +172,9 @@ public int findColumn(String colName)
 public boolean isCellEditable(int rowIndex, int columnIndex)
 	{ return false; }
 // --------------------------------------------------
-/** This is a NOP: Values are immutable once inserted */
-public void setValueAt(Object val, int rowIndex, int colIndex)
-	{ }
+///** This is a NOP: Values are immutable once inserted */
+//public void setValueAt(Object val, int rowIndex, int colIndex)
+//	{ }
 // --------------------------------------------------
 
 // ===============================================================

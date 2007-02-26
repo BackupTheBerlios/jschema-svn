@@ -27,7 +27,7 @@ public class NullSwinger implements Swinger
 	/** Renderer and editor for a CitibobJTable.  If JTable's default
 	 renderer and editor is desired, just return null.  Normally, this will
 	 just return new TypedWidgetRenderEdit(newTypedWidget()) */
-	public citibob.swing.table.RenderEdit newRenderEdit() { return null; }
+	public citibob.swing.table.RenderEdit newRenderEdit(boolean editable) { return null; }
 	
 	/** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
 	 SqlType is never to be edited with a JFormattedTextField, it can just

@@ -24,8 +24,10 @@ public interface Swinger {
 	
 	/** Renderer and editor for a CitibobJTable.  If JTable's default
 	 renderer and editor is desired, just return null.  Normally, this will
-	 just return new TypedWidgetRenderEdit(newTypedWidget()) */
-	public citibob.swing.table.RenderEdit newRenderEdit();
+	 just return new TypedWidgetRenderEdit(newTypedWidget())
+	 @param editable Is the item we want to render & edit editable?
+	 Used to determine which form of renderer is used*/
+	public citibob.swing.table.RenderEdit newRenderEdit(boolean editable);
 	
 	/** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
 	 SqlType is never to be edited with a JFormattedTextField, it can just

@@ -45,27 +45,29 @@ protected citibob.swing.typed.TypedWidget createTypedWidget()
 	public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 	{
 		SqlNumeric tt = (SqlNumeric)jType;
+		NumberFormatter nff = new LooseNumberFormatter(tt);
+		return new DefaultFormatterFactory(nff);
 		
-		NumberFormat nf;
-		if (tt.getScale() == 0) {
-			nf = NumberFormat.getIntegerInstance();
-		} else {
-			nf = NumberFormat.getInstance();
-			nf.setMinimumIntegerDigits(0);
-			nf.setMaximumIntegerDigits(tt.getPrecision() - tt.getScale());
-			nf.setMinimumFractionDigits(tt.getScale());
-			nf.setMaximumFractionDigits(tt.getScale());			
-		}
-		return newFormatterFactory(nf);
+//		NumberFormat nf;
+//		if (tt.getScale() == 0) {
+//			nf = NumberFormat.getIntegerInstance();
+//		} else {
+//			nf = NumberFormat.getInstance();
+//			nf.setMinimumIntegerDigits(0);
+//			nf.setMaximumIntegerDigits(tt.getPrecision() - tt.getScale());
+//			nf.setMinimumFractionDigits(tt.getScale());
+//			nf.setMaximumFractionDigits(tt.getScale());			
+//		}
+//		return newFormatterFactory(nf);
 	}
 
 	// --------------------------------------------------------------------
-	// Not part of interface
-	public javax.swing.text.DefaultFormatterFactory newFormatterFactory(NumberFormat nf)
-	{
-		NumberFormatter nff = new LooseNumberFormatter(nf);
-		return new DefaultFormatterFactory(nff);
-	}
+//	// Not part of interface
+//	public javax.swing.text.DefaultFormatterFactory newFormatterFactory(NumberFormat nf)
+//	{
+//		NumberFormatter nff = new LooseNumberFormatter(nf);
+//		return new DefaultFormatterFactory(nff);
+//	}
 
 //	private NumberFormatter formatter(NumberFormat nf)
 //	{

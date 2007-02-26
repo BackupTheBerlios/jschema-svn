@@ -14,8 +14,11 @@ public interface App
 public ConnPool getPool();
 public void runGui(CBRunnable r);
 public void runApp(CBRunnable r);
+public ActionRunner getGuiRunner();
+public ActionRunner getAppRunner();
 public MailSender getMailSender();
 public SwingerMap getSwingerMap();
+public citibob.text.SFormatterMap getSFormatterMap();
 public SchemaSet getSchemaSet();
 public Schema getSchema(String name);	// Get schema by name
 /** Get default conversion between database types and SqlType objects */

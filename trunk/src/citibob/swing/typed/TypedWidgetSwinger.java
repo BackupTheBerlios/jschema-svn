@@ -35,8 +35,8 @@ public JType getJType() { return jType; }
 /** Renderer and editor for a CitibobJTable.  If JTable's default
  renderer and editor is desired, just return null.  Normally, this will
  just return new TypedWidgetRenderEdit(newTypedWidget()) */
-public citibob.swing.table.RenderEdit newRenderEdit()
-	{ return new TypedWidgetRenderEdit(this); }
+public citibob.swing.table.RenderEdit newRenderEdit(boolean editable)
+	{ return new TypedWidgetRenderEdit(this, editable); }
 
 /** By default, no associated text formatter; render with widget. */
 public javax.swing.text.DefaultFormatterFactory newFormatterFactory()

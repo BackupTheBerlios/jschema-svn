@@ -35,6 +35,7 @@ public Map<Object,Integer> getJoinMap() { return joinMap; }
 
 public void executeQuery(Statement st, String sql) throws SQLException
 {
+System.out.println("MainSqlTableModel.executeQuery: " + sql);
 	super.executeQuery(st, sql);
 
 	// Re-set the joinMap

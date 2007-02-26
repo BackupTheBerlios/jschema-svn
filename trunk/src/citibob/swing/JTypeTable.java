@@ -28,14 +28,16 @@ import citibob.swing.typed.*;
 public class JTypeTable extends CitibobJTable
 {
 	SwingerMap smap;
-	HashMap RenderEditMap;		// HashMap of RenderEdit objects created for table cells.
+	HashMap editableREMap;		// HashMap of RenderEdit objects created for table cells.
+	HashMap readonlyREMap;		// HashMap of RenderEdit objects created for table cells.
 	
 	public void setSwingerMap(SwingerMap smap)
 		{ this.smap = smap; }
 
 	/** Creates a new instance of JTypeTable */
 	public JTypeTable() {
-		RenderEditMap = new HashMap();
+		editableREMap = new HashMap();
+		readonlyREMap = new HashMap();
 	}
 
 	public TableCellEditor getCellEditor(int row, int col)
@@ -58,15 +60,17 @@ public class JTypeTable extends CitibobJTable
 		if (jType == null) return null;
 		
 		// See if we have cached a RenderEdit for this type
-		RenderEdit re = (RenderEdit)RenderEditMap.get(jType);
+		boolean editable = mod.isCellEditable(row, col);
+		HashMap reMap = (editable ? editableREMap : readonlyREMap);
+		RenderEdit re = (RenderEdit)reMap.get(jType);
 		if (re != null) return re;
 		
 		// Get the swinger to make us a new RenderEdit
 		Swinger swinger = smap.newSwinger(jType);
 		if (swinger == null) return null;
-		re = swinger.newRenderEdit();
-		RenderEditMap.put(jType, re);
-		
+		re = swinger.newRenderEdit(editable);
+		reMap.put(jType, re);
+System.out.println("New RenderEdit: " + jType + " --> " + re);
 		return re;
 	}
 }

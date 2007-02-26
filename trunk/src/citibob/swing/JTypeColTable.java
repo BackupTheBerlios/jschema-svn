@@ -41,13 +41,14 @@ public void setModelU(JTypeTableModel schemaBuf,
 	if (editable != null) model.setEditable(editable);
 	
 	// Set the RenderEdit for each column, according to that column's SqlType.
-	for (int c=0; c<sColMap.length; ++c) {
+//	for (int c=0; c<sColMap.length; ++c) {
+	for (int c=0; c<this.getColumnCount(); ++c) {
 		int bcol = model.getColMap(c);
 		JType sqlType = schemaBuf.getJType(0,bcol);
 		if (sqlType == null) continue;
 		Swinger swing = swingers.newSwinger(sqlType);
 		if (swing == null) continue;
-		setRenderEdit(c, swing.newRenderEdit());
+		setRenderEdit(c, swing.newRenderEdit(model.isCellEditable(0, c)));
 	}
 }
 //	

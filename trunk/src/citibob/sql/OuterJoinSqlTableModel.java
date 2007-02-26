@@ -9,6 +9,7 @@
 
 package citibob.sql;
 
+import citibob.sql.*;
 import citibob.swing.table.*;
 import java.sql.*;
 import javax.swing.table.*;

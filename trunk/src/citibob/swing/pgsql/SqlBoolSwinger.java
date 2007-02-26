@@ -43,7 +43,10 @@ public citibob.swing.typed.TypedWidget createTypedWidget()
  because one instance is required per JFormattedTextField.  It's OK for the
  factory to just store instances of 4 AbstractFormatters and return them as needed. */
 public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
-{ return null; }
+{
+	return new DefaultFormatterFactory(new BoolFormatter());
+
+}
 //	SqlEnum tt = (SqlEnum)sqlType;
 //	KeyedFormatter fmt = new KeyedFormatter(tt.getKeyedModel());
 //	return new DefaultFormatterFactory(fmt);
