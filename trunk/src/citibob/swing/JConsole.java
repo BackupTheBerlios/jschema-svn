@@ -47,6 +47,7 @@ import java.util.Vector;
 import java.awt.Cursor;
 import javax.swing.text.*;
 import javax.swing.*;
+import citibob.util.*;
 
 // Things that are not in the core packages
 
@@ -81,7 +82,8 @@ public class JConsole extends JScrollPane
 	public PrintStream getErr() { return out;	}
 
     private int	cmdStart = 0;
-	private	Vector history = new Vector();
+//	private	Vector history = new Vector();
+	private CircularArrayList history = new CircularArrayList(100);
 	private	String startedLine;
 	private	int histLine = 0;
 
@@ -401,7 +403,8 @@ public class JConsole extends JScrollPane
 
 	public void addHistory(String s)
 	{
-		history.addElement(s);
+		history.addCircular(s);
+//		history.addElement(s);
 	}
 	
 	private	void enter() {
@@ -410,7 +413,8 @@ public class JConsole extends JScrollPane
 		if ( s.length()	== 0 )	// special hack	for empty return!
 			s = ";\n";
 		else {
-			history.addElement( s );
+			history.addCircular(s);
+//			history.addElement( s );
 			s = s +"\n";
 		}
 
@@ -455,13 +459,31 @@ public class JConsole extends JScrollPane
 		if ( histLine == 0 )
 			showline = startedLine;
 		else
-			showline = (String)history.elementAt( history.size() - histLine	);
+//			showline = (String)history.elementAt( history.size() - histLine	);
+			showline = (String)history.get( history.size() - histLine	);
 
 		replaceRange( showline,	cmdStart, textLength() );
 		text.setCaretPosition(textLength());
 		text.repaint();
 	}
 
+	// ------------------------------------------------------
+	public void saveHistory(Writer out) throws IOException
+	{
+		for (int i=0; i<history.size(); ++i) {
+			String s = (String)history.get(i);
+			out.write(s);
+			out.write('\n');
+		}
+	}
+	public void loadHistory(BufferedReader in) throws IOException
+	{
+		String s;
+		while ((s = in.readLine()) != null) {
+			this.addHistory(s);
+		}
+	}
+	// ------------------------------------------------------
 	String ZEROS = "000";
 
 	private	void acceptLine( String	line ) 
