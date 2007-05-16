@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package citibob.jschema;
 
 import java.sql.*;
-import citibob.sql.SqlQuery;
+import citibob.sql.ConsSqlQuery;
 import javax.swing.event.*;
 import citibob.sql.*;
 import static citibob.jschema.RowStatusConst.*;
@@ -120,7 +120,7 @@ public void doInit(Statement st) throws java.sql.SQLException
 // -----------------------------------------------------------
 /** Set the where clause for the select statement, based on current key... 
  Meant to be overridden. */
-public void setSelectWhere(SqlQuery q) {}
+public void setSelectWhere(ConsSqlQuery q) {}
 // -----------------------------------------------------------
 /** Adds extra fields to an insert query that must be provided
 before a row can be inserted into the database.  Typically, this
@@ -128,7 +128,7 @@ will involve setting the key fields (same as setSelectWhere()),
 which are usually the same for all the same for all records
 in the SqlGenDbModel.  This method is called AFTER the rest of
 the insert query has been constructed. */
-public void setInsertKeys(int tab, int row, SqlQuery sql) {}
+public void setInsertKeys(int tab, int row, ConsSqlQuery sql) {}
 // -----------------------------------------------------------
 /** Get Sql query to re-select current records
 * from database.  When combined with an actual
@@ -136,7 +136,7 @@ public void setInsertKeys(int tab, int row, SqlQuery sql) {}
 * has the result of refreshing the current display. */
 public void doSelect(Statement st) throws java.sql.SQLException
 {
-	SqlQuery q = new SqlQuery(SqlQuery.SELECT);
+	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.SELECT);
 	for (int i=0; i<specs.length; ++i) {
 		q.addTable(specs[i].tableName, specs[i].asName, specs[i].joinLogic);
 		specs[i].gen.getSelectCols(q, specs[i].asName);
@@ -256,7 +256,7 @@ private void doSimpleUpdate(int tab, int row, Statement st) throws java.sql.SQLE
 {
 	SqlGen gen = specs[tab].gen;
 	if (gen.valueChanged(row)) {
-		SqlQuery q = new SqlQuery(SqlQuery.UPDATE);
+		ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.UPDATE);
 		gen.getUpdateCols(row, q, false);
 		q.setMainTable(specs[tab].tableName);
 
@@ -281,7 +281,7 @@ System.out.println("doSimpleUpdate: " + sql);
 /** Get Sql query to delete current record. */
 private void doSimpleDelete(int tab, int row, Statement st) throws java.sql.SQLException
 {
-	SqlQuery q = new SqlQuery(SqlQuery.DELETE);
+	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.DELETE);
 	q.setMainTable(specs[tab].tableName);
 	specs[tab].gen.getWhereKey(row, q, specs[tab].tableName);
 System.out.println(q.toString());
@@ -297,9 +297,9 @@ System.out.println("doSimpleDelete: " + sql);
 // -----------------------------------------------------------
 /** Get Sql query to insert record into database,
 * assuming it isn't already there. */
-protected SqlQuery doSimpleInsert(int tab, int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleInsert(int tab, int row, Statement st) throws java.sql.SQLException
 {
-	SqlQuery q = new SqlQuery(SqlQuery.INSERT);
+	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.INSERT);
 	q.setMainTable(specs[tab].tableName);
 System.out.println("doSimpleInsert: ");
 	specs[tab].gen.getInsertCols(row, q, false);

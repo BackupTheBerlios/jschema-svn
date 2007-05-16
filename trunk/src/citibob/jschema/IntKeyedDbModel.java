@@ -73,12 +73,12 @@ public IntKeyedDbModel(Schema schema, String keyField)
 	{ this(schema, keyField, null); }
 // --------------------------------------------------------------
 
-public void setSelectWhere(SqlQuery q)
+public void setSelectWhere(ConsSqlQuery q)
 {
 	super.setSelectWhere(q);
 	q.addWhereClause(keyField + " = " + idValue);
 }
-public void setInsertKeys(int row, SqlQuery q)
+public void setInsertKeys(int row, ConsSqlQuery q)
 {
 	super.setInsertKeys(row, q);
 	if (doInsertKeys) q.addColumn(keyField, SqlInteger.sql(idValue));

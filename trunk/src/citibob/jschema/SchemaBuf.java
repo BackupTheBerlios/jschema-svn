@@ -25,7 +25,7 @@ import javax.swing.event.*;
 import citibob.swing.table.*;
 
 import java.util.*;
-import citibob.sql.SqlQuery;
+import citibob.sql.ConsSqlQuery;
 import citibob.swing.typed.JType;
 import static citibob.jschema.RowStatusConst.*;
 
@@ -199,7 +199,7 @@ System.out.println("SchemaBuf Done firing event!");
 // --------------------------------------------------
 /** Makes update query update column(s) represented by this object.
  @param updateUnchanged If true, update even columns that haven't been edited. */
-public void getUpdateCols(int row, SqlQuery q, boolean updateUnchanged)
+public void getUpdateCols(int row, ConsSqlQuery q, boolean updateUnchanged)
 {
 	SqlRow r = (SqlRow)rows.get(row);
 	for (int col = 0; col < schema.getColCount(); ++col) {
@@ -214,7 +214,7 @@ public void getUpdateCols(int row, SqlQuery q, boolean updateUnchanged)
 	}
 }
 // --------------------------------------------------
-public void getInsertCols(int row, SqlQuery q, boolean insertUnchanged)
+public void getInsertCols(int row, ConsSqlQuery q, boolean insertUnchanged)
 {
 	SqlRow r = (SqlRow)rows.get(row);
 	for (int col = 0; col < schema.getColCount(); ++col) {
@@ -230,14 +230,14 @@ System.out.println("   getInsertCols(" + row + ", " + col + "): " + !unchanged +
 
 }
 // --------------------------------------------------
-public void getWhereKey(int row, SqlQuery q, String table)
+public void getWhereKey(int row, ConsSqlQuery q, String table)
 {
 	SqlRow r = (SqlRow)rows.get(row);
 	SchemaHelper.getWhereKey(schema, q, table, r.data);
 }
 // --------------------------------------------------
 public void setColPrefix(String colPrefix) { this.colPrefix = colPrefix; }
-public void getSelectCols(SqlQuery q, String asName)
+public void getSelectCols(ConsSqlQuery q, String asName)
 {
 	SchemaHelper.getSelectCols(schema, q, asName, colPrefix);
 }

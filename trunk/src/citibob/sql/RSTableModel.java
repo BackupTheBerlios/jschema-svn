@@ -140,6 +140,8 @@ public RSTableModel(SqlTypeSet tset)
 	super();
 	this.tset = tset;
 }
+
+/** All-in-one: execute a query, set up row headers, and add all rows to the table model. */
 public void executeQuery(Statement st, String sql) throws SQLException
 {
 	setNumRows(0);

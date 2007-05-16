@@ -18,13 +18,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package citibob.jschema;
 
-import citibob.sql.SqlQuery;
+import citibob.sql.ConsSqlQuery;
 
 /** Extra methods for Schema, but not included in the interface. */
 public class SchemaHelper
 {
 
-public static void getSelectCols(Schema schema, SqlQuery q, String table, String colPrefix)
+public static void getSelectCols(Schema schema, ConsSqlQuery q, String table, String colPrefix)
 {
 	for (int col = 0; col < schema.getColCount(); ++col) {
 		Column c = schema.getCol(col);
@@ -37,7 +37,7 @@ public static void getSelectCols(Schema schema, SqlQuery q, String table, String
  * For columns, this will just check the isKey() field and add itself
  * or not.  For records, will call getWhereKey on children
  * (unless the record has special knowledge about itself.) */
-public static void getWhereKey(Schema schema, SqlQuery q, String table, Object[] whereKey)
+public static void getWhereKey(Schema schema, ConsSqlQuery q, String table, Object[] whereKey)
 {
 	for (int col = 0; col < schema.getColCount(); ++col) {
 		Column c = schema.getCol(col);

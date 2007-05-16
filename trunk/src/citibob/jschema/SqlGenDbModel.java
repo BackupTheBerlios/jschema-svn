@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package citibob.jschema;
 
 import java.sql.*;
-import citibob.sql.SqlQuery;
+import citibob.sql.ConsSqlQuery;
 import javax.swing.event.*;
 import citibob.sql.*;
 
@@ -63,7 +63,7 @@ public void doInit(Statement st) throws java.sql.SQLException
 }
 // -----------------------------------------------------------
 /** Set the where clause for the select statement, based on current key... */
-public void setSelectWhere(SqlQuery q) {}
+public void setSelectWhere(ConsSqlQuery q) {}
 // -----------------------------------------------------------
 /** Adds extra fields to an insert query that must be provided
 before a row can be inserted into the database.  Typically, this
@@ -71,7 +71,7 @@ will involve setting the key fields (same as setSelectWhere()),
 which are usually the same for all the same for all records
 in the SqlGenDbModel.  This method is called AFTER the rest of
 the insert query has been constructed. */
-public void setInsertKeys(int row, SqlQuery sql) {}
+public void setInsertKeys(int row, ConsSqlQuery sql) {}
 // -----------------------------------------------------------
 /** Get Sql query to re-select current records
 * from database.  When combined with an actual
@@ -79,12 +79,12 @@ public void setInsertKeys(int row, SqlQuery sql) {}
 * has the result of refreshing the current display. */
 public void doSelect(Statement st) throws java.sql.SQLException
 {
-	SqlQuery q = new SqlQuery(SqlQuery.SELECT);
+	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.SELECT);
 	gen.getSelectCols(q, table);
 	q.addTable(table);
 	setSelectWhere(q);
-System.out.println("doSelect: " + q.toString());
-	gen.addAllRows(st.executeQuery(q.toString()));
+System.out.println("doSelect: " + q.getSql());
+	gen.addAllRows(st.executeQuery(q.getSql()));
 }
 // -----------------------------------------------------------
 /** Get Sql query to insert record into database,
@@ -164,7 +164,7 @@ public void doDelete(Statement st) throws java.sql.SQLException
 private void doSimpleUpdate(int row, Statement st) throws java.sql.SQLException
 {
 	if (gen.valueChanged(row)) {
-		SqlQuery q = new SqlQuery(SqlQuery.UPDATE);
+		ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.UPDATE);
 		gen.getUpdateCols(row, q, false);
 		q.setMainTable(table);
 
@@ -172,12 +172,12 @@ private void doSimpleUpdate(int row, Statement st) throws java.sql.SQLException
 		int beforeWhere = q.numWhereClauses();
 		gen.getWhereKey(row, q, table);
 		int afterWhere = q.numWhereClauses();
-		System.out.println(q.toString());
+		System.out.println(q.getSql());
 		if (beforeWhere == afterWhere) {
 			throw new SQLException("Update statement missing key fields in WHERE clause\n"
-				+ q.toString());
+				+ q.getSql());
 		}
-	String sql = q.toString();
+	String sql = q.getSql();
 System.out.println("doSimpleUpdate: " + sql);
 		st.executeUpdate(sql);
 	}
@@ -189,15 +189,15 @@ System.out.println("doSimpleUpdate: " + sql);
 /** Get Sql query to delete current record. */
 private void doSimpleDelete(int row, Statement st) throws java.sql.SQLException
 {
-	SqlQuery q = new SqlQuery(SqlQuery.DELETE);
+	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.DELETE);
 	q.setMainTable(table);
 	gen.getWhereKey(row, q, table);
-System.out.println(q.toString());
+System.out.println(q.getSql());
 	if (q.numWhereClauses() == 0) {
 		throw new SQLException("Delete statement missing WHERE clause\n" +
-			q.toString());
+			q.getSql());
 	}
-	String sql = q.toString();
+	String sql = q.getSql();
 System.out.println("doSimpleDelete: " + sql);
 	st.executeUpdate(sql);
 	gen.removeRow(row);
@@ -205,14 +205,14 @@ System.out.println("doSimpleDelete: " + sql);
 // -----------------------------------------------------------
 /** Get Sql query to insert record into database,
 * assuming it isn't already there. */
-protected SqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQLException
 {
-	SqlQuery q = new SqlQuery(SqlQuery.INSERT);
+	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.INSERT);
 	q.setMainTable(table);
 System.out.println("doSimpleInsert: ");
 	gen.getInsertCols(row, q, false);
 	setInsertKeys(row, q);
-	String sql = q.toString();
+	String sql = q.getSql();
 System.out.println("   sql = " + sql);
 	st.executeUpdate(sql);
 	gen.setStatus(row, 0);

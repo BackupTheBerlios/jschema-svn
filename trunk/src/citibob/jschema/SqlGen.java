@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package citibob.jschema;
 
 import java.sql.*;
-import citibob.sql.SqlQuery;
+import citibob.sql.ConsSqlQuery;
 
 /** NOTE: Implementations of this interface do not NECESSARILY have to be Schema-based; however, it is expected that most will be. */
 public interface SqlGen extends RowStatusConst //, citibob.swing.table.JTypeTableModel
@@ -72,14 +72,14 @@ void removeRow(int row);
 // Write rows to the database
 
 /** Makes update query update column(s) represented by this object. */
-void getUpdateCols(int row, SqlQuery q, boolean updateUnchanged);
-void getInsertCols(int row, SqlQuery q, boolean insertUnchanged);
+void getUpdateCols(int row, ConsSqlQuery q, boolean updateUnchanged);
+void getInsertCols(int row, ConsSqlQuery q, boolean insertUnchanged);
 
 /** Adds the where clauses corresponding to the currently stored keyfield values. */
-void getWhereKey(int row, SqlQuery q, String table);
+void getWhereKey(int row, ConsSqlQuery q, String table);
 //void getInsertKey(int row, SqlQuery q);
 
 /** If schema-based, just a passthrough to the underlying Schema. */
-void getSelectCols(SqlQuery q, String table);
+void getSelectCols(ConsSqlQuery q, String table);
 
 }

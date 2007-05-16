@@ -91,14 +91,14 @@ public void doClear()
 }
 
 // -----------------------------------------------------------
-public void setSelectWhere(SqlQuery q)
+public void setSelectWhere(ConsSqlQuery q)
 {
 	q.addWhereClause(whereClause);
 	q.addOrderClause(orderClause);
 }
 
 /** @see SqlGenDbModel */
-public void setInsertKeys(int row, SqlQuery q) {}
+public void setInsertKeys(int row, ConsSqlQuery q) {}
 
 
 // ===========================================================
@@ -126,10 +126,10 @@ public void setInsertKeys(int row, SqlQuery q) {}
 //	return (instantUpdateListener != null);
 //}
 
-protected SqlQuery doSimpleInsert(int tab, int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleInsert(int tab, int row, Statement st) throws java.sql.SQLException
 {
 	
-	SqlQuery q = super.doSimpleInsert(tab, row, st);
+	ConsSqlQuery q = super.doSimpleInsert(tab, row, st);
 
 	/** Figure out which sequence columns were not inserted, and find their keys */
 	SchemaBuf sb = getSchemaBuf(tab); //(SchemaBuf)gens[tab];

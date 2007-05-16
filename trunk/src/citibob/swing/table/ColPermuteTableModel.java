@@ -58,6 +58,10 @@ public ColPermuteTableModel(CitibobTableModel model_u, String[] colNames, int[] 
 	init(model_u, colNames, colMap, null);
 }
 
+/** @param model_u Underlying table model
+ @param colNames Display names -- Null if you wish to just use names of underlying columns
+ @param sColMap Names of underlying columns --- Null if wish to use all underlying columns
+ @param editable Is each column editable? */
 public ColPermuteTableModel(CitibobTableModel model_u,
 String[] colNames,			// Display names
 String[] sColMap,			// Underlying names
@@ -83,6 +87,10 @@ public void setEditable(boolean[] editable)
 {
 	this.editable = editable;
 }
+/** @param model_u Underlying table model
+ @param xColNames Display names
+ @param xColMap Index in underlying table of each column
+ @param editable Is each column editable? */
 private void init(CitibobTableModel model_u, String[] xColNames, int[] xColMap, boolean[] editable)
 {
 	if (xColNames == null) {

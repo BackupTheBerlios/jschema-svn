@@ -74,14 +74,14 @@ public void doClear()
 	{ ((SchemaBuf)getSqlGen()).clear(); }
 
 // -----------------------------------------------------------
-public void setSelectWhere(SqlQuery q)
+public void setSelectWhere(ConsSqlQuery q)
 {
 	q.addWhereClause(whereClause);
 	q.addOrderClause(orderClause);
 }
 
 /** @see SqlGenDbModel */
-public void setInsertKeys(int row, SqlQuery q) {}
+public void setInsertKeys(int row, ConsSqlQuery q) {}
 
 
 // ===========================================================
@@ -109,9 +109,9 @@ public boolean isInstantUpdate()
 	return (instantUpdateListener != null);
 }
 
-protected SqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQLException
 {
-	SqlQuery q = super.doSimpleInsert(row, st);
+	ConsSqlQuery q = super.doSimpleInsert(row, st);
 	
 //	SqlQuery q = new SqlQuery(SqlQuery.INSERT);
 //	q.setMainTable(table);
