@@ -62,6 +62,9 @@ public void setColHeaders(ResultSet rs, SqlTypeSet tset) throws SQLException
 	jTypes = new JType[md.getColumnCount()];
 	for (int i=0; i<ncol; ++i) {
 		jTypes[i] = tset.getSqlType(md, i+1);
+//if (jTypes[i] == null) {
+//	System.out.println("hoi");
+//}
 		ids[i] = md.getColumnLabel(i+1);
 	}
 	setColumnIdentifiers(ids);

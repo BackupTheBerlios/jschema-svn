@@ -104,14 +104,19 @@ public boolean valueChanged(SqlRow r, int col)
 
 	Object origData = r.origData[col];
 	Object curData = r.data[col];
+//String name = schema.getCol(col).getName();
+//System.out.println(name + ": " + origData + " -> " + curData);
+//if ("isorg".equals(name)) {
+//	System.out.println("hoi");
+//}
 	return !(curData == null ? origData == null : curData.equals(origData));
 }
 public boolean valueChanged(int row)
 {
 	SqlRow r = (SqlRow)rows.get(row);
 	for (int col = 0; col < schema.getColCount(); ++col) {
-		Object origData = r.origData[col];
-		Object curData = r.data[col];
+//		Object origData = r.origData[col];
+//		Object curData = r.data[col];
 		if (valueChanged(r, col)) return true;
 	}
 	return false;
@@ -178,9 +183,9 @@ public void addAllRows(ResultSet rs) throws java.sql.SQLException
 
 	rs.close();
 	int lastRow = rows.size()-1;
-System.out.println("SchemaBuf Firing event...");
+//System.out.println("SchemaBuf Firing event...");
 	if (lastRow >= firstRow) fireTableRowsInserted(firstRow, lastRow);
-System.out.println("SchemaBuf Done firing event!");
+//System.out.println("SchemaBuf Done firing event!");
 	rs.close();
 //System.err.println("addAllRows: count = " + getRowCount());
 }
@@ -410,7 +415,10 @@ public boolean isCellEditable(int rowIndex, int columnIndex)
 public void setValueAt(Object val, int row, int col)
 {
 	
-System.out.println("SchemaBuf.setValueAt(" + val + ")");
+//System.out.println("SchemaBuf.setValueAt(" + val + ", " + row + ", " + col + ")");
+//if (col == 0 && getColumnName(col).equals("entityid")) {
+//	System.out.println("hoi");
+//}
 	// Figure out whether our new value is same or different from original
 	SqlRow srow = (SqlRow)rows.get(row);
 

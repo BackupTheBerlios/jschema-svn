@@ -22,8 +22,8 @@ import java.util.*;
  */
 public class JDateSwinger extends TypedWidgetSwinger
 {
-String fmt;
-DateFormat dfmt;
+protected String fmt;
+protected DateFormat dfmt;
 
 // -------------------------------------------------------------------------
 /** Creates a new instance of TypedWidgetSTFactory */

@@ -38,6 +38,7 @@ new State("", "", "") {
 }
 */
 
+/** @param frame Parent frame for the modal dialogs created by the Wizard. */
 public SwingWizard(String wizardName, java.awt.Frame frame, String startState)
 {
 	super(wizardName, startState);

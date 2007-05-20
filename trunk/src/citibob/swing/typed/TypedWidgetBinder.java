@@ -53,9 +53,9 @@ public void bind(TypedWidget tw, TableRowModel bufRow)
 /** Bind widget and set its type. */
 public void bind(TypedWidget tw, SchemaRowModel bufRow, String colName, SwingerMap map)
 {
-if (colName.equals("dob")) {
-	System.out.println("dob column reached!!!");
-}
+//if (colName.equals("dob")) {
+//	System.out.println("dob column reached!!!");
+//}
 	// Set the type
 	if (map != null) {
 		Schema schema = bufRow.getSchema();

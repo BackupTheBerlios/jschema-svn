@@ -12,10 +12,11 @@ public interface App
 {
 
 public ConnPool getPool();
-public void runGui(CBRunnable r);
+/** Runs an action started from a specific Swing component. */
+public void runGui(java.awt.Component c, CBRunnable r);
 public void runApp(CBRunnable r);
-public ActionRunner getGuiRunner();
-public ActionRunner getAppRunner();
+//public ActionRunner getGuiRunner();
+public ActionRunner getAppRunner();		// Useful for some things that need it.
 public MailSender getMailSender();
 public SwingerMap getSwingerMap();
 public citibob.text.SFormatterMap getSFormatterMap();

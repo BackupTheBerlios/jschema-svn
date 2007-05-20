@@ -48,7 +48,7 @@ public TableRowModel(CitibobTableModel tmodel, boolean listen)
 {
 	listenTableModel = listen;
 	this.tmodel = tmodel;
-	colListeners = new ColListener[tmodel.getColumnCount()];
+	super.setColumnCount(tmodel.getColumnCount());
 	// Set to the first row, if there is one right now...
 	if (tmodel.getRowCount() == 0) curRow = NOROW;
 	else curRow = 0;
@@ -75,7 +75,7 @@ public void set(int col, Object val)
 }
 public Object get(int col)
 {
-System.out.println("   Xxtmodel = " + tmodel);
+//System.out.println("   Xxtmodel = " + tmodel);
 	if (curRow == NOROW) return null;
 	return tmodel.getValueAt(curRow, col);
 }

@@ -45,7 +45,7 @@ public SqlType getSqlType(int type, int precision, int scale, boolean nullable)
 		case BIT : return new SqlBool(nullable);
 		case BLOB : return null;
 		case BOOLEAN : return new SqlBool(nullable);
-		case CHAR : return null;
+		case CHAR : return new SqlChar(nullable);
 		case CLOB : return new SqlString(nullable);
 		case DATALINK : return null;
 		case DATE : return new SqlDate(tz, nullable);

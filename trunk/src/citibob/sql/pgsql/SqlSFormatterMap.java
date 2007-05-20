@@ -53,6 +53,12 @@ public SqlSFormatterMap() {
 		return new ToStringSFormatter();
 	}});
 
+	// SqlString
+	this.addMaker(SqlChar.class, new SFormatterMap.Maker() {
+	public SFormatter newSFormatter(JType sqlType) {
+		return new ToStringSFormatter();
+	}});
+
 	// SqlTime
 	this.addMaker(SqlTime.class, new SFormatterMap.Maker() {
 	public SFormatter newSFormatter(JType sqlType) {

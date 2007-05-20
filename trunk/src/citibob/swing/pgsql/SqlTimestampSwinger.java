@@ -25,8 +25,8 @@ import citibob.swing.typed.JDateSwinger;
  */
 public class SqlTimestampSwinger extends JDateSwinger
 {
-String fmt;
-DateFormat dfmt;
+//String fmt;
+//DateFormat dfmt;
 
 // -------------------------------------------------------------------------
 /** Creates a new instance of TypedWidgetSTFactory */

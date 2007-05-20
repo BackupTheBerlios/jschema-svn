@@ -16,42 +16,24 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
+/*
+ * ActionRunner.java
+ *
+ * Created on January 29, 2006, 7:49 PM
+ *
+ * To change this template, choose Tools | Options and locate the template under
+ * the Source Creation and Management node. Right-click the template and choose
+ * Open. You can then make changes to the template in the Source Editor.
+ */
+
 package citibob.multithread;
 
-import java.sql.*;
-import citibob.sql.*;
-import citibob.multithread.ExpHandler;
-
 /**
- * Just run the CBRunnables in the current thread.  Route exceptions to the ExpHandler.
+ *
  * @author citibob
  */
-public class SimpleDbActionRunner implements ActionRunner
-{
+public interface SwingActionRunner {
 
-DbRawRunner raw;
-ExpHandler eh;
-
-public ConnPool getPool() { return raw.getPool(); }
-
-public SimpleDbActionRunner(DbRawRunner raw, ExpHandler eh)
-{
-	this.raw = raw;
-	this.eh = eh;
-}
-public SimpleDbActionRunner(ConnPool pool, ExpHandler eh)
-{
-	this(new DbRawRunner(pool), eh);
-}
-public SimpleDbActionRunner(ConnPool pool)
-{
-	this(new DbRawRunner(pool), new SimpleExpHandler());
-}
-
-public void doRun(CBRunnable rr)
-{
-	Throwable e = raw.doRun(rr);
-	if (e != null && eh != null) eh.consume(e);
-}
+public void doRun(java.awt.Component component, CBRunnable r);
 
 }

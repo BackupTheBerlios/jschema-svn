@@ -72,7 +72,7 @@ public boolean isInstance(Object o)
 public void setJType(citibob.swing.typed.Swinger f) throws ClassCastException
 {
 	Class klass = f.getJType().getObjClass();
-	if (!(Boolean.class.isInstance(klass)))
+	if (!(Boolean.class.isAssignableFrom(klass)))
 		throw new ClassCastException("Expected Boolean type, got " + klass);
 }
 
@@ -91,6 +91,10 @@ public JBoolCheckbox()
 {
 	super();
 	val = this.isSelected() ? Boolean.TRUE : Boolean.FALSE;
+	addActionListener(new java.awt.event.ActionListener() {
+	public void actionPerformed(java.awt.event.ActionEvent evt) {
+		setValue(isSelected());
+	}});
 }
 public void setValue(boolean b)
 	{ setValue(b ? Boolean.TRUE : Boolean.FALSE); }

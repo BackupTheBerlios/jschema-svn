@@ -18,39 +18,43 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package citibob.multithread;
 
+import citibob.swing.*;
 import java.sql.*;
 import citibob.sql.*;
-import citibob.multithread.ExpHandler;
+import java.awt.*;
+import javax.swing.*;
 
 /**
  * Just run the CBRunnables in the current thread.  Route exceptions to the ExpHandler.
  * @author citibob
  */
-public class SimpleDbActionRunner implements ActionRunner
+public class BusybeeDbActionRunner implements SwingActionRunner
 {
 
 DbRawRunner raw;
 ExpHandler eh;
 
-public ConnPool getPool() { return raw.getPool(); }
+//public ConnPool getPool() { return raw.getPool(); }
 
-public SimpleDbActionRunner(DbRawRunner raw, ExpHandler eh)
+public BusybeeDbActionRunner(DbRawRunner raw, ExpHandler eh)
 {
 	this.raw = raw;
 	this.eh = eh;
 }
-public SimpleDbActionRunner(ConnPool pool, ExpHandler eh)
+public BusybeeDbActionRunner(ConnPool pool, ExpHandler eh)
 {
 	this(new DbRawRunner(pool), eh);
 }
-public SimpleDbActionRunner(ConnPool pool)
+public BusybeeDbActionRunner(ConnPool pool)
 {
 	this(new DbRawRunner(pool), new SimpleExpHandler());
 }
 
-public void doRun(CBRunnable rr)
+public void doRun(Component component, CBRunnable rr)
 {
+	SwingUtil.setCursor(component, Cursor.WAIT_CURSOR);
 	Throwable e = raw.doRun(rr);
+	SwingUtil.setCursor(component, Cursor.DEFAULT_CURSOR);
 	if (e != null && eh != null) eh.consume(e);
 }
 

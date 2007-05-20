@@ -18,34 +18,52 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 package citibob.swing;
 
+import java.util.*;
+
 public abstract class AbstractRowModel implements RowModel
 {
 
-RowModel.ColListener[] colListeners;		// One listener per column.  We don't allow multiple listeners
+List<RowModel.ColListener>[] colListeners;	// Multiple listeners per column
+///// One listener per column.  We don't allow multiple listeners
 public void addColListener(int colIndex, ColListener l)
-	{ colListeners[colIndex] = l; }
+{
+	if (colListeners[colIndex] == null) colListeners[colIndex] = new LinkedList();
+	colListeners[colIndex].add(l);
+}
 
 public void removeColListener(int colIndex, ColListener l)
-	{ colListeners[colIndex] = null; }
+{
+	if (colListeners[colIndex] == null) return;
+	colListeners[colIndex].remove(l);
+//	colListeners[colIndex] = null;
+}
 
 void fireValueChanged(int colIndex)
 {
 System.out.println("AbstractRowModel: value " + colIndex + " changed to " + this.get(colIndex));
-	ColListener l = colListeners[colIndex];
-	if (l != null) l.valueChanged(colIndex);
+	List<ColListener> ll = colListeners[colIndex];
+	if (ll == null) return;
+	for (ColListener l : ll) l.valueChanged(colIndex);
 }
 void fireAllValuesChanged()
 {
 //for (int i = 0; i < listeners.length; ++i) System.out.println("    fireAllValuesChanged: " + get(i));
-	for (int i = 0; i < colListeners.length; ++i) {
-		if (colListeners[i] != null) fireValueChanged(i);
-	}
+//	for (int i = 0; i < colListeners.length; ++i) {
+//		if (colListeners[i] != null) fireValueChanged(i);
+//	}
+	for (int i = 0; i < colListeners.length; ++i) fireValueChanged(i);
 }
 void fireCurRowChanged()
 {
 	for (int i = 0; i < colListeners.length; ++i) {
-		if (colListeners[i] != null) colListeners[i].curRowChanged(i);
+		List<ColListener> ll = colListeners[i];
+		if (ll == null) continue;
+		for (ColListener l : ll) l.curRowChanged(i);
+//		if (colListeners[i] != null) colListeners[i].curRowChanged(i);
 	}
 }
-
+void setColumnCount(int ncol) {
+//	colListeners = new ColListener[tmodel.getColumnCount()];
+	colListeners = new List[ncol];
+}
 }
