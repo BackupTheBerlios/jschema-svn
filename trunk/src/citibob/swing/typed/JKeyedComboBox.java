@@ -16,11 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-/*
- * JDate.java
- *
- * Created on May 14, 2003, 8:52 PM
- */
+/* This works if there's a null in kmodel!! */
 
 package citibob.swing.typed;
 //import java.text.DateFormat;
@@ -30,6 +26,7 @@ import java.util.*;
 import java.sql.*;
 import citibob.util.KeyedModel;
 import java.awt.*;
+import java.awt.event.*;
 import citibob.sql.*;
 
 /**
@@ -40,11 +37,23 @@ Used to make a combo box that returns one of a fixed set of integer values.  The
 public class JKeyedComboBox extends JComboBox implements TypedWidget {
 KeyedModel kmodel;
 KeyedFormatter kformatter;
+Object value;
 //JType jType;
+
+static final Object NULL = new Object();
 // ------------------------------------------------------
 public JKeyedComboBox()
 {
 	setRenderer(new MyRenderer());
+	
+	// Called when user changes selection
+	addActionListener(new ActionListener() {
+	public void actionPerformed(ActionEvent evt) {
+		Object o = getSelectedItem();
+		setValue(o == NULL ? null : o);
+//		// No need for setValue(), since value === getSelectedItem()
+//		this.firePropertyChange("value", null, getValue());
+	}});
 }
 public JKeyedComboBox(KeyedModel kmodel)
 {
@@ -57,6 +66,12 @@ public void setKeyedModel(KeyedModel kmodel)
 	this.kmodel = kmodel;
 	kformatter = new KeyedFormatter(kmodel);
 	Vector keyList = kmodel.getKeyList();
+	// Handle null specially if it is in our key list.
+	if (kmodel.get(null) != null) {
+		keyList = (Vector)keyList.clone();
+		for (int i=0; i<keyList.size(); ++i)
+			if (keyList.get(i) == null) keyList.set(i, NULL);
+	}
 	DefaultComboBoxModel cmodel = new DefaultComboBoxModel(keyList);
 	super.setModel(cmodel);
 }
@@ -103,7 +118,17 @@ public Object clone() throws CloneNotSupportedException { return super.clone(); 
 public void setValue(Object d)
 {
 System.out.println("JKeyedComboBox.setValue: " + d);
-	setSelectedItem(d);
+//	// HACK: Handle it if 
+//	if (d instanceof Short) d = new Integer(((Short)d).intValue());
+	Object oldVal = value;
+	
+//	// No event if we haven't changed... (stop infinite recursion too)
+//	if (oldVal == d) return;
+//	if (oldVal != null && d != null && d.equals(oldVal)) return;
+	value = d;
+	
+	setSelectedItem(d == null ? NULL : d);
+	this.firePropertyChange("value", oldVal, d);
 }
 public void setValue(int i)
 {
@@ -113,8 +138,9 @@ public void setValue(int i)
 	
 public Object getValue()
 {
-	Object o = getSelectedItem();
-	return o;
+	return value;
+//	Object o = getSelectedItem();
+//	return o;
 }
 
 // ==============================================================
@@ -124,9 +150,13 @@ extends DefaultListCellRenderer {
     public Component getListCellRendererComponent(
 	JList list, Object value, int index,
 	boolean isSelected, boolean cellHasFocus) {
-		if (kformatter != null) value = kformatter.valueToString(value);
+//if (value == null || value == NULL) {
+//	System.out.println("hoi");
+//}
+		if (kformatter != null) value = kformatter.valueToString(
+			value == NULL ? null : value);
 		return super.getListCellRendererComponent(
-			list, value, index,isSelected,cellHasFocus);
+			list, value == NULL ? null : value, index,isSelected,cellHasFocus);
     }
 }
 

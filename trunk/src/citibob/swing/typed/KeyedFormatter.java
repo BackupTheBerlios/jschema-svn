@@ -38,10 +38,23 @@ public Object  stringToValue(String text)
 }
 public String  valueToString(Object value)
 {
-	if (value == null) return nullText;
 	String s = kmodel.toString(value);
-	if (s != null) return s;
-	return "x" + value.toString();
+	if (s == null) {	// Not found in kmodel
+		if (value == null) return nullText;
+		return "x" + value.toString();
+	}
+	return s;
+//	
+//	if (value == null) {
+//		
+//	if (s == null && value == null) return nullText;
+//		
+//		String ret = kmodel.toString(null);
+//		if (ret != null) return ret;
+//		return nullText;
+//	}
+//	if (s != null) return s;
+//	return "x" + value.toString();
 	
 }
 }

@@ -94,6 +94,9 @@ public void bindWidget(TypedWidget tw)
 //System.out.println("tw.class = " + tw.getClass());
 //	Component c = (Component)tw;
 //System.out.println("registering to receive property change from: " + tw);
+//if ("mailprefid".equals(tw.getColName())) {
+//	System.out.println("hoi");
+//}
 	tw.addPropertyChangeListener("value", this);
 	this.tw = tw;
 }
@@ -121,8 +124,11 @@ boolean valsEqual(Object a, Object b)
 /** Propagate change in underlying RowModel to widget value. */
 public void valueChanged(int col)
 {
-//System.out.println("valueChanged(" + col + ") = " + bufRow.get(col));
-//System.out.println("tw = " + tw + ", bufRow = " + bufRow);
+//if ("mailprefid".equals(tw.getColName())) {
+//	System.out.println("hoi");
+//	System.out.println("valueChanged(" + col + ") = " + bufRow.get(col));
+//	System.out.println("tw = " + tw + ", bufRow = " + bufRow);
+//}
 	if (inValueChanged) return;
 	inValueChanged = true;
 
@@ -132,6 +138,9 @@ public void valueChanged(int col)
 }
 public void curRowChanged(int col)
 {
+//if ("mailprefid".equals(tw.getColName())) {
+//	System.out.println("hoi");
+//}
 	if (inCurRowChanged) return;
 	inCurRowChanged = true;
 
@@ -146,6 +155,9 @@ public void curRowChanged(int col)
 // Implementation of PropertyChangeListener
 public void propertyChange(java.beans.PropertyChangeEvent evt)
 {
+//if ("mailprefid".equals(tw.getColName())) {
+//	System.out.println("hoi");
+//}
 	if (inPropertyChange) return;
 	inPropertyChange = true;
 
