@@ -38,6 +38,11 @@ public Column(SqlType type, String name, boolean key)
 	this.key = key;
 }
 
+public Column(SqlType type, String name)
+{
+	this(type, name, false);
+}
+
 //public Column(citibob.jschema.pgsql.SqlHoi type, String name, boolean key)
 //{
 //	init(type, name, key);
