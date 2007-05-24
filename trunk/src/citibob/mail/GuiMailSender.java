@@ -55,6 +55,7 @@ public int sendMessage(MimeMessage msg) throws Exception
 	// Keep trying to send as long as authentication errors happen.
 	// Look up into auth exactly what happened.
 	auth.setStatusMessage("");
+	auth.getPasswordAuthentication();
 	for (;;) {
 		try {
 			Transport.send(msg);

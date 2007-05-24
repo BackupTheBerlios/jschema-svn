@@ -41,7 +41,9 @@ protected  PasswordAuthentication getPasswordAuthentication()
 	prefs = prefs.node(nodePath);
 	String host = prefs.get("mail.smtp.host", "<nohost>");
 	String username = prefs.get("mail.smtp.user", "<nouser>");
-	String password = Scramble.descramble(prefs.get("mail.password", null));
+	String password = prefs.get("mail.password", null);
+	if (password.startsWith("A")) password =
+		Scramble.descramble(prefs.get("mail.password", null));
 	boolean rememberPassword = prefs.getBoolean("mail.rememberPassword", false);
 
 	AuthenticatorDialog d = new AuthenticatorDialog(null,
