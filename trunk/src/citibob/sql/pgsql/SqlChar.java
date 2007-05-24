@@ -40,7 +40,10 @@ public class SqlChar implements citibob.sql.SqlType
 
 	/** Convert an element of this type to an Sql string for use in a query */
 	public String toSql(Object o)
-		{ return SqlChar.sql((Character)o); }
+	{
+		if (o instanceof Character) return SqlChar.sql((Character)o);
+		return SqlChar.sql(((String)o).charAt(0));
+	}
 
 
 /** Converts a Java String to a form appropriate for inclusion in an
@@ -50,9 +53,16 @@ the input is null, the string "null" is returned. */
 	public static String sql(Character c, boolean quotes)
 	{
 		if (c == null) return "null";
+		char ch = c.charValue();
+		return sql(ch, quotes);
+	}
+	public static String sql(Character s)
+		{ return sql(s, true); }
+
+	public static String sql(char ch, boolean quotes)
+	{
 		StringBuffer str = new StringBuffer();
 		if (quotes) str.append('\'');
-		char ch = c.charValue();
 		switch(ch) {
 			case '\'' : str.append("''"); break;
 			default: str.append(ch); break;
@@ -60,9 +70,6 @@ the input is null, the string "null" is returned. */
 		if (quotes) str.append('\'');
 		return str.toString();
 	}
-	public static String sql(Character s)
-		{ return sql(s, true); }
-
 	public boolean isInstance(Object o)
 	{
 		if (nullable && o == null) return true;
