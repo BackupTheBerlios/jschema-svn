@@ -252,7 +252,7 @@ public void doDelete(Statement st) throws java.sql.SQLException
 /** Get Sql query to flush updates to database.
 * Only updates records that have changed; returns null
 * if nothing has changed. */
-private void doSimpleUpdate(int tab, int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleUpdate(int tab, int row, Statement st) throws java.sql.SQLException
 {
 	SqlGen gen = specs[tab].gen;
 	if (gen.valueChanged(row)) {
@@ -272,14 +272,17 @@ private void doSimpleUpdate(int tab, int row, Statement st) throws java.sql.SQLE
 	String sql = q.toString();
 System.out.println("doSimpleUpdate: " + sql);
 //		st.executeUpdate(sql);
+		specs[tab].gen.setStatus(row, 0);
+		return q;
+	} else {
+		specs[tab].gen.setStatus(row, 0);
+		return null;
 	}
-	specs[tab].gen.setStatus(row, 0);
-
 }
 // -----------------------------------------------------------
 
 /** Get Sql query to delete current record. */
-private void doSimpleDelete(int tab, int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleDelete(int tab, int row, Statement st) throws java.sql.SQLException
 {
 	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.DELETE);
 	q.setMainTable(specs[tab].tableName);
@@ -293,6 +296,7 @@ System.out.println(q.toString());
 System.out.println("doSimpleDelete: " + sql);
 	st.executeUpdate(sql);
 	specs[tab].gen.removeRow(row);
+	return q;
 }
 // -----------------------------------------------------------
 /** Get Sql query to insert record into database,

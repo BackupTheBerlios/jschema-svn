@@ -12,6 +12,9 @@ public interface App
 {
 
 public ConnPool getPool();
+/** Allow to log all database changes */
+public citibob.jschema.log.QueryLogger getLogger();
+
 /** Runs an action started from a specific Swing component. */
 public void runGui(java.awt.Component c, CBRunnable r);
 /** Only runs the action if logged-in user is a member of the correct group */
@@ -32,7 +35,6 @@ public java.util.prefs.Preferences userRoot();
 
 /** @returns Root system preferences node for this application */
 public java.util.prefs.Preferences systemRoot();
-
 
 //protected ConnPool pool;
 //protected SwingerMap swingerMap;

@@ -23,11 +23,13 @@ import javax.swing.event.*;
 import citibob.multithread.*;
 import citibob.sql.*;
 import java.util.*;
+import citibob.jschema.log.*;
 
 public class SchemaBufDbModel extends SqlGenDbModel implements TableDbModel
 {
 String whereClause;
 String orderClause;
+QueryLogger logger;
 
 boolean updateBufOnUpdate = false;	// Should we update sequence columns on insert?
 //Statement st;
@@ -47,6 +49,8 @@ public SchemaBufDbModel(SchemaBuf buf)
 {
 	super(buf.getSchema().getDefaultTable(), buf);
 }
+
+public void setLogger(QueryLogger logger) { this.logger = logger; }
 
 public void setUpdateBufOnUpdate(boolean b) { updateBufOnUpdate = b; }
 
@@ -126,26 +130,75 @@ protected ConsSqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQL
 	/** Figure out which sequence columns were not inserted, and find their keys */
 	SchemaBuf sb = (SchemaBuf)gen;
 	Schema schema = sb.getSchema();
-	String[] sinserted = q.getColumnNames();
-	TreeSet inserted = new TreeSet();
-	for (int i=0; i<sinserted.length; ++i) inserted.add(sinserted[i]);
 	
-	if (!updateBufOnUpdate) return q;
-	for (int i=0; i<schema.getColCount(); ++i) {
-		Column col = schema.getCol(i);
-		if ((col.type instanceof SqlSequence) && !inserted.contains(col.name)) {
-			// Update this in the SchemaBuf if it wasn't inserted...
-			SqlSequence seq = (SqlSequence)col.type;
-			int val = seq.getCurVal(st);
-			sb.setValueAt(new Integer(val), row, i);
+	TreeMap<String,ConsSqlQuery.NVPair> inserted = new TreeMap();
+	for (ConsSqlQuery.NVPair nv : q.getColumns()) inserted.put(nv.name, nv);
+	
+	if (updateBufOnUpdate) {
+		for (int i=0; i<schema.getColCount(); ++i) {
+			Column col = schema.getCol(i);
+			if ((col.type instanceof SqlSequence) && inserted.get(col.name)==null) {
+				// Update this in the SchemaBuf if it wasn't inserted...
+				SqlSequence seq = (SqlSequence)col.type;
+				int val = seq.getCurVal(st);
+				sb.setValueAt(new Integer(val), row, i);
+			}
 		}
 	}
-	
+
+//	// =============== Figure out logging stuff
+//	System.out.println("Insert Log");
+//	for (int i=0; i<schema.getColCount(); ++i) {
+//		// Retrieve info on column + data from Query and SchemaBuf (if present)
+//		Column col = schema.getCol(i);		
+//		ConsSqlQuery.NVPair nv = inserted.get(col.name);
+//		
+//		// Determine the value we ended up setting
+//		Object sqlval = null;		// The value we ended up setting
+//		boolean haveval = false;
+//		if (nv != null) {
+//			// Take the value we actually inserted, if it exists.
+//			sqlval = nv.value;
+//			haveval = true;
+//		} else if (sb != null) {
+//			// Take value in the SchemaBuf, which was set after the insert
+//			// due to a SqlSerial data type.  Ignore if null
+//			Object setval = sb.getValueAt(row,i);
+//			if (setval != null) {
+//				// Convert setval to a Sql string
+//				sqlval = col.getType().toSql(setval);
+//				haveval = true;
+//			}
+//		}
+//
+//		
+//		if (col.isKey()) {
+//			System.out.println("     Key field: " + col.getName() + " = " + sqlval);
+//		} else if (haveval) {
+//			System.out.println("     inserted field: " + col.getName() + " = " + sqlval);
+//		}
+//	}
+	if (logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
 	return q;
 }
 // -----------------------------------------------------------
-
-
+protected ConsSqlQuery doSimpleUpdate(int row, Statement st) throws java.sql.SQLException
+{
+	SchemaBuf sb = (SchemaBuf)gen;
+	Schema schema = sb.getSchema();
+	ConsSqlQuery q = super.doSimpleUpdate(row, st);
+	if (q != null && logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
+	return q;
+}
+/** Get Sql query to delete current record. */
+protected ConsSqlQuery doSimpleDelete(int row, Statement st) throws java.sql.SQLException
+{
+	SchemaBuf sb = (SchemaBuf)gen;
+	Schema schema = sb.getSchema();
+	ConsSqlQuery q = super.doSimpleDelete(row, st);
+	if (logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
+	return q;
+}
 // ==============================================
 private static class InstantUpdateListener implements TableModelListener {
 //	Statement st;

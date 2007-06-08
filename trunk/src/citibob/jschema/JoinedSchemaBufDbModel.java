@@ -24,6 +24,7 @@ import citibob.multithread.*;
 import citibob.sql.*;
 import java.util.*;
 import citibob.swing.table.*;
+import citibob.jschema.log.*;
 
 public class JoinedSchemaBufDbModel extends JoinedSqlGenDbModel
 {
@@ -34,7 +35,7 @@ boolean updateBufOnUpdate = false;	// Should we update sequence columns on inser
 //Statement st;
 //JTypeTableModel xtra;
 MultiJTypeTableModel model;
-
+QueryLogger logger;
 // -------------------------------------------------------------
 //public MultiSchemaBufDbModel(String[] tables, SchemaBuf[] bufs)
 //{
@@ -126,32 +127,78 @@ public void setInsertKeys(int row, ConsSqlQuery q) {}
 //	return (instantUpdateListener != null);
 //}
 
+//protected ConsSqlQuery doSimpleInsert(int tab, int row, Statement st) throws java.sql.SQLException
+//{
+//	
+//	ConsSqlQuery q = super.doSimpleInsert(tab, row, st);
+//
+//	/** Figure out which sequence columns were not inserted, and find their keys */
+//	SchemaBuf sb = getSchemaBuf(tab); //(SchemaBuf)gens[tab];
+//	Schema schema = sb.getSchema();
+//	String[] sinserted = q.getColumnNames();
+//	TreeSet inserted = new TreeSet();
+//	for (int i=0; i<sinserted.length; ++i) inserted.add(sinserted[i]);
+//
+//	if (!updateBufOnUpdate) return q;
+//	for (int i=0; i<schema.getColCount(); ++i) {
+//		Column col = schema.getCol(i);
+//		if ((col.type instanceof SqlSequence) && !inserted.contains(col.name)) {
+//			// Update this in the SchemaBuf if it wasn't inserted...
+//			SqlSequence seq = (SqlSequence)col.type;
+//			int val = seq.getCurVal(st);
+//			sb.setValueAt(new Integer(val), row, i);
+//		}
+//	}
+//	
+//	return q;
+//}
+
 protected ConsSqlQuery doSimpleInsert(int tab, int row, Statement st) throws java.sql.SQLException
 {
-	
 	ConsSqlQuery q = super.doSimpleInsert(tab, row, st);
-
+	
 	/** Figure out which sequence columns were not inserted, and find their keys */
 	SchemaBuf sb = getSchemaBuf(tab); //(SchemaBuf)gens[tab];
 	Schema schema = sb.getSchema();
-	String[] sinserted = q.getColumnNames();
-	TreeSet inserted = new TreeSet();
-	for (int i=0; i<sinserted.length; ++i) inserted.add(sinserted[i]);
-
-	if (!updateBufOnUpdate) return q;
-	for (int i=0; i<schema.getColCount(); ++i) {
-		Column col = schema.getCol(i);
-		if ((col.type instanceof SqlSequence) && !inserted.contains(col.name)) {
-			// Update this in the SchemaBuf if it wasn't inserted...
-			SqlSequence seq = (SqlSequence)col.type;
-			int val = seq.getCurVal(st);
-			sb.setValueAt(new Integer(val), row, i);
+	
+	TreeMap<String,ConsSqlQuery.NVPair> inserted = new TreeMap();
+	for (ConsSqlQuery.NVPair nv : q.getColumns()) inserted.put(nv.name, nv);
+	
+	if (updateBufOnUpdate) {
+		for (int i=0; i<schema.getColCount(); ++i) {
+			Column col = schema.getCol(i);
+			if ((col.type instanceof SqlSequence) && inserted.get(col.name)==null) {
+				// Update this in the SchemaBuf if it wasn't inserted...
+				SqlSequence seq = (SqlSequence)col.type;
+				int val = seq.getCurVal(st);
+				sb.setValueAt(new Integer(val), row, i);
+			}
 		}
 	}
-	
+
+	if (logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
 	return q;
 }
+
+
 // -----------------------------------------------------------
+protected ConsSqlQuery doSimpleUpdate(int tab, int row, Statement st) throws java.sql.SQLException
+{
+	SchemaBuf sb = getSchemaBuf(tab); //(SchemaBuf)gens[tab];
+	Schema schema = sb.getSchema();
+	ConsSqlQuery q = super.doSimpleUpdate(tab, row, st);
+	if (q != null && logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
+	return q;
+}
+/** Get Sql query to delete current record. */
+protected ConsSqlQuery doSimpleDelete(int tab, int row, Statement st) throws java.sql.SQLException
+{
+	SchemaBuf sb = getSchemaBuf(tab); //(SchemaBuf)gens[tab];
+	Schema schema = sb.getSchema();
+	ConsSqlQuery q = super.doSimpleDelete(tab, row, st);
+	if (logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
+	return q;
+}
 
 
 //// ==============================================

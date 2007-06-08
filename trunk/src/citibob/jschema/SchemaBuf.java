@@ -111,6 +111,11 @@ public boolean valueChanged(SqlRow r, int col)
 //}
 	return !(curData == null ? origData == null : curData.equals(origData));
 }
+public boolean valueChanged(int row, int col)
+{
+	SqlRow r = (SqlRow)rows.get(row);
+	return valueChanged(r, col);
+}
 public boolean valueChanged(int row)
 {
 	SqlRow r = (SqlRow)rows.get(row);
@@ -211,7 +216,11 @@ public void getUpdateCols(int row, ConsSqlQuery q, boolean updateUnchanged)
 		Object origData = r.origData[col];
 		Object curData = r.data[col];
 		Column c = schema.getCol(col);
+//if ("firstname".equals(c.getName())) {
+//	System.out.println("hoi");
+//}
 		boolean unchanged = (curData == null ? origData == null : curData.equals(origData));
+//		boolean changed = valueChanged(r, col);
 		if (updateUnchanged || !unchanged) {
 //		if (updateUnchanged || !curData.equals(origData)) {
 			q.addColumn(c.getName(), c.getType().toSql(curData));

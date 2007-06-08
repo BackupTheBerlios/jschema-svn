@@ -161,7 +161,7 @@ public void doDelete(Statement st) throws java.sql.SQLException
 /** Get Sql query to flush updates to database.
 * Only updates records that have changed; returns null
 * if nothing has changed. */
-private void doSimpleUpdate(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleUpdate(int row, Statement st) throws java.sql.SQLException
 {
 	if (gen.valueChanged(row)) {
 		ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.UPDATE);
@@ -180,14 +180,17 @@ private void doSimpleUpdate(int row, Statement st) throws java.sql.SQLException
 	String sql = q.getSql();
 System.out.println("doSimpleUpdate: " + sql);
 		st.executeUpdate(sql);
+		gen.setStatus(row, 0);
+		return q;
+	} else {
+		gen.setStatus(row, 0);
+		return null;
 	}
-	gen.setStatus(row, 0);
-
 }
 // -----------------------------------------------------------
 
 /** Get Sql query to delete current record. */
-private void doSimpleDelete(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleDelete(int row, Statement st) throws java.sql.SQLException
 {
 	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.DELETE);
 	q.setMainTable(table);
@@ -201,6 +204,7 @@ System.out.println(q.getSql());
 System.out.println("doSimpleDelete: " + sql);
 	st.executeUpdate(sql);
 	gen.removeRow(row);
+	return q;
 }
 // -----------------------------------------------------------
 /** Get Sql query to insert record into database,
