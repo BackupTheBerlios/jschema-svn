@@ -14,6 +14,9 @@ public interface App
 public ConnPool getPool();
 /** Runs an action started from a specific Swing component. */
 public void runGui(java.awt.Component c, CBRunnable r);
+/** Only runs the action if logged-in user is a member of the correct group */
+public void runGui(java.awt.Component c, String permissionGroup, CBRunnable r);
+public void runGui(java.awt.Component c, String[] permissionGroups, CBRunnable r);
 public void runApp(CBRunnable r);
 //public ActionRunner getGuiRunner();
 public ActionRunner getAppRunner();		// Useful for some things that need it.

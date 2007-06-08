@@ -18,6 +18,7 @@ public abstract class JPanelWiz extends javax.swing.JPanel implements citibob.wi
 	protected JPanelWizWrapper wrapper;
 	protected String title;
 	protected boolean cacheWiz;
+	protected boolean cacheWizFwd;
 	
 	public String getTitle() { return title; }
 	
@@ -34,6 +35,7 @@ public abstract class JPanelWiz extends javax.swing.JPanel implements citibob.wi
 	// ===========================================
 	// Wiz
 	public boolean getCacheWiz() { return cacheWiz; }
+	public boolean getCacheWizFwd() { return cacheWizFwd; }
 	public void setTitle(String title) { this.title = title; }
 	
 }

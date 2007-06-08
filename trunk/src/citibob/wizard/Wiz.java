@@ -21,6 +21,9 @@ public void setTitle(String title);
 /** Should this Wiz screen be cached when "Back" is pressed? */
 public boolean getCacheWiz();
 
+/** Should old version of this Wiz be used when we go back "forward" over it again? */
+public boolean getCacheWizFwd();
+
 /** After the Wiz is done running, report its output into a Map. */
 public void getAllValues(java.util.Map map);
 

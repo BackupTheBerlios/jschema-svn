@@ -102,8 +102,13 @@ public TypedHashMap runWizard() throws Exception
 			String submit = v.getString("submit");
 	System.out.println("submit = " + submit);
 			if ("next".equals(submit)) state = stateRec.next;
-			else if ("back".equals(submit)) state = stateRec.back;
-			else if ("cancel".equals(submit) && reallyCancel()) break;
+			else if ("back".equals(submit)) {
+				// Remove it from the cache so we re-make
+				// it going "forward" in the Wizard
+				if (!wiz.getCacheWizFwd()) wizCache.remove(state);
+				state = stateRec.back;
+				continue;
+			} else if ("cancel".equals(submit) && reallyCancel()) break;
 
 			// Do screen-specific processing
 			stateRec.process();

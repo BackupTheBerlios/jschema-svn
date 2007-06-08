@@ -33,17 +33,29 @@ package citibob.multithread;
 public class CBTask
 {
 String name;
-CBRunnable r;
+CBRunnable runnable;
 java.util.Date dTime;
-		
-public CBTask(String name, CBRunnable r)
+String[] permissions;		// Describes who can and cannot run this task.
+
+public CBTask(String name, String[] permissions, CBRunnable runnable)
 {
 	this.name = name;
-	this.r = r;
-	this.dTime = new java.util.Date();
+	this.runnable = runnable;
+	this.dTime = new java.util.Date();	
+	this.permissions = permissions;
+}
+public CBTask(String name, CBRunnable runnable)
+{
+	this(name, (String[])null, runnable);
 }	
+public CBTask(String name, String permission, CBRunnable runnable)
+{
+	this(name, new String[]{ permission}, runnable);
+}
+
+public String[] getPermissions() { return permissions; }
 public String getName() { return name; }
 public java.util.Date getDTime() { return dTime; }
-public CBRunnable getCBRunnable() { return r; }
+public CBRunnable getCBRunnable() { return runnable; }
 
 }

@@ -45,6 +45,14 @@ public HtmlDialog(Frame owner, String title, boolean modal)
 	getContentPane().add(html);
 //	this.setSize(600, 400);
 	html.addListener(this);
+	
+    // Add a listener for the close event
+    addWindowListener(new java.awt.event.WindowAdapter() {
+	public void windowClosing(WindowEvent evt) {
+		submitName = "cancel";
+		submitButton = null;
+		setVisible(false);
+    }});
 }
 
 public JTypedTextField addTextField(String name, Swinger swinger)

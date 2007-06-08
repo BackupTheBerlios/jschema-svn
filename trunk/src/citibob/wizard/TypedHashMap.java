@@ -19,6 +19,7 @@ import java.util.*;
 public class TypedHashMap extends HashMap
 {
 
+public long getLong(Object key) { return ((Long)get(key)).longValue(); }
 public int getInt(Object key) { return ((Integer)get(key)).intValue(); }
 public String getString(Object key) { return ((String)get(key)); }
 public boolean getBool(Object key) { return ((Boolean)get(key)).booleanValue(); }

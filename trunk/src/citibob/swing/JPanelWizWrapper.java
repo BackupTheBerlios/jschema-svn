@@ -50,6 +50,7 @@ public void doSubmit(String submit)
 
 /** Should this Wiz screen be cached when "Back" is pressed? */
 public boolean getCacheWiz() { return wiz.getCacheWiz(); }
+public boolean getCacheWizFwd() { return wiz.getCacheWizFwd(); }
 
 	
 	/** This method is called from within the constructor to

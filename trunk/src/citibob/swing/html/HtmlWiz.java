@@ -17,7 +17,7 @@ import javax.swing.*;
 import java.io.*;
 import java.util.*;
 import citibob.swing.typed.*;
-
+import java.awt.event.*;
 
 /**
  *
@@ -27,9 +27,12 @@ public class HtmlWiz extends HtmlDialog implements citibob.swing.SwingWiz
 {
 
 //protected HtmlPanel html;
+protected boolean cacheWiz = true;
+protected boolean cacheWizFwd = false;
 
 /** Should this Wiz screen be cached when "Back" is pressed? */
-public boolean getCacheWiz() { return true; }
+public boolean getCacheWiz() { return cacheWiz; }
+public boolean getCacheWizFwd() { return cacheWizFwd; }
 	
 /**
  * Creates a new instance of HtmlWiz 
@@ -44,7 +47,9 @@ public HtmlWiz(Frame owner, String title, boolean modal)
 	addSubmitButton("back", "<< Back");
 	addSubmitButton("next", ">> Next");
 	addSubmitButton("cancel", "Cancel");
-	super.setTitle("hoi");
+	super.setTitle("HtmlWiz");
+	
+
 }
 
 ///** Presents the Wiz to the user; when it is finished, reports output values into map. */
