@@ -28,7 +28,7 @@ public static final int UPDATE = 2;
 public static final int DELETE = 3;
 
 // ========================================
-private static class NVPair
+public static class NVPair
 {
 	public String name;
 	public String value;
@@ -37,8 +37,8 @@ private static class NVPair
 }
 // ========================================
 protected String mainTable = null;
-protected ArrayList columns = new ArrayList();
-protected ArrayList tables = new ArrayList();
+protected ArrayList<NVPair> columns = new ArrayList();
+protected ArrayList<String> tables = new ArrayList();
 protected TreeSet tableSet = new TreeSet();
 protected ArrayList whereClauses = new ArrayList();
 protected int type = SELECT;
@@ -135,6 +135,7 @@ public void addOrderClause(String wc)
 /** Sets the "special" table (for UPDATE and INSERT, not SELECT) */
 public void setMainTable(String t)
 	{ mainTable = t; }
+public String getMainTable() { return mainTable; }
 
 /** Chooses whether this is SELECT, UPDATE or INSERT query.
  This parameter is not essential. */
@@ -213,17 +214,21 @@ public String getColumnList()
 	return ret.toString();
 }
 
-/** Returns names of the columns involved in the query */
-public String[] getColumnNames()
-{
-	String[] ret = new String[columns.size()];
-	int n=0;
-	for (Iterator ii = columns.iterator(); ii.hasNext(); ) {
-		NVPair nv = (NVPair)ii.next();
-		ret[n++] = nv.name;
-	}
-	return ret;
-}
+
+public List<NVPair> getColumns() { return columns; }
+//public List<String> getTables() { return tables; }
+
+///** Returns names of the columns involved in the query */
+//public String[] getColumnNames()
+//{
+//	String[] ret = new String[columns.size()];
+//	int n=0;
+//	for (Iterator ii = columns.iterator(); ii.hasNext(); ) {
+//		NVPair nv = (NVPair)ii.next();
+//		ret[n++] = nv.name;
+//	}
+//	return ret;
+//}
 
 /** Returns a permuted list of columns. */
 public String getColumnList(int[] selectList)
