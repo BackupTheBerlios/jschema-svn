@@ -21,11 +21,11 @@ public class SqlSerial extends SqlInteger implements SqlSequence
 {
 	String seq;		// Name of the postgreSQL sequence for this serial column
 	
-	public SqlSerial(String seq, boolean n) {
-		super(n);
+	public SqlSerial(String seq, boolean nullable) {
+		super(nullable);
 		this.seq = seq;
 	}
-	public SqlSerial(String seq) { this(seq, true); }
+	public SqlSerial(String seq) { this(seq, false); }
 
 	public int getCurVal(Statement st) throws SQLException
 	{

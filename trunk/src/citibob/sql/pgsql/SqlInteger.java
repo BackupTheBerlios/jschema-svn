@@ -25,7 +25,7 @@ public class SqlInteger implements citibob.sql.SqlType
 	
 	boolean nullable = true;
 	
-	public SqlInteger(boolean n) { nullable = n; }
+	public SqlInteger(boolean nullable) { this.nullable = nullable; }
 	public SqlInteger() { this(true); }
 	
 	/** Java class used to represent this type */

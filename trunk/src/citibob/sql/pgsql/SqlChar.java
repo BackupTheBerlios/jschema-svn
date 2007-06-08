@@ -41,6 +41,7 @@ public class SqlChar implements citibob.sql.SqlType
 	/** Convert an element of this type to an Sql string for use in a query */
 	public String toSql(Object o)
 	{
+		if (o == null) return "null";
 		if (o instanceof Character) return SqlChar.sql((Character)o);
 		return SqlChar.sql(((String)o).charAt(0));
 	}
