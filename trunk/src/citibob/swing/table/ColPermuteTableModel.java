@@ -152,7 +152,7 @@ public int getColMap(int col) { return colMap[col]; }
 /** Gets the column class of a column named ``name'' in the underlying model. */
 public Class getColumnClassU(String s)
 	{ return model_u.getColumnClass(model_u.findColumn(s)); }
-public TableModel getModelU() { return model_u; }
+public CitibobTableModel getModelU() { return model_u; }
 
 
 public String getColumnName(int col)
