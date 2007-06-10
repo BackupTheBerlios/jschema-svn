@@ -52,6 +52,10 @@ public class SqlString implements citibob.sql.SqlType
 	public String toSql(Object o)
 		{ return SqlString.sql((String)o); }
 
+	public Object get(java.sql.ResultSet rs, int col) throws SQLException
+		{ return rs.getObject(col); }
+	public Object get(java.sql.ResultSet rs, String col) throws SQLException
+		{ return rs.getObject(col); }
 
 /** Converts a Java String to a form appropriate for inclusion in an
 Sql query.  This is done by single-quoting the input and repeating any

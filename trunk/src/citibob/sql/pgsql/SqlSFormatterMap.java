@@ -15,6 +15,7 @@ import citibob.sql.*;
 import citibob.sql.pgsql.*;
 import citibob.text.*;
 import citibob.swing.typed.*;
+import java.util.*;
 
 /**
  *
@@ -22,11 +23,14 @@ import citibob.swing.typed.*;
  */
 public class SqlSFormatterMap extends JavaSFormatterMap
 {
-	
+
+
 /**
  * Creates a new instance of SqlSFormatterMap 
  */
-public SqlSFormatterMap() {
+public SqlSFormatterMap() { this(null); }
+
+public SqlSFormatterMap(final TimeZone tz) {
 	super();
 	
 	// SqlBool
@@ -38,7 +42,7 @@ public SqlSFormatterMap() {
 	// SqlDate
 	this.addMaker(SqlDate.class, new SFormatterMap.Maker() {
 	public SFormatter newSFormatter(JType sqlType) {
-		return new JDateSFormatter(null, "MM-dd-yyyy");
+		return new JDateSFormatter(tz, "MM-dd-yyyy");
 	}});
 
 	// SqlInteger
@@ -62,13 +66,13 @@ public SqlSFormatterMap() {
 	// SqlTime
 	this.addMaker(SqlTime.class, new SFormatterMap.Maker() {
 	public SFormatter newSFormatter(JType sqlType) {
-		return new JDateSFormatter(null, "HH:mm:ss");
+		return new JDateSFormatter(java.util.TimeZone.getTimeZone("GMT"), "HH:mm:ss");
 	}});
 
 	// SqlTimestamp
 	this.addMaker(SqlTimestamp.class, new SFormatterMap.Maker() {
 	public SFormatter newSFormatter(JType sqlType) {
-		return new JDateSFormatter(null, "MM-dd-yyyy HH:mm");
+		return new JDateSFormatter(tz, "MM-dd-yyyy HH:mm");
 	}});
 }
 	

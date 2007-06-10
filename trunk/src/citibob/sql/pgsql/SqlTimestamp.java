@@ -19,69 +19,78 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 package citibob.sql.pgsql;
 
 import java.util.*;
+import java.sql.*;
+import java.text.*;
 
-public class SqlTimestamp  implements citibob.sql.SqlDateType //swing.typed.JDateType
+public class SqlTimestamp extends citibob.swing.typed.JDate
+implements citibob.sql.SqlDateType
 {
 
-Calendar cal;
-boolean nullable = true;
+java.text.DateFormat sqlFmt, sqlParse;
+static DateFormat gmtFmt;
 
-// -----------------------------------------------------
-public SqlTimestamp(Calendar cal, boolean nullable)
-{
-	this.cal = cal;
-	this.nullable = nullable;
+static {
+	gmtFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+	gmtFmt.setTimeZone(TimeZone.getTimeZone("GMT"));
 }
-public SqlTimestamp(TimeZone tz, boolean nullable)
-{
-	this(Calendar.getInstance(tz), nullable);
-}
-public SqlTimestamp(boolean nullable)
-	{ this(Calendar.getInstance(), nullable); }
-public SqlTimestamp()
-	{ this(Calendar.getInstance(), true); }
 // -----------------------------------------------------
-/** Java class used to represent this type */
-public Class getObjClass()
-	{ return java.sql.Timestamp.class; }
+private void setFmt() {
+	sqlFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+	sqlFmt.setCalendar(cal);
+	sqlParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+	sqlParse.setCalendar(cal);
+}
+public SqlTimestamp(Calendar cal, boolean nullable) {
+	super(cal,nullable);
+	setFmt();
+}
+//public SqlTimestamp(boolean nullable) {
+//	super(nullable);
+//	setFmt();
+//}
 
+public SqlTimestamp(TimeZone tz, boolean nullable) {
+	super(tz, nullable);
+	setFmt();
+}
+/** @param stz TimeZone of timestamps stored in database. */
+public SqlTimestamp(String stz, boolean nullable)
+	{ this(TimeZone.getTimeZone(stz), nullable); }
+public SqlTimestamp(String stz) { this(stz, true); }
+
+//public SqlTimestamp() {
+//	super();
+//	setFmt();
+//}
+// -----------------------------------------------------
 /** Convert an element of this type to an Sql string for use in a query */
 public String toSql(Object o)
 {
-	System.out.println("o.class = " + o.getClass());
-	return SqlTimestamp.sql((java.util.Date)o);
+	java.util.Date ts = (java.util.Date)o;
+	return ts == null ? "null" : ("TIMESTAMP '" + sqlFmt.format(ts) + '\'');
 }
-
-public boolean isInstance(Object o)
-	{ return (o instanceof java.util.Date); }
 // ==================================================	
-public Calendar getCalendar() { return cal; }
 /** Reads the date with the appropriate timezone. */
-public java.util.Date get(java.sql.ResultSet rs, int col)
+public java.util.Date get(java.sql.ResultSet rs, int col) throws SQLException
 {
-	throw new NullPointerException("Not yet implemented!");
+	try {
+		String s = rs.getString(col);
+		if (s == null) return null;
+		return sqlParse.parse(s);
+	} catch(java.text.ParseException e) {
+		throw new SQLException(e.getMessage());
+	}
 }
 /** Reads the date with the appropriate timezone. */
-public java.util.Date get(java.sql.ResultSet rs, String col)
+public java.util.Date get(java.sql.ResultSet rs, String col) throws SQLException
 {
-	throw new NullPointerException("Not yet implemented!");
+	return get(rs, rs.findColumn(col));
 }
 public java.util.Date truncate(java.util.Date dt)
 { return dt; }
 // ===========================================================
-	private static java.text.DateFormat sqlFmt;
-	static {
-		try {
-			sqlFmt = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		} catch(Exception e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-	}
-
-	public static String sql(java.util.Date ts)
-	{
-		return ts == null ? "null" :
-			("TIMESTAMP '" + sqlFmt.format(ts) + '\'');
-	}
+public static String gmt(java.util.Date ts)
+{
+	return ts == null ? "null" : ("TIMESTAMP '" + gmtFmt.format(ts) + '\'');	
+}
 }

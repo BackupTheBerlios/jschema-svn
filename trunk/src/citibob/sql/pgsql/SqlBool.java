@@ -36,6 +36,10 @@ public class SqlBool implements citibob.sql.SqlType
 	
 	public boolean isInstance(Object o)
 		{ return (o instanceof Boolean || (nullable && o == null)); }
+	public Object get(java.sql.ResultSet rs, int col) throws SQLException
+		{ return rs.getObject(col); }
+	public Object get(java.sql.ResultSet rs, String col) throws SQLException
+		{ return rs.getObject(col); }
 
 // ========================================================
 	public static String sql(Boolean ii)

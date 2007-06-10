@@ -20,39 +20,50 @@ package citibob.sql.pgsql;
 
 import java.text.*;
 import java.util.*;
+import java.sql.*;
 
-public class SqlDate implements citibob.swing.typed.JDateType, citibob.sql.SqlDateType
+public class SqlDate extends citibob.swing.typed.JDate
+implements citibob.sql.SqlDateType
 {
-boolean nullable = true;
-Calendar cal;	// Calendar (& TimeZone) used to convert SQL to Java dates
 // Assumes SQL dates are stored without a timezone.
+DateFormat sqlFmt;
 
 // -----------------------------------------------------
-public SqlDate(Calendar cal, boolean nullable)
-{
-	this.cal = cal;
-
-	this.nullable = nullable;
+private void setFmt() {
+	sqlFmt = new SimpleDateFormat("yyyy-MM-dd");
+	sqlFmt.setCalendar(cal);
 }
-public SqlDate(boolean nullable)
-	{ this(Calendar.getInstance(), nullable); }
+public SqlDate(Calendar cal, boolean nullable) {
+	super(cal,nullable);
+	setFmt();
+}
+//public SqlDate(boolean nullable) {
+//	super(nullable);
+//	setFmt();
+//}
 
-public SqlDate(TimeZone tz, boolean nullable)
-	{ this(Calendar.getInstance(tz), nullable); }
-public SqlDate()
-	{ this(Calendar.getInstance(), true); }
+/** @param stz TimeZone of dates stored in database. */
+public SqlDate(String stz, boolean nullable) {
+	super(stz, nullable);
+	setFmt();
+}
+public SqlDate(TimeZone tz, boolean nullable) {
+	super(tz, nullable);
+	setFmt();
+}
+//public SqlDate() {
+//	super();
+//	setFmt();
+//}
 // -----------------------------------------------------
-/** Java class used to represent this type */
-public Class getObjClass()
-	{ return java.sql.Date.class; }
+// -----------------------------------------------------
 
 /** Convert an element of this type to an Sql string for use in a query */
 public String toSql(Object o)
 {
-//	System.out.println("o.class = " + o.getClass());
-	return SqlDate.sql((java.util.Date)o);
+	java.util.Date ts = (java.util.Date)o;
+	return ts == null ? "null" : '\'' + sqlFmt.format(ts) + '\'';
 }
-
 public boolean isInstance(Object o)
 {
 	if (o == null) return nullable;
@@ -69,70 +80,35 @@ public boolean isInstance(Object o)
 		cal.get(Calendar.MILLISECOND) == 0);
 }
 // ==================================================	
-public Calendar getCalendar() { return cal; }
 /** Reads the date with the appropriate timezone. */
-public java.util.Date get(java.sql.ResultSet rs, int col)
+public java.util.Date get(java.sql.ResultSet rs, int col) throws SQLException
 {
-	throw new NullPointerException("Not yet implemented!");
+	try {
+		String s = rs.getString(col);
+		if (s == null) return null;
+		return sqlFmt.parse(s);
+	} catch(java.text.ParseException e) {
+		throw new SQLException(e.getMessage());
+	}
 }
 /** Reads the date with the appropriate timezone. */
-public java.util.Date get(java.sql.ResultSet rs, String col)
+public java.util.Date get(java.sql.ResultSet rs, String col) throws SQLException
 {
-	throw new NullPointerException("Not yet implemented!");
+	return get(rs, rs.findColumn(col));
 }
-public java.util.Date truncate(java.util.Date dt)
-{
-	cal.setTime(dt);
-	cal.set(Calendar.HOUR_OF_DAY, 0);
-	cal.set(Calendar.MINUTE, 0);
-	cal.set(Calendar.SECOND, 0);
-	cal.set(Calendar.MILLISECOND, 0);
-	return cal.getTime();
-}
-// ==================================================	
-	private static DateFormat sqlFmt;
-	static {
-		try {
-			sqlFmt = new SimpleDateFormat("yyyy-MM-dd");
-		} catch(Exception e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-	}
-	public static String sql(java.util.Date ts)
-	{
-		return ts == null ? "null" : '\'' + sqlFmt.format(ts) + '\'';
-	}
-	
 // ==========================================================
-public static List makeDateList(Date first, Date last, long periodMS)
-{
-	ArrayList ret = new ArrayList();
-	Date dt = (Date)first.clone();
-	while (dt.getTime() <= last.getTime()) {
-		ret.add(dt);
-		dt = new Date(dt.getTime() + periodMS);
-	}
-	return ret;
-}
+//public static List makeDateList(Date first, Date last, long periodMS)
+//{
+//	ArrayList ret = new ArrayList();
+//	Date dt = (Date)first.clone();
+//	while (dt.getTime() <= last.getTime()) {
+//		ret.add(dt);
+//		dt = new java.sql.Date(dt.getTime() + periodMS);
+//	}
+//	return ret;
+//}
 
 
-public static List makeDateList(Calendar cal, int firstHr, int firstMin, int lastHr, int lastMin, long periodMS)
-{
-	if (cal == null) cal = Calendar.getInstance(); //new GregorianCalendar();
-	cal.setTimeInMillis(0);
-	
-	cal.set(Calendar.HOUR_OF_DAY, firstHr);
-	cal.set(Calendar.MINUTE, firstMin);
-	java.util.Date first = new java.util.Date(cal.getTimeInMillis());
-	
-	cal.set(Calendar.HOUR_OF_DAY, lastHr);
-	cal.set(Calendar.MINUTE, lastMin);
-	java.util.Date last = new java.util.Date(cal.getTimeInMillis());
-
-	return makeDateList(first, last, periodMS);
-	
-}
 
 }
 

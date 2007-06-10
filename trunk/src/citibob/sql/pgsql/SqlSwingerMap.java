@@ -20,6 +20,7 @@ import citibob.swing.pgsql.SqlTimeSwinger;
 import citibob.swing.pgsql.SqlTimestampSwinger;
 import citibob.sql.pgsql.*;
 import citibob.swing.typed.JType;
+import java.util.*;
 
 
 /**
@@ -32,7 +33,7 @@ public class SqlSwingerMap extends JavaSwingerMap
 /**
  * Creates a new instance of SqlSwingerMap 
  */
-public SqlSwingerMap() {
+public SqlSwingerMap(final TimeZone tz) {
 	super();
 	
 	// SqlBool
@@ -44,7 +45,7 @@ public SqlSwingerMap() {
 	// SqlDate
 	this.addMaker(SqlDate.class, new SwingerMap.Maker() {
 	public Swinger newSwinger(JType sqlType) {
-		return new JDateSwinger((SqlDate)sqlType, null, "MM-dd-yyyy");
+		return new JDateSwinger((SqlDate)sqlType, tz, "MM-dd-yyyy");
 	}});
 
 	// SqlInteger
@@ -62,13 +63,13 @@ public SqlSwingerMap() {
 	// SqlTime
 	this.addMaker(SqlTime.class, new SwingerMap.Maker() {
 	public Swinger newSwinger(JType sqlType) {
-		return new SqlTimeSwinger((SqlTime)sqlType, null, "HH:mm:ss");
+		return new SqlTimeSwinger((SqlTime)sqlType, "HH:mm:ss");
 	}});
 
 	// SqlTimestamp
 	this.addMaker(SqlTimestamp.class, new SwingerMap.Maker() {
 	public Swinger newSwinger(JType sqlType) {
-		return new SqlTimestampSwinger((SqlTimestamp)sqlType, null, "MM-dd-yyyy HH:mm");
+		return new SqlTimestampSwinger((SqlTimestamp)sqlType, tz, "MM-dd-yyyy HH:mm");
 	}});
 }
 	

@@ -15,7 +15,7 @@ import java.sql.*;
 import citibob.sql.*;
 
 /**
- *
+ * TODO: Could reduce a lot of short-lifed memory allocation here...
  * @author citibob
  */
 public class PgsqlTypeSet extends BaseSqlTypeSet
