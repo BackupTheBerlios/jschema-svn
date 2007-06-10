@@ -53,6 +53,9 @@ public SwingPrefs()
 	settersType.put(JFileChooser.class, new JFileChooserPrefSetter());
 }
 
+public void setPrefs(Component c, Preferences prefs)
+{ setPrefs(c, "", prefs); }
+
 public void setPrefs(Component c, String prefix, Preferences prefs)
 {
 	nullCount = new HashMap();
@@ -77,7 +80,8 @@ private void setPrefsRecurse(Component c, String prefix, Preferences prefs)
 	if (setter != null || c instanceof PrefWidget) {
 		// Make up name for component
 		Class klass = c.getClass();
-		String name = c.getName();
+//		String name = c.getName();		// Bad default names like frame1, frame2, etc. changed every time we created container
+		String name = null;
 		if (name == null || "".equals(name) || "null".equals(name)) {
 			Integer Count = (Integer)nullCount.get(klass);
 			int nCount;
