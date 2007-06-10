@@ -7,6 +7,7 @@ import citibob.swing.typed.*;
 import citibob.mail.*;
 import javax.mail.internet.*;
 import citibob.jschema.*;
+import citibob.swing.prefs.*;
 
 public interface App
 {
@@ -25,6 +26,8 @@ public void runApp(CBRunnable r);
 public ActionRunner getAppRunner();		// Useful for some things that need it.
 public MailSender getMailSender();
 public SwingerMap getSwingerMap();
+public SwingPrefs getSwingPrefs();
+public void setUserPrefs(java.awt.Component c, String base);
 public citibob.text.SFormatterMap getSFormatterMap();
 public SchemaSet getSchemaSet();
 public Schema getSchema(String name);	// Get schema by name
@@ -35,6 +38,8 @@ public java.util.prefs.Preferences userRoot();
 
 /** @returns Root system preferences node for this application */
 public java.util.prefs.Preferences systemRoot();
+
+public TimeZone getTimeZone();
 
 //protected ConnPool pool;
 //protected SwingerMap swingerMap;
