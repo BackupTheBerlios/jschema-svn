@@ -17,6 +17,7 @@ import citibob.swing.typed.*;
 import java.util.*;
 import citibob.swing.typed.JDateType;
 import citibob.swing.typed.JDateSwinger;
+import citibob.text.*;
 
 
 /**
@@ -33,21 +34,16 @@ DateFormat dfmt;
 public SqlTimeSwinger(JDateType sqlType, DateFormat dfmt) {
 	super(sqlType, dfmt);
 }
-public static DateFormat newTimeFormat(TimeZone tz, String fmt)
+public static DateFormat newTimeFormat(String fmt)
 {
 	DateFormat dff;
-	dff = new SimpleDateFormat(fmt);
-	if (tz != null) dff.setTimeZone(tz);
+	dff = new SimpleTimeFormat(fmt);
 	return dff;
-}
-public SqlTimeSwinger(JDateType sqlType, TimeZone tz, String fmt)
-{
-	this(sqlType, newTimeFormat(tz, fmt));
-	this.fmt = fmt;
 }
 public SqlTimeSwinger(JDateType sqlType, String fmt)
 {
-	this(sqlType, TimeZone.getDefault(), fmt);
+	this(sqlType, newTimeFormat(fmt));
+	this.fmt = fmt;
 }
 // -------------------------------------------------------------------------
 public boolean renderWithWidget() { return true; }

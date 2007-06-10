@@ -29,10 +29,10 @@ public class SqlTimestampSwinger extends JDateSwinger
 //DateFormat dfmt;
 
 // -------------------------------------------------------------------------
-/** Creates a new instance of TypedWidgetSTFactory */
-public SqlTimestampSwinger(JDateType sqlType, DateFormat dfmt) {
-	super(sqlType, dfmt);
-}
+///** Creates a new instance of TypedWidgetSTFactory */
+//public SqlTimestampSwinger(JDateType sqlType, DateFormat dfmt) {
+//	super(sqlType, dfmt);
+//}
 public static DateFormat newTimestampFormat(Calendar cal, String fmt)
 {
 	DateFormat dff;
@@ -43,8 +43,12 @@ public static DateFormat newTimestampFormat(Calendar cal, String fmt)
 }
 public SqlTimestampSwinger(JDateType sqlType, Calendar cal, String fmt)
 {
-	this(sqlType, newTimestampFormat(cal, fmt));
+	super(sqlType, newTimestampFormat(cal, fmt));
 	this.fmt = fmt;
+}
+public SqlTimestampSwinger(JDateType sqlType, TimeZone tz, String fmt)
+{
+	this(sqlType, Calendar.getInstance(tz), fmt);
 }
 // -------------------------------------------------------------------------
 public boolean renderWithWidget() { return true; }
