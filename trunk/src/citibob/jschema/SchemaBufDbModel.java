@@ -74,8 +74,10 @@ public void setOrderClause(String orderClause)
 // -------------------------------------------------------------
 public void doSelect(Statement st) throws java.sql.SQLException
 {
+//	gen.fireRefreshStart();
 	getSchemaBuf().clear();
 	super.doSelect(st);
+//	gen.fireRefreshFinish();
 }
 
 public SchemaBuf getSchemaBuf()

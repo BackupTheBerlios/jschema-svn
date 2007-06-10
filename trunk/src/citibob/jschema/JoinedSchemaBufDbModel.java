@@ -73,8 +73,10 @@ public void doSelect(Statement st) throws java.sql.SQLException
 {
 //	for (int i=0; i<specs.length; ++i)
 //		getSchemaBuf(i).clear();
+//	for (int i=0; i<specs.length; ++i) specs[i].gen.fireRefreshStart();
 	doClear();
 	super.doSelect(st);
+//	for (int i=0; i<specs.length; ++i) specs[i].gen.fireRefreshFinish();
 }
 
 public SchemaBuf getSchemaBuf(int i)
