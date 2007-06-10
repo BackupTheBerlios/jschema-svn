@@ -190,7 +190,7 @@ System.out.println("doSimpleUpdate: " + sql);
 // -----------------------------------------------------------
 
 /** Get Sql query to delete current record. */
-protected ConsSqlQuery doSimpleDelete(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleDeleteNoRemoveRow(int row, Statement st) throws java.sql.SQLException
 {
 	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.DELETE);
 	q.setMainTable(table);
@@ -203,6 +203,11 @@ System.out.println(q.getSql());
 	String sql = q.getSql();
 System.out.println("doSimpleDelete: " + sql);
 	st.executeUpdate(sql);
+	return q;
+}
+protected ConsSqlQuery doSimpleDelete(int row, Statement st) throws java.sql.SQLException
+{
+	ConsSqlQuery q = doSimpleDeleteNoRemoveRow(row, st);
 	gen.removeRow(row);
 	return q;
 }
