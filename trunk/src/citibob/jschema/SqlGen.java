@@ -20,9 +20,10 @@ package citibob.jschema;
 
 import java.sql.*;
 import citibob.sql.ConsSqlQuery;
+import static citibob.jschema.RowStatusConst.*;
 
 /** NOTE: Implementations of this interface do not NECESSARILY have to be Schema-based; however, it is expected that most will be. */
-public interface SqlGen extends RowStatusConst //, citibob.swing.table.JTypeTableModel
+public interface SqlGen // extends RowStatusConst //, citibob.swing.table.JTypeTableModel
 {
 int getRowCount();
 
