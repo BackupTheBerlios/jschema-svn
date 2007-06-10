@@ -33,6 +33,7 @@ import citibob.swing.typed.*;
 import citibob.multithread.*;
 import citibob.jschema.swing.StatusTable;
 import citibob.sql.*;
+import citibob.app.*;
 
 /**
  * StatusPNC = Panel 'n Controller
@@ -42,8 +43,9 @@ public class StatusPNC extends javax.swing.JPanel {
 
 	
 SchemaBuf schemaBuf;
-ActionRunner runner;
+//ActionRunner runner;
 SchemaBufDbModel dbm;
+App app;
 
 	/** Creates new form CompleteStatusPanel */
 	public StatusPNC() {
@@ -52,13 +54,15 @@ SchemaBufDbModel dbm;
 	
 	
 	public void initRuntime(SchemaBufDbModel dbm,
-	String[] xColNames, String[] xSColMap, boolean[] editable, SwingerMap swingers,
-	ActionRunner runner)
+	String[] xColNames, String[] xSColMap, boolean[] editable, App app)
+//	SwingerMap swingers,
+//	ActionRunner runner)
 	{
 		this.dbm = dbm;
 		this.schemaBuf = dbm.getSchemaBuf();
-		this.runner = runner;
-		table.setModelU(schemaBuf, xColNames, xSColMap, editable, swingers);
+		this.app = app;
+		table.setModelU(schemaBuf, xColNames, xSColMap, editable, app.getSwingerMap());
+		table.setRowSelectionAllowed(false);
 	}
 
 	
@@ -146,7 +150,7 @@ SchemaBufDbModel dbm;
     // </editor-fold>//GEN-END:initComponents
 
 private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
-		runner.doRun(new StRunnable() { public void run(Statement st) throws Exception {
+		app.runGui(StatusPNC.this, new StRunnable() { public void run(Statement st) throws Exception {
 			dbm.doUpdate(st);
 			dbm.doSelect(st);
 		}});
@@ -154,24 +158,24 @@ private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
 }//GEN-LAST:event_bSaveActionPerformed
 
 	private void bRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRestoreActionPerformed
-		runner.doRun(new StRunnable() { public void run(Statement st) throws Exception {
+		app.runGui(StatusPNC.this, new StRunnable() { public void run(Statement st) throws Exception {
 			dbm.doSelect(st);
 		}});
 // TODO add your handling code here:
 	}//GEN-LAST:event_bRestoreActionPerformed
 
 	private void bDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDelActionPerformed
-		runner.doRun(new ERunnable() { public void run() throws Exception {
+		app.runGui(StatusPNC.this, new ERunnable() { public void run() throws Exception {
 			int selected = table.getSelectedRow();
 			if (selected != -1) {
-	System.out.println("Deleting row: " + selected);
+//	System.out.println("Deleting row: " + selected);
 				schemaBuf.deleteRow(selected);
 			}
 		}});
 	}//GEN-LAST:event_bDelActionPerformed
 
 	private void bAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAddActionPerformed
-		runner.doRun(new ERunnable() { public void run() throws Exception {
+		app.runGui(StatusPNC.this, new ERunnable() { public void run() throws Exception {
 			schemaBuf.insertRow(-1);
 		}});
 // TODO add your handling code here:
