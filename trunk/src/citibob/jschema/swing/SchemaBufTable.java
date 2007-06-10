@@ -26,7 +26,7 @@ public class SchemaBufTable extends JTypeColTable
 
 SchemaBufDbModel dbModel;
 
-public void setModelU(SchemaBufDbModel dbModel,
+public void setDbModelU(SchemaBufDbModel dbModel,
 String[] colNames, String[] sColMap, boolean[] editable,
 citibob.swing.typed.SwingerMap swingers)
 {
