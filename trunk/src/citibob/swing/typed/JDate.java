@@ -23,15 +23,14 @@ import java.util.*;
 
 public class JDate implements citibob.swing.typed.JDateType
 {
-boolean nullable = true;
-Calendar cal;	// Calendar (& TimeZone) used to convert SQL to Java dates
+protected boolean nullable = true;
+protected Calendar cal;	// Calendar (& TimeZone) used to convert SQL to Java dates
 // Assumes SQL dates are stored without a timezone.
 
 // -----------------------------------------------------
 public JDate(Calendar cal, boolean nullable)
 {
 	this.cal = cal;
-
 	this.nullable = nullable;
 }
 public JDate(boolean nullable)
@@ -39,6 +38,8 @@ public JDate(boolean nullable)
 
 public JDate(TimeZone tz, boolean nullable)
 	{ this(Calendar.getInstance(tz), nullable); }
+public JDate(String stz, boolean nullable)
+	{ this(TimeZone.getTimeZone(stz), nullable);  }
 public JDate()
 	{ this(Calendar.getInstance(), true); }
 // -----------------------------------------------------
@@ -64,16 +65,16 @@ public boolean isInstance(Object o)
 }
 // ==================================================	
 public Calendar getCalendar() { return cal; }
-/** Reads the date with the appropriate timezone. */
-public java.util.Date get(java.sql.ResultSet rs, int col)
-{
-	throw new NullPointerException("Not yet implemented!");
-}
-/** Reads the date with the appropriate timezone. */
-public java.util.Date get(java.sql.ResultSet rs, String col)
-{
-	throw new NullPointerException("Not yet implemented!");
-}
+///** Reads the date with the appropriate timezone. */
+//public java.util.Date get(java.sql.ResultSet rs, int col)
+//{
+//	throw new NullPointerException("Not yet implemented!");
+//}
+///** Reads the date with the appropriate timezone. */
+//public java.util.Date get(java.sql.ResultSet rs, String col)
+//{
+//	throw new NullPointerException("Not yet implemented!");
+//}
 public java.util.Date truncate(java.util.Date dt)
 {
 	cal.setTime(dt);
@@ -84,34 +85,34 @@ public java.util.Date truncate(java.util.Date dt)
 	return cal.getTime();
 }
 // ==================================================	
-public static List makeDateList(Date first, Date last, long periodMS)
-{
-	ArrayList ret = new ArrayList();
-	Date dt = (Date)first.clone();
-	while (dt.getTime() <= last.getTime()) {
-		ret.add(dt);
-		dt = new Date(dt.getTime() + periodMS);
-	}
-	return ret;
-}
-
-
-public static List makeDateList(Calendar cal, int firstHr, int firstMin, int lastHr, int lastMin, long periodMS)
-{
-	if (cal == null) cal = Calendar.getInstance(); //new GregorianCalendar();
-	cal.setTimeInMillis(0);
-	
-	cal.set(Calendar.HOUR_OF_DAY, firstHr);
-	cal.set(Calendar.MINUTE, firstMin);
-	java.util.Date first = new java.util.Date(cal.getTimeInMillis());
-	
-	cal.set(Calendar.HOUR_OF_DAY, lastHr);
-	cal.set(Calendar.MINUTE, lastMin);
-	java.util.Date last = new java.util.Date(cal.getTimeInMillis());
-
-	return makeDateList(first, last, periodMS);
-	
-}
+//public static List makeDateList(Date first, Date last, long periodMS)
+//{
+//	ArrayList ret = new ArrayList();
+//	Date dt = (Date)first.clone();
+//	while (dt.getTime() <= last.getTime()) {
+//		ret.add(dt);
+//		dt = new Date(dt.getTime() + periodMS);
+//	}
+//	return ret;
+//}
+//
+//
+//public static List makeDateList(Calendar cal, int firstHr, int firstMin, int lastHr, int lastMin, long periodMS)
+//{
+//	if (cal == null) cal = Calendar.getInstance(); //new GregorianCalendar();
+//	cal.setTimeInMillis(0);
+//	
+//	cal.set(Calendar.HOUR_OF_DAY, firstHr);
+//	cal.set(Calendar.MINUTE, firstMin);
+//	java.util.Date first = new java.util.Date(cal.getTimeInMillis());
+//	
+//	cal.set(Calendar.HOUR_OF_DAY, lastHr);
+//	cal.set(Calendar.MINUTE, lastMin);
+//	java.util.Date last = new java.util.Date(cal.getTimeInMillis());
+//
+//	return makeDateList(first, last, periodMS);
+//	
+//}
 
 }
 

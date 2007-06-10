@@ -44,10 +44,10 @@ public JDateSwinger(JDateType sqlType, TimeZone tz, String fmt)
 	this(sqlType, newDateFormat(tz, fmt));
 	this.fmt = fmt;
 }
-public JDateSwinger(JDateType sqlType, String fmt)
-{
-	this(sqlType, TimeZone.getDefault(), fmt);
-}
+//public JDateSwinger(JDateType sqlType, String fmt)
+//{
+//	this(sqlType, TimeZone.getDefault(), fmt);
+//}
 // -------------------------------------------------------------------------
 public boolean renderWithWidget() { return true; }
 

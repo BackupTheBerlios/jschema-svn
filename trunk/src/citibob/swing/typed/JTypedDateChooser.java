@@ -30,6 +30,7 @@ import javax.swing.*;
 import citibob.swing.calendar.*;
 import citibob.sql.*;
 import java.beans.*;
+import java.util.*;
 
 /**
  * TODO: This class need sthe once-over!
@@ -41,6 +42,12 @@ public class JTypedDateChooser extends JDateChooser implements TypedWidget {
 JDateType jType;
 //PropertyChangeSupport support = new PropertyChangeSupport(this);
 
+public JTypedDateChooser()
+{
+	super();
+//	super(null, new CalModel(Calendar.getInstance(), true));	// Dummy values for CalModel
+//	super(dateFormatString, new CalModel(Calendar.getInstance(tz), nullable));
+}
 /** Returns last legal value of the widget.  Same as method in JFormattedTextField */
 public Object getValue()
 {
@@ -55,11 +62,11 @@ public void setValue(Object d)
 // TODO: Temporarily allow null in ALL fields --- to make it work
 // in the query editor for dates...
 if (d != null) {
-	if (!isInstance(d)) throw new ClassCastException("Bad type " + d);
+	if (!isInstance(d)) throw new ClassCastException("Bad type " + d.getClass() + " " + d);
 }
 	java.util.Date dt = (d == null ? null :  jType.truncate((java.util.Date)d));
 	
-//System.out.println("JTDC: Setting date to " + dt );
+System.out.println("JTDC: Setting date to " + dt );
 	java.util.Date oldDt = getModel().getTime();
 	getModel().setTime(dt);
 	//support.firePropertyChange("value", oldDt, dt);
@@ -97,12 +104,14 @@ public void setJType(citibob.swing.typed.Swinger f) throws ClassCastException
 {
 //	jType = (SqlDateType)f.getJType();
 	jType = (JDateType)f.getJType();
-
+	
 	// Set up the type properly
 	Class klass = jType.getObjClass();
 	if (!(java.util.Date.class.isAssignableFrom(klass)))
 		throw new ClassCastException("Expected Date type, got " + klass);
-	CalModel mcal = new CalModel(jType.isInstance(null));
+//	CalModel mcal = new CalModel(jType.getCalendar(), jType.isInstance(null));
+//	CalModel mcal = new CalModel((Calendar)jType.getCalendar().clone(), jType.isInstance(null));
+	CalModel mcal = new CalModel(jType.getCalendar(), jType.isInstance(null));
 	super.setModel(mcal);
 	//super.setNullable(jType.isInstance(null));
 }

@@ -21,8 +21,6 @@ public interface JDateType extends JType
 {
 
 public Calendar getCalendar();
-public java.util.Date get(java.sql.ResultSet rs, int col);
-public java.util.Date get(java.sql.ResultSet rs, String col);
 
 /** Returns a truncated version of the input; i.e. if this is a SqlDate,
  *then truncates off hour, minute, second. */
