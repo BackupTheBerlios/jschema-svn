@@ -21,6 +21,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Created on March 20, 2005, 5:51 PM
  * TODO: Should this be in citibob.jschema package?
+ * TODO: This does not use the SqlTypeSet structure.  Thus, it may do incorrect
+ * data conversions on some types (such as dates, wrong timezone).  This should
+ * not be much of a problem, since KeyedModel is rarely if ever used for dates
+ * or times selected from the DB.
  */
 
 package citibob.util;
