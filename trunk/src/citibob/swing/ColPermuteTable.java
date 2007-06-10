@@ -39,13 +39,13 @@ public void setModelU(CitibobTableModel uModel, String[] colNames, String[] sCol
 }
 
 /** Convenience function, to be used by subclasses:
- * finds the column number based on a column name, not display name. */
+ * finds the column number in THIS table model based on a column name, not display name. */
 public int findColumnU(String s)
 {
 	return ((ColPermuteTableModel)getModel()).findColumnU(s);
 }
 
-public TableModel getModelU()
+public CitibobTableModel getModelU()
 {
 	return ((ColPermuteTableModel)getModel()).getModelU();	
 }
