@@ -157,7 +157,11 @@ public int addRowNoFire(ResultSet rs, int rowIndex) throws SQLException
 		// Should we be using column numbers here instead of names?  After all,
 		// we know col numbers because of the schema (or do we)?
 		Column col = schema.getCol(i);
-		row.data[i] = rs.getObject(pre + col.getName()); //xyzqqq
+//if (col.getName().equals("date")) {
+//	System.out.println("hoi");
+//}
+		row.data[i] = col.getType().get(rs, pre + col.getName()); //xyzqqq
+//		row.data[i] = rs.getObject(pre + col.getName()); //xyzqqq
 		row.origData[i] = row.data[i];
 //System.out.println("     col[" + i + "] = " + row.data[i] + " name = " + col.getName());
 //if (row.data[i] == null) System.out.println("             " + rs.getString(col.getName()));
