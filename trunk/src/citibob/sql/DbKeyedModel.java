@@ -24,31 +24,43 @@ implements DbChangeModel.Listener
 
 DbChangeModel change;
 String idTableName;
-String idFieldName;
-String nameFieldName;
-String orderFieldName;
+//String idFieldName;
+//String nameFieldName;
+//String orderFieldName;
 
+String sql;
+
+/** @param change model that will tell us when we need to requery.
+ @param idTableName Name of table on which a change should trigger a requery.
+ @parm sql Query to generate key/value pairs; ID must be in column 1, Name in column 2. */
+public DbKeyedModel(Statement st, DbChangeModel change,
+String idTableName, String sql)
+throws SQLException
+{
+	super();
+	this.sql = sql;
+	this.idTableName = idTableName;
+	this.change = change;
+	requery(st);
+	if (change != null) change.addListener(idTableName, this);
+}
 public DbKeyedModel(Statement st, DbChangeModel change,
 String idTableName, String idFieldName,
 String nameFieldName, String orderFieldName)
 throws SQLException
 {
-	super();
-	this.idTableName = idTableName;
-	this.idFieldName = idFieldName;
-	this.nameFieldName = nameFieldName;
-	this.orderFieldName = orderFieldName;
-	this.change = change;
-	requery(st);
-	if (change != null) change.addListener(idTableName, this);
+	this(st, change, idTableName,
+		"select " + idFieldName + ", " + nameFieldName + " from " +
+			idTableName + " order by " + orderFieldName);
 }
 
 /** Re-load keyed model from database... */
 public void requery(Statement st) throws SQLException
 {
 	clear();
-	ResultSet rs = st.executeQuery("select " + idFieldName + ", " + nameFieldName + " from " +
-			idTableName + " order by " + orderFieldName);
+//	ResultSet rs = st.executeQuery("select " + idFieldName + ", " + nameFieldName + " from " +
+//			idTableName + " order by " + orderFieldName);
+	ResultSet rs = st.executeQuery(sql);
 	addAllItems(rs, 1, 2);
 	rs.close();
 }
