@@ -45,9 +45,20 @@ public SchemaBufDbModel(SchemaBuf buf, DbChangeModel dbChange)
 	super(buf.getSchema().getDefaultTable(), buf, dbChange);
 }
 /** Uses the default table for the Schema in buf. */
+public SchemaBufDbModel(Schema schema, DbChangeModel dbChange)
+{
+	super(schema.getDefaultTable(), new SchemaBuf(schema), dbChange);
+}
+
+/** Uses the default table for the Schema in buf. */
 public SchemaBufDbModel(SchemaBuf buf)
 {
 	super(buf.getSchema().getDefaultTable(), buf);
+}
+/** Uses the default table for the Schema in buf. */
+public SchemaBufDbModel(Schema schema)
+{
+	super(schema.getDefaultTable(), new SchemaBuf(schema));
 }
 
 public void setLogger(QueryLogger logger) { this.logger = logger; }
@@ -195,8 +206,9 @@ protected ConsSqlQuery doSimpleDelete(int row, Statement st) throws java.sql.SQL
 {
 	SchemaBuf sb = (SchemaBuf)gen;
 	Schema schema = sb.getSchema();
-	ConsSqlQuery q = super.doSimpleDelete(row, st);
+	ConsSqlQuery q = super.doSimpleDeleteNoRemoveRow(row, st);
 	if (logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
+	gen.removeRow(row);
 	return q;
 }
 // ==============================================
