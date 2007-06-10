@@ -51,7 +51,7 @@ App app;
 	public StatusPNC() {
 		initComponents();
 	}
-	
+	public SchemaBufDbModel getDbModel() { return dbm; }
 	
 	public void initRuntime(SchemaBufDbModel dbm,
 	String[] xColNames, String[] xSColMap, boolean[] editable, App app)
@@ -62,7 +62,7 @@ App app;
 		this.schemaBuf = dbm.getSchemaBuf();
 		this.app = app;
 		table.setModelU(schemaBuf, xColNames, xSColMap, editable, app.getSwingerMap());
-		table.setRowSelectionAllowed(false);
+//		table.setRowSelectionAllowed(false);
 	}
 
 	
@@ -149,11 +149,19 @@ App app;
     }
     // </editor-fold>//GEN-END:initComponents
 
-private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
+public void doSave()
+{
 		app.runGui(StatusPNC.this, new StRunnable() { public void run(Statement st) throws Exception {
-			dbm.doUpdate(st);
-			dbm.doSelect(st);
+			if (dbm.valueChanged()) {
+				dbm.doUpdate(st);
+				dbm.doSelect(st);
+			}
 		}});
+	
+}
+	
+private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
+	doSave();
 // TODO add your handling code here:
 }//GEN-LAST:event_bSaveActionPerformed
 

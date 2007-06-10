@@ -130,11 +130,11 @@ System.out.println("JKeyedComboBox.setValue: " + d);
 	setSelectedItem(d == null ? NULL : d);
 	this.firePropertyChange("value", oldVal, d);
 }
-public void setValue(int i)
-{
-	Integer ii = new Integer(i);
-	setValue(ii);
-}
+//public void setValue(int i)
+//{
+//	Integer ii = new Integer(i);
+//	setValue(ii);
+//}
 	
 public Object getValue()
 {

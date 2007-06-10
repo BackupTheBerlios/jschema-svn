@@ -60,4 +60,7 @@ citibob.swing.typed.SwingerMap swingers)
 	return new SchemaBufDbModel(sb);
 }
 
+///** Does an update on the underlying 
+//public void doUpdate(java.sql.Statment st)
+
 }

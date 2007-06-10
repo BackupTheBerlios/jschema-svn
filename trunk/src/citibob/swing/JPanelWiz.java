@@ -17,7 +17,7 @@ public abstract class JPanelWiz extends javax.swing.JPanel implements citibob.wi
 {
 	protected JPanelWizWrapper wrapper;
 	protected String title;
-	protected boolean cacheWiz;
+	protected boolean cacheWiz = true;
 	protected boolean cacheWizFwd;
 	
 	public String getTitle() { return title; }
@@ -31,7 +31,9 @@ public abstract class JPanelWiz extends javax.swing.JPanel implements citibob.wi
 	public void backPressed() {}
 	public void nextPressed() {}
 	public void cancelPressed() {}
-	
+	///** After the Wiz is done running, report its output into a Map. */
+	//public void getAllValues(java.util.Map map);
+
 	// ===========================================
 	// Wiz
 	public boolean getCacheWiz() { return cacheWiz; }

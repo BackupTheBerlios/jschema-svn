@@ -51,6 +51,23 @@ public void setModelU(JTypeTableModel schemaBuf,
 		setRenderEdit(c, swing.newRenderEdit(model.isCellEditable(0, c)));
 	}
 }
+
+/** Returns the value of a column (in the underlying table) of the first selected row. */
+public Object getOneSelectedValU(String colU)
+{
+	int sel = getSelectedRow();
+	if (sel < 0) return null;
+	
+	CitibobTableModel modelU = getModelU();
+	int col = modelU.findColumn(colU);
+	return modelU.getValueAt(sel, col);	
+}
+///** Sets the render and editor (and JType) on a column */
+//public void setSwinger(int col, Swinger swing)
+//{
+//	ColPermuteTableModel model = (ColPermuteTableModel)getModel();
+//	setRenderEdit(col, swing.newRenderEdit(model.isCellEditable(0, col)));
+//}
 //	
 ///** Sets a render/edit on a colum, by UNDERLYING column name,
 // * according to the columns declared SqlType: getColumnJType(). */

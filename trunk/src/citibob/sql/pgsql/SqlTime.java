@@ -27,14 +27,14 @@ implements citibob.sql.SqlDateType
 {
 
 private static TimeZone tz;
-static java.text.DateFormat sqlFmt, sqlParse;
+static java.text.DateFormat sqlFmt;//, sqlParse;
 public static DateFormat hhmmss;
 static {
 	tz = TimeZone.getTimeZone("GMT");
 	sqlFmt = new SimpleDateFormat("HH:mm:ss.SSS");
 	sqlFmt.setTimeZone(tz);
-	sqlParse = new SimpleDateFormat("HH:mm:ss.SSSSSS");
-	sqlParse.setTimeZone(tz);
+//	sqlParse = new SimpleDateFormat("HH:mm:ss.SSSSSS");
+//	sqlParse.setTimeZone(tz);
 	hhmmss = new SimpleDateFormat("HH:mm:ss");
 	hhmmss.setTimeZone(tz);
 }
@@ -57,7 +57,14 @@ public java.util.Date get(java.sql.ResultSet rs, int col) throws SQLException
 	try {
 		String s = rs.getString(col);
 		if (s == null) return null;
-		return sqlParse.parse(s);
+		int dot = s.indexOf('.');
+		if (dot < 0) return hhmmss.parse(s);
+		else {
+			java.util.Date dt = hhmmss.parse(s.substring(0,dot));
+			double frac = Double.parseDouble("0." + s.substring(dot+1));
+			int ms = (int)(frac * 1000);
+			return new java.util.Date(dt.getTime() + ms);
+		}
 	} catch(java.text.ParseException e) {
 		throw new SQLException(e.getMessage());
 	}

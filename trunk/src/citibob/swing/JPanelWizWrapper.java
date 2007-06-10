@@ -8,6 +8,7 @@ package citibob.swing;
 
 import javax.swing.*;
 import citibob.wizard.*;
+import java.awt.event.*;
 
 /**
  * Wraps a content-ful JPanel (that is a Wiz) to create a Wiz.
@@ -19,20 +20,35 @@ protected String submit;
 JPanelWiz wiz;
 
 /** @params wiz must be a JComponent (JPanel) as well as a Wiz. */
-public JPanelWizWrapper(java.awt.Frame owner, JPanelWiz wiz)
+public JPanelWizWrapper(java.awt.Frame owner, JPanelWiz xwiz)
 {
-	super(owner, wiz.getTitle(), true);
+	super(owner, xwiz.getTitle(), true);
 	initComponents();
-	this.wiz = wiz;
+	this.wiz = xwiz;
 	wiz.setWrapper(this);
-	getContentPane().add(wiz, java.awt.BorderLayout.CENTER);
+	getContentPane().add(xwiz, java.awt.BorderLayout.CENTER);
 	pack();
+	
+	
+    // Add a listener for the close event
+    addWindowListener(new java.awt.event.WindowAdapter() {
+	public void windowClosing(WindowEvent evt) {
+		submit = "cancel";
+		wiz.cancelPressed();
+		setVisible(false);
+    }});
 }
-public JPanelWizWrapper(java.awt.Frame owner, boolean back, boolean next, JPanelWiz wiz)
+/** @param sBack (a) null if no back button, (b) "" if default back button,
+ (c) "Name" for back button with text of "Name" */
+public JPanelWizWrapper(java.awt.Frame owner, String sBack, String snext, JPanelWiz wiz)
 {
 	this(owner, wiz);
-	if (!back) bBack.setEnabled(false);
-	if (!next) bNext.setEnabled(false);
+	
+	if (sBack == null) bBack.setEnabled(false);
+	else if (!"".equals(sBack)) bBack.setText(sBack);
+	
+	if (snext == null) bNext.setEnabled(false);
+	else if (!"".equals(snext)) bNext.setText(snext);
 }
 public void getAllValues(java.util.Map map)
 {

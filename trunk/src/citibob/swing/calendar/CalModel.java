@@ -67,9 +67,13 @@ public CalModel() {
 	this(getCalInstance(), true);
 }
 /** Wraps a Calendar object. */
-public CalModel(Calendar cal, boolean nullable)
+public CalModel(Calendar xcal, boolean nullable)
 {
-	this.cal = cal;
+	this.cal = (Calendar)xcal.clone();
+	cal.set(Calendar.HOUR_OF_DAY, 0);
+	cal.set(Calendar.MINUTE, 0);
+	cal.set(Calendar.SECOND, 0);
+	cal.set(Calendar.MILLISECOND, 0);
 	this.nullable = nullable;
 	//finalCal = (Calendar)cal.clone();
 }

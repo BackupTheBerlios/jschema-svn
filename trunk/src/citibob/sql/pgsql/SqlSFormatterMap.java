@@ -66,7 +66,8 @@ public SqlSFormatterMap(final TimeZone tz) {
 	// SqlTime
 	this.addMaker(SqlTime.class, new SFormatterMap.Maker() {
 	public SFormatter newSFormatter(JType sqlType) {
-		return new JDateSFormatter(java.util.TimeZone.getTimeZone("GMT"), "HH:mm:ss");
+		return new FormatSFormatter(new SimpleTimeFormat("HH:mm:ss"));
+//			JDateSFormatter(java.util.TimeZone.getTimeZone("GMT"), "HH:mm:ss");
 	}});
 
 	// SqlTimestamp

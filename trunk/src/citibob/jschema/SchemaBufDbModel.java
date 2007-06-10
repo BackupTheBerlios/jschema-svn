@@ -31,7 +31,7 @@ String whereClause;
 String orderClause;
 QueryLogger logger;
 
-boolean updateBufOnUpdate = false;	// Should we update sequence columns on insert?
+boolean updateBufOnUpdate = true;	// Should we update sequence columns on insert?
 //Statement st;
 	
 // -------------------------------------------------------------

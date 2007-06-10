@@ -12,6 +12,7 @@ package citibob.swing;
 import citibob.wizard.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 /**
  *
@@ -21,7 +22,9 @@ public abstract class JDialogWiz extends JDialog implements SwingWiz
 {
 	
 public JDialogWiz(Frame owner, String title, boolean modal)
-	{ super(owner, title, modal); }
+{
+	super(owner, title, modal);
+}
 
 /** Should this Wiz screen be cached when "Back" is pressed? */
 public boolean getCacheWiz() { return true; }
