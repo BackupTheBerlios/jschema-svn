@@ -17,10 +17,15 @@ import java.sql.*;
  */
 public abstract class BaseSqlTypeSet implements SqlTypeSet
 {
-	
+
+public SqlType getSqlType(ResultSet rs, int col) throws SQLException
+{
+	return getSqlType(rs.getMetaData(), col);
+}
 public SqlType getSqlType(ResultSetMetaData md, int col) throws SQLException
 {
 	boolean nullable = (md.isNullable(col) != ResultSetMetaData.columnNoNulls);
+//System.out.println("col = " + col);
 	return getSqlType(md.getColumnType(col), md.getPrecision(col), md.getScale(col), nullable);
 }
 	

@@ -43,6 +43,10 @@ public class SqlDouble implements SqlType
 		if (o == null) return nullable;
 		return (o instanceof Double);
 	}
+	public Object get(java.sql.ResultSet rs, int col) throws SQLException
+		{ return rs.getObject(col); }
+	public Object get(java.sql.ResultSet rs, String col) throws SQLException
+		{ return rs.getObject(col); }
 // ================================================
 	public static String sql(Double ii)
 		{ return ii == null ? "null" : ii.toString(); }

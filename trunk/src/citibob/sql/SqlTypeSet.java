@@ -19,6 +19,7 @@ import java.sql.*;
 public interface SqlTypeSet
 {
 	
+public SqlType getSqlType(ResultSet rs, int col) throws SQLException;
 public SqlType getSqlType(ResultSetMetaData md, int col) throws java.sql.SQLException;
 
 /** @param col the first column is 1, the second is 2, ...

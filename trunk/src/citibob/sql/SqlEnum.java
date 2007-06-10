@@ -58,6 +58,10 @@ implements SqlType
 		if (!(o instanceof Integer)) return false;
 		return (kmodel.get(o) != null);
 	}
+	public Object get(java.sql.ResultSet rs, int col) throws SQLException
+		{ return rs.getObject(col); }
+	public Object get(java.sql.ResultSet rs, String col) throws SQLException
+		{ return rs.getObject(col); }
 // ================================================
 	public static String sql(Integer ii)
 		{ return ii == null ? "null" : ii.toString(); }

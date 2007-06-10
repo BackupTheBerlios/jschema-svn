@@ -32,7 +32,7 @@ implements JTypeTableModel
 {
 
 List proto;		// Prototypes for CitibobTableModel
-JType[] jTypes;		// JType of each column
+SqlType[] jTypes;		// JType of each column
 
 // =====================================================
 // DefaultTableModel handles data storage
@@ -43,7 +43,7 @@ JType[] jTypes;		// JType of each column
 /** To be used by subclasses */
 public void setColHeaders(Col[] cols)
 {
-	jTypes = new JType[cols.length];
+	jTypes = new SqlType[cols.length];
 	Object[] ids = new Object[cols.length];
 	for (int i=0; i<cols.length; ++i) {
 		ids[i] = cols[i].name;
@@ -54,12 +54,12 @@ public void setColHeaders(Col[] cols)
 }
 
 // --------------------------------------------------
-public void setColHeaders(ResultSet rs, SqlTypeSet tset) throws SQLException
+public void setColHeaders(ResultSet rs) throws SQLException
 {
 	ResultSetMetaData md = rs.getMetaData();
 	int ncol = md.getColumnCount();
 	Object[] ids = new Object[ncol];
-	jTypes = new JType[md.getColumnCount()];
+	jTypes = new SqlType[md.getColumnCount()];
 	for (int i=0; i<ncol; ++i) {
 		jTypes[i] = tset.getSqlType(md, i+1);
 //if (jTypes[i] == null) {
@@ -110,7 +110,11 @@ public void addRow(ResultSet rs) throws java.sql.SQLException
 	ResultSetMetaData meta = rs.getMetaData();
 	int ncol = meta.getColumnCount();
 	Object[] data = new Object[ncol];
-	for (int i = 0; i < ncol; ++i) data[i] = rs.getObject(i+1);
+	for (int i = 0; i < ncol; ++i) {
+		data[i] = jTypes[i].get(rs, i+1);
+//			rs.getObject(i+1);
+//		data[i] = rs.getObject(i+1);
+	}
 	addRow(data);
 }
 // --------------------------------------------------
@@ -151,7 +155,7 @@ public void executeQuery(Statement st, String sql) throws SQLException
 	ResultSet rs = null;
 	try {
 		rs = st.executeQuery(sql);
-		this.setColHeaders(rs, tset);
+		this.setColHeaders(rs);
 		addAllRows(rs);
 	} finally {
 		try { rs.close(); } catch(Exception e) {}
@@ -159,7 +163,7 @@ public void executeQuery(Statement st, String sql) throws SQLException
 }
 public void addAllRows(ResultSet rs) throws SQLException
 {
-	while (rs.next()) addRow(rs);	
+	while (rs.next()) addRow(rs);
 }
 // ===============================================================
 // Implementation of TableModel
@@ -215,8 +219,8 @@ public JType getJType(int row, int col)
 public static class Col
 {
 	public String name;
-	public JType type;
-	public Col(String name, JType type) {
+	public SqlType type;
+	public Col(String name, SqlType type) {
 		this.name = name;
 		this.type = type;
 	}
