@@ -37,7 +37,7 @@ static {
 private void setFmt() {
 	sqlFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	sqlFmt.setCalendar(cal);
-	sqlParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+	sqlParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	sqlParse.setCalendar(cal);
 }
 public SqlTimestamp(Calendar cal, boolean nullable) {
@@ -76,10 +76,24 @@ public java.util.Date get(java.sql.ResultSet rs, int col) throws SQLException
 	try {
 		String s = rs.getString(col);
 		if (s == null) return null;
-		return sqlParse.parse(s);
+		int dot = s.indexOf('.');
+		if (dot < 0) return sqlParse.parse(s);
+		else {
+			java.util.Date dt = sqlParse.parse(s.substring(0,dot));
+			double frac = Double.parseDouble("0." + s.substring(dot+1));
+			int ms = (int)(frac * 1000);
+			return new java.util.Date(dt.getTime() + ms);
+		}
 	} catch(java.text.ParseException e) {
 		throw new SQLException(e.getMessage());
 	}
+//	try {
+//		String s = rs.getString(col);
+//		if (s == null) return null;
+//		return sqlParse.parse(s);
+//	} catch(java.text.ParseException e) {
+//		throw new SQLException(e.getMessage());
+//	}
 }
 /** Reads the date with the appropriate timezone. */
 public java.util.Date get(java.sql.ResultSet rs, String col) throws SQLException

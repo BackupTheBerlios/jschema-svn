@@ -69,7 +69,7 @@ public SqlSwingerMap(final TimeZone tz) {
 	// SqlTimestamp
 	this.addMaker(SqlTimestamp.class, new SwingerMap.Maker() {
 	public Swinger newSwinger(JType sqlType) {
-		return new SqlTimestampSwinger((SqlTimestamp)sqlType, tz, "MM-dd-yyyy HH:mm");
+		return new SqlTimestampSwinger((SqlTimestamp)sqlType, tz, "MM-dd-yyyy HH:mm z");
 	}});
 }
 	
