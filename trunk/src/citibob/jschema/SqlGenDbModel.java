@@ -101,7 +101,8 @@ System.out.println("doSimpleInsert on row " + row + " of " + gen.getRowCount());
 public boolean valueChanged()
 {
 	for (int row = 0; row < gen.getRowCount(); ++row) {
-		if (gen.valueChanged(row)) return true;
+		if (gen.getStatus(row) != 0) return true;
+//		if (gen.valueChanged(row)) return true;
 	}
 	return false;
 }
