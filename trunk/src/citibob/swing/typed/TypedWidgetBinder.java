@@ -28,6 +28,7 @@ import citibob.exception.*;
 import citibob.jschema.*;
 import citibob.swing.*;
 import java.awt.*;
+import java.sql.*;
 
 /**
  * Binds a TypedWidget to a RowModel, passing events back and forth.
@@ -50,12 +51,11 @@ public void bind(TypedWidget tw, SchemaRowModel bufRow, SwingerMap map)
 	{ bind(tw, bufRow, null, map); }
 public void bind(TypedWidget tw, TableRowModel bufRow)
 	{ bind(tw, bufRow, null); }
-/** Bind widget and set its type. */
-public void bind(TypedWidget tw, SchemaRowModel bufRow, String colName, SwingerMap map)
+
+// -------------------------------------------------------------------------------
+/** Set the type of a widget */
+public static void setJType(TypedWidget tw, SchemaRowModel bufRow, String colName, SwingerMap map)
 {
-//if (colName.equals("dob")) {
-//	System.out.println("dob column reached!!!");
-//}
 	// Set the type
 	if (map != null) {
 		Schema schema = bufRow.getSchema();
@@ -64,7 +64,15 @@ public void bind(TypedWidget tw, SchemaRowModel bufRow, String colName, SwingerM
 	//System.out.println("colName = " + colName);
 		tw.setJType(f);
 	}
-
+}
+// -------------------------------------------------------------------------------
+/** Bind widget and set its type. */
+public void bind(TypedWidget tw, SchemaRowModel bufRow, String colName, SwingerMap map)
+{
+//if (colName.equals("dob")) {
+//	System.out.println("dob column reached!!!");
+//}
+	setJType(tw, bufRow, colName, map);
 	bind(tw, (TableRowModel)bufRow, colName);
 }
 
@@ -188,6 +196,47 @@ public static void bindRecursive(Component c, SchemaRowModel bufRow, SwingerMap 
 	    Component[] child = ((Container)c).getComponents();
 	    for (int i = 0; i < child.length; ++i) {
 			bindRecursive(child[i], bufRow, map);
+		}
+	}
+}
+
+// --------------------------------------------------------------
+/** Set the type of a widget
+ @param colName column in ResultSet to bind --- if null, use from tw. */
+static void setValue(TypedWidget tw, java.sql.ResultSet rs,
+SwingerMap map, citibob.sql.SqlTypeSet typeset) throws java.sql.SQLException
+{
+	String colName = tw.getColName();
+	int col = 0;
+	try {
+		col = rs.findColumn(colName);
+	} catch(java.sql.SQLException e) {
+		return;		// Col not found
+	}
+	if (col <= 0) return;
+	SqlType sqlType = typeset.getSqlType(rs, col);
+	tw.setJType(map.newSwinger(sqlType));
+	tw.setValue(sqlType.get(rs, col));
+}
+
+
+/** Sets the JType and value of all widgets in a tree, but does not bind them. */
+public static void setValueRecursive(Component c, java.sql.ResultSet rs, SwingerMap map, SqlTypeSet tset)
+throws SQLException
+{
+	// Take care of yourself
+	if (c instanceof TypedWidget) {
+		TypedWidget tw = (TypedWidget)c;
+		if (tw.getColName() != null) {
+			setValue(tw, rs, map, tset);
+		}
+	}
+
+	// Take care of your children
+	if (c instanceof Container) {
+	    Component[] child = ((Container)c).getComponents();
+	    for (int i = 0; i < child.length; ++i) {
+			setValueRecursive(child[i], rs, map, tset);
 		}
 	}
 }
