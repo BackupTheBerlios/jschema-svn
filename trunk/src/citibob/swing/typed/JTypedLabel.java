@@ -66,7 +66,7 @@ public void setJType(Swinger f)
 {
 //System.out.println("JTypedTextField.setJType: " + f + ", " + f.getJType());
 	jType = f.getJType();
-	formatter = f.newFormatterFactory().getDisplayFormatter();
+	formatter = f.newFormatterFactory().getDefaultFormatter();
 }
 public void setJType(JType jt, JFormattedTextField.AbstractFormatter formatter)
 {
