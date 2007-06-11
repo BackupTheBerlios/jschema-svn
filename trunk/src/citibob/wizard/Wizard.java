@@ -37,7 +37,6 @@ protected abstract class State {
 	public String back;		// Wiz normally traversed to on back button
 	public String next;
 	public abstract Wiz newWiz() throws Exception;	// User implements this
-	public Wiz createWiz() throws Exception { return newWiz(); }		// Override this to post-process wiz after it's created
 	/** Runs before the Wiz */
 	public void pre() throws Exception {}
 	/** Runs after the Wiz */
@@ -78,6 +77,11 @@ protected boolean checkFieldsFilledIn()
 	return true;
 }
 
+/** Override this to post-process wiz after it's created */
+protected Wiz createWiz(State stateRec) throws Exception {
+	return stateRec.newWiz();
+}
+
 /** Returns the values collected from the Wizard (for any work not
 accomplished by Wizard already). */
 public TypedHashMap runWizard() throws Exception
@@ -91,7 +95,7 @@ public TypedHashMap runWizard() throws Exception
 			if (stateRec == null) return v;		// Fell off the state graph
 			wiz = (Wiz)wizCache.get(state);
 			if (wiz == null) {
-				wiz = stateRec.createWiz();
+				wiz = createWiz(stateRec);
 				if (wiz.getCacheWiz()) wizCache.put(state, wiz);
 			}
 			stateRec.pre();		// Prepare the Wiz...
