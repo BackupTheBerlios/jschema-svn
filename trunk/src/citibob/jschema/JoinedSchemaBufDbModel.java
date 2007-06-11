@@ -51,7 +51,7 @@ public JoinedSchemaBufDbModel(DbChangeModel dbChange, TableSpec[] specs)
 	JTypeTableModel[] models = new JTypeTableModel[specs.length];
 	int i;
 	for (i=0; i<specs.length; ++i) models[i] = (JTypeTableModel)specs[i].gen;
-	MultiJTypeTableModel model = new MultiJTypeTableModel(models);
+	model = new MultiJTypeTableModel(models);
 }
 
 /** Returns a JTypeTableModel that can be displayed in a JTable */
