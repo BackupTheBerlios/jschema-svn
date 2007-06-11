@@ -142,7 +142,9 @@ public void doSelect(Statement st) throws java.sql.SQLException
 		specs[i].gen.getSelectCols(q, specs[i].asName);
 	}
 	setSelectWhere(q);	// Non-join where clauses (can include inner join as well)
-	ResultSet rs = st.executeQuery(q.toString());
+	String sql = q.getSql();
+System.out.println("JoinedSqlGenDbModel: " + sql);
+	ResultSet rs = st.executeQuery(sql);
 	int firstRow = specs[0].gen.getRowCount();
 	int n=0;
 	while (rs.next()) {
@@ -264,14 +266,14 @@ protected ConsSqlQuery doSimpleUpdate(int tab, int row, Statement st) throws jav
 		int beforeWhere = q.numWhereClauses();
 		specs[tab].gen.getWhereKey(row, q, specs[tab].tableName);
 		int afterWhere = q.numWhereClauses();
-		System.out.println(q.toString());
+		System.out.println(q.getSql());
 		if (beforeWhere == afterWhere) {
 			throw new SQLException("Update statement missing key fields in WHERE clause\n"
-				+ q.toString());
+				+ q.getSql());
 		}
-	String sql = q.toString();
+		String sql = q.getSql();
 System.out.println("doSimpleUpdate: " + sql);
-//		st.executeUpdate(sql);
+		st.executeUpdate(sql);
 		specs[tab].gen.setStatus(row, 0);
 		return q;
 	} else {
@@ -287,12 +289,12 @@ protected ConsSqlQuery doSimpleDelete(int tab, int row, Statement st) throws jav
 	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.DELETE);
 	q.setMainTable(specs[tab].tableName);
 	specs[tab].gen.getWhereKey(row, q, specs[tab].tableName);
-System.out.println(q.toString());
+System.out.println(q.getSql());
 	if (q.numWhereClauses() == 0) {
 		throw new SQLException("Delete statement missing WHERE clause\n" +
-			q.toString());
+			q.getSql());
 	}
-	String sql = q.toString();
+	String sql = q.getSql();
 System.out.println("doSimpleDelete: " + sql);
 	st.executeUpdate(sql);
 	specs[tab].gen.removeRow(row);
@@ -308,7 +310,7 @@ protected ConsSqlQuery doSimpleInsert(int tab, int row, Statement st) throws jav
 System.out.println("doSimpleInsert: ");
 	specs[tab].gen.getInsertCols(row, q, false);
 	setInsertKeys(tab, row, q);
-	String sql = q.toString();
+	String sql = q.getSql();
 System.out.println("   sql = " + sql);
 	st.executeUpdate(sql);
 	specs[tab].gen.setStatus(row, 0);
