@@ -33,7 +33,7 @@ public class SqlTimestampSwinger extends JDateSwinger
 //public SqlTimestampSwinger(JDateType sqlType, DateFormat dfmt) {
 //	super(sqlType, dfmt);
 //}
-public static DateFormat newTimestampFormat(Calendar cal, String fmt)
+private static DateFormat newTimestampFormat(Calendar cal, String fmt)
 {
 	DateFormat dff;
 	if (fmt == null) dff = DateFormat.getTimeInstance();
@@ -50,14 +50,19 @@ public SqlTimestampSwinger(JDateType sqlType, TimeZone tz, String fmt)
 {
 	this(sqlType, Calendar.getInstance(tz), fmt);
 }
+public SqlTimestampSwinger(String sDatabaseTZ, TimeZone displayTZ, String fmt)
+{ this(new citibob.sql.pgsql.SqlTimestamp(sDatabaseTZ), displayTZ, fmt); }
+public SqlTimestampSwinger(TimeZone displayTZ, String fmt)
+{ this("GMT", displayTZ, fmt); }
+
 // -------------------------------------------------------------------------
 public boolean renderWithWidget() { return true; }
 
 /** Create a widget suitable for editing this type of data. */
 protected citibob.swing.typed.TypedWidget createTypedWidget()
 {
-	JTypedDateChooser dc = new JTypedDateChooser(); 
-	if (fmt != null) dc.setDateFormatString(fmt);
+	JTypedTimestampChooser dc = new JTypedTimestampChooser(); 
+	if (fmt != null) dc.setDateFormatString(getCalendar(), fmt);
 	return dc;
 }
 

@@ -44,6 +44,10 @@ public JDateSwinger(JDateType sqlType, TimeZone tz, String fmt)
 	this(sqlType, newDateFormat(tz, fmt));
 	this.fmt = fmt;
 }
+public Calendar getCalendar()
+{
+	return dfmt.getCalendar();
+}
 //public JDateSwinger(JDateType sqlType, String fmt)
 //{
 //	this(sqlType, TimeZone.getDefault(), fmt);
@@ -55,7 +59,7 @@ public boolean renderWithWidget() { return true; }
 protected citibob.swing.typed.TypedWidget createTypedWidget()
 {
 	JTypedDateChooser dc = new JTypedDateChooser(); 
-	if (fmt != null) dc.setDateFormatString(fmt);
+	if (fmt != null) dc.setDateFormatString(getCalendar(), fmt);
 	return dc;
 }
 

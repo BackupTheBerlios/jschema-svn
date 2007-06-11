@@ -35,21 +35,22 @@ import java.util.*;
 /**
  * @author  citibob
  */
-public class JTypedDateChooser extends BaseJTypedDateChooser
+public class JTypedTimestampChooser extends BaseJTypedDateChooser
 {
-public JTypedDateChooser()
+public JTypedTimestampChooser()
 {
-	super(new JCalendarDateOnly());
+	super(new JCalendarDateHHMM());
 }
 /** Set up widget to edit a specific JType.  Note that this widget does not
  have to be able to edit ALL JTypes... it can throw a ClassCastException
  if asked to edit a JType it doesn't like. */
 public void setJType(citibob.swing.typed.Swinger f) throws ClassCastException
 {
-//	super.setJType(f, ((JDateSwinger)f).getCalendar());
-	jType = (JDateType)f.getJType();
-	// Normally, we render dates using the same TimeZone used to read them in
-	// from the database.
-	super.setJType(f, jType.getCalendar());
+	// Normally, we render timestamps using application TimeZone (it is always
+	// read from the DB in GMT).
+	super.setJType(f, ((JDateSwinger)f).getCalendar());
 }
+
 }
+
+
