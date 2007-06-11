@@ -44,15 +44,15 @@ int tmpDay;
 boolean nullValue;			// true if we're holding a null date value now...
 boolean nullable = true;			// Are we even allowed to set null values?
 
-private static Calendar getCalInstance()
-{
-	Calendar c = Calendar.getInstance();
-	c.set(Calendar.HOUR_OF_DAY, 0);
-	c.set(Calendar.MINUTE, 0);
-	c.set(Calendar.SECOND, 0);
-	c.set(Calendar.MILLISECOND, 0);
-	return c;
-}
+//private static Calendar getCalInstance()
+//{
+//	Calendar c = Calendar.getInstance();
+//	c.set(Calendar.HOUR_OF_DAY, 0);
+//	c.set(Calendar.MINUTE, 0);
+//	c.set(Calendar.SECOND, 0);
+//	c.set(Calendar.MILLISECOND, 0);
+//	return c;
+//}
 
 
 public void setNullable(boolean n)
@@ -63,23 +63,23 @@ public void setNullable(boolean n)
 public boolean isNullable() { return nullable; }
 
 // ============================================================
-public CalModel() {
-	this(getCalInstance(), true);
-}
+//public CalModel() {
+//	this(getCalInstance(), true);
+//}
 /** Wraps a Calendar object. */
 public CalModel(Calendar xcal, boolean nullable)
 {
 	this.cal = (Calendar)xcal.clone();
-	cal.set(Calendar.HOUR_OF_DAY, 0);
-	cal.set(Calendar.MINUTE, 0);
-	cal.set(Calendar.SECOND, 0);
-	cal.set(Calendar.MILLISECOND, 0);
+//	cal.set(Calendar.HOUR_OF_DAY, 0);
+//	cal.set(Calendar.MINUTE, 0);
+//	cal.set(Calendar.SECOND, 0);
+//	cal.set(Calendar.MILLISECOND, 0);
 	this.nullable = nullable;
 	//finalCal = (Calendar)cal.clone();
 }
-public CalModel(boolean nullable) {
-	this(getCalInstance(), nullable);
-}
+//public CalModel(boolean nullable) {
+//	this(getCalInstance(), nullable);
+//}
 // ============================================================
 public Calendar getCal()
 	{ return cal; }
@@ -179,8 +179,8 @@ public void setTime(Date date)
 	if (date == null) {
 		setNull(true);
 	} else {
-		setNull(false);
 		setCalTime(date);
+		setNull(false);
 	}
 }
 //   void  setTimeInMillis(long millis) 

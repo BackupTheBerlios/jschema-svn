@@ -83,18 +83,9 @@ boolean lastPopupVisible = false;
 */
 public JDateChooser()
 {
-	this(null, null, true, null);
+	this(null, new JCalendarDateOnly(), null, true, null);
 }
 
-/**
-* Creates a new JDateChooser object.
-*
-* @param icon the new icon
-*/
-public JDateChooser(ImageIcon icon)
-{
-	this(null, icon, true, null);
-}
 
 /**
 * Creates a new JDateChooser object with given date format string.
@@ -103,9 +94,9 @@ public JDateChooser(ImageIcon icon)
 * @param dateFormatString the date format string
 * @param startEmpty true, if the date field should be empty
 */
-public JDateChooser(String dateFormatString)
+public JDateChooser(String dateFormatString, JCalendar jcalendar)
 {
-	this(dateFormatString, null, true, null);
+	this(dateFormatString, jcalendar, null, true, null);
 }
 
 
@@ -118,11 +109,12 @@ public JDateChooser(String dateFormatString)
 * @param icon the icon or null (then an internal icon is used)
 * @param mnemonic false, if you wish to disable the mnemonic code
 */
-public JDateChooser(String dateFormatString,
+public JDateChooser(String dateFormatString, JCalendar jcalendar,
 ImageIcon icon, boolean mnemonic, CalModel xmodel)
 {
 	
-	jcalendar = new JCalendar();
+	this.jcalendar = jcalendar;
+//	jcalendar = new JCalendarDateOnly();
 
 //	if (dateFormatString == null) dateFormatString = "MMMMM d, yyyy";
 	if (dateFormatString == null) dateFormatString = "MM-dd-yyyy";
@@ -238,7 +230,7 @@ ImageIcon icon, boolean mnemonic, CalModel xmodel)
 //	});
 	
 	
-	if (xmodel == null) xmodel = new CalModel();
+	if (xmodel == null) xmodel = new CalModel(java.util.Calendar.getInstance(), true);
 	setModel(xmodel);
 }
 
@@ -360,9 +352,10 @@ public String getDateFormatString()
 *
 * @param dateFormatString The dateFormatString to set.
 */
-public void setDateFormatString(String dateFormatString)
+public void setDateFormatString(Calendar cal, String dateFormatString)
 {
 	this.dateFormatString = dateFormatString;
+	editor.getFormat().setCalendar(cal);
 	editor.getFormat().applyPattern(dateFormatString);
 	invalidate();
 }
@@ -457,7 +450,7 @@ public void setSModel(ReverseSpinnerDateModel mdl)
 	{
 		JFrame f = new JFrame();
 		
-		CalModel cm = new CalModel();
+		CalModel cm = new CalModel(java.util.Calendar.getInstance(), true);
 
 		JDateChooser jd = new JDateChooser();
 		f.getContentPane().add(jd);

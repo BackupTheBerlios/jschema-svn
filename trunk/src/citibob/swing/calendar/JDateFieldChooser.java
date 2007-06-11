@@ -16,48 +16,74 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-package citibob.swing.calendar;
 
+package citibob.swing.calendar;
 import java.util.*;
 import java.text.*;
+import java.beans.*;
 import javax.swing.*;
 import java.awt.event.*;
+import citibob.swing.typed.*;
 
 /**
  *
  * @author  citibob
  */
-public class JMonthChooser
-extends javax.swing.JPanel implements CalModel.Listener
+public class JDateFieldChooser extends javax.swing.JPanel implements CalModel.Listener
 {
+	
+boolean inPropertyChange = false;
+JFormattedTextField tfYear;
+int dateField;			// eg: Calendar.YEAR, Calendar.HOUR, etc.
 
-/** Creates new form JMonthChooser */
-public JMonthChooser() {
+/** Creates new form JYearChooser */
+public JDateFieldChooser()
+{
 	initComponents();
+}
+public void initRuntime(int dateField, String sformat)
+{
+	this.dateField = dateField;
 
-	// Set up the month names --- just use default locale for now.
-	Locale locale = Locale.getDefault();
-	DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(locale);
-	String[] monthNames = dateFormatSymbols.getMonths();
-	for (int i = 0; i < 12; i++) monthBox.addItem(monthNames[i]);
+	
+	// Add the year text field...
+	Format format = new java.text.DecimalFormat(sformat);
+	tfYear = new JFormattedTextField(format);
+	tfYear.setValue(new Integer(0));
+	add(tfYear, java.awt.BorderLayout.CENTER);	
 
-	monthBox.addActionListener(new ActionListener() {
-    public void actionPerformed(ActionEvent e) {
-		int month = monthBox.getSelectedIndex();
-		if (month == getMonth()) return;
-		setMonth(month);
-    }});
-//	// TODO: Java 1.4.2 doesn't work with a JComboBox in a JPopupMenu
-//	// For now, disable the combo box.
-	monthBox.setEnabled(false);
 	
 	spinner.getUp().addMouseListener(new SpinnerListener(-1));
 	spinner.getDown().addMouseListener(new SpinnerListener(1));
+	
+	
+//	JFormattedTextField.AbstractFormatterFactory factory = new javax.swing.text.DefaultFormatterFactory(format);
+//	tfYear.setFormatterFactory(tfYear.getDefaultFormatterFactory(format));
+	
+	tfYear.addPropertyChangeListener(new PropertyChangeListener() {
+	public  void  propertyChange(PropertyChangeEvent evt) {
+		if ("value".equals(evt.getPropertyName())) {
+			inPropertyChange = true;
+			Object o = tfYear.getValue();
+			System.out.println(o.getClass());
+			Number Y = (Number)o;
+			setYear(Y.intValue());
+		}
+	}});
 }
-int getMonth()
-	{ return model.getCal().get(Calendar.MONTH); }
-void setMonth(int m)
-	{ model.set(Calendar.MONTH, m); }
+int getYear()
+	{ return model.getCal().get(dateField); }
+void setYear(int m)
+{
+	int y = getYear();
+	if (y == m) return;		// Break infinite recursion.
+	model.set(dateField, m); 
+
+//spinner.getUp().setFocusable(true);
+//spinner.getUp().requestFocus();
+//System.out.println("Focusable = " + spinner.getUp().isFocusable());
+
+}
 // =====================================================
 // Standard for all the JxxxChooser calendar sub-components
 CalModel model;
@@ -68,10 +94,6 @@ public void setModel(CalModel m) {
 	calChanged();
 }
 public CalModel getModel() { return model; }
-public void nullChanged() {
-	// TODO: Don't for now, we're permanently disabled...
-	// citibob.swing.WidgetTree.setEnabled(this, !model.isNull());
-}
 // =====================================================
 
 // ===================================================================
@@ -81,22 +103,41 @@ int incr;
 public SpinnerListener(int a) { incr=a; }
 public void  mousePressed(MouseEvent e) 
 {
-		int month = getMonth();
-		setMonth(month + incr);
+		int month = getYear();
+		setYear(month + incr);
 }}
+// ===================================================================
 // ===================================================================
 // CalModel.Listener
 /**  Value has changed. */
 public void calChanged()
 {
-	int month = getMonth();
-	monthBox.setSelectedIndex(month);
+	int year = getYear();
+	Number Y = (Number)tfYear.getValue();
+	if (Y.intValue() == year) return;		// No change; break recursion
+	tfYear.setValue(new Integer(year));
 }
+public void dayButtonSelected() {}
+public void nullChanged() { citibob.swing.WidgetTree.setEnabled(this, !model.isNull()); }
+// ===================================================================
+// These are called by the Integer TextField.
+class YearObjModel implements ObjModel
+{
+	public void setValue(Object o) {
+		int year = ((Integer)o).intValue();
+		setYear(year);
+	}
+	public Object getValue() {
+		return new Integer(getYear());
+	}
+}
+// ===================================================================
 
 
 /**  The "final" value has been changed. */
-public void dayButtonSelected() {}
+public void finalChanged() {}	// don't listen to it.
 // ===================================================================
+	
 	
 	/** This method is called from within the constructor to
 	 * initialize the form.
@@ -105,12 +146,9 @@ public void dayButtonSelected() {}
 	 */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
-        monthBox = new javax.swing.JComboBox();
         spinner = new citibob.swing.calendar.JSpinnerButtons();
 
         setLayout(new java.awt.BorderLayout());
-
-        add(monthBox, java.awt.BorderLayout.CENTER);
 
         add(spinner, java.awt.BorderLayout.EAST);
 
@@ -119,32 +157,7 @@ public void dayButtonSelected() {}
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox monthBox;
     private citibob.swing.calendar.JSpinnerButtons spinner;
     // End of variables declaration//GEN-END:variables
-
-	
-	public static void main(String[] args)
-	{
-		JFrame f = new JFrame();
-		f.getContentPane().setLayout(new javax.swing.BoxLayout(f.getContentPane(), javax.swing.BoxLayout.Y_AXIS));
-		
-		CalModel cm = new CalModel(Calendar.getInstance(), true);
-		
-		JMonthChooser jm = new JMonthChooser();
-		jm.setModel(cm);
-		f.getContentPane().add(jm);
-		
-		JYearChooser jy = new JYearChooser();
-		jy.setModel(cm);
-		f.getContentPane().add(jy);
-
-		JDayChooser jd = new JDayChooser();
-		jd.setModel(cm);
-		f.getContentPane().add(jd);
-		
-		f.setSize(400,400);
-		f.show();
-	}
 	
 }
