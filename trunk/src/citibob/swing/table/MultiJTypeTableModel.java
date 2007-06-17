@@ -130,7 +130,11 @@ public JType getJType(int row, int col)
  Name should be tableName.colName*/
 public int findColumn(String name)
 {
-	return colMap.get(name).col;
+	ColRec rec = colMap.get(name);
+if (rec == null) {
+System.out.println("hoi");
+}
+	return rec.col;
 }
 // ===============================================================
 // TableModel

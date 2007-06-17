@@ -31,7 +31,7 @@ public class JoinedSchemaBufDbModel extends JoinedSqlGenDbModel
 String whereClause;
 String orderClause;
 
-boolean updateBufOnUpdate = false;	// Should we update sequence columns on insert?
+boolean updateBufOnUpdate = true;	// Should we update sequence columns on insert?
 //Statement st;
 //JTypeTableModel xtra;
 MultiJTypeTableModel model;
@@ -41,6 +41,11 @@ QueryLogger logger;
 //{
 //	super(tables, bufs);
 //}
+public JoinedSchemaBufDbModel(DbChangeModel dbChange, TableSpec[] specs, String whereClause)
+{
+	this(dbChange, specs);
+	setWhereClause(whereClause);
+}
 /** Uses the default table for the Schema in buf.
  @param xtra Report columns not derived from the database in a standard way. */
 public JoinedSchemaBufDbModel(DbChangeModel dbChange, TableSpec[] specs)

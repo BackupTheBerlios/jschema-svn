@@ -74,6 +74,7 @@ public void setKeyedModel(KeyedModel kmodel)
 	}
 	DefaultComboBoxModel cmodel = new DefaultComboBoxModel(keyList);
 	super.setModel(cmodel);
+	if (keyList.size() > 0) this.setSelectedIndex(0);	// Make sure getValue() returns something
 }
 public void setJType(Swinger f)
 {

@@ -115,6 +115,7 @@ public void setJType(citibob.swing.typed.Swinger f, Calendar cal) throws ClassCa
 //	CalModel mcal = new CalModel(jType.getCalendar(), jType.isInstance(null));
 //	CalModel mcal = new CalModel((Calendar)jType.getCalendar().clone(), jType.isInstance(null));
 	CalModel mcal = new CalModel(cal, jType.isInstance(null));
+	mcal.setCalTime(jType.truncate(mcal.getCalTime()));	// Make sure Calendar always stores a valid date/time value
 	super.setModel(mcal);
 	//super.setNullable(jType.isInstance(null));
 }
