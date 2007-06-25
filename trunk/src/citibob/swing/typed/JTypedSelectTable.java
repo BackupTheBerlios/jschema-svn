@@ -11,6 +11,9 @@ package citibob.swing.typed;
 
 import citibob.swing.*;
 import citibob.swing.table.*;
+import java.awt.*;
+import javax.swing.table.*;
+import javax.swing.*;
 
 /**
  * Allows user to select rows in a table, returns one column as the value of this widget.
@@ -21,7 +24,7 @@ implements TypedWidget
 {
 
 int valueColU = 0;		// This column in the selected row will be returned as the value
-	
+
 /** Controls which column in selected row will be returned as the value */
 public void setValueColU(String name)
 	{ valueColU = getModelU().findColumn(name); }

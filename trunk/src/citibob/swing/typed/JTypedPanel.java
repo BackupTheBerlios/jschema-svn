@@ -10,14 +10,18 @@
 package citibob.swing.typed;
 
 /**
- * 
+ * Base class to create complex typed widgets
  * @author citibob
  */
-public class JTypedScrollPane
-extends javax.swing.JScrollPane implements TypedWidget
+public class JTypedPanel
+extends javax.swing.JPanel implements TypedWidget
 {
 
-TypedWidget subWidget() { return (TypedWidget)getComponent(0); }
+/** Set by overriding class; the value of this object will be passed along.
+ Often, this will be a JTypedSelectTable. */
+protected TypedWidget subTypedWidget;
+	
+TypedWidget subWidget() { return subTypedWidget; }
 	
 /** Returns last legal value of the widget.  Same as method in JFormattedTextField */
 public Object getValue() { return subWidget().getValue(); }

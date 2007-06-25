@@ -17,11 +17,13 @@ import java.text.*;
  */
 public class ToStringSFormatter implements SFormatter
 {
-	Format fmt;
+//	Format fmt;
+	String nullval = "";
 	
 	public String  valueToString(Object value) throws java.text.ParseException
 	{
-		return value.toString();
+		return (value == null ? nullval : value.toString());
+//		return value.toString();
 	}
 	public Object  stringToValue(String text)  throws java.text.ParseException
 	{

@@ -155,13 +155,17 @@ String url, String user, String password)
 public static int readInt(Statement st, String sql) throws SQLException
 {
 	ResultSet rs = null;
-	try {
-		rs = st.executeQuery(sql);
-		rs.next();
-		int ret = rs.getInt(1);
-		return ret;
-	} finally {
-		try { rs.close(); } catch(Exception e) {}
-	}
+	rs = st.executeQuery(sql);
+	rs.next();
+	int ret = rs.getInt(1);
+	return ret;
+}
+public static String readString(Statement st, String sql) throws SQLException
+{
+	ResultSet rs = null;
+	rs = st.executeQuery(sql);
+	rs.next();
+	String ret = rs.getString(1);
+	return ret;
 }
 }

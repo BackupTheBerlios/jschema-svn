@@ -111,6 +111,7 @@ public void addRow(ResultSet rs) throws java.sql.SQLException
 	int ncol = meta.getColumnCount();
 	Object[] data = new Object[ncol];
 	for (int i = 0; i < ncol; ++i) {
+//if (i == )
 		data[i] = jTypes[i].get(rs, i+1);
 //			rs.getObject(i+1);
 //		data[i] = rs.getObject(i+1);

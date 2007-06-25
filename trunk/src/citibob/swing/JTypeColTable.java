@@ -19,6 +19,8 @@ import citibob.jschema.*;
 import citibob.swing.table.*;
 import citibob.swing.typed.*;
 import citibob.swing.typed.JType;
+import java.awt.*;
+import citibob.text.*;
 
 /**
  * A table with one type per column.  Integrated with ColPermuteTable, so it's
@@ -27,7 +29,24 @@ import citibob.swing.typed.JType;
  */
 public class JTypeColTable extends ColPermuteTable
 {
-	
+
+ColPermuteTableModel ttModel;	// Tooltips for each column
+SFormatter[] ttFmt;				// Formatter for each tooltip
+
+/** Do tooltips.  This could be pushed up the class hierarchy if we wish. */
+public Component prepareRenderer(TableCellRenderer renderer,
+ int rowIndex, int vColIndex) {
+	Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+	if (c instanceof JComponent) {
+		JComponent jc = (JComponent)c;
+		String ttip = getTooltip(rowIndex, vColIndex);
+//	System.out.println(ttip);
+		jc.setToolTipText(ttip);
+//		jc.setToolTipText("<html>This is the first line<br>This is the second line</html>");
+	}
+	return c;
+}
+
 /** @param schemaBuf Underling data buffer to use
  * @param typeCol Name of type column in the schema
  * @param xColNames Columns (other than type and status) from schema to display
@@ -49,6 +68,38 @@ public void setModelU(JTypeTableModel schemaBuf,
 		Swinger swing = swingers.newSwinger(sqlType);
 		if (swing == null) continue;
 		setRenderEdit(c, swing.newRenderEdit(model.isCellEditable(0, c)));
+	}
+}
+
+/** @param schemaBuf Underling data buffer to use
+ * @param typeCol Name of type column in the schema
+ * @param xColNames Columns (other than type and status) from schema to display
+ * @param ttColMap Column in underlying table to display as tooltip for each column in displayed table.
+ */
+public void setModelU(JTypeTableModel schemaBuf,
+		String[] colNames, String[] sColMap, String[] ttColMap, boolean[] editable,
+		citibob.swing.typed.SwingerMap swingers, citibob.text.SFormatterMap smap)
+{
+	this.setModelU(schemaBuf, colNames, sColMap, editable, swingers);
+	
+	// Come up with model for all the tooltips
+	ttModel = new ColPermuteTableModel(schemaBuf, colNames, ttColMap, editable);
+	ttFmt = new SFormatter[ttModel.getColumnCount()];
+	for (int i=0; i<ttModel.getColumnCount(); ++i) {
+		int colU = ttModel.getColMap(i);
+		if (colU < 0) continue;
+		ttFmt[i] = smap.newSFormatter(schemaBuf.getJType(0, colU));
+	}
+}
+
+/** Override this to do tooltips in custom manner.  For now, we return the "tooltip column" */
+public String getTooltip(int row, int col)
+{
+	if (ttModel == null) return null;
+	try {
+		return ttFmt[col].valueToString(ttModel.getValueAt(row, col)); // + "\nHoi";
+	} catch(java.text.ParseException e) {
+		return "<JTypeColTable: ParseException>\n" + e.getMessage();
 	}
 }
 

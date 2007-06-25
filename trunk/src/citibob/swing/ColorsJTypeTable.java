@@ -19,7 +19,8 @@ import citibob.swing.typed.*;
 import java.awt.*;
 
 /**
- *
+ * TODO: use prepareRenderer instead
+ * See: http://www.exampledepot.com/egs/javax.swing.table/Tips.html?l=rel
  * @author citibob
  */
 public abstract class ColorsJTypeTable extends JTypeTable implements TableCellRenderer

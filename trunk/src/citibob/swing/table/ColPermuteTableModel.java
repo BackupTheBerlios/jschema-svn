@@ -147,6 +147,8 @@ public int findColumnU(String s)
 	int col_t = iColMap[col_u];
 	return col_t;
 }
+
+/** Column map: i in this table --> colMap[i] in underlying */
 public int getColMap(int col) { return colMap[col]; }
 
 /** Gets the column class of a column named ``name'' in the underlying model. */
