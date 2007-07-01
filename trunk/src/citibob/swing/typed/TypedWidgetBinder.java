@@ -59,7 +59,10 @@ public static void setJType(TypedWidget tw, SchemaRowModel bufRow, String colNam
 	// Set the type
 	if (map != null) {
 		Schema schema = bufRow.getSchema();
-		JType sqlType = schema.getCol(schema.findCol(colName)).getType();
+		int col = schema.findCol(colName);
+		if (col < 0) return;		// This widget was not meant for us
+//		if (col < 0) System.out.println("TypedWidgetBinder: Cannot find column nanmed " + colName);
+		JType sqlType = schema.getCol(col).getType();
 		Swinger f = map.newSwinger(sqlType);		// Default ways to render & edit
 	//System.out.println("colName = " + colName);
 		tw.setJType(f);
@@ -81,7 +84,8 @@ public void bind(TypedWidget tw, TableRowModel bufRow, String colName)
 {
 	if (colName == null) colName = tw.getColName();
 	colNo = bufRow.findColumn(colName);
-	
+	if (colNo < 0) return;		// This column is not for us
+
 	bindRowModel(bufRow, colNo);
 	bindWidget(tw);
 	
