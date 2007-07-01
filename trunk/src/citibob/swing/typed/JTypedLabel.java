@@ -50,6 +50,7 @@ JType jType;
 JFormattedTextField.AbstractFormatter formatter;
 Object val;
 String nullDisplay = "";
+boolean useToolTips = true;		// Should we set the tooltip to the same as the label text?
 
 public JTypedLabel()
 {
@@ -96,7 +97,9 @@ public void setValue(Object o)
 	if (val == null) setText(nullDisplay);
 	else {
 		try {
-			setText(formatter.valueToString(val));
+			String text = formatter.valueToString(val);
+			setText(text);
+			if (useToolTips) setToolTipText(text);
 		} catch(java.text.ParseException e) {
 			setText("<parseException>");
 		}

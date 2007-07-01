@@ -14,16 +14,18 @@ import citibob.swing.table.*;
 import java.awt.*;
 import javax.swing.table.*;
 import javax.swing.*;
+import javax.swing.event.*;
 
 /**
  * Allows user to select rows in a table, returns one column as the value of this widget.
  * @author citibob
  */
 public class JTypedSelectTable extends JTypeColTable
-implements TypedWidget
+implements TypedWidget, ListSelectionListener
 {
 
 int valueColU = 0;		// This column in the selected row will be returned as the value
+Object val = null;
 
 /** Controls which column in selected row will be returned as the value */
 public void setValueColU(String name)
@@ -31,16 +33,16 @@ public void setValueColU(String name)
 	
 /** Returns last legal value of the widget.  Same as method in JFormattedTextField */
 public Object getValue()
-{
-	int selRow = this.getSelectedRow();
-	if (selRow < 0) return null;
-	return getModelU().getValueAt(selRow, valueColU);
-}
+{ return val; }
 
 /** Sets the value.  Same as method in JFormattedTextField.  Fires a
  * propertyChangeEvent("value") when calling setValue() changes the value. */
 public void setValue(Object o)
 {
+	if (o == null) {
+		getSelectionModel().clearSelection();
+		return;
+	}
 	for (int i=0; i<getModel().getRowCount(); ++i) {
 		Object val = getModelU().getValueAt(i, valueColU);
 		boolean eq = (val == null ? o == null : o.equals(val));
@@ -80,6 +82,24 @@ public String getColName() { return colName; }
 public void setColName(String col) { colName = col; }
 //public Object clone() throws CloneNotSupportedException { return super.clone(); }
 // ---------------------------------------------------
+// ================================================================
+// ListSelectionListener
+//class SharedListSelectionHandler implements ListSelectionListener {
+public void valueChanged(ListSelectionEvent e) {
+//	ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+//
+//	int firstIndex = e.getFirstIndex();
+//	int lastIndex = e.getLastIndex();
+//	boolean isAdjusting = e.getValueIsAdjusting();
+
+	Object oldval = val;
+	
+	int selRow = this.getSelectedRow();
+	if (selRow < 0) val = null;
+	else val = getModelU().getValueAt(selRow, valueColU);
+	if (oldval == val) return;		// Try to filter out at least a few spurious events.
+	firePropertyChange("value", oldval, val);
+}
 
 	
 }
