@@ -88,7 +88,9 @@ public void setModelU(JTypeTableModel schemaBuf,
 	for (int i=0; i<ttModel.getColumnCount(); ++i) {
 		int colU = ttModel.getColMap(i);
 		if (colU < 0) continue;
-		ttFmt[i] = smap.newSFormatter(schemaBuf.getJType(0, colU));
+		JType jt = schemaBuf.getJType(0, colU);
+		if (jt == null) continue;
+		ttFmt[i] = smap.newSFormatter(jt);
 	}
 }
 
@@ -97,6 +99,7 @@ public String getTooltip(int row, int col)
 {
 	if (ttModel == null) return null;
 	try {
+		if (ttFmt[col] == null) return null;
 		return ttFmt[col].valueToString(ttModel.getValueAt(row, col)); // + "\nHoi";
 	} catch(java.text.ParseException e) {
 		return "<JTypeColTable: ParseException>\n" + e.getMessage();

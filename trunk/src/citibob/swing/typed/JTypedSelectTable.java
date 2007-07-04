@@ -12,6 +12,7 @@ package citibob.swing.typed;
 import citibob.swing.*;
 import citibob.swing.table.*;
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.table.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -26,6 +27,14 @@ implements TypedWidget, ListSelectionListener
 
 int valueColU = 0;		// This column in the selected row will be returned as the value
 Object val = null;
+boolean isHighlightMouseover = true;		// SHould we highlight rows when mousing over?
+
+public JTypedSelectTable()
+{
+	super();
+	this.addMouseListener(new MyMouseAdapter());
+	this.addMouseMotionListener(new MyMouseMotionAdapter());
+}
 
 /** Controls which column in selected row will be returned as the value */
 public void setValueColU(String name)
@@ -53,6 +62,9 @@ public void setValue(Object o)
 	}
 	getSelectionModel().clearSelection();
 }
+
+public void setHighlightMouseover(boolean b) { isHighlightMouseover = b; }
+public boolean getHighlightMouseover(boolean b) { return isHighlightMouseover; }
 
 /** From TableCellEditor (in case this is being used in a TableCellEditor):
  * Tells the editor to stop editing and accept any partially edited value
@@ -83,6 +95,42 @@ public void setColName(String col) { colName = col; }
 //public Object clone() throws CloneNotSupportedException { return super.clone(); }
 // ---------------------------------------------------
 // ================================================================
+// Stuff to highlight on mouseover
+//Color mouseoverColor = new Color(0,255,0);
+//Color defaultColor = new Color(255,255,255);
+Color cTextHighlight = UIManager.getDefaults().getColor("textHighlight");
+Color cText = UIManager.getDefaults().getColor("text");
+public Component prepareRenderer(TableCellRenderer renderer, int row, int col)
+{
+	Component c = super.prepareRenderer(renderer, row, col);
+	if (row == mouseRow) {
+		c.setBackground(cTextHighlight);
+	} else {
+		c.setBackground(cText);
+	}
+	return c;
+}
+int mouseRow = -1;		// Row the mouse is currently hovering over.
+class MyMouseMotionAdapter extends MouseMotionAdapter {
+public void mouseMoved(MouseEvent e) {
+	if (!isHighlightMouseover) return;
+	
+	JTable aTable =  (JTable)e.getSource();
+	int oldRow = mouseRow;
+	mouseRow = aTable.rowAtPoint(e.getPoint());
+//	itsColumn = aTable.columnAtPoint(e.getPoint());
+	if (oldRow != mouseRow) aTable.repaint();
+}}
+class MyMouseAdapter extends MouseAdapter {
+public void mouseExited(MouseEvent e) {
+	if (!isHighlightMouseover) return;
+	
+	JTable aTable =  (JTable)e.getSource();
+	mouseRow = -1;
+	aTable.repaint();
+}}
+
+// ================================================================
 // ListSelectionListener
 //class SharedListSelectionHandler implements ListSelectionListener {
 public void valueChanged(ListSelectionEvent e) {
@@ -97,7 +145,7 @@ public void valueChanged(ListSelectionEvent e) {
 	int selRow = this.getSelectedRow();
 	if (selRow < 0) val = null;
 	else val = getModelU().getValueAt(selRow, valueColU);
-	if (oldval == val) return;		// Try to filter out at least a few spurious events.
+//	if (oldval == val) return;		// Try to filter out at least a few spurious events.
 	firePropertyChange("value", oldval, val);
 }
 

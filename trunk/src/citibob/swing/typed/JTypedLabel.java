@@ -49,7 +49,7 @@ implements TypedWidget {
 JType jType;	
 JFormattedTextField.AbstractFormatter formatter;
 Object val;
-String nullDisplay = "";
+String nullText = "";
 boolean useToolTips = true;		// Should we set the tooltip to the same as the label text?
 
 public JTypedLabel()
@@ -61,7 +61,9 @@ public JTypedLabel(Swinger f)
 	this();
 	setJType(f);
 }
-
+public void setNullText(String s)
+	{ nullText = s; }
+public String getNullText() { return nullText; }
 // --------------------------------------------------------------
 public void setJType(Swinger f)
 {
@@ -93,8 +95,9 @@ public boolean stopEditing()
 // --------------------------------------------------------------
 public void setValue(Object o)
 {
+	if (val == o) return;		// This was called multiple times; ignore
 	val = o;
-	if (val == null) setText(nullDisplay);
+	if (val == null) setText(nullText);
 	else {
 		try {
 			String text = formatter.valueToString(val);

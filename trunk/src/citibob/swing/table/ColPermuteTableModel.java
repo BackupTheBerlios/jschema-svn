@@ -99,20 +99,23 @@ private void init(CitibobTableModel model_u, String[] xColNames, int[] xColMap, 
 			xColNames[i] = model_u.getColumnName(xColMap[i]);
 		}
 	}
-	// Remove null columns -- they can get here if a null was included in colNames or colMap
-	int ncol = 0;
-	for (int i=0; i<xColMap.length; ++i) if (xColNames[i] != null && xColMap[i] != -1) ++ncol;
-	String[] colNames = new String[ncol];
-	int[] colMap = new int[ncol];
-	int j = 0;
-	for (int i=0; i<xColMap.length; ++i) {
-		if (xColNames[i] != null && xColMap[i] != -1) {
-			colNames[j] = xColNames[i];
-			colMap[j] = xColMap[i];
-			++j;
-		}
-	}
-		
+
+//	// Remove null columns -- they can get here if a null was included in colNames or colMap
+//	int ncol = 0;
+//	for (int i=0; i<xColMap.length; ++i) if (xColNames[i] != null && xColMap[i] != -1) ++ncol;
+//	String[] colNames = new String[ncol];
+//	int[] colMap = new int[ncol];
+//	int j = 0;
+//	for (int i=0; i<xColMap.length; ++i) {
+//		if (xColNames[i] != null && xColMap[i] != -1) {
+//			colNames[j] = xColNames[i];
+//			colMap[j] = xColMap[i];
+//			++j;
+//		}
+//	}
+	colMap = xColMap;
+	colNames = xColNames;
+	
 	this.model_u = model_u;
 	this.colNames = colNames;
 	this.colMap = colMap;
@@ -121,7 +124,9 @@ private void init(CitibobTableModel model_u, String[] xColNames, int[] xColMap, 
 	// Set up inverse column map
 	iColMap = new int[model_u.getColumnCount()];
 	for (int i=0; i < model_u.getColumnCount(); ++i) iColMap[i] = -1;
-	for (int i=0; i < colMap.length; ++i) iColMap[colMap[i]] = i;
+	for (int i=0; i < colMap.length; ++i) {
+		if (colMap[i] != -1) iColMap[colMap[i]] = i;
+	}
 
 
 	model_u.addTableModelListener(this);

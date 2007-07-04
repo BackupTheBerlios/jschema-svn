@@ -24,6 +24,7 @@ public abstract class DBFormatter extends JFormattedTextField.AbstractFormatter
 {
 
 ConnPool pool;
+//protected String nullText = "";
 
 public DBFormatter(ConnPool pool)
 {
@@ -43,6 +44,8 @@ throws java.sql.SQLException;
 
 public String valueToString(Object value)
 {
+//	if (value == null) return nullText;
+	
 	String ret = null;
 	Statement st = null;
 	Connection dbb = null;

@@ -62,5 +62,32 @@ boolean[] xEditable, SwingerMap swingers)
 	super.setModelU(ssb, colNames, sColMap, editable, swingers);
 
 	setRenderEditU("__status__", new citibob.swing.table.StatusRenderEdit());
+}
+
+public void setModelU(SchemaBuf schemaBuf,
+String[] xColNames, String[] xSColMap, String[] xTtColMap,
+boolean[] xEditable, SwingerMap swingers, citibob.text.SFormatterMap smap)
+{
+	// Prepend 1 column to column list
+	boolean[] editable = (xEditable == null ? null : new boolean[xEditable.length + 1]);
+	String[] colNames = new String[xColNames.length + 1];
+	String[] sColMap = new String[xSColMap.length + 1];
+	String[] ttColMap = new String[xSColMap.length + 1];
+	colNames[0] = "Status";
+	sColMap[0] = "__status__";
+//	ttColMap[0] = "__none__";		// Should not match...
+	for (int i=0; i<xColNames.length; ++i) {
+		if (editable != null) editable[i+1] = xEditable[i];
+		colNames[i+1] = xColNames[i];
+		sColMap[i+1] = xSColMap[i];
+		ttColMap[i+1] = xTtColMap[i];
+	}
+	// Set it up
+	ssb = new StatusSchemaBuf(schemaBuf);
+	super.setModelU(ssb, colNames, sColMap, ttColMap, editable, swingers, smap);
+
+	setRenderEditU("__status__", new citibob.swing.table.StatusRenderEdit());
 }	
+
+
 }

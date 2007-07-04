@@ -82,12 +82,16 @@ protected Wiz createWiz(State stateRec) throws Exception {
 	return stateRec.newWiz();
 }
 
-/** Returns the values collected from the Wizard (for any work not
-accomplished by Wizard already). */
 public TypedHashMap runWizard() throws Exception
 {
+	return runWizard(startState);
+}
+/** Returns the values collected from the Wizard (for any work not
+accomplished by Wizard already). */
+public TypedHashMap runWizard(String startState) throws Exception
+{
+	state = startState;
 	try {
-		state = startState;
 		v = new TypedHashMap();
 		wizCache = new HashMap();
 		for (state = startState; state != null;) {

@@ -74,6 +74,13 @@ protected boolean reallyCancel() throws Exception
 	return (ret == JOptionPane.YES_OPTION);
 }
 
-
+protected String vsql(Object val, String col, citibob.jschema.Schema schema)
+{
+	return schema.getCol(col).getType().toSql(val);
+}
+protected String vsql(String col, citibob.jschema.Schema schema)
+{
+	return vsql(v.get(col), col, schema);
+}
 	
 }

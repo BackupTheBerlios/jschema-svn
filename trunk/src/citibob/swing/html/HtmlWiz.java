@@ -34,12 +34,21 @@ protected boolean cacheWizFwd = false;
 public boolean getCacheWiz() { return cacheWiz; }
 public boolean getCacheWizFwd() { return cacheWizFwd; }
 	
+public HtmlWiz(Frame owner, String title, citibob.swing.typed.SwingerMap swingers, boolean modal)
+{
+	super(owner, title, swingers, true);
+	init();
+}
 /**
  * Creates a new instance of HtmlWiz 
  */
 public HtmlWiz(Frame owner, String title, boolean modal)
 {
 	super(owner, title, true);
+	init();
+}
+private void init()
+{
 	this.setSize(600, 400);
 	this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 

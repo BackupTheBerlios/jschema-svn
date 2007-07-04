@@ -19,6 +19,8 @@ import java.util.*;
 import citibob.swing.typed.*;
 import citibob.swing.html.ObjHtmlPanel;
 import java.net.URL;
+import citibob.jschema.*;
+import citibob.swing.typed.*;
 
 /**
  * Meant to be subclassed to produce Wizards, etc...
@@ -27,6 +29,7 @@ import java.net.URL;
 public class HtmlDialog extends JDialog implements ObjHtmlPanel.Listener
 {
 
+SwingerMap swingers;
 protected ObjHtmlPanel html;
 String submitName;
 JButton submitButton;
@@ -34,6 +37,11 @@ JButton submitButton;
 public String getSubmitName() { return submitName; }
 public JButton getSubmitButton() { return submitButton; }
 
+public HtmlDialog(Frame owner, String title, SwingerMap swingers, boolean modal)
+{
+	this(owner, title, modal);
+	this.swingers = swingers;
+}
 /**
  * Creates a new instance of HtmlDialog 
  */
@@ -57,11 +65,23 @@ public HtmlDialog(Frame owner, String title, boolean modal)
 
 public JTypedTextField addTextField(String name, Swinger swinger)
 	{ return html.addTextField(name, swinger); }
+
 //public JComponent getWidget(String name)
 //{ return (JComponent)html.getMap().get(name); }
 public JComponent addWidget(String name, JComponent widget)
 	{ return html.addWidget(name, widget); }
 
+/** Add a text field with the correct Swinger already created... */
+public JTypedTextField addTextField(String name, Schema schema)
+	{ return addTextField(name, swingers.newSwinger(schema.getCol(name).getType())); }
+/** Adds a field based on its type in a schema, and the SwingerMap */
+public TypedWidget addWidget(String name, Schema schema)
+{
+	JType jt = schema.getCol(name).getType();
+	TypedWidget w = swingers.newSwinger(jt).newTypedWidget();
+	addWidget(name, (JComponent)w);
+	return w;
+}
 
 public JButton addSubmitButton(String name, String text)
 {
