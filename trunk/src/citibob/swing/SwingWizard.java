@@ -82,5 +82,5 @@ protected String vsql(String col, citibob.jschema.Schema schema)
 {
 	return vsql(v.get(col), col, schema);
 }
-	
+
 }

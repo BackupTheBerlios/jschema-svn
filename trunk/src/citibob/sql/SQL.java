@@ -20,8 +20,10 @@ package citibob.sql;
 
 import java.sql.*;
 import java.text.*;
+import java.util.*;
+import citibob.jschema.*;
 
-/** THIS CLASS IS DEPRECATED.  Low-level utilities to help generate SQL query string on the fly.  Example of the use of this class:<pre>
+/** Low-level utilities to help generate SQL query string on the fly.  Example of the use of this class:<pre>
 java.sql.Connection db;
 java.sql.Statement st = db.createStatement();
 String city;
@@ -34,123 +36,122 @@ ResultSet rs = st.executeQuery(sql);
 
 <p>Note: similar functionality may be obtained using the java.sql.PreparedStatement class.</p>
 
-@deprecated
  */
 public class SQL
 {
 
-/** Converts a Java String to a form appropriate for inclusion in an
-SQL query.  This is done by single-quoting the input and repeating any
-single qoutes found in it (SQL convention for quoting a quote).  If
-the input is null, the string "null" is returned. */
-	public static String sString(String s)
-	{
-		if (s == null) return "null";
-		StringBuffer str = new StringBuffer();
-		str.append('\'');
-		int len = s.length();
-		for (int i = 0; i < len; ++i) {
-			char ch = s.charAt(i);
-			switch(ch) {
-				case '\'' : str.append("''"); break;
-				default: str.append(ch); break;
-			}
-		}
-		str.append('\'');
-		return str.toString();
-	}
-
-
-static final DateFormat dateFormat =
-	new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-/** Converts a Java java.util.Date to a form appropriate for inclusion in an SQL query.  The date is written in standard SQL fashion (single-quoted): dd-MMM-yyyy HH:mm:ss.  If the input is null, the string "null" is returned.  Careful of the difference between java.util.Date and java.sql.Date */
-public static String sDate(java.util.Date d)
-{
-	if (d == null) return "null";
-	return "'" + dateFormat.format(d) + "'";
-}
-
- /** Converts a Java java.util.Date (date &amp; time) to a form
-appropriate for inclusion in an SQL query.  The timestamp is written
-in standard SQL fashion (single-quoted): dd-MMM-yyyy HH:mm:ss.   If the input is null, the string "null" is returned. */
- public static String sDTime(java.util.Date t)
-{
-	if (t == null) return "null";
-	return "'" + timestampFormat.format(t) + "'";
-}
-
- static final DateFormat timestampFormat =
-	new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+///** Converts a Java String to a form appropriate for inclusion in an
+//SQL query.  This is done by single-quoting the input and repeating any
+//single qoutes found in it (SQL convention for quoting a quote).  If
+//the input is null, the string "null" is returned. */
+//	public static String sString(String s)
+//	{
+//		if (s == null) return "null";
+//		StringBuffer str = new StringBuffer();
+//		str.append('\'');
+//		int len = s.length();
+//		for (int i = 0; i < len; ++i) {
+//			char ch = s.charAt(i);
+//			switch(ch) {
+//				case '\'' : str.append("''"); break;
+//				default: str.append(ch); break;
+//			}
+//		}
+//		str.append('\'');
+//		return str.toString();
+//	}
+//
+//
+//static final DateFormat dateFormat =
 //	new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
- /** Converts a Java java.util.Timestamp (date &amp; time) to a form
-appropriate for inclusion in an SQL query.  The timestamp is written
-in standard SQL fashion (single-quoted): dd-MMM-yyyy HH:mm:ss.   If the input is null, the string "null" is returned. */
- public static String sTimestamp(Timestamp t)
-{
-	if (t == null) return "null";
-	return "'" + timestampFormat.format(t) + "'";
-}
-
- /** Converts a Java boolean to a form appropriate for inclusion in an SQL query.  The result is either "true" or "false" */
-public static String sBool(boolean i)
-{ return i ? "true" : "false"; }
-
- /** Converts a Java Boolean object to a form appropriate for inclusion in an SQL query.  The result is either "true" or "false", or "null" if the input is null. */
-public static String sBool(Boolean i)
-{
-	if (i == null) return "null";
-	return sBool(i.booleanValue());
-}
-
- /** Converts a Java integer value to a form appropriate for inclusion in an SQL query.  This is done by simply converting to a String. */
-public static String sInt(int i)
-{ return ""+i; }
-
- /** Converts a Java Integer object to a form appropriate for inclusion in an SQL query.  This is done by simply converting to a string, or by returning the string "null" if the input is null. */
-public static String sInt(Integer i)
-{
-	if (i == null) return "null";
-	return i.toString();
-}
-
- /** Converts a Java long value to a form appropriate for inclusion in an SQL query.  This is done by simply converting to a String. */
-public static String sLong(long i)
-{ return ""+i; }
-
- /** Converts a Java integer value to a form appropriate for inclusion in an SQL query.  This is done by simply converting to a String.  This conversion is special for database ID fields: the string "null" is returned if the input is less than or equal to zero. */
-public static String sID(int i)
-	{ return (i <= 0 ? "null" : ""+i); }
-
-/** Convert timestamp from getTimestamp() --> display form */
-/*
-public static String vTimestamp(Timestamp t, java.text.DateFormat df)
-	{ return (t == null ? "" : df.format(t)); }
-*/
-// ----------------------------------------------------------
-/** @deprecated */
-public static Connection openDB(String driver,
-String url, String user, String password)
-{
-    try {
-            // Load the JDBC PostgreSQL driver.
-            Class.forName(driver);
-    } catch(ClassNotFoundException e) {
-            System.out.println("Cannot load the JDBC driver: " + driver);
-            e.printStackTrace();
-            System.exit(-1);
-    }
-
-    try {
-            // Open a long-lived connection to the database;
-            // it is used on every interaction, to look up cookies.
-            return DriverManager.getConnection(url, user, password);
-    } catch(SQLException e) {
-            System.out.println("Cannot open JcpServer database: " + url);
-            e.printStackTrace();
-            System.exit(-1);
-    }
-	return null;
-}
+///** Converts a Java java.util.Date to a form appropriate for inclusion in an SQL query.  The date is written in standard SQL fashion (single-quoted): dd-MMM-yyyy HH:mm:ss.  If the input is null, the string "null" is returned.  Careful of the difference between java.util.Date and java.sql.Date */
+//public static String sDate(java.util.Date d)
+//{
+//	if (d == null) return "null";
+//	return "'" + dateFormat.format(d) + "'";
+//}
+//
+// /** Converts a Java java.util.Date (date &amp; time) to a form
+//appropriate for inclusion in an SQL query.  The timestamp is written
+//in standard SQL fashion (single-quoted): dd-MMM-yyyy HH:mm:ss.   If the input is null, the string "null" is returned. */
+// public static String sDTime(java.util.Date t)
+//{
+//	if (t == null) return "null";
+//	return "'" + timestampFormat.format(t) + "'";
+//}
+//
+// static final DateFormat timestampFormat =
+//	new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+////	new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+// /** Converts a Java java.util.Timestamp (date &amp; time) to a form
+//appropriate for inclusion in an SQL query.  The timestamp is written
+//in standard SQL fashion (single-quoted): dd-MMM-yyyy HH:mm:ss.   If the input is null, the string "null" is returned. */
+// public static String sTimestamp(Timestamp t)
+//{
+//	if (t == null) return "null";
+//	return "'" + timestampFormat.format(t) + "'";
+//}
+//
+// /** Converts a Java boolean to a form appropriate for inclusion in an SQL query.  The result is either "true" or "false" */
+//public static String sBool(boolean i)
+//{ return i ? "true" : "false"; }
+//
+// /** Converts a Java Boolean object to a form appropriate for inclusion in an SQL query.  The result is either "true" or "false", or "null" if the input is null. */
+//public static String sBool(Boolean i)
+//{
+//	if (i == null) return "null";
+//	return sBool(i.booleanValue());
+//}
+//
+// /** Converts a Java integer value to a form appropriate for inclusion in an SQL query.  This is done by simply converting to a String. */
+//public static String sInt(int i)
+//{ return ""+i; }
+//
+// /** Converts a Java Integer object to a form appropriate for inclusion in an SQL query.  This is done by simply converting to a string, or by returning the string "null" if the input is null. */
+//public static String sInt(Integer i)
+//{
+//	if (i == null) return "null";
+//	return i.toString();
+//}
+//
+// /** Converts a Java long value to a form appropriate for inclusion in an SQL query.  This is done by simply converting to a String. */
+//public static String sLong(long i)
+//{ return ""+i; }
+//
+// /** Converts a Java integer value to a form appropriate for inclusion in an SQL query.  This is done by simply converting to a String.  This conversion is special for database ID fields: the string "null" is returned if the input is less than or equal to zero. */
+//public static String sID(int i)
+//	{ return (i <= 0 ? "null" : ""+i); }
+//
+///** Convert timestamp from getTimestamp() --> display form */
+///*
+//public static String vTimestamp(Timestamp t, java.text.DateFormat df)
+//	{ return (t == null ? "" : df.format(t)); }
+//*/
+//// ----------------------------------------------------------
+///** @deprecated */
+//public static Connection openDB(String driver,
+//String url, String user, String password)
+//{
+//    try {
+//            // Load the JDBC PostgreSQL driver.
+//            Class.forName(driver);
+//    } catch(ClassNotFoundException e) {
+//            System.out.println("Cannot load the JDBC driver: " + driver);
+//            e.printStackTrace();
+//            System.exit(-1);
+//    }
+//
+//    try {
+//            // Open a long-lived connection to the database;
+//            // it is used on every interaction, to look up cookies.
+//            return DriverManager.getConnection(url, user, password);
+//    } catch(SQLException e) {
+//            System.out.println("Cannot open JcpServer database: " + url);
+//            e.printStackTrace();
+//            System.exit(-1);
+//    }
+//	return null;
+//}
 // -----------------------------------------------------------
 public static int readInt(Statement st, String sql) throws SQLException
 {
@@ -168,4 +169,26 @@ public static String readString(Statement st, String sql) throws SQLException
 	String ret = rs.getString(1);
 	return ret;
 }
+// -----------------------------------------------------------
+/** Adds a bunch of key/value pairs to a query; this happens when we're
+ making INSERT queries from Wizard data. */
+public static void addColumns(ConsSqlQuery sql, HashMap v, Schema schema)
+{
+	int ncol = schema.getColCount();
+	for (int i=0; i<ncol; ++i) {
+		Column col = schema.getCol(i);
+		Object val = v.get(col.getName());
+		if (val == null) val = col.getDefault();
+		if (val == null) continue;
+		sql.addColumn(col.getName(), col.getType().toSql(val));
+	}
+}
+
+public static ConsSqlQuery newInsertQuery(String mainTable, HashMap v, Schema schema)
+{
+	ConsSqlQuery sql = new ConsSqlQuery(mainTable, ConsSqlQuery.INSERT);
+	addColumns(sql, v, schema);
+	return sql;
+}
+
 }

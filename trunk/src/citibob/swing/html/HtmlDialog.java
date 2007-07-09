@@ -63,30 +63,38 @@ public HtmlDialog(Frame owner, String title, boolean modal)
     }});
 }
 
+// ------------------------------------------------------------------
 public JTypedTextField addTextField(String name, Swinger swinger)
 	{ return html.addTextField(name, swinger); }
 
+/** Add a text field with the correct Swinger already created... */
+public JTypedTextField addTextField(String name, Schema schema)
+	{ return addTextField(name, swingers.newSwinger(schema.getCol(name).getType())); }
+// ------------------------------------------------------------------
 //public JComponent getWidget(String name)
 //{ return (JComponent)html.getMap().get(name); }
 public JComponent addWidget(String name, JComponent widget)
 	{ return html.addWidget(name, widget); }
 
-/** Add a text field with the correct Swinger already created... */
-public JTypedTextField addTextField(String name, Schema schema)
-	{ return addTextField(name, swingers.newSwinger(schema.getCol(name).getType())); }
-/** Adds a field based on its type in a schema, and the SwingerMap */
-public TypedWidget addWidget(String name, Schema schema)
+
+public TypedWidget addWidget(String instanceName, String colName, Schema schema)
 {
-	JType jt = schema.getCol(name).getType();
+	JType jt = schema.getCol(colName).getType();
 	TypedWidget w = swingers.newSwinger(jt).newTypedWidget();
-	addWidget(name, (JComponent)w);
+	addWidget(instanceName, (JComponent)w);
 	return w;
 }
+
+/** Adds a field based on its type in a schema, and the SwingerMap */
+public TypedWidget addWidget(String name, Schema schema)
+{ return addWidget(name, name, schema); }
+// ------------------------------------------------------------------
 
 public JButton addSubmitButton(String name, String text)
 {
 	return setSubmit(name, html.addJButton(name, text));
 }
+// ------------------------------------------------------------------
 
 protected JButton setSubmit(final String name, final JButton button)
 {
