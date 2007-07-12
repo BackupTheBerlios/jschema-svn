@@ -1,4 +1,21 @@
 /*
+JSchema: library for GUI-based database applications
+This file Copyright (c) 2006-2007 by Robert Fischer
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*
  * HtmlDialog.java
  *
  * Created on October 8, 2006, 5:25 PM
@@ -80,7 +97,8 @@ public JComponent addWidget(String name, JComponent widget)
 public TypedWidget addWidget(String instanceName, String colName, Schema schema)
 {
 	JType jt = schema.getCol(colName).getType();
-	TypedWidget w = swingers.newSwinger(jt).newTypedWidget();
+	Swinger sw = swingers.newSwinger(jt);
+	TypedWidget w = sw.newTypedWidget();
 	addWidget(instanceName, (JComponent)w);
 	return w;
 }

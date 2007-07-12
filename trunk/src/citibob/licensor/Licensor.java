@@ -74,12 +74,14 @@ throws java.io.IOException
 
 public void relicenseDir(File dir) throws IOException
 {
+	if (dir.isHidden() || dir.getName().startsWith(".")) return;
 	if (dir.isDirectory()) {
 		String[] children = dir.list();
 		for (int i=0; i<children.length; i++) {
 			relicenseDir(new File(dir, children[i]));
 		}
 	} else {
+		if (!dir.getName().endsWith(".java")) return;
 		relicenseFile(dir);
 	}
 }
@@ -87,6 +89,7 @@ public void relicenseDir(File dir) throws IOException
 /** Creates a new instance of Licensor */
 public void relicenseFile(File f) throws IOException
 {
+	System.out.println("Relicensing " + f);
 	FileReader in = new FileReader(f);
 	int state = S_INIT;
 	
@@ -128,7 +131,7 @@ outer :
 	// Evaluate that comment
 	String scom = comment.toString();
 	if (license.equals(scom)) {
-		System.out.println("No relicensing needed for " + f);
+		System.out.println("    No relicensing needed for " + f);
 		return;		// Nothing to do, file already up to date
 	}
 	
@@ -159,7 +162,8 @@ outer :
 public static void main(String[] args) throws Exception
 {
 	Licensor l = new Licensor();
-	l.relicenseFile(new File("/home/citibob/svn/jschema/src/citibob/licensor/Licensor.java"));
+//	l.relicenseFile(new File("/home/citibob/svn/jschema/src/citibob/licensor/Licensor.java"));
+	l.relicenseDir(new File("/home/citibob/svn/jschema/src/citibob"));
 }
 
 }
