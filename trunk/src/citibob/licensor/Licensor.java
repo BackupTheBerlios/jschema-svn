@@ -1,11 +1,11 @@
 /*
 JSchema: library for GUI-based database applications
-This file Copyright (c) 2006 by Robert Fischer
+This file Copyright (c) 2006-2007 by Robert Fischer
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13,8 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ///*
 // * Licensor.java
@@ -45,10 +44,48 @@ static final int S_INCOMMENT = 2;
 static final int S_STAR2 = 3;
 
 //StringBuffer comment;
+String license;
 
+public Licensor(String licenseResourceName) throws IOException
+{
+	readLicense(getClass(), licenseResourceName);	
+}
+public Licensor() throws IOException
+{
+	readLicense(getClass(), "license.txt");
+}
+
+void readLicense(Class klass, String licenseResourceName)
+throws java.io.IOException
+{
+	String resourceName = klass.getPackage().getName().replace('.', '/') + "/" + licenseResourceName;
+	Reader in = null;
+	
+	in = new InputStreamReader(klass.getClassLoader().getResourceAsStream(resourceName));
+	StringWriter out = new StringWriter();
+	char[] buf = new char[8192];
+	int len;
+	while ((len = in.read(buf)) > 0) out.write(buf,0,len);
+	in.close();
+	out.close();
+	license = out.getBuffer().toString();
+	System.out.println(license);
+}
+
+public void relicenseDir(File dir) throws IOException
+{
+	if (dir.isDirectory()) {
+		String[] children = dir.list();
+		for (int i=0; i<children.length; i++) {
+			relicenseDir(new File(dir, children[i]));
+		}
+	} else {
+		relicenseFile(dir);
+	}
+}
 
 /** Creates a new instance of Licensor */
-public static void relicense(File f, String license) throws IOException
+public void relicenseFile(File f) throws IOException
 {
 	FileReader in = new FileReader(f);
 	int state = S_INIT;
@@ -90,7 +127,10 @@ outer :
 
 	// Evaluate that comment
 	String scom = comment.toString();
-	if (license.equals(scom)) return;		// Nothing to do, file already up to date
+	if (license.equals(scom)) {
+		System.out.println("No relicensing needed for " + f);
+		return;		// Nothing to do, file already up to date
+	}
 	
 	File fnew = new File(f.getPath() + ".__tmp");
 	FileWriter out = new FileWriter(fnew);
@@ -118,8 +158,8 @@ outer :
 
 public static void main(String[] args) throws Exception
 {
-	String license = "/* My GNU General Public License v3 */";
-	relicense(new File("/home/citibob/svn/jschema/src/citibob/licensor/Licensor.java"), license);
+	Licensor l = new Licensor();
+	l.relicenseFile(new File("/home/citibob/svn/jschema/src/citibob/licensor/Licensor.java"));
 }
 
 }
