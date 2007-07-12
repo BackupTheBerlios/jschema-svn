@@ -46,6 +46,8 @@ static final int S_STAR2 = 3;
 //StringBuffer comment;
 String license;
 
+String[] suffixes = new String[] {".c", ".cpp", ".java", ".mvc"};
+
 public Licensor(String licenseResourceName) throws IOException
 {
 	readLicense(getClass(), licenseResourceName);	
@@ -81,7 +83,11 @@ public void relicenseDir(File dir) throws IOException
 			relicenseDir(new File(dir, children[i]));
 		}
 	} else {
-		if (!dir.getName().endsWith(".java")) return;
+		String name = dir.getName();
+		for (int i=0; ; ++i) {
+			if (i >= suffixes.length) return;	// not a valid suffix to relicense
+			if (name.endsWith(suffixes[i])) break;	// good suffix
+		}
 		relicenseFile(dir);
 	}
 }
@@ -89,7 +95,7 @@ public void relicenseDir(File dir) throws IOException
 /** Creates a new instance of Licensor */
 public void relicenseFile(File f) throws IOException
 {
-	System.out.println("Relicensing " + f);
+//	System.out.println("Relicensing " + f);
 	FileReader in = new FileReader(f);
 	int state = S_INIT;
 	
@@ -98,7 +104,8 @@ public void relicenseFile(File f) throws IOException
 outer :
 	// Grab the first comment
 	for (;;) {
-		if ((c = in.read()) < 0) return;	// no comments; do nothing
+//		if ((c = in.read()) < 0) return;	// no comments; prepend
+		if ((c = in.read()) < 0) break outer;	// no comments add 
 		switch(state) {
 			case S_INIT :
 				if (c == '/') state = S_SLASH1;
@@ -131,10 +138,11 @@ outer :
 	// Evaluate that comment
 	String scom = comment.toString();
 	if (license.equals(scom)) {
-		System.out.println("    No relicensing needed for " + f);
+//		System.out.println("    No relicensing needed for " + f);
 		return;		// Nothing to do, file already up to date
 	}
 	
+	System.out.println("Relicensing " + f);
 	File fnew = new File(f.getPath() + ".__tmp");
 	FileWriter out = new FileWriter(fnew);
 	out.write(license);
