@@ -1,4 +1,7 @@
 package pubdomain;
+
+import java.io.*;
+
 /**
  * <p>Encodes and decodes to and from Base64 notation.</p>
  * <p>Homepage: <a href="http://iharder.net/base64">http://iharder.net/base64</a>.</p>
@@ -1762,5 +1765,34 @@ public class Base64
         
     }   // end inner class OutputStream
     
-    
+// ==============================================================
+// Stuff by Robert Fischer after this
+/** Read and decode a file consisting of Base64-encoded stuff --- skip header and footer. */
+static public byte[] readBase64File(java.io.File f) throws IOException
+{
+	BufferedReader in = new BufferedReader(new FileReader(f));
+	for (;;) {
+		String s = in.readLine();
+		if (s.startsWith("-----")) break;
+	}
+	
+	StringBuffer sb = new StringBuffer();
+	for (;;) {
+		String s = in.readLine();
+		if (s.startsWith("-----")) break;
+		sb.append(s);
+	}
+	
+	in.close();
+
+	return decode(sb.toString());
+//	char[] cc = new char[sb.length()];
+//	sb.getChars(0, sb.length(), cc, 0);
+//	return cc;	
+}
+
+static public void zeroChars(char[] cc)
+	{ for (int i=0; i<cc.length; ++i) cc[i] = '\0'; }
+
+
 }   // end class Base64

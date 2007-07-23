@@ -29,6 +29,7 @@ import citibob.swing.prefs.*;
 public interface App
 {
 
+public Properties getProps();
 public ConnPool getPool();
 /** Allow to log all database changes */
 public citibob.jschema.log.QueryLogger getLogger();
