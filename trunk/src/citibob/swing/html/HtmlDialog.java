@@ -138,6 +138,11 @@ throws org.xml.sax.SAXException, java.io.IOException
 {
 	html.loadHtml(getClass());
 }
+protected void loadHtmlResource(String resourceName)
+throws org.xml.sax.SAXException, java.io.IOException
+{
+	html.loadHtmlResource(resourceName);
+}
 
 
 /** Gets all the TypedWidget values from the form. */

@@ -143,16 +143,32 @@ throws org.xml.sax.SAXException, java.io.IOException
 {
 	loadHtml(getClass());
 }
-/** Convenience method: loads HTML from a file of the same name as the
-class. */
+
 protected void loadHtml(Class klass)//HtmlRendererContext rendererContext)
 throws org.xml.sax.SAXException, java.io.IOException
 {
 	String resourceName = klass.getName().replace('.', '/') + ".html";
+	loadHtmlResource(resourceName);
+//System.out.println("HtmlDialog: loading resourceName " + resourceName);
+//	Reader in = null;
+//	try {
+//		in = new InputStreamReader(klass.getClassLoader().getResourceAsStream(resourceName));
+//		org.xamjwg.html.HtmlRendererContext rendererContext =
+//			new MyRendererContext();
+//		setDocument(in, null, rendererContext);
+//		in.close();
+//	} finally {
+//		try { in.close(); } catch(Exception e) {}
+//	}
+}
+
+protected void loadHtmlResource(String resourceName)
+throws org.xml.sax.SAXException, java.io.IOException
+{
 System.out.println("HtmlDialog: loading resourceName " + resourceName);
 	Reader in = null;
 	try {
-		in = new InputStreamReader(klass.getClassLoader().getResourceAsStream(resourceName));
+		in = new InputStreamReader(getClass().getClassLoader().getResourceAsStream(resourceName));
 		org.xamjwg.html.HtmlRendererContext rendererContext =
 			new MyRendererContext();
 		setDocument(in, null, rendererContext);

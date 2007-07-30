@@ -64,6 +64,13 @@ public HtmlWiz(Frame owner, String title, boolean modal)
 	super(owner, title, true);
 	init();
 }
+/** Creates a new HtmlWiz, loading an HTML file as a resource. */
+public HtmlWiz(Frame owner, String title, boolean modal, String htmlResource)
+throws org.xml.sax.SAXException, java.io.IOException
+{
+	this(owner, title, modal);
+	loadHtmlResource(htmlResource);
+}
 private void init()
 {
 	this.setSize(600, 400);

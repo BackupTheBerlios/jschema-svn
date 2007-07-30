@@ -66,6 +66,13 @@ protected abstract class State {
 	}
 }
 
+/** Gets the name of a resource in the same package as this class. */
+protected String getResourceName(String rname)
+{
+	return getClass().getPackage().getName().replace('.', '/') + "/" + rname;
+
+}
+
 /** Presents one Wiz to the user */
 protected abstract void runWiz(Wiz wiz) throws Exception;
 protected boolean reallyCancel() throws Exception { return true; }
