@@ -115,6 +115,8 @@ accomplished by Wizard already). */
 public TypedHashMap runWizard(String startState) throws Exception
 {
 	state = startState;
+	String prevState = null;
+	String curState;
 	try {
 		v = new TypedHashMap();
 		wizCache = new HashMap();
@@ -126,6 +128,7 @@ public TypedHashMap runWizard(String startState) throws Exception
 				wiz = createWiz(stateRec);
 				if (wiz.getCacheWiz()) wizCache.put(state, wiz);
 			}
+			curState = state;	// State now becomes (semantically) nextState
 			stateRec.pre();		// Prepare the Wiz...
 			runWiz(wiz);
 			wiz.getAllValues(v);
@@ -138,12 +141,13 @@ public TypedHashMap runWizard(String startState) throws Exception
 				// Remove it from the cache so we re-make
 				// it going "forward" in the Wizard
 				if (!wiz.getCacheWizFwd()) wizCache.remove(state);
-				state = stateRec.back;
+				state = (stateRec.back == null ? prevState : stateRec.back);
 				continue;
 			} else if ("cancel".equals(submit) && reallyCancel()) break;
 
 			// Do screen-specific processing
 			stateRec.process();
+			prevState = curState;
 		}
 		return v;
 	} finally {
