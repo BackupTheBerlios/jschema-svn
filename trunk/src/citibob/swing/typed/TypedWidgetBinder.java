@@ -74,6 +74,9 @@ public void bind(TypedWidget tw, SchemaRowModel bufRow, String colName, SwingerM
 //if (colName.equals("dob")) {
 //	System.out.println("dob column reached!!!");
 //}
+//if ("cctype".equals(colName)) {
+//	System.out.println("hoi");
+//}
 	setJType(tw, bufRow, colName, map);
 	bind(tw, (TableRowModel)bufRow, colName);
 }
@@ -189,6 +192,7 @@ public static void bindRecursive(Component c, SchemaRowModel bufRow, SwingerMap 
 	// Take care of yourself
 	if (c instanceof TypedWidget) {
 		TypedWidget tw = (TypedWidget)c;
+//System.out.println("Binding TypedWidget: " + tw.getColName());
 		if (tw.getColName() != null) {
 			new TypedWidgetBinder().bind(tw, bufRow, tw.getColName(), map);
 		}
@@ -196,7 +200,17 @@ public static void bindRecursive(Component c, SchemaRowModel bufRow, SwingerMap 
 
 	// Take care of your children
 	if (c instanceof Container) {
+//System.out.println("Binding TypedWidget Container: " + c.getClass());
 	    Component[] child = ((Container)c).getComponents();
+	    for (int i = 0; i < child.length; ++i) {
+			bindRecursive(child[i], bufRow, map);
+		}
+	}
+	
+	// Take care of explicit invisible children
+	if (c instanceof BindContainer) {
+//System.out.println("Binding TypedWidget Container: " + c.getClass());
+	    Component[] child = ((BindContainer)c).getBindComponents();
 	    for (int i = 0; i < child.length; ++i) {
 			bindRecursive(child[i], bufRow, map);
 		}
@@ -218,7 +232,9 @@ SwingerMap map, citibob.sql.SqlTypeSet typeset) throws java.sql.SQLException
 	}
 	if (col <= 0) return;
 	SqlType sqlType = typeset.getSqlType(rs, col);
-	tw.setJType(map.newSwinger(sqlType));
+	Swinger swinger = map.newSwinger(sqlType);
+System.out.println("Binder.setValue: tw = " + tw.getClass() + "\n     swinger = " + swinger.getClass());
+	tw.setJType(swinger);
 	tw.setValue(sqlType.get(rs, col));
 }
 
@@ -238,6 +254,14 @@ throws SQLException
 	// Take care of your children
 	if (c instanceof Container) {
 	    Component[] child = ((Container)c).getComponents();
+	    for (int i = 0; i < child.length; ++i) {
+			setValueRecursive(child[i], rs, map, tset);
+		}
+	}
+	
+	// Take care of explicit invisible children
+	if (c instanceof BindContainer) {
+	    Component[] child = ((BindContainer)c).getBindComponents();
 	    for (int i = 0; i < child.length; ++i) {
 			setValueRecursive(child[i], rs, map, tset);
 		}

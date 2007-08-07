@@ -88,8 +88,8 @@ public JTypedTextField addTextField(String name, Swinger swinger)
 public JTypedTextField addTextField(String name, Schema schema)
 	{ return addTextField(name, swingers.newSwinger(schema.getCol(name).getType())); }
 // ------------------------------------------------------------------
-//public JComponent getWidget(String name)
-//{ return (JComponent)html.getMap().get(name); }
+public JComponent getWidget(String name)
+{ return (JComponent)html.getMap().get(name); }
 public JComponent addWidget(String name, JComponent widget)
 	{ return html.addWidget(name, widget); }
 
@@ -101,6 +101,33 @@ public TypedWidget addWidget(String instanceName, String colName, Schema schema)
 	TypedWidget w = sw.newTypedWidget();
 	addWidget(instanceName, (JComponent)w);
 	return w;
+}
+
+public void addWidgetRecursive(Component c)
+{
+	// Take care of yourself
+	if (c instanceof TypedWidget) {
+		TypedWidget tw = (TypedWidget)c;
+		if (tw.getColName() != null) {
+			addWidget(tw.getColName(), (JComponent)c);
+		}
+	}
+
+	// Take care of your children
+	if (c instanceof Container) {
+	    Component[] child = ((Container)c).getComponents();
+	    for (int i = 0; i < child.length; ++i) {
+			addWidgetRecursive(child[i]);
+		}
+	}
+	
+	// Take care of explicit invisible children
+	if (c instanceof BindContainer) {
+	    Component[] child = ((BindContainer)c).getBindComponents();
+	    for (int i = 0; i < child.length; ++i) {
+			addWidgetRecursive(child[i]);
+		}
+	}
 }
 
 /** Adds a field based on its type in a schema, and the SwingerMap */
