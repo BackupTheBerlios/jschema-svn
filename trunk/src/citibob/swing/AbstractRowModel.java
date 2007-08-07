@@ -39,7 +39,7 @@ public void removeColListener(int colIndex, ColListener l)
 
 void fireValueChanged(int colIndex)
 {
-System.out.println("AbstractRowModel: value " + colIndex + " changed to " + this.get(colIndex));
+//System.out.println("AbstractRowModel: value " + colIndex + " changed to " + this.get(colIndex));
 	List<ColListener> ll = colListeners[colIndex];
 	if (ll == null) return;
 	for (ColListener l : ll) l.valueChanged(colIndex);

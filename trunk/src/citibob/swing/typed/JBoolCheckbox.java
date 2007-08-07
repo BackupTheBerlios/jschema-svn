@@ -45,6 +45,11 @@ public Object getValue()
 	return val;
 }
 
+public boolean getBoolValue()
+{
+	return val.booleanValue();
+}
+
 /** Sets the value.  Same as method in JFormattedTextField.  Fires a
  * propertyChangeEvent("value") when calling setValue() changes the value. */
 public void setValue(Object d)

@@ -117,7 +117,7 @@ public Object clone() throws CloneNotSupportedException { return super.clone(); 
 // TypedWidget stuff
 public void setValue(Object d)
 {
-System.out.println("JKeyedComboBox.setValue: " + d);
+//System.out.println("JKeyedComboBox.setValue: " + d);
 //	// HACK: Handle it if 
 //	if (d instanceof Short) d = new Integer(((Short)d).intValue());
 	Object oldVal = value;

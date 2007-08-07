@@ -94,7 +94,8 @@ public boolean stopEditing()
 // --------------------------------------------------------------
 public void setValue(Object o)
 {
-	if (val == o) return;		// This was called multiple times; ignore
+	if (val == o && val != null) return;		// This was called multiple times; ignore
+	Object oldVal = val;
 	val = o;
 	if (val == null) setText(nullText);
 	else {
@@ -106,9 +107,12 @@ public void setValue(Object o)
 			setText("<parseException>");
 		}
 	}
+	this.firePropertyChange("value", oldVal, val);
 }
 public Object getValue()
-{ return val; }
+{
+	return val;
+}
 // --------------------------------------------------------------
 String colName;
 /** Row (if any) in a RowModel we will bind this to at runtime. */
