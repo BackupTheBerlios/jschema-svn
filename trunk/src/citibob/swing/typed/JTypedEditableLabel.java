@@ -79,7 +79,7 @@ String colName;
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        ckNull.setText("null");
+        ckNull.setText(null);
         ckNull.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         ckNull.setMargin(new java.awt.Insets(0, 0, 0, 0));
         jPanel1.add(ckNull, java.awt.BorderLayout.WEST);
@@ -100,7 +100,24 @@ String colName;
 
         setLayout(new java.awt.BorderLayout());
 
+        setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setPreferredSize(new java.awt.Dimension(122, 19));
         label.setText("jTypedLabel1");
+        label.addMouseMotionListener(new java.awt.event.MouseMotionAdapter()
+        {
+            public void mouseDragged(java.awt.event.MouseEvent evt)
+            {
+                labelMouseDragged(evt);
+            }
+        });
+        label.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                labelMouseClicked(evt);
+            }
+        });
+
         add(label, java.awt.BorderLayout.CENTER);
 
         btnChange.setText("...");
@@ -117,10 +134,20 @@ String colName;
 
     }// </editor-fold>//GEN-END:initComponents
 
+	private void labelMouseDragged(java.awt.event.MouseEvent evt)//GEN-FIRST:event_labelMouseDragged
+	{//GEN-HEADEREND:event_labelMouseDragged
+// TODO add your handling code here:
+	}//GEN-LAST:event_labelMouseDragged
+
+	private void labelMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_labelMouseClicked
+	{//GEN-HEADEREND:event_labelMouseClicked
+	showPopup();
+	//togglePopup();
+	}//GEN-LAST:event_labelMouseClicked
+
 	private void bCloseActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bCloseActionPerformed
 	{//GEN-HEADEREND:event_bCloseActionPerformed
-		popup.setVisible(false);
-// TODO add your handling code here:
+		closePopup();
 	}//GEN-LAST:event_bCloseActionPerformed
 
 protected void showPopup()
@@ -129,9 +156,19 @@ protected void showPopup()
 	popup.pack();
 	popup.show(this, 0, this.getHeight());	
 }
-	
+protected void closePopup()
+{
+	popup.setVisible(false);
+}	
+protected void togglePopup()
+{
+	if (!popup.isVisible()) showPopup();
+	else closePopup();
+}
+
 private void btnChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeActionPerformed
 	showPopup();
+	//togglePopup();
 }//GEN-LAST:event_btnChangeActionPerformed
 
 
@@ -215,7 +252,7 @@ public void propertyChange(PropertyChangeEvent evt)
 	Object newval = popupWidget.getValue();
 	if (newval == null) return;		// Ignore nulls from popup widget!!!
 	
-	popup.setVisible(false);
+	closePopup();
 	Object oldval = getValue();
 	ckNull.setSelected(false);
 	setValue(newval);
@@ -225,7 +262,7 @@ public void propertyChange(PropertyChangeEvent evt)
 /** Called when the null checkbox is clicked. */
 public void actionPerformed(ActionEvent evt)
 {
-	popup.setVisible(false);
+	closePopup();
 	Object oldval = getValue();
 	Object newval = null;
 	ckNull.setSelected(true);

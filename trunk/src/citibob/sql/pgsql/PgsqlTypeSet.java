@@ -82,7 +82,7 @@ public SqlType getSqlType(int type, int precision, int scale, boolean nullable)
 		case REF : return null;
 		case SMALLINT : return new SqlInteger(nullable);
 		case STRUCT : return null;
-		case TIME : return null;
+		case TIME : return new SqlTime(nullable);
 		case TIMESTAMP : return new SqlTimestamp(tz, nullable);
 		case TINYINT : return null;
 		case VARBINARY : return null;

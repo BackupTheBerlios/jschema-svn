@@ -37,30 +37,44 @@ import java.util.*;
 public class MainSqlTableModel extends SqlTableModel
 {
 
-String joinCol;
-HashMap<Object,Integer> joinMap;
+//String joinCol;
+//HashMap<Object,List<Integer>> joinMap;	// Map from key value to the rows it's found in
 
 /** @param joinCol Name of column (in TableModel) used to join on. */
-public MainSqlTableModel(SqlTypeSet tset, String joinCol, String sql)
+//public MainSqlTableModel(SqlTypeSet tset, String joinCol, String sql)
+public MainSqlTableModel(SqlTypeSet tset, String sql)
 {
 	super(tset, sql);
-	this.joinCol = joinCol;
-	joinMap = new HashMap();
+//	this.joinCol = joinCol;
+//	joinMap = new HashMap();
 }
 
-public Map<Object,Integer> getJoinMap() { return joinMap; }
+//public Map<Object,List<Integer>> getJoinMap() { return joinMap; }
+
+public Map<Object,List<Integer>> makeJoinMap(String joinCol)
+{
+	HashMap<Object,List<Integer>> joinMap = new HashMap();
+	// Re-set the joinMap
+	int iJoinCol = findColumn(joinCol);
+	joinMap.clear();
+	for (int i=0; i<this.getRowCount(); ++i) {
+		Object val = getValueAt(i, iJoinCol);
+		List<Integer> l = joinMap.get(val);
+		if (l == null) {
+			l = new LinkedList();
+			l.add(i);
+			joinMap.put(val, l);
+		} else {
+			l.add(i);
+		}
+	}
+	return joinMap;
+}
 
 public void executeQuery(Statement st, String sql) throws SQLException
 {
 System.out.println("MainSqlTableModel.executeQuery: " + sql);
 	super.executeQuery(st, sql);
-
-	// Re-set the joinMap
-	int iJoinCol = findColumn(joinCol);
-	joinMap.clear();
-	for (int i=0; i<this.getRowCount(); ++i) {
-		joinMap.put(getValueAt(i, iJoinCol), i);
-	}
 }
 
 }

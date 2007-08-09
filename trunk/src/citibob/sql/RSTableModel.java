@@ -61,6 +61,7 @@ public void setColHeaders(ResultSet rs) throws SQLException
 	jTypes = new SqlType[md.getColumnCount()];
 	for (int i=0; i<ncol; ++i) {
 		jTypes[i] = tset.getSqlType(md, i+1);
+System.out.println("jTypes[" + i + "] = " + jTypes[i]);
 //if (jTypes[i] == null) {
 //	System.out.println("hoi");
 //}
@@ -147,6 +148,13 @@ public RSTableModel(SqlTypeSet tset)
 	super();
 	this.tset = tset;
 }
+/** Use this constructor if you'll be setting your own column types. */
+public RSTableModel()
+{
+	super();
+	tset = null;
+}
+// ===============================================================
 
 /** All-in-one: execute a query, set up row headers, and add all rows to the table model. */
 public void executeQuery(Statement st, String sql) throws SQLException
@@ -155,7 +163,7 @@ public void executeQuery(Statement st, String sql) throws SQLException
 	ResultSet rs = null;
 	try {
 		rs = st.executeQuery(sql);
-		this.setColHeaders(rs);
+		if (tset != null) this.setColHeaders(rs);
 		addAllRows(rs);
 	} finally {
 		try { rs.close(); } catch(Exception e) {}

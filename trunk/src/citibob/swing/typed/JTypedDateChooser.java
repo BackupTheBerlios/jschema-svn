@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
  * JDate.java
- *
+ * This uses JCalendar by Toedter.  Consider using SwingX's JXDatePicker instead.
  * Created on May 14, 2003, 8:52 PM
  */
 

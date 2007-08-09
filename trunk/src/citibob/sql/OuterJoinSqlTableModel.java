@@ -47,18 +47,20 @@ public class OuterJoinSqlTableModel extends SqlTableModel
 //}
 	
 MainSqlTableModel main;	// The main table
-String joinCol;
+String mainJoinCol;		// Column to join to in main table
+String joinCol;			// Column to join in this table
 
 /** @param main main table we're doing outer join to
  @param main main table we're joining to
  @param joinMap indicates the row that each key value appears on
  @param joinCol name of column in this table to join to
  */
-public OuterJoinSqlTableModel(MainSqlTableModel main, String joinCol,
+public OuterJoinSqlTableModel(MainSqlTableModel main, String mainJoinCol, String joinCol,
 SqlTypeSet tset, String sql)
 {
 	super(tset, sql);
 	this.main = main;
+	this.mainJoinCol = mainJoinCol;
 	this.joinCol = joinCol;
 }
 
@@ -74,10 +76,17 @@ throws SQLException
 	ResultSetMetaData meta = rs.getMetaData();
 	int ncol = meta.getColumnCount();
 	//int ijoinCol = meta.this.findColumn(joinCol);
-	Map<Object,Integer> joinMap = main.getJoinMap();
+	Map<Object,List<Integer>> joinMap = main.makeJoinMap(mainJoinCol);
 	while (rs.next()) {
-		int row = joinMap.get(rs.getObject(joinCol));
-		setRow(row, rs);
+		Object o = rs.getObject(joinCol);
+		List<Integer> Rows = joinMap.get(o);
+		if (Rows == null) {
+System.out.println("Outer join val=" + o + " not found in joinMap");
+		} else {
+			for (Integer R : Rows) {
+				setRow(R.intValue(), rs);
+			}
+		}
 	}
 }
 

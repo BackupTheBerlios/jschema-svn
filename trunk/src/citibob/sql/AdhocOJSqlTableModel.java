@@ -40,10 +40,10 @@ import java.util.*;
 public abstract class AdhocOJSqlTableModel extends OuterJoinSqlTableModel
 {
 
-public AdhocOJSqlTableModel(MainSqlTableModel main, String joinCol,
+public AdhocOJSqlTableModel(MainSqlTableModel main, String mainJoinCol, String joinCol,
 Col[] tableCols, SqlTypeSet tset, String sql)
 {
-	super(main, joinCol, tset, sql);
+	super(main, mainJoinCol, joinCol, tset, sql);
 	setColHeaders(tableCols);
 //	setColumnCount(tableCols.length);
 //System.out.println("Column Count set to " + getColumnCount());
