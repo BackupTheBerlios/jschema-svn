@@ -45,6 +45,7 @@ implements TypedWidget, ListSelectionListener
 int valueColU = 0;		// This column in the selected row will be returned as the value
 Object val = null;
 boolean isHighlightMouseover = true;		// SHould we highlight rows when mousing over?
+protected boolean inSelect;		// Are we in the middle of having the user change the value?
 
 public JTypedSelectTable()
 {
@@ -165,7 +166,7 @@ public void valueChanged(ListSelectionEvent e) {
 //	int firstIndex = e.getFirstIndex();
 //	int lastIndex = e.getLastIndex();
 //	boolean isAdjusting = e.getValueIsAdjusting();
-
+	inSelect = true;
 	Object oldval = val;
 	
 	int selRow = this.getSelectedRow();
@@ -173,6 +174,7 @@ public void valueChanged(ListSelectionEvent e) {
 	else val = getModelU().getValueAt(selRow, valueColU);
 //	if (oldval == val) return;		// Try to filter out at least a few spurious events.
 	firePropertyChange("value", oldval, val);
+	inSelect = false;
 }
 
 	

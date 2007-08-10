@@ -23,7 +23,6 @@ public abstract class AbstractRowModel implements RowModel
 {
 
 List<RowModel.ColListener>[] colListeners;	// Multiple listeners per column
-///// One listener per column.  We don't allow multiple listeners
 public void addColListener(int colIndex, ColListener l)
 {
 	if (colListeners[colIndex] == null) colListeners[colIndex] = new LinkedList();

@@ -42,10 +42,19 @@ public void setKey(int idValue)
 	this.idValue = idValue;
 }
 public void setKey(Object[] key)
-	{ setKey((Integer)(key[0])); }
+{
+if (key == null) {
+	System.out.println("hoi");
+}
+	Integer ii = (Integer)key[0];
+if (ii == null)
+	System.out.println("hoi");
+	
+	setKey((Integer)(key[0]));
+}
 
 
-public int getKey() { return idValue; }
+public int getIntKey() { return idValue; }
 ///** Gets the key column of a row from the underlying SchemaBuf */
 //public int getKeyValueAt(int row)
 //{

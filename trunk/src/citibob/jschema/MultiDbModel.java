@@ -19,6 +19,7 @@ package citibob.jschema;
 
 import java.util.*;
 import java.sql.*;
+import citibob.jschema.log.*;
 
 /** A DbModel that controls many sub DbModels */
 public class MultiDbModel implements DbModel
@@ -124,7 +125,7 @@ public void setKey(Object[] key)
 	}	
 }
 // ---------------------------------------------------
-int intKey;
+protected int intKey;
 /** This method will only work if all our sub-models are IntKeyedDbModel. */
 public void setKey(Integer ID)
 {
@@ -135,10 +136,16 @@ public void setKey(Integer ID)
 public void setKey(int id)
 {
 	intKey = id;
-	setKey(id);
+	setKey(new Integer[] {id});
 }
 public int getIntKey()
 { return intKey; }
 
 // ---------------------------------------------------
+/** Convenience method */
+protected void logadd(QueryLogger logger, SchemaBufDbModel m)
+{
+	add(m);
+	m.setLogger(logger);
+}
 }

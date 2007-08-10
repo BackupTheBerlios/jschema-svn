@@ -55,6 +55,12 @@ public TableRowModel(CitibobTableModel tmodel, boolean listen)
 	tmodel.addTableModelListener(this);
 }
 
+public void addColListener(String colName, ColListener l)
+{
+	int ix = tmodel.findColumn(colName);
+	addColListener(ix, l);
+}
+
 protected void finalize() {
 	tmodel.removeTableModelListener(this);
 }
@@ -73,12 +79,16 @@ public void set(int col, Object val)
 	}
 	fireValueChanged(col);
 }
+public void set(String colName, Object val)
+	{ set(findColumn(colName), val); }
 public Object get(int col)
 {
 //System.out.println("   Xxtmodel = " + tmodel);
 	if (curRow == NOROW) return null;
 	return tmodel.getValueAt(curRow, col);
 }
+public Object get(String colName)
+	{ return get(findColumn(colName)); }
 public int getColCount()
 	{ return tmodel.getColumnCount(); }
 // ------------------------------------------------------
