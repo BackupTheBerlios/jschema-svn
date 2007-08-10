@@ -41,6 +41,10 @@ public void setKey(int idValue)
 {
 	this.idValue = idValue;
 }
+public void setKey(Object[] key)
+	{ setKey((Integer)(key[0])); }
+
+
 public int getKey() { return idValue; }
 ///** Gets the key column of a row from the underlying SchemaBuf */
 //public int getKeyValueAt(int row)

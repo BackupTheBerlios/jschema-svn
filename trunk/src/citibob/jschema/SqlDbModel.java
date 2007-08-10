@@ -67,5 +67,7 @@ public void doClear()
 {
 	model.setRowCount(0);
 }
+/** This is read-only, so key doesn't matter. */
+public void setKey(Object[] key) {}
 
 }

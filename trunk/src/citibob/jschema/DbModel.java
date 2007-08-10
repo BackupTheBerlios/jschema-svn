@@ -55,4 +55,8 @@ void doDelete(Statement st) throws java.sql.SQLException;
 is no current record. */
 void doClear();
 
+/** Changes the intrinsic key fields representing the row(s) this DbModel
+ will select. */
+public void setKey(Object[] key);
+
 }

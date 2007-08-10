@@ -23,7 +23,7 @@ import citibob.swing.RowModel;
   * The columns in the RowModel must match EXACTLY the columns in the schema.
   * Thus, schema.findCol() returns column indices that are relevant
   * to the SchemaRowModel.
-  * (x instanceof SchemaRowModel) ==> (x isntanceof TableRowModel) */
+  * NOTE: (x instanceof SchemaRowModel) ==> (x instanceof TableRowModel) */
 public interface SchemaRowModel extends RowModel
 {
 	Schema getSchema();

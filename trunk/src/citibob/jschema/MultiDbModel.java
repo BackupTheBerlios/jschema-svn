@@ -116,5 +116,29 @@ public void doClear()
 		m.doClear();
 	}
 }
+public void setKey(Object[] key)
+{
+	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
+		DbModel m = (DbModel)ii.next();
+		m.setKey(key);
+	}	
+}
+// ---------------------------------------------------
+int intKey;
+/** This method will only work if all our sub-models are IntKeyedDbModel. */
+public void setKey(Integer ID)
+{
+	if (ID != null) intKey = ID;
+	setKey(new Integer[] {ID});
+}
+/** This method will only work if all our sub-models are IntKeyedDbModel. */
+public void setKey(int id)
+{
+	intKey = id;
+	setKey(id);
+}
+public int getIntKey()
+{ return intKey; }
+
 // ---------------------------------------------------
 }

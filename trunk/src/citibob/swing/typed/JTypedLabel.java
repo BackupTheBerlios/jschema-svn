@@ -100,6 +100,7 @@ public void setValue(Object o)
 	if (val == null) setText(nullText);
 	else {
 		try {
+//System.out.println(getColName());
 			String text = formatter.valueToString(val);
 			setText(text);
 			if (useToolTips) setToolTipText(text);

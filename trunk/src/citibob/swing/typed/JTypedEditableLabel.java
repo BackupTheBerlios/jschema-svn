@@ -59,6 +59,13 @@ String colName;
 //		bClose.setText(null);
     }
 
+//public void setEditable(boolean editable)
+//{
+//	if (editable) {
+//		
+//	}
+//}
+//
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

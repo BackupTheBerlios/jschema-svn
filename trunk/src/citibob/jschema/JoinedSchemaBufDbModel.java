@@ -65,7 +65,9 @@ public JTypeTableModel getTableModel()
 }
 
 //public void setUpdateBufOnUpdate(boolean b) { updateBufOnUpdate = b; }
-
+/** Don't even try on this one... */
+public void setKey(Object[] key)
+{}
 public void setWhereClause(String whereClause)
 {
 	this.whereClause = whereClause;

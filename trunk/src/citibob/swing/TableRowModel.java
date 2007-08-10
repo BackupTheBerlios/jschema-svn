@@ -24,7 +24,8 @@ import java.util.*;
 import citibob.swing.table.*;
 
 /** An improvement on TableRowModel, realizing this should have a SelectModel
- *in it too. */
+ *in it too.
+* NOTE: (x instanceof SchemaRowModel) ==> (x instanceof TableRowModel) */
 public class TableRowModel
 extends AbstractRowModel
 implements MultiRowModel, TableModelListener, ListSelectionModel {

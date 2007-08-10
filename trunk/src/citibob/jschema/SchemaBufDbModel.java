@@ -32,7 +32,7 @@ QueryLogger logger;
 
 boolean updateBufOnUpdate = true;	// Should we update sequence columns on insert?
 //Statement st;
-	
+
 // -------------------------------------------------------------
 public SchemaBufDbModel(String table, SchemaBuf buf)
 {
@@ -63,6 +63,25 @@ public SchemaBufDbModel(Schema schema)
 public void setLogger(QueryLogger logger) { this.logger = logger; }
 
 public void setUpdateBufOnUpdate(boolean b) { updateBufOnUpdate = b; }
+
+/** This will sometimes be overridden. */
+public void setKey(Object[] key)
+{
+	if (key == null || key.length == 0) return;
+	
+	SchemaBuf buf = (SchemaBuf)gen;
+	Schema schema = buf.getSchema();
+	StringBuffer sb = new StringBuffer("1=1");
+	int j = 0;
+	for (int i=0; i<schema.getColCount(); ++i) {
+		Column c = schema.getCol(i);
+		if (!c.isKey()) continue;
+		sb.append(" and " + buf.getDefaultTable() + "." + c.getName() +
+			"=" + c.getType().toSql(key[j]));
+		++j;
+	}
+	setWhereClause(sb.toString());
+}
 
 public void setWhereClause(String whereClause)
 {

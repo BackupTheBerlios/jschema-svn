@@ -61,6 +61,17 @@ public void setValueColU(String name)
 public Object getValue()
 { return val; }
 
+/** Returns the row a value is found on (or -1 if no such row) */
+protected int rowOfValue(Object o)
+{
+	for (int i=0; i<getModel().getRowCount(); ++i) {
+		Object val = getModelU().getValueAt(i, valueColU);
+		boolean eq = (val == null ? o == null : o.equals(val));
+		if (eq) return i;
+	}
+	return -1;
+}
+
 /** Sets the value.  Same as method in JFormattedTextField.  Fires a
  * propertyChangeEvent("value") when calling setValue() changes the value. */
 public void setValue(Object o)
@@ -69,15 +80,13 @@ public void setValue(Object o)
 		getSelectionModel().clearSelection();
 		return;
 	}
-	for (int i=0; i<getModel().getRowCount(); ++i) {
-		Object val = getModelU().getValueAt(i, valueColU);
-		boolean eq = (val == null ? o == null : o.equals(val));
-		if (eq) {
-			this.getSelectionModel().setSelectionInterval(i,i);
-			return;
-		}
+	int row = rowOfValue(o);
+	if (row >= 0) {
+		this.getSelectionModel().setSelectionInterval(row,row);
+		return;
+	} else {
+		getSelectionModel().clearSelection();
 	}
-	getSelectionModel().clearSelection();
 }
 
 public void setHighlightMouseover(boolean b) { isHighlightMouseover = b; }

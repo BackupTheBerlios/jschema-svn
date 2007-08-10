@@ -37,6 +37,13 @@ public class TypedWidgetBinder
 implements RowModel.ColListener, java.beans.PropertyChangeListener
 {
 
+/** Only move data from SchemaBuf to TypedWidget */
+public static final int BT_READ = 1;
+/** Only move data from TypedWidget to RowModel */
+public static final int BT_WRITE = 2;
+/** Move data both ways between RowModel and TypedWidget */
+public static final int BT_READWRITE = BT_READ | BT_WRITE;
+	
 boolean inValueChanged = false;
 boolean inCurRowChanged = false;
 boolean inPropertyChange = false;
@@ -46,12 +53,96 @@ int colNo;
 TypedWidget tw;
 
 // --------------------------------------------------------------------
-public void bind(TypedWidget tw, SchemaRowModel bufRow, SwingerMap map)
-	{ bind(tw, bufRow, null, map); }
-public void bind(TypedWidget tw, TableRowModel bufRow)
-	{ bind(tw, bufRow, null); }
+///** Convenience function --- look up column name for us. */
+//public void bind(TypedWidget tw, SchemaRowModel bufRow, SwingerMap map)
+//	{ bind(tw, bufRow, tw.getColName(), map); }
+///** Don't set the JType of the widget */
+//public void bind(TypedWidget tw, TableRowModel bufRow)
+//	{ bind(tw, bufRow, null); }
+//
+//// -------------------------------------------------------------------------------
+//public void bind(TypedWidget tw, SchemaRowModel bufRow, String colName, SwingerMap map)
+//{
+//	bind(tw, (TableRowModel)bufRow, colName);
+//}
+//
+//public void bindReadOnly(TypedWidget tw, SchemaRowModel bufRow, String colName)
+//{
+//	readOnly = true;
+//	bind(tw, bufRow, colName);
+//}
+///** Just bind widget, don't mess with its type. */
 
 // -------------------------------------------------------------------------------
+// Convenience functions
+/** Binds tw to bufRow as BT_READWRITE using default column name, DOES set types. */
+public void bind(TypedWidget tw, SchemaRowModel bufRow,
+SwingerMap smap)
+	{ bind(tw, bufRow, null, BT_READWRITE, smap); }
+	
+/** Binds tw to bufRow as BT_READWRITE using default column name, DOES NOT set any types. */
+public void bind(TypedWidget tw, SchemaRowModel bufRow)
+	{ bind(tw, (TableRowModel)bufRow, tw.getColName(), BT_READWRITE); }
+// -------------------------------------------------------------------------------
+/** Bind widget and DO set its type.
+
+ @param colName Name in RowModel of column to bind widget to.  If null, bind to
+ tw.getColName().
+ @param tw Widget to bind to buffer
+ @param bufRow Buffer to bind to widget.
+ NOTE: (x instanceof SchemaRowModel) ==> (x instanceof TableRowModel)
+ @param BT_READ, BT_WRITE, or BT_READWRITE
+ @smap Used to auto-configure type of widget. */
+public void bind(TypedWidget tw, SchemaRowModel bufRow,
+String colName, int bindType, SwingerMap smap)
+{
+	if (colName == null) colName = tw.getColName();
+	setJType(tw, bufRow, colName, smap);
+	bind(tw, (TableRowModel)bufRow, colName, bindType);
+}
+// ------------------------------------
+///** Bind widget and DO NOT set its type.
+// @param colName Name in RowModel of column to bind widget to.  If null, bind to
+// tw.getColName().
+// @param tw Widget to bind to buffer
+// @param bufRow Buffer to bind to widget
+// NOTE: (x instanceof SchemaRowModel) ==> (x instanceof TableRowModel)
+// @param BT_READ, BT_WRITE, or BT_READWRITE */ 
+//public void bind(TypedWidget tw, SchemaRowModel bufRow,
+//String colName, int bindType)
+//	{ bind(tw, (TableRowModel)bufRow, colName, bindType); }
+/** Bind widget and DO NOT set its type.
+ @param colName Name in RowModel of column to bind widget to.  If null, bind to
+ tw.getColName().
+ @param tw Widget to bind to buffer
+ @param bufRow Buffer to bind to widget
+ NOTE: (x instanceof SchemaRowModel) ==> (x instanceof TableRowModel)
+ @param BT_READ, BT_WRITE, or BT_READWRITE */
+public void bind(TypedWidget tw, TableRowModel bufRow,
+String colName, int bindType)
+{
+	if (colName == null) colName = tw.getColName();
+	colNo = bufRow.findColumn(colName);
+	if (colNo < 0) return;		// This column is not for us
+
+	this.bufRow = bufRow;
+	this.tw = tw;
+	if ((bindType & BT_WRITE) != 0) {
+		// Bind as listener to the TypedWidget
+		tw.addPropertyChangeListener("value", this);
+	}
+	
+	/** Listen to the RowModel */
+	if ((bindType & BT_READ) != 0) {
+		// Bind as a listener to the RowModel (which fronts a SchemaBuf)...
+		bufRow.addColListener(colNo, this);
+
+		/* Now, set the initial value. */
+		valueChanged(colNo);
+	}
+}
+
+// --------------------------------------------------------------------
 /** Set the type of a widget */
 public static void setJType(TypedWidget tw, SchemaRowModel bufRow, String colName, SwingerMap map)
 {
@@ -68,50 +159,9 @@ public static void setJType(TypedWidget tw, SchemaRowModel bufRow, String colNam
 	}
 }
 // -------------------------------------------------------------------------------
-/** Bind widget and set its type. */
-public void bind(TypedWidget tw, SchemaRowModel bufRow, String colName, SwingerMap map)
+/** Listen to the widget. */
+void bindWidget(TypedWidget tw)
 {
-//if (colName.equals("dob")) {
-//	System.out.println("dob column reached!!!");
-//}
-//if ("cctype".equals(colName)) {
-//	System.out.println("hoi");
-//}
-	setJType(tw, bufRow, colName, map);
-	bind(tw, (TableRowModel)bufRow, colName);
-}
-
-/** Just bind widget, don't mess with its type. */
-public void bind(TypedWidget tw, TableRowModel bufRow, String colName)
-{
-	if (colName == null) colName = tw.getColName();
-	colNo = bufRow.findColumn(colName);
-	if (colNo < 0) return;		// This column is not for us
-
-	bindRowModel(bufRow, colNo);
-	bindWidget(tw);
-	
-	/* Now, set the initial value. */
-	valueChanged(colNo);
-}
-
-// --------------------------------------------------------------------
-public void bindRowModel(TableRowModel bufRow, int colNo)
-{
-	// Bind as a listener to the RowModel (which fronts a SchemaBuf)...
-	this.bufRow = bufRow;
-	bufRow.addColListener(colNo, this);	
-}
-public void bindWidget(TypedWidget tw)
-{
-	// Bind as listener to the TypedWidget
-//System.out.println("tw.class = " + tw.getClass());
-//	Component c = (Component)tw;
-//System.out.println("registering to receive property change from: " + tw);
-//if ("mailprefid".equals(tw.getColName())) {
-//	System.out.println("hoi");
-//}
-	tw.addPropertyChangeListener("value", this);
 	this.tw = tw;
 }
 // --------------------------------------------------------------------
@@ -146,7 +196,8 @@ public void valueChanged(int col)
 	if (inValueChanged) return;
 	inValueChanged = true;
 
-	tw.setValue(bufRow.get(col));
+	Object val = bufRow.get(col);
+	tw.setValue(val);
 
 	inValueChanged = false;
 }
@@ -194,7 +245,7 @@ public static void bindRecursive(Component c, SchemaRowModel bufRow, SwingerMap 
 		TypedWidget tw = (TypedWidget)c;
 //System.out.println("Binding TypedWidget: " + tw.getColName());
 		if (tw.getColName() != null) {
-			new TypedWidgetBinder().bind(tw, bufRow, tw.getColName(), map);
+			new TypedWidgetBinder().bind(tw, bufRow, tw.getColName(), BT_READWRITE, map);
 		}
 	}
 
