@@ -123,17 +123,22 @@ public void setColName(String col) { colName = col; }
 // ---------------------------------------------------
 // ================================================================
 // Stuff to highlight on mouseover
-//Color mouseoverColor = new Color(0,255,0);
-//Color defaultColor = new Color(255,255,255);
-Color cTextHighlight = UIManager.getDefaults().getColor("textHighlight");
-Color cText = UIManager.getDefaults().getColor("text");
+// See: http://forum.java.sun.com/thread.jspa?threadID=280692&messageID=1091824
+// TODO: Actually, we need to use different colors (and fonts) if this is being
+// used in a popup.  We should subclass for that...  But it's OK for now.
+Color cTextHighlightBg = UIManager.getDefaults().getColor("List.selectionBackground");
+Color cTextBg = UIManager.getDefaults().getColor("List.background");
+Color cTextHighlightFg = UIManager.getDefaults().getColor("List.selectionForeground");
+Color cTextFg = UIManager.getDefaults().getColor("List.foreground");
 public Component prepareRenderer(TableCellRenderer renderer, int row, int col)
 {
 	Component c = super.prepareRenderer(renderer, row, col);
 	if (row == mouseRow) {
-		c.setBackground(cTextHighlight);
+		c.setBackground(cTextHighlightBg);
+		c.setForeground(cTextHighlightFg);
 	} else {
-		c.setBackground(cText);
+		c.setBackground(cTextBg);
+		c.setForeground(cTextFg);
 	}
 	return c;
 }

@@ -60,6 +60,12 @@ public JTypedLabel(Swinger f)
 	this();
 	setJType(f);
 }
+public JTypedLabel(String s)
+{
+	this(new JStringSwinger());
+	setValue(s);
+}
+	
 public void setNullText(String s)
 	{ nullText = s; }
 public String getNullText() { return nullText; }

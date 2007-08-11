@@ -75,6 +75,8 @@ public void setKeyedModel(KeyedModel kmodel)
 	super.setModel(cmodel);
 	if (keyList.size() > 0) this.setSelectedIndex(0);	// Make sure getValue() returns something
 }
+public KeyedModel getKeyedModel()
+{ return kmodel; }
 public void setJType(Swinger f)
 {
 	JType jType = f.getJType();

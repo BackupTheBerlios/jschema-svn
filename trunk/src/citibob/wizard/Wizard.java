@@ -66,6 +66,9 @@ protected abstract class State {
 	}
 }
 
+/** Returns output from Wizard. */
+public Object getVal(String name) { return v.get(name); }
+
 /** Gets the name of a resource in the same package as this class. */
 protected String getResourceName(String rname)
 {
@@ -108,17 +111,19 @@ protected Wiz createWiz(State stateRec) throws Exception {
 
 public TypedHashMap runWizard() throws Exception
 {
-	return runWizard(startState);
+	return runWizard(startState, null);
 }
+public TypedHashMap runWizard(String startState) throws Exception
+{ return runWizard(startState, null); }
 /** Returns the values collected from the Wizard (for any work not
 accomplished by Wizard already). */
-public TypedHashMap runWizard(String startState) throws Exception
+public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Exception
 {
 	state = startState;
 	String prevState = null;
 	String curState;
 	try {
-		v = new TypedHashMap();
+		v = (xv == null ? new TypedHashMap() : xv);
 		wizCache = new HashMap();
 		for (state = startState; state != null;) {
 			stateRec = (State)states.get(state);

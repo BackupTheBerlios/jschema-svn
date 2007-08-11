@@ -47,6 +47,9 @@ public void removeColListener(int colIndex, ColListener l);
 public void set(int col, Object val);
 public Object get(int col);
 
+public void set(String col, Object val);
+public Object get(String col);
+
 /** Returns number of columns */
 public int getColCount();
 

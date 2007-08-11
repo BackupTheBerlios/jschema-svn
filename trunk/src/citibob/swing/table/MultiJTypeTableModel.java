@@ -148,9 +148,9 @@ public JType getJType(int row, int col)
 public int findColumn(String name)
 {
 	ColRec rec = colMap.get(name);
-if (rec == null) {
-System.out.println("hoi");
-}
+//if (rec == null) {
+//System.out.println("hoi");
+//}
 	return rec.col;
 }
 // ===============================================================

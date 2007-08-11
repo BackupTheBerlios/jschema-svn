@@ -38,6 +38,7 @@ public class TypedHashMap extends HashMap
 
 public long getLong(Object key) { return ((Long)get(key)).longValue(); }
 public int getInt(Object key) { return ((Integer)get(key)).intValue(); }
+public Integer getInteger(Object key) { return (Integer)get(key); }
 public String getString(Object key) { return ((String)get(key)); }
 public boolean getBool(Object key) { return ((Boolean)get(key)).booleanValue(); }
 /** Sees if there's a key associated with a null value... */

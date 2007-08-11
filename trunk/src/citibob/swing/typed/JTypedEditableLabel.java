@@ -79,8 +79,8 @@ String colName;
         jPanel1 = new javax.swing.JPanel();
         ckNull = new javax.swing.JCheckBox();
         bClose = new javax.swing.JButton();
-        label = new citibob.swing.typed.JTypedLabel();
         btnChange = new javax.swing.JButton();
+        label = new citibob.swing.typed.JTypedLabel();
 
         popupPanel.setLayout(new java.awt.BorderLayout());
 
@@ -93,6 +93,7 @@ String colName;
 
         bClose.setText("x");
         bClose.setFocusable(false);
+        bClose.setMargin(new java.awt.Insets(0, 2, 0, 2));
         bClose.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -104,6 +105,16 @@ String colName;
         jPanel1.add(bClose, java.awt.BorderLayout.EAST);
 
         popupPanel.add(jPanel1, java.awt.BorderLayout.NORTH);
+
+        btnChange.setText("...");
+        btnChange.setPreferredSize(new java.awt.Dimension(35, 29));
+        btnChange.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnChangeActionPerformed(evt);
+            }
+        });
 
         setLayout(new java.awt.BorderLayout());
 
@@ -126,18 +137,6 @@ String colName;
         });
 
         add(label, java.awt.BorderLayout.CENTER);
-
-        btnChange.setText("...");
-        btnChange.setPreferredSize(new java.awt.Dimension(35, 29));
-        btnChange.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                btnChangeActionPerformed(evt);
-            }
-        });
-
-        add(btnChange, java.awt.BorderLayout.EAST);
 
     }// </editor-fold>//GEN-END:initComponents
 
