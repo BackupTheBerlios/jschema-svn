@@ -146,7 +146,20 @@ ImageIcon icon, boolean mnemonic, CalModel xmodel)
 	sModel = new ReverseSpinnerDateModel();
 	setSModel(sModel);
 	dateSpinner = new JSpinner(sModel);
-//	JComponent jc = dateSpinner.getEditor();
+	
+	// Adjust date display font to fit tables better.
+	JComponent jc = dateSpinner;
+	Font font = jc.getFont();
+	font = font.deriveFont(Font.PLAIN);//, (float)(font.getSize2D() - 1.0f));
+	jc.setFont(font);
+	
+	// Move the border to the outermost component so it looks better in a table.
+	// TODO: Real fix is to make a companion JDateDisplayer good for displaying
+	// in table (but not editing).  Also, get rid of those spinner buttons.
+//	setBorder(jc.getBorder());
+	jc.setBorder(new javax.swing.border.EmptyBorder(0,0,0,0));
+//	setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+	
 //System.out.println("jc = " + jc);
 //	if (jc instanceof JSpinner.DefaultEditor) {
 //		final JFormattedTextField tf = ((JSpinner.DefaultEditor)jc).getTextField();
@@ -216,7 +229,7 @@ ImageIcon icon, boolean mnemonic, CalModel xmodel)
 		calendarButton.setMnemonic(KeyEvent.VK_C);
 	}
 	add(calendarButton, BorderLayout.EAST);
-
+	
 	calendarButton.setMargin(new Insets(0, 0, 0, 0));
 	popup = new JPopupMenu();
 //	{
