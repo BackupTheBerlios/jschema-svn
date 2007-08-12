@@ -33,6 +33,8 @@ public Properties getProps();
 public ConnPool getPool();
 /** Allow to log all database changes */
 public citibob.jschema.log.QueryLogger getLogger();
+/** Directory containing configuration files, etc. for this application. */
+public java.io.File getConfigDir();
 
 /** Runs an action started from a specific Swing component. */
 public void runGui(java.awt.Component c, CBRunnable r);
