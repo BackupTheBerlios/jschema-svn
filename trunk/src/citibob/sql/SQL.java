@@ -190,4 +190,13 @@ public static ConsSqlQuery newInsertQuery(String mainTable, HashMap v, Schema sc
 	return sql;
 }
 
+public static String intList(int[] ids)
+{
+	if (ids == null || ids.length == 0) return null;
+	StringBuffer sb = new StringBuffer("(" + ids[0]);
+	for (int i=1; i<ids.length; ++i) sb.append("," + ids[i]);
+	sb.append(")");
+	return sb.toString();
+}
+
 }
