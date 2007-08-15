@@ -24,71 +24,69 @@ import citibob.sql.*;
 //import java.util.*;
 
 /** Description of a set of queries we would like to do and load into a PersonsBuf. */
-public class IntKeyedDbModel extends SchemaBufDbModel
+public class IntsKeyedDbModel extends SchemaBufDbModel
 {
 
 /** Key fields to control who gets displayed. */
-int idValue;
-String keyField;
-int keyCol;
+int[] idValue;
+String[] keyField;
+int[] keyCol;
 
 /** Should we add the key field to the SQL statement when we insert records?  Generally,
 this will be false for main tables (because they have auto-insert), and
 true for subsidiary tables. Defaults to true. */
 boolean doInsertKeys;
 
-public void setKey(int idValue)
+public void setKey(int[] idValue)
 {
-	this.idValue = idValue;
+	for (int i=0; i<idValue.length; ++i) this.idValue[i] = idValue[i];
 }
 public void setKey(Object[] key)
 {
-	if (key[0] == null) setKey(-1);
-	else setKey((Integer)(key[0]));
+	for (int i=0; i<idValue.length; ++i) this.idValue[i] = (Integer)key[i];
 }
 
 
-public int getIntKey() { return idValue; }
-///** Gets the key column of a row from the underlying SchemaBuf */
-//public int getKeyValueAt(int row)
-//{
-//	Integer I = (Integer)getSchemaBuf().getValueAt(row, keyCol);
-//	return (I == null ? -1 : I.intValue());
-//}
+public int[] getIntsKey() { return idValue; }
 // --------------------------------------------------------------
-public IntKeyedDbModel(SchemaBuf buf, String keyField, boolean doInsertKeys)
+public IntsKeyedDbModel(SchemaBuf buf, String[] keyField, boolean doInsertKeys)
 { this(buf, keyField, doInsertKeys, null); }
 
-public IntKeyedDbModel(SchemaBuf buf, String keyField, boolean doInsertKeys, DbChangeModel dbChange)
+public IntsKeyedDbModel(SchemaBuf buf, String[] keyField, boolean doInsertKeys, DbChangeModel dbChange)
 {
 	super(buf, dbChange);
 	this.keyField = keyField;
-	this.keyCol = buf.findColumn(keyField);
+	keyCol = new int[keyField.length];
+	idValue = new int[keyField.length];
+	for (int i=0; i<idValue.length; ++i) keyCol[i] = buf.findColumn(keyField[i]);
 	this.doInsertKeys = doInsertKeys;	
 }
-public IntKeyedDbModel(Schema schema, String keyField, boolean doInsertKeys)
+public IntsKeyedDbModel(Schema schema, String[] keyField, boolean doInsertKeys)
 { this(schema, keyField, doInsertKeys, null); }
-public IntKeyedDbModel(Schema schema, String keyField, boolean doInsertKeys, DbChangeModel dbChange)
+public IntsKeyedDbModel(Schema schema, String[] keyField, boolean doInsertKeys, DbChangeModel dbChange)
 {
 	this(new SchemaBuf(schema), keyField, doInsertKeys, dbChange);
 }
 
-public IntKeyedDbModel(Schema schema, String keyField, DbChangeModel dbChange)
+public IntsKeyedDbModel(Schema schema, String[] keyField, DbChangeModel dbChange)
 	{ this(schema, keyField, true, dbChange); }
-public IntKeyedDbModel(Schema schema, String keyField)
+public IntsKeyedDbModel(Schema schema, String[] keyField)
 	{ this(schema, keyField, null); }
 // --------------------------------------------------------------
 
 public void setSelectWhere(ConsSqlQuery q)
 {
 	super.setSelectWhere(q);
-	q.addWhereClause(keyField + " = " + idValue);
+	for (int i=0; i<keyField.length; ++i) {
+		q.addWhereClause(keyField[i] + " = " + idValue[i]);
+	}
 }
 public void setInsertKeys(int row, ConsSqlQuery q)
 {
 	super.setInsertKeys(row, q);
-	if (doInsertKeys) q.addColumn(keyField, SqlInteger.sql(idValue));
-//	q.addColumn("lastupdated", "now()");
+	if (doInsertKeys) for (int i=0; i<keyField.length; ++i) {
+		q.addColumn(keyField[i], SqlInteger.sql(idValue[i]));
+	}
 }
 // -----------------------------------------------------------
 
