@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.jschema;
 
 import citibob.swing.typed.JType;
+import citibob.swing.typed.JDateType;
 import citibob.sql.SqlType;
 //import citibob.sql.SqlType;
 
@@ -46,6 +47,15 @@ public Column(SqlType type, String name)
 //{
 //	init(type, name, key);
 //}
+
+/** Convenience function */
+public java.util.TimeZone getTimeZone() { return ((JDateType)getType()).getCalendar().getTimeZone(); }
+/** Convenience function */
+public JDateType getJDateType() { return ((JDateType)getType()); }
+/** Convenience function */
+public java.util.Date newDate() { return getJDateType().truncate(new java.util.Date()); }
+/** Convenience function */
+public String toSql(Object o) { return type.toSql(o); }
 
 /** Type of this column */
 public SqlType getType()
