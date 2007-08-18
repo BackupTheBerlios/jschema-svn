@@ -60,7 +60,7 @@ public ColPermuteTableModel(CitibobTableModel model_u, String[] colNames, int[] 
 /** @param model_u Underlying table model
  @param colNames Display names -- Null if you wish to just use names of underlying columns
  @param sColMap Names of underlying columns --- Null if wish to use all underlying columns
- @param editable Is each column editable? */
+ @param editable Is each column editable?  If null, use underlying table's isEditable() function. */
 public ColPermuteTableModel(CitibobTableModel model_u,
 String[] colNames,			// Display names
 String[] sColMap,			// Underlying names
