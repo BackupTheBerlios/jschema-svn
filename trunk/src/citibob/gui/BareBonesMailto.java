@@ -33,7 +33,7 @@ import javax.swing.JOptionPane;
 
 public class BareBonesMailto {
 
-   private static final String errMsg = "Error attempting to launch web browser";
+   private static final String errMsg = "Error attempting to launch email client";
 
    public static void mailto(String addr) {
 	   String url = "mailto:" + addr;
@@ -49,7 +49,7 @@ public class BareBonesMailto {
             Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
 		 } else { //assume Unix or Linux
             String[] browsers = {
-               "evolution" };
+               "evolution", "thunderbird" };
             String browser = null;
             for (int count = 0; count < browsers.length && browser == null; count++)
                if (Runtime.getRuntime().exec(

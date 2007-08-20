@@ -38,7 +38,7 @@ public class BareBonesBrowserLaunch {
    public static void openURL(String url) {
       String osName = System.getProperty("os.name");
       try {
-         if (osName.startsWith("Mac OS")) {
+         if (osName.startsWith("Mac")) {
             Class fileMgr = Class.forName("com.apple.eio.FileManager");
             Method openURL = fileMgr.getDeclaredMethod("openURL",
                new Class[] {String.class});

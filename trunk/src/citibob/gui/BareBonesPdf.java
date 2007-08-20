@@ -39,7 +39,7 @@ public class BareBonesPdf {
 	   String url = f.getPath();
       String osName = System.getProperty("os.name");
       try {
-         if (osName.startsWith("Mac OS")) {
+         if (osName.startsWith("Mac")) {
 //            Class fileMgr = Class.forName("com.apple.eio.FileManager");
 //            Method openURL = fileMgr.getDeclaredMethod("open",
 //               new Class[] {String.class});
