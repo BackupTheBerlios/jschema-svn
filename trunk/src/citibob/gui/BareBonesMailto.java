@@ -47,7 +47,7 @@ public class BareBonesMailto {
             }
          else if (osName.startsWith("Windows")) {
             Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
-		 } else { //assume Unix or Linux
+         } else { //assume Unix or Linux
             String[] browsers = {
                "evolution", "thunderbird" };
             String browser = null;
@@ -56,7 +56,7 @@ public class BareBonesMailto {
                      new String[] {"which", browsers[count]}).waitFor() == 0)
                   browser = browsers[count];
             if (browser == null)
-               throw new Exception("Could not find web browser");
+               throw new Exception("Could not find emailer");
             else
                Runtime.getRuntime().exec(new String[] {browser, url});
             }
@@ -65,5 +65,9 @@ public class BareBonesMailto {
          JOptionPane.showMessageDialog(null, errMsg + ":\n" + e.getLocalizedMessage());
          }
       }
+public static void main(String[] args)
+{
+    mailto("citibob@comcast.net");
+}
 
    }

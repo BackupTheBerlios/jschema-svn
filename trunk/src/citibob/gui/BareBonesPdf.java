@@ -30,6 +30,7 @@ package citibob.gui;
 
 import java.lang.reflect.Method;
 import javax.swing.JOptionPane;
+import java.io.*;
 
 public class BareBonesPdf {
 
@@ -47,8 +48,8 @@ public class BareBonesPdf {
             Runtime.getRuntime().exec("open " + url);
             }
          else if (osName.startsWith("Windows")) {
-//            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
-		 } else { //assume Unix or Linux
+            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
+	} else { //assume Unix or Linux
             String[] browsers = {
                "acroread", "kpdf"  };
             String browser = null;
@@ -66,5 +67,8 @@ public class BareBonesPdf {
          JOptionPane.showMessageDialog(null, errMsg + ":\n" + e.getLocalizedMessage());
          }
       }
-
+public static void main(String[] args)
+{
+    view(new File("c:\\x.pdf"));
+}
    }

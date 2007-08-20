@@ -64,5 +64,9 @@ public class BareBonesBrowserLaunch {
          JOptionPane.showMessageDialog(null, errMsg + ":\n" + e.getLocalizedMessage());
          }
       }
+public static void main(String[] args)
+{
+    openURL("http://www.yale.edu");
+}
 
    }
