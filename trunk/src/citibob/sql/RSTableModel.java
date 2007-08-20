@@ -189,9 +189,12 @@ public int findColumn(String colName)
 public boolean isCellEditable(int rowIndex, int columnIndex)
 	{ return false; }
 // --------------------------------------------------
-///** This is a NOP: Values are immutable once inserted */
-//public void setValueAt(Object val, int rowIndex, int colIndex)
-//	{ }
+/** This is a NOP: Values are immutable once inserted. Noo... report generator
+ might wish to change values at times...*/
+public void setValueAt(Object val, int rowIndex, int colIndex)
+{
+	super.setValueAt(val, rowIndex, colIndex);
+}
 // --------------------------------------------------
 
 // ===============================================================

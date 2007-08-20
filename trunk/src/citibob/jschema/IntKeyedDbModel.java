@@ -82,7 +82,7 @@ public IntKeyedDbModel(Schema schema, String keyField)
 public void setSelectWhere(ConsSqlQuery q)
 {
 	super.setSelectWhere(q);
-	q.addWhereClause(keyField + " = " + idValue);
+	if (idValue >= 0) q.addWhereClause(keyField + " = " + idValue);
 }
 public void setInsertKeys(int row, ConsSqlQuery q)
 {
