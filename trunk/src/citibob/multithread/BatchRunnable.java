@@ -15,24 +15,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
- * ERunnable.java
- *
- * Created on January 29, 2006, 7:50 PM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
-
 package citibob.multithread;
 
-/**
- *
- * @author citibob
- */
-public interface RsRunnable extends CBRunnable {
+/** Takes multiple result sets from one segment of a batch query. */
+public interface BatchRunnable extends CBRunnable {
 
-public void run(java.sql.ResultSet rs) throws Throwable;
+/** Runnable gets run on results of a previous batch query.  If the runnable
+ needs to produce additional queries, it stores them in sqlb. */
+public void run(citibob.sql.SqlBatch batch) throws Throwable;
 	
 }

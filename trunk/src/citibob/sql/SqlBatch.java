@@ -17,7 +17,7 @@ import java.util.*;
  *
  * @author citibob
  */
-public class SqlBatch {
+public class SqlBatch implements SqlRunner {
 
 // Used while building query
 StringBuffer sqlBuf = new StringBuffer();
@@ -35,15 +35,15 @@ public int size() { return handlers.size(); }
 
 
 /** Adds update SQL to the batch --- no ResultSets returned, no handler. */
-public void addUpdate(String sql)
+public void execUpdate(String sql)
 {
-	addQuery(sql, (RssRunnable)null);
+	execQuery(sql, (RssRunnable)null);
 }
 
 /** Adds SQL to the batch --- exactly one ResultSet returned */
-public void addQuery(String sql, final RsRunnable r)
+public void execQuery(String sql, final RsRunnable r)
 {
-	addQuery(sql, new RssRunnable() {
+	execQuery(sql, new RssRunnable() {
 	public void run(ResultSet[] rss, SqlBatch nextBatch) throws Throwable {
 		r.run(rss[0]);
 	}});
@@ -51,7 +51,7 @@ public void addQuery(String sql, final RsRunnable r)
 
 /** Adds SQL to the batch --- multiple ResultSets returned, and it can create
  additional SQL as needed. */
-public void addQuery(String sql, RssRunnable r)
+public void execQuery(String sql, RssRunnable r)
 {
 	sqlBuf.append(sql);
 	sqlBuf.append(";\n select 'hello' as __divider__;\n");
@@ -59,42 +59,42 @@ public void addQuery(String sql, RssRunnable r)
 }
 
 
-public void exec(Connection dbb, ExpHandler exp)
-{
-	if (size() == 0) return;
-	Statement st = null;
-	try {
-		st = dbb.createStatement();
-		exec(st, exp);
-	} catch(SQLException e) {
-		exp.consume(e);
-	} finally {
-		try {
-			st.close();
-		} catch(SQLException e) {
-			exp.consume(e);
-		}
-	}
-}
+//public void exec(Connection dbb) throws Throwable
+//{
+//	if (size() == 0) return;
+//	Statement st = null;
+//	try {
+//		st = dbb.createStatement();
+//		exec(st, exp);
+//	} catch(SQLException e) {
+//		exp.consume(e);
+//	} finally {
+//		try {
+//			st.close();
+//		} catch(SQLException e) {
+//			exp.consume(e);
+//		}
+//	}
+//}
 
 /** Recursively executes this batch and all batches its execution creates. */
-public void exec(Statement st, ExpHandler exp) throws SQLException
+public void exec(Statement st) throws Throwable
 {
 	if (size() == 0) return;
-	exec(this, st, exp);
+	exec(this, st);
 }
 
-private static void exec(SqlBatch batch, Statement st, ExpHandler exp) throws SQLException
+private static void exec(SqlBatch batch, Statement st) throws Throwable
 {
 	for (;;) {
-		SqlBatch nextBatch = batch.execOneBatch(st, exp);
+		SqlBatch nextBatch = batch.execOneBatch(st);
 		if (nextBatch == null) return;
 		batch = nextBatch;
 	}
 }
 
 /** Execute the SQL batch; puts any new queries in "nextBatch" */
-SqlBatch execOneBatch(Statement st, ExpHandler exp) throws SQLException
+SqlBatch execOneBatch(Statement st) throws Throwable
 {
 	SqlBatch nextBatch = new SqlBatch();
 	String sql = sqlBuf.toString();
@@ -123,12 +123,8 @@ SqlBatch execOneBatch(Statement st, ExpHandler exp) throws SQLException
 			xrss.toArray(rss);
 
 			// Process this batch of ResultSets
-			try {
-				RssRunnable handler = curHandler.next();
-				if (handler != null) handler.run(rss, nextBatch);
-			} catch(Throwable e) {
-				exp.consume(e);
-			}
+			RssRunnable handler = curHandler.next();
+			if (handler != null) handler.run(rss, nextBatch);
 
 			// Get ready for new batch
 			xrss.clear();

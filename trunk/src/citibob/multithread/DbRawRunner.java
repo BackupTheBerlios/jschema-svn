@@ -70,6 +70,31 @@ public static Throwable run(StRunnable r, ConnPool pool)
 	return ret;
 }
 	
+public static Throwable run(BatchRunnable r, ConnPool pool)
+{
+	Throwable ret = null;
+	Statement st = null;
+	Connection dbb = null;
+	try {
+		SqlBatch batch = new SqlBatch();
+		r.run(batch);
+		dbb = pool.checkout();
+		st = dbb.createStatement();
+		batch.exec(st);
+	} catch(Throwable e) {
+		ret = e;
+//		eh.consume(e);
+	} finally {
+		try {
+			if (st != null) st.close();
+		} catch(SQLException se) {}
+		try {
+			pool.checkin(dbb);
+		} catch(SQLException se) {}
+	}
+	return ret;
+}
+
 public static Throwable run(DbRunnable r, ConnPool pool)
 {
 	Connection dbb = null;
@@ -99,6 +124,10 @@ public Throwable doRun(CBRunnable rr)
 	}
 	if (rr instanceof DbRunnable) {
 		DbRunnable r = (DbRunnable)rr;
+		return run(r, pool);
+	}
+	if (rr instanceof BatchRunnable) {
+		BatchRunnable r = (BatchRunnable)rr;
 		return run(r, pool);
 	}
 	return new ClassCastException("CBRunnable of class " + rr.getClass() + " is not one of ERunnable, StRunnable or DbRunnable");
