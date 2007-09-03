@@ -27,6 +27,6 @@ import citibob.multithread.*;
  */
 public interface UpdRunnable extends SqlRunnable {
 
-public void run() throws Throwable;
+public void run(SqlRunner str) throws Exception;
 
 }

@@ -19,14 +19,26 @@ import java.util.*;
  */
 public interface SqlRunner {
 
+/** Adds SQL to the batch --- multiple ResultSets returned, and it can create
+ additional SQL as needed.
+ @param rr one of RssRunnable, RsRunnable, UpdRunnable */
+public void execSql(String sql, SqlRunnable rr);
+
+/** Adds Sql to current batch without any processing code. */
 public void execSql(String sql);
 
-/** Adds SQL to the batch --- multiple ResultSets returned, and it can create
- additional SQL as needed. */
-public void execSql(String sql, SqlRunnable r);
-
-/** Adds code to run, in sequence, between other SQL queries. */
+/** Adds processing code to run without any SQL. */
 public void execUpdate(UpdRunnable r);
+
+/** Gets the SqlRunner for the next batch --- used inside SqlRunnable
+ to run things in sequence. */
+public SqlRunner next();
+
+/** While SqlRunnables are running --- store a value for retrieval by later SqlRunnable. */
+public void put(Object key, Object val);
+
+/** While SqlRunnables are running --- retrieve a previously stored value. */
+public Object get(Object key);
 
 }
 

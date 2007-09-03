@@ -35,6 +35,6 @@ import citibob.multithread.*;
  */
 public interface RsRunnable extends SqlRunnable {
 
-public void run(java.sql.ResultSet rs) throws Throwable;
+public void run(citibob.sql.SqlRunner str, java.sql.ResultSet rs) throws Exception;
 	
 }

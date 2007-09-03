@@ -31,6 +31,7 @@ public interface App
 
 public Properties getProps();
 public ConnPool getPool();
+public ExpHandler getExpHandler();
 /** Allow to log all database changes */
 public citibob.jschema.log.QueryLogger getLogger();
 /** Directory containing configuration files, etc. for this application. */

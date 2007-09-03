@@ -107,7 +107,7 @@ public void addItem(Object key, Object item)
 public void addAllItems(SqlRunner str, String sql, final int keyCol, final int itemCol)
 {
 	str.execSql(sql, new RsRunnable() {
-	public void run(ResultSet rs) throws SQLException {
+	public void run(SqlRunner str, ResultSet rs) throws SQLException {
 		while (rs.next()) {
 			addItem(rs.getObject(keyCol),
 				rs.getObject(itemCol));
@@ -118,7 +118,7 @@ public void addAllItems(SqlRunner str, String sql, final int keyCol, final int i
 public void addAllItems(SqlRunner str, String sql, final String keyCol, final String itemCol)
 {
 	str.execSql(sql, new RsRunnable() {
-	public void run(ResultSet rs) throws SQLException {
+	public void run(SqlRunner str, ResultSet rs) throws SQLException {
 		while (rs.next()) {
 			addItem(rs.getObject(keyCol),
 				rs.getObject(itemCol));

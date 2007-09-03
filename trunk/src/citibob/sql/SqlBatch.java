@@ -9,6 +9,7 @@
 
 package citibob.sql;
 
+import citibob.app.App;
 import java.sql.*;
 import citibob.multithread.*;
 import java.util.*;
@@ -24,6 +25,9 @@ StringBuffer sqlBuf = new StringBuffer();
 List<SqlRunnable> handlers = new ArrayList();
 
 // Used while interpreting results
+boolean inExec = false;
+HashMap map;				// Map of values to pass from from one SqlRunnable to the next
+SqlBatch nextBatch;			// The batch we're constructing for the next set of stuff
 int nextCurrent = Statement.CLOSE_ALL_RESULTS;
 List<ResultSet> xrss = new ArrayList();
 
@@ -36,6 +40,9 @@ public int size() { return handlers.size(); }
 
 
 
+// ========================================================================
+// Setting up the batch
+
 public void execSql(String sql)
 	{ execSql(sql, null); }
 
@@ -43,6 +50,7 @@ public void execSql(String sql)
  additional SQL as needed. */
 public void execSql(String sql, SqlRunnable rr)
 {
+	if (inExec) throw new IllegalStateException("Cannot use execSql() or execUpdate() while executing the SQL batch.");
 	sqlBuf.append(sql);
 	sqlBuf.append(";\n select 'hello' as __divider__;\n");
 	handlers.add(rr);
@@ -53,27 +61,28 @@ public void execUpdate(UpdRunnable r)
 	execSql("", r);
 }
 
+// ========================================================================
+// Running the batch
+public SqlBatch next() { return nextBatch; }
+/** While SqlRunnables are running --- store a value for retrieval by later SqlRunnable. */
+public void put(Object key, Object val)
+{ map.put(key, val); }
 
-//public void exec(Connection dbb) throws Throwable
-//{
-//	if (size() == 0) return;
-//	Statement st = null;
-//	try {
-//		st = dbb.createStatement();
-//		exec(st, exp);
-//	} catch(SQLException e) {
-//		exp.consume(e);
-//	} finally {
-//		try {
-//			st.close();
-//		} catch(SQLException e) {
-//			exp.consume(e);
-//		}
-//	}
-//}
+/** While SqlRunnables are running --- retrieve a previously stored value. */
+public Object get(Object key)
+{ return map.get(key); }
 
+// ---------------------------------------
 
-public void exec(ConnPool pool) throws Throwable
+public void exec(App app)
+{
+	try {
+		exec(app.getPool());
+	} catch(Exception e) {
+		app.getExpHandler().consume(e);
+	}
+}
+public void exec(ConnPool pool) throws Exception
 {
 	if (size() == 0) return;
 	Throwable ret = null;
@@ -94,25 +103,30 @@ public void exec(ConnPool pool) throws Throwable
 }
 
 /** Recursively executes this batch and all batches its execution creates. */
-public void exec(Statement st) throws Throwable
+public void exec(Statement st) throws Exception
 {
 	if (size() == 0) return;
+	map = new HashMap();
+	inExec = true;
 	exec(this, st);
+	inExec = false;
 }
 
-private static void exec(SqlBatch batch, Statement st) throws Throwable
+// ---------------------------------------
+private static void exec(SqlBatch batch, Statement st) throws Exception
 {
 	for (;;) {
-		SqlBatch nextBatch = batch.execOneBatch(st);
-		if (nextBatch == null) return;
-		batch = nextBatch;
+		batch.execOneBatch(st);
+		if (batch.next().size() == 0) return;
+		batch.map = batch.next().map;		// Transfer values over
+		batch = batch.next();
 	}
 }
 
 /** Execute the SQL batch; puts any new queries in "nextBatch" */
-SqlBatch execOneBatch(Statement st) throws Throwable
+private void execOneBatch(Statement st) throws Exception
 {
-	SqlBatch nextBatch = new SqlBatch();
+	nextBatch = new SqlBatch();
 	String sql = sqlBuf.toString();
 System.out.println("Executing batch with " + size() + " segments: \n" + sql +
 "=================================================");
@@ -144,11 +158,11 @@ System.out.println("Executing batch with " + size() + " segments: \n" + sql +
 			SqlRunnable handler = curHandler.next();
 			if (handler != null) {
 				if (handler instanceof RssRunnable) {
-					((RssRunnable)handler).run(rss, nextBatch);
+					((RssRunnable)handler).run(this, rss);
 				} else if (handler instanceof RsRunnable) {		
-					((RsRunnable)handler).run(rss[0]);
+					((RsRunnable)handler).run(this, rss[0]);
 				} else if (handler instanceof UpdRunnable) {
-					((UpdRunnable)handler).run();
+					((UpdRunnable)handler).run(this);
 				}
 			}
 
@@ -161,7 +175,7 @@ System.out.println("Executing batch with " + size() + " segments: \n" + sql +
 		}
 
 	}
-	return (nextBatch.size() == 0 ? null : nextBatch);
+//	return (nextBatch.size() == 0 ? null : nextBatch);
 }
 }
 

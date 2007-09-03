@@ -33,6 +33,6 @@ package citibob.multithread;
  */
 public interface ERunnable extends CBRunnable {
 
-public void run() throws Throwable;
+public void run() throws Exception;
 	
 }

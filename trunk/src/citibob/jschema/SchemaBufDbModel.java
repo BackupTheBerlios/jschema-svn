@@ -171,12 +171,13 @@ protected ConsSqlQuery doSimpleInsert(final int row, SqlRunner str)
 			Column col = schema.getCol(i);
 			if ((col.type instanceof SqlSequence) && inserted.get(col.name)==null) {
 				// Update this in the SchemaBuf if it wasn't inserted...
-				SqlSequence seq = (SqlSequence)col.type;
+				final SqlSequence seq = (SqlSequence)col.type;
 //				int val = seq.getCurVal(st);
 				final int ii = i;
-				seq.getCurVal(str, new SeqRunnable() {
-				public void run(int val, SqlRunner nstr) {
-					sb.setValueAt(new Integer(val), row, ii);
+				seq.getCurVal(str);
+				str.execUpdate(new UpdRunnable() {
+				public void run(SqlRunner str) throws Exception {
+					sb.setValueAt(seq.retrieve(str), row, ii);
 				}});
 			}
 		}

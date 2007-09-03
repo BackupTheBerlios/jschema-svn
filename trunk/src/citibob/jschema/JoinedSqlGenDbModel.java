@@ -144,7 +144,7 @@ public void doSelect(SqlRunner str)
 	String sql = q.getSql();
 	
 	str.execSql(sql, new RsRunnable() {
-	public void run(ResultSet rs) throws SQLException {
+	public void run(SqlRunner str, ResultSet rs) throws SQLException {
 		int firstRow = specs[0].gen.getRowCount();
 		int n=0;
 		while (rs.next()) {
@@ -253,7 +253,7 @@ protected ConsSqlQuery doSimpleUpdate(final int tab, final int row, SqlRunner st
 		final String sql = q.getSql();
 
 		str.execSql(sql, new UpdRunnable() {
-		public void run() {
+		public void run(SqlRunner str) {
 			specs[tab].gen.setStatus(row, 0);
 		}});
 		return q;
@@ -278,7 +278,7 @@ System.out.println(q.getSql());
 	String sql = q.getSql();
 	
 	str.execSql(sql, new UpdRunnable() {
-	public void run() {
+	public void run(SqlRunner str) {
 		specs[tab].gen.removeRow(row);
 	}});
 	return q;
@@ -296,7 +296,7 @@ System.out.println("doSimpleInsert: ");
 	String sql = q.getSql();
 System.out.println("   sql = " + sql);
 	str.execSql(sql, new UpdRunnable() {
-	public void run() {
+	public void run(SqlRunner str) {
 		specs[tab].gen.setStatus(row, 0);
 	}});
 	return q;

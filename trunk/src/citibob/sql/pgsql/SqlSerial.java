@@ -46,6 +46,9 @@ public class SqlSerial extends SqlInteger implements SqlSequence
 
 	static String curValSql(String seq) { return "select currval(" + SqlString.sql(seq) + ")"; }
 	static String nextValSql(String seq) { return "select nextval(" + SqlString.sql(seq) + ")"; }
+
+	public int retrieve(SqlRunner str) { return (Integer)str.get(seq); }
+
 	
 	public int getCurVal(Statement st) throws SQLException
 	{
@@ -64,29 +67,30 @@ public class SqlSerial extends SqlInteger implements SqlSequence
 		return ret;		
 	}
 	
-	public void getCurVal(SqlRunner str, final SeqRunnable r)
-		{ getCurVal(str, seq, r); }
-	public void getNextVal(SqlRunner str, final SeqRunnable r)
-		{ getNextVal(str, seq, r); }
-	/** Return current value of the sequence (after an INSERT has been called that incremented it.) */
-	public static void getCurVal(SqlRunner str, String seq, final SeqRunnable r)
+	public void getCurVal(SqlRunner str)
+		{ getCurVal(str, seq); }
+	public void getNextVal(SqlRunner str)
+		{ getNextVal(str, seq); }
+	/** Return current value of the sequence (after an INSERT has been called that incremented it.)  Stores
+	 value in Str under name seq. */
+	public static void getCurVal(SqlRunner str, final String seq)
 	{
 		String sql = curValSql(seq);
 		str.execSql(sql, new RssRunnable() {
-		public void run(ResultSet[] rss, SqlRunner nstr) throws Throwable {
+		public void run(SqlRunner str, ResultSet[] rss) throws Exception {
 			int val = rss[0].getInt(1);
-			r.run(val, nstr);
+			str.put(seq, val);
 		}});
 	}
 	
 	/** Return current value of the sequence (after an INSERT has been called that incremented it.) */
-	public static void getNextVal(SqlRunner str, String seq, final SeqRunnable r)
+	public static void getNextVal(SqlRunner str, final String seq)
 	{
 		String sql = curValSql(seq);
 		str.execSql(sql, new RssRunnable() {
-		public void run(ResultSet[] rss, SqlRunner nstr) throws Throwable {
+		public void run( SqlRunner str, ResultSet[] rss) throws Exception {
 			int val = rss[0].getInt(1);
-			r.run(val, nstr);
+			str.put(seq, val);
 		}});
 	}
 }

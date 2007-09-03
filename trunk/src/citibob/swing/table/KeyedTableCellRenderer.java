@@ -52,17 +52,17 @@ public void setModel(KeyedModel model)
 public void setNullString(String s)
 	{ nullString = s; }
 
-public void addAllItems(ResultSet rs, String intCol, String itemCol)
-throws SQLException
-{
-	model.addAllItems(rs, intCol, itemCol);
-}
-
-public void addAllItems(ResultSet rs, int intCol, int itemCol)
-throws SQLException
-{
-	model.addAllItems(rs, intCol, itemCol);
-}
+//public void addAllItems(ResultSet rs, String intCol, String itemCol)
+//throws SQLException
+//{
+//	model.addAllItems(rs, intCol, itemCol);
+//}
+//
+//public void addAllItems(ResultSet rs, int intCol, int itemCol)
+//throws SQLException
+//{
+//	model.addAllItems(rs, intCol, itemCol);
+//}
 // ------------------------------------------------------
 
 public void setValue(Object o) {

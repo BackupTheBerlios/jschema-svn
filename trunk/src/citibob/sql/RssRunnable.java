@@ -23,7 +23,7 @@ import citibob.multithread.*;
 public interface RssRunnable extends SqlRunnable {
 
 /** Runnable gets run on results of a previous batch query.  If the runnable
- needs to produce additional queries, it stores them in sqlb. */
-public void run(java.sql.ResultSet[] rss, citibob.sql.SqlRunner nextBatch) throws Throwable;
+ needs to produce additional queries, it stores them in nstr.next(). */
+public void run(citibob.sql.SqlRunner str, java.sql.ResultSet[] rss) throws Exception;
 	
 }

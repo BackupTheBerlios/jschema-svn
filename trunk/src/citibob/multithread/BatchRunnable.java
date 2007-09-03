@@ -22,6 +22,6 @@ public interface BatchRunnable extends CBRunnable {
 
 /** Runnable gets run on results of a previous batch query.  If the runnable
  needs to produce additional queries, it stores them in sqlb. */
-public void run(citibob.sql.SqlRunner batch) throws Throwable;
+public void run(citibob.sql.SqlRunner batch) throws Exception;
 	
 }

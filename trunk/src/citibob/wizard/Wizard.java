@@ -114,15 +114,15 @@ protected Wiz createWiz(State stateRec, SqlRunner xstr) throws Exception {
 	return stateRec.newWiz(xstr);
 }
 
-public TypedHashMap runWizard() throws Throwable
+public TypedHashMap runWizard() throws Exception
 {
 	return runWizard(startState, null);
 }
-public TypedHashMap runWizard(String startState) throws Throwable
+public TypedHashMap runWizard(String startState) throws Exception
 { return runWizard(startState, null); }
 /** Returns the values collected from the Wizard (for any work not
 accomplished by Wizard already). */
-public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Throwable
+public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Exception
 {
 	state = startState;
 	String prevState = null;

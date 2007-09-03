@@ -161,7 +161,7 @@ public void executeQuery(SqlRunner str, String sql)
 {
 	setNumRows(0);
 	str.execSql(sql, new RsRunnable() {
-	public void run(ResultSet rs) throws SQLException {
+	public void run(SqlRunner str, ResultSet rs) throws SQLException {
 		if (tset != null) setColHeaders(rs);
 		addAllRows(rs);
 	}});
