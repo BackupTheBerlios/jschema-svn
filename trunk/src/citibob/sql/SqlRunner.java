@@ -19,14 +19,14 @@ import java.util.*;
  */
 public interface SqlRunner {
 
-public void execUpdate(String sql);
-
-/** Adds SQL to the batch --- exactly one ResultSet returned */
-public void execQuery(String sql, final RsRunnable r);
+public void execSql(String sql);
 
 /** Adds SQL to the batch --- multiple ResultSets returned, and it can create
  additional SQL as needed. */
-public void execQuery(String sql, RssRunnable r);
+public void execSql(String sql, SqlRunnable r);
+
+/** Adds code to run, in sequence, between other SQL queries. */
+public void execUpdate(UpdRunnable r);
 
 }
 

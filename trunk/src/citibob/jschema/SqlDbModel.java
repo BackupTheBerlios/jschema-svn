@@ -49,16 +49,16 @@ public SqlTableModel getTableModel() { return model; }
 // ========================================================
 // DbModel
 /** Initialize component to receive data.  Might be needed if some kind of database lookup is needed. */
-public void doInit(Statement st) throws java.sql.SQLException {}
+public void doInit(SqlRunner str) {}
 
 /** Get Sql query to re-select current record
 * from database.  When combined with an actual
 * database and the SqlDisplay.setSqlValue(), this
 * has the result of refreshing the current display. */
-public void doSelect(Statement st) throws java.sql.SQLException
+public void doSelect(SqlRunner str)
 {
 //	ResultSet rs = st.executeQuery(sql);
-	model.executeQuery(st);
+	model.executeQuery(str);
 }
 
 /** Clear all buffered data from this component.  Then there

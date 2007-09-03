@@ -56,7 +56,7 @@ public SqlGen getSqlGen()
 // in every implementation.
 // void setKey()
 // -----------------------------------------------------------
-public void doInit(Statement st) throws java.sql.SQLException
+public void doInit(SqlRunner str)
 {
 //	this.st = st;
 }
@@ -76,23 +76,26 @@ public void setInsertKeys(int row, ConsSqlQuery sql) {}
 * from database.  When combined with an actual
 * database and the SqlDisplay.setSqlValue(), this
 * has the result of refreshing the current display. */
-public void doSelect(Statement st) throws java.sql.SQLException
+public void doSelect(SqlRunner str)
 {
 	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.SELECT);
 	gen.getSelectCols(q, table);
 	q.addTable(table);
 	setSelectWhere(q);
 System.out.println("doSelect: " + q.getSql());
-	gen.addAllRows(st.executeQuery(q.getSql()));
+	str.execSql(q.getSql(),new RsRunnable() {
+	public void run(ResultSet rs) throws SQLException {
+		gen.addAllRows(rs);
+	}});
 }
 // -----------------------------------------------------------
 /** Get Sql query to insert record into database,
 * assuming it isn't already there. */
-public void doInsert(Statement st) throws java.sql.SQLException
+public void doInsert(SqlRunner str)
 {
 	for (int row = 0; row < gen.getRowCount(); ++row) {
 System.out.println("doSimpleInsert on row " + row + " of " + gen.getRowCount());
-		doSimpleInsert(row, st);
+		doSimpleInsert(row, str);
 	}
 }
 // -----------------------------------------------------------
@@ -109,7 +112,7 @@ public boolean valueChanged()
 /** Get Sql query to flush updates to database.
 * Only updates records that have changed; returns null
 * if nothing has changed. */
-public void doUpdate(Statement st, int row) throws java.sql.SQLException
+public void doUpdate(SqlRunner str, int row)
 {
 //System.out.println("doUpdate.status(" + row + ") = " + gen.getStatus(row));
 	int status = gen.getStatus(row); // & ~CHANGED;
@@ -119,38 +122,40 @@ public void doUpdate(Statement st, int row) throws java.sql.SQLException
 		// break;
 		case DELETED :
 		case DELETED | CHANGED :
-			doSimpleDelete(row, st);
+			doSimpleDelete(row, str);
 		break;
 		case INSERTED :
-			if (insertBlankRow) doSimpleInsert(row, st);
+			if (insertBlankRow) doSimpleInsert(row, str);
 			else gen.removeRow(row);
 		break;
 		case INSERTED | CHANGED :
-			doSimpleInsert(row, st);
+			doSimpleInsert(row, str);
 		break;
 		case 0 :
 		case CHANGED :	// No status bits, just a normal record
-			doSimpleUpdate(row, st);
+			doSimpleUpdate(row, str);
 		break;
 	}
-	if (dbChange != null) dbChange.fireTableChanged(st, table);	
+	if (dbChange != null) {
+		dbChange.fireTableWillChange(str, table);
+	}	
 }
 // -----------------------------------------------------------
 /** Get Sql query to flush updates to database.
 * Only updates records that have changed; returns null
 * if nothing has changed. */
-public void doUpdate(Statement st) throws java.sql.SQLException
+public void doUpdate(SqlRunner str)
 {
-	for (int row = 0; row < gen.getRowCount(); ++row) doUpdate(st, row);
+	for (int row = 0; row < gen.getRowCount(); ++row) doUpdate(str, row);
 }
 // -----------------------------------------------------------
 /** Get Sql query to delete current record. */
-public void doDelete(Statement st) throws java.sql.SQLException
+public void doDelete(SqlRunner str)
 {
 	for (int row = 0; row < gen.getRowCount(); ++row) {
 		// Only delete if this is a real record in the DB.
 		if ((gen.getStatus(row) & INSERTED) == 0) {
-			doSimpleDelete(row, st);
+			doSimpleDelete(row, str);
 		}
 	}
 }
@@ -161,7 +166,7 @@ public void doDelete(Statement st) throws java.sql.SQLException
 /** Get Sql query to flush updates to database.
 * Only updates records that have changed; returns null
 * if nothing has changed. */
-protected ConsSqlQuery doSimpleUpdate(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleUpdate(final int row, SqlRunner str)
 {
 	if (gen.valueChanged(row)) {
 		ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.UPDATE);
@@ -174,13 +179,15 @@ protected ConsSqlQuery doSimpleUpdate(int row, Statement st) throws java.sql.SQL
 		int afterWhere = q.numWhereClauses();
 		System.out.println(q.getSql());
 		if (beforeWhere == afterWhere) {
-			throw new SQLException("Update statement missing key fields in WHERE clause\n"
+			throw new IllegalArgumentException("Update statement missing key fields in WHERE clause\n"
 				+ q.getSql());
 		}
 	String sql = q.getSql();
 System.out.println("doSimpleUpdate: " + sql);
-		st.executeUpdate(sql);
-		gen.setStatus(row, 0);
+		str.execSql(sql, new UpdRunnable() {
+		public void run() {
+			gen.setStatus(row, 0);
+		}});
 		return q;
 	} else {
 		gen.setStatus(row, 0);
@@ -190,31 +197,31 @@ System.out.println("doSimpleUpdate: " + sql);
 // -----------------------------------------------------------
 
 /** Get Sql query to delete current record. */
-protected ConsSqlQuery doSimpleDeleteNoRemoveRow(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleDeleteNoRemoveRow(int row, SqlRunner str)
 {
 	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.DELETE);
 	q.setMainTable(table);
 	gen.getWhereKey(row, q, table);
 System.out.println(q.getSql());
 	if (q.numWhereClauses() == 0) {
-		throw new SQLException("Delete statement missing WHERE clause\n" +
+		throw new IllegalArgumentException("Delete statement missing WHERE clause\n" +
 			q.getSql());
 	}
 	String sql = q.getSql();
 System.out.println("doSimpleDelete: " + sql);
-	st.executeUpdate(sql);
+	str.execSql(sql);
 	return q;
 }
-protected ConsSqlQuery doSimpleDelete(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleDelete(int row, SqlRunner str)
 {
-	ConsSqlQuery q = doSimpleDeleteNoRemoveRow(row, st);
+	ConsSqlQuery q = doSimpleDeleteNoRemoveRow(row, str);
 	gen.removeRow(row);
 	return q;
 }
 // -----------------------------------------------------------
 /** Get Sql query to insert record into database,
 * assuming it isn't already there. */
-protected ConsSqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleInsert(final int row, SqlRunner str)
 {
 	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.INSERT);
 	q.setMainTable(table);
@@ -223,8 +230,10 @@ System.out.println("doSimpleInsert: ");
 	setInsertKeys(row, q);
 	String sql = q.getSql();
 System.out.println("   sql = " + sql);
-	st.executeUpdate(sql);
-	gen.setStatus(row, 0);
+	str.execSql(sql, new UpdRunnable() {
+	public void run() {
+		gen.setStatus(row, 0);
+	}});
 	return q;
 }
 // -----------------------------------------------------------

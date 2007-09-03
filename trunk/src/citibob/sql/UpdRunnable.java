@@ -15,13 +15,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package citibob.multithread;
 
-/** Takes multiple result sets from one segment of a batch query. */
-public interface BatchRunnable extends CBRunnable {
 
-/** Runnable gets run on results of a previous batch query.  If the runnable
- needs to produce additional queries, it stores them in sqlb. */
-public void run(citibob.sql.SqlRunner batch) throws Throwable;
-	
+package citibob.sql;
+
+import citibob.multithread.*;
+
+/**
+ * Runs after an update.
+ * @author citibob
+ */
+public interface UpdRunnable extends SqlRunnable {
+
+public void run() throws Throwable;
+
 }

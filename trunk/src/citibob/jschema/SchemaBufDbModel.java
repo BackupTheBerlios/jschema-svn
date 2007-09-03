@@ -31,7 +31,7 @@ String orderClause;
 QueryLogger logger;
 
 boolean updateBufOnUpdate = true;	// Should we update sequence columns on insert?
-//Statement st;
+//SqlRunner str;
 
 // -------------------------------------------------------------
 public SchemaBufDbModel(String table, SchemaBuf buf)
@@ -90,11 +90,11 @@ public void setWhereClause(String whereClause)
 public void setOrderClause(String orderClause)
 	{ this.orderClause = orderClause; }
 // -------------------------------------------------------------
-public void doSelect(Statement st) throws java.sql.SQLException
+public void doSelect(SqlRunner str)
 {
 //	gen.fireRefreshStart();
 	getSchemaBuf().clear();
-	super.doSelect(st);
+	super.doSelect(str);
 //	gen.fireRefreshFinish();
 }
 
@@ -144,9 +144,10 @@ public boolean isInstantUpdate()
 	return (instantUpdateListener != null);
 }
 
-protected ConsSqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleInsert(final int row, SqlRunner str)
 {
-	ConsSqlQuery q = super.doSimpleInsert(row, st);
+	//ConsSqlQuery q = 
+	ConsSqlQuery q = super.doSimpleInsert(row, str);
 	
 //	SqlQuery q = new SqlQuery(SqlQuery.INSERT);
 //	q.setMainTable(table);
@@ -159,7 +160,7 @@ protected ConsSqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQL
 //	gen.setStatus(row, 0);
 	
 	/** Figure out which sequence columns were not inserted, and find their keys */
-	SchemaBuf sb = (SchemaBuf)gen;
+	final SchemaBuf sb = (SchemaBuf)gen;
 	Schema schema = sb.getSchema();
 	
 	TreeMap<String,ConsSqlQuery.NVPair> inserted = new TreeMap();
@@ -171,8 +172,12 @@ protected ConsSqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQL
 			if ((col.type instanceof SqlSequence) && inserted.get(col.name)==null) {
 				// Update this in the SchemaBuf if it wasn't inserted...
 				SqlSequence seq = (SqlSequence)col.type;
-				int val = seq.getCurVal(st);
-				sb.setValueAt(new Integer(val), row, i);
+//				int val = seq.getCurVal(st);
+				final int ii = i;
+				seq.getCurVal(str, new SeqRunnable() {
+				public void run(int val, SqlRunner nstr) {
+					sb.setValueAt(new Integer(val), row, ii);
+				}});
 			}
 		}
 	}
@@ -213,27 +218,27 @@ protected ConsSqlQuery doSimpleInsert(int row, Statement st) throws java.sql.SQL
 	return q;
 }
 // -----------------------------------------------------------
-protected ConsSqlQuery doSimpleUpdate(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleUpdate(int row, SqlRunner str)
 {
 	SchemaBuf sb = (SchemaBuf)gen;
 	Schema schema = sb.getSchema();
-	ConsSqlQuery q = super.doSimpleUpdate(row, st);
+	ConsSqlQuery q = super.doSimpleUpdate(row, str);
 	if (q != null && logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
 	return q;
 }
 /** Get Sql query to delete current record. */
-protected ConsSqlQuery doSimpleDelete(int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleDelete(int row, SqlRunner str)
 {
 	SchemaBuf sb = (SchemaBuf)gen;
 	Schema schema = sb.getSchema();
-	ConsSqlQuery q = super.doSimpleDeleteNoRemoveRow(row, st);
+	ConsSqlQuery q = super.doSimpleDeleteNoRemoveRow(row, str);
 	if (logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
 	gen.removeRow(row);
 	return q;
 }
 // ==============================================
 private static class InstantUpdateListener implements TableModelListener {
-//	Statement st;
+//	SqlRunner str;
 	ActionRunner runner;
 	SqlGenDbModel dbModel;
 	public InstantUpdateListener(SqlGenDbModel dbModel, ActionRunner runner)
@@ -243,15 +248,15 @@ private static class InstantUpdateListener implements TableModelListener {
 	}
 	public void tableChanged(final TableModelEvent e) {
 System.out.println("InstantUpdateListener.tableChanged()");
-		runner.doRun(new StRunnable() {
-		public void run(Statement st) throws SQLException {
+		runner.doRun(new BatchRunnable() {
+		public void run(SqlRunner str) throws SQLException {
 			switch(e.getType()) {
 				// TODO: Update only rows that have changed, don't waste
 				// your time on all the other rows!
 				case TableModelEvent.UPDATE :
 					for (int r=e.getFirstRow(); r <= e.getLastRow(); ++r) {
 System.out.println("InstantUpdateListener.doUpdate row = " + r);
-						dbModel.doUpdate(st, r);
+						dbModel.doUpdate(str, r);
 					}
 				break;
 			}

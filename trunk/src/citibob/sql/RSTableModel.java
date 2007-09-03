@@ -53,7 +53,7 @@ public void setColHeaders(Col[] cols)
 }
 
 // --------------------------------------------------
-public void setColHeaders(ResultSet rs) throws SQLException
+public void setColHeaders(java.sql.ResultSet rs) throws SQLException
 {
 	ResultSetMetaData md = rs.getMetaData();
 	int ncol = md.getColumnCount();
@@ -157,17 +157,14 @@ public RSTableModel()
 // ===============================================================
 
 /** All-in-one: execute a query, set up row headers, and add all rows to the table model. */
-public void executeQuery(Statement st, String sql) throws SQLException
+public void executeQuery(SqlRunner str, String sql)
 {
 	setNumRows(0);
-	ResultSet rs = null;
-	try {
-		rs = st.executeQuery(sql);
-		if (tset != null) this.setColHeaders(rs);
+	str.execSql(sql, new RsRunnable() {
+	public void run(ResultSet rs) throws SQLException {
+		if (tset != null) setColHeaders(rs);
 		addAllRows(rs);
-	} finally {
-		try { rs.close(); } catch(Exception e) {}
-	}
+	}});
 }
 public void addAllRows(ResultSet rs) throws SQLException
 {

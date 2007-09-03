@@ -29,6 +29,6 @@ package citibob.jschema;
  */
 public interface StatementInitializable {
 
-	void init(java.sql.Statement db) throws java.sql.SQLException;
+	void init(java.sql.Statement db);
 
 }

@@ -150,10 +150,10 @@ App app;
 
 public void doSave()
 {
-		app.runGui(StatusPNC.this, new StRunnable() { public void run(Statement st) throws Exception {
+		app.runGui(StatusPNC.this, new BatchRunnable() { public void run(SqlRunner str) throws Exception {
 			if (dbm.valueChanged()) {
-				dbm.doUpdate(st);
-				dbm.doSelect(st);
+				dbm.doUpdate(str);
+				dbm.doSelect(str);
 			}
 		}});
 	
@@ -165,8 +165,8 @@ private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
 }//GEN-LAST:event_bSaveActionPerformed
 
 	private void bRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRestoreActionPerformed
-		app.runGui(StatusPNC.this, new StRunnable() { public void run(Statement st) throws Exception {
-			dbm.doSelect(st);
+		app.runGui(StatusPNC.this, new BatchRunnable() { public void run(SqlRunner str) throws Exception {
+			dbm.doSelect(str);
 		}});
 // TODO add your handling code here:
 	}//GEN-LAST:event_bRestoreActionPerformed

@@ -37,9 +37,9 @@ import java.sql.*;
 public interface SqlSequence {
 
 	/** Return current value of the sequence (after an INSERT has been called that incremented it.) */
-	public int getCurVal(Statement st) throws SQLException;
+	public void getCurVal(SqlRunner str, SeqRunnable r);
 	
 	/** Increment the sequence and return its value. */
-	public int getNextVal(Statement st) throws SQLException;
+	public void getNextVal(SqlRunner str, SeqRunnable r);
 	
 }

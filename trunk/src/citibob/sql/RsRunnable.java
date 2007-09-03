@@ -33,7 +33,7 @@ import citibob.multithread.*;
  *
  * @author citibob
  */
-public interface RsRunnable extends CBRunnable {
+public interface RsRunnable extends SqlRunnable {
 
 public void run(java.sql.ResultSet rs) throws Throwable;
 	

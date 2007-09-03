@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.jschema;
 
 import java.sql.*;
+import citibob.sql.*;
 
 /** Implements smart update and delete operations... */
 public interface DbModel
@@ -28,7 +29,7 @@ public interface DbModel
 // void setKey()
 
 /** Initialize component to receive data.  Might be needed if some kind of database lookup is needed. */
-void doInit(Statement st) throws java.sql.SQLException;
+void doInit(SqlRunner str);
 
 /** Have any of the values here changed and not stored in the DB?  I.e. would calling doUpdate() cause any changes to the database? */
 boolean valueChanged();
@@ -37,19 +38,19 @@ boolean valueChanged();
 * from database.  When combined with an actual
 * database and the SqlDisplay.setSqlValue(), this
 * has the result of refreshing the current display. */
-void doSelect(Statement st) throws java.sql.SQLException;
+void doSelect(SqlRunner str);
 
 /** Get Sql query to flush updates to database.
 * Only updates records that have changed; returns null
 * if nothing has changed. */
-void doUpdate(Statement st) throws java.sql.SQLException;
+void doUpdate(SqlRunner str);
 
 /** Get Sql query to insert record into database,
 * assuming it isn't already there. */
-void doInsert(Statement st) throws java.sql.SQLException;
+void doInsert(SqlRunner str);
 
 /** Get Sql query to delete current record. */
-void doDelete(Statement st) throws java.sql.SQLException;
+void doDelete(SqlRunner str);
 
 /** Clear all buffered data from this component.  Then there
 is no current record. */

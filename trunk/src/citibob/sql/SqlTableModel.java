@@ -50,9 +50,9 @@ public SqlTableModel(SqlTypeSet tset, String sql)
 	this.sql = sql;
 }
 
-public void executeQuery(Statement st) throws SQLException
+public void executeQuery(SqlRunner str)
 {
-	executeQuery(st, sql);
+	executeQuery(str, sql);
 }
 
 }

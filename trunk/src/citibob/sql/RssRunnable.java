@@ -20,7 +20,7 @@ package citibob.sql;
 import citibob.multithread.*;
 
 /** Takes multiple result sets from one segment of a batch query. */
-public interface RssRunnable extends CBRunnable {
+public interface RssRunnable extends SqlRunnable {
 
 /** Runnable gets run on results of a previous batch query.  If the runnable
  needs to produce additional queries, it stores them in sqlb. */

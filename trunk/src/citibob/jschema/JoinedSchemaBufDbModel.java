@@ -31,7 +31,7 @@ String whereClause;
 String orderClause;
 
 boolean updateBufOnUpdate = true;	// Should we update sequence columns on insert?
-//Statement st;
+//SqlRunner str;
 //JTypeTableModel xtra;
 MultiJTypeTableModel model;
 QueryLogger logger;
@@ -75,13 +75,13 @@ public void setWhereClause(String whereClause)
 public void setOrderClause(String orderClause)
 	{ this.orderClause = orderClause; }
 // -------------------------------------------------------------
-public void doSelect(Statement st) throws java.sql.SQLException
+public void doSelect(SqlRunner str)
 {
 //	for (int i=0; i<specs.length; ++i)
 //		getSchemaBuf(i).clear();
 //	for (int i=0; i<specs.length; ++i) specs[i].gen.fireRefreshStart();
 	doClear();
-	super.doSelect(st);
+	super.doSelect(str);
 //	for (int i=0; i<specs.length; ++i) specs[i].gen.fireRefreshFinish();
 }
 
@@ -135,7 +135,7 @@ public void setInsertKeys(int row, ConsSqlQuery q) {}
 //	return (instantUpdateListener != null);
 //}
 
-//protected ConsSqlQuery doSimpleInsert(int tab, int row, Statement st) throws java.sql.SQLException
+//protected ConsSqlQuery doSimpleInsert(int tab, int row, SqlRunner str)
 //{
 //	
 //	ConsSqlQuery q = super.doSimpleInsert(tab, row, st);
@@ -161,12 +161,12 @@ public void setInsertKeys(int row, ConsSqlQuery q) {}
 //	return q;
 //}
 
-protected ConsSqlQuery doSimpleInsert(int tab, int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleInsert(int tab, final int row, SqlRunner str)
 {
-	ConsSqlQuery q = super.doSimpleInsert(tab, row, st);
+	ConsSqlQuery q = super.doSimpleInsert(tab, row, str);
 	
 	/** Figure out which sequence columns were not inserted, and find their keys */
-	SchemaBuf sb = getSchemaBuf(tab); //(SchemaBuf)gens[tab];
+	final SchemaBuf sb = getSchemaBuf(tab); //(SchemaBuf)gens[tab];
 	Schema schema = sb.getSchema();
 	
 	TreeMap<String,ConsSqlQuery.NVPair> inserted = new TreeMap();
@@ -178,8 +178,11 @@ protected ConsSqlQuery doSimpleInsert(int tab, int row, Statement st) throws jav
 			if ((col.type instanceof SqlSequence) && inserted.get(col.name)==null) {
 				// Update this in the SchemaBuf if it wasn't inserted...
 				SqlSequence seq = (SqlSequence)col.type;
-				int val = seq.getCurVal(st);
-				sb.setValueAt(new Integer(val), row, i);
+				final int ii = i;
+				seq.getCurVal(str, new SeqRunnable() {
+				public void run(int val, SqlRunner nstr) {
+					sb.setValueAt(new Integer(val), row, ii);
+				}});
 			}
 		}
 	}
@@ -190,20 +193,20 @@ protected ConsSqlQuery doSimpleInsert(int tab, int row, Statement st) throws jav
 
 
 // -----------------------------------------------------------
-protected ConsSqlQuery doSimpleUpdate(int tab, int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleUpdate(int tab, int row, SqlRunner str)
 {
 	SchemaBuf sb = getSchemaBuf(tab); //(SchemaBuf)gens[tab];
 	Schema schema = sb.getSchema();
-	ConsSqlQuery q = super.doSimpleUpdate(tab, row, st);
+	ConsSqlQuery q = super.doSimpleUpdate(tab, row, str);
 	if (q != null && logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
 	return q;
 }
 /** Get Sql query to delete current record. */
-protected ConsSqlQuery doSimpleDelete(int tab, int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleDelete(int tab, int row, SqlRunner str)
 {
 	SchemaBuf sb = getSchemaBuf(tab); //(SchemaBuf)gens[tab];
 	Schema schema = sb.getSchema();
-	ConsSqlQuery q = super.doSimpleDelete(tab, row, st);
+	ConsSqlQuery q = super.doSimpleDelete(tab, row, str);
 	if (logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
 	return q;
 }
@@ -211,7 +214,7 @@ protected ConsSqlQuery doSimpleDelete(int tab, int row, Statement st) throws jav
 
 //// ==============================================
 //private static class InstantUpdateListener implements TableModelListener {
-////	Statement st;
+////	SqlRunner str;
 //	ActionRunner runner;
 //	SqlGenDbModel dbModel;
 //	public InstantUpdateListener(SqlGenDbModel dbModel, ActionRunner runner)
@@ -222,7 +225,7 @@ protected ConsSqlQuery doSimpleDelete(int tab, int row, Statement st) throws jav
 //	public void tableChanged(final TableModelEvent e) {
 //System.out.println("InstantUpdateListener.tableChanged()");
 //		runner.doRun(new StRunnable() {
-//		public void run(Statement st) throws SQLException {
+//		public void run(SqlRunner str) throws SQLException {
 //			switch(e.getType()) {
 //				// TODO: Update only rows that have changed, don't waste
 //				// your time on all the other rows!

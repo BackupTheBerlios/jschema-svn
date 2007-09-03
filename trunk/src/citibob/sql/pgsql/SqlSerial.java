@@ -44,9 +44,12 @@ public class SqlSerial extends SqlInteger implements SqlSequence
 	}
 	public SqlSerial(String seq) { this(seq, false); }
 
+	static String curValSql(String seq) { return "select currval(" + SqlString.sql(seq) + ")"; }
+	static String nextValSql(String seq) { return "select nextval(" + SqlString.sql(seq) + ")"; }
+	
 	public int getCurVal(Statement st) throws SQLException
 	{
-		ResultSet rs = st.executeQuery("select currval(" + SqlString.sql(seq) + ")");
+		ResultSet rs = st.executeQuery(curValSql(seq));
 		rs.next();
 		int ret = rs.getInt(1);
 		rs.close();
@@ -54,10 +57,36 @@ public class SqlSerial extends SqlInteger implements SqlSequence
 	}
 	public int getNextVal(Statement st) throws SQLException
 	{
-		ResultSet rs = st.executeQuery("select nextval(" + SqlString.sql(seq) + ")");
+		ResultSet rs = st.executeQuery(nextValSql(seq));
 		rs.next();
 		int ret = rs.getInt(1);
 		rs.close();
 		return ret;		
+	}
+	
+	public void getCurVal(SqlRunner str, final SeqRunnable r)
+		{ getCurVal(str, seq, r); }
+	public void getNextVal(SqlRunner str, final SeqRunnable r)
+		{ getNextVal(str, seq, r); }
+	/** Return current value of the sequence (after an INSERT has been called that incremented it.) */
+	public static void getCurVal(SqlRunner str, String seq, final SeqRunnable r)
+	{
+		String sql = curValSql(seq);
+		str.execSql(sql, new RssRunnable() {
+		public void run(ResultSet[] rss, SqlRunner nstr) throws Throwable {
+			int val = rss[0].getInt(1);
+			r.run(val, nstr);
+		}});
+	}
+	
+	/** Return current value of the sequence (after an INSERT has been called that incremented it.) */
+	public static void getNextVal(SqlRunner str, String seq, final SeqRunnable r)
+	{
+		String sql = curValSql(seq);
+		str.execSql(sql, new RssRunnable() {
+		public void run(ResultSet[] rss, SqlRunner nstr) throws Throwable {
+			int val = rss[0].getInt(1);
+			r.run(val, nstr);
+		}});
 	}
 }

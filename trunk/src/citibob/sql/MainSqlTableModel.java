@@ -71,10 +71,10 @@ public Map<Object,List<Integer>> makeJoinMap(String joinCol)
 	return joinMap;
 }
 
-public void executeQuery(Statement st, String sql) throws SQLException
+public void executeQuery(SqlRunner str, String sql)
 {
 System.out.println("MainSqlTableModel.executeQuery: " + sql);
-	super.executeQuery(st, sql);
+	super.executeQuery(str, sql);
 }
 
 }

@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.jschema;
 
 import java.sql.*;
+import citibob.sql.*;
 
 /**
  * A DbModel that controls read-only data --- good for use with ad-hoc RSTableModel
@@ -36,12 +37,12 @@ public abstract class ReadonlyDbModel implements DbModel
 {
 	
 ///** Initialize component to receive data.  Might be needed if some kind of database lookup is needed. */
-//void doInit(Statement st) throws java.sql.SQLException;
+//void doInit(SqlRunner str);
 ///** Get Sql query to re-select current record
 //* from database.  When combined with an actual
 //* database and the SqlDisplay.setSqlValue(), this
 //* has the result of refreshing the current display. */
-//void doSelect(Statement st) throws java.sql.SQLException;
+//void doSelect(SqlRunner str);
 ///** Clear all buffered data from this component.  Then there
 //is no current record. */
 //void doClear();
@@ -53,14 +54,14 @@ public boolean valueChanged() { return false; }
 /** Get Sql query to flush updates to database.
 * Only updates records that have changed; returns null
 * if nothing has changed. */
-public void doUpdate(Statement st) throws java.sql.SQLException {}
+public void doUpdate(SqlRunner str) {}
 
 /** Get Sql query to insert record into database,
 * assuming it isn't already there. */
-public void doInsert(Statement st) throws java.sql.SQLException {}
+public void doInsert(SqlRunner str) {}
 
 /** Get Sql query to delete current record. */
-public void doDelete(Statement st) throws java.sql.SQLException {}
+public void doDelete(SqlRunner str) {}
 
 	
 }

@@ -112,7 +112,7 @@ public SqlGen getSqlGen(int i)
 // in every implementation.
 // void setKey()
 // -----------------------------------------------------------
-public void doInit(Statement st) throws java.sql.SQLException
+public void doInit(SqlRunner str)
 {
 //	this.st = st;
 }
@@ -133,7 +133,7 @@ public void setInsertKeys(int tab, int row, ConsSqlQuery sql) {}
 * from database.  When combined with an actual
 * database and the SqlDisplay.setSqlValue(), this
 * has the result of refreshing the current display. */
-public void doSelect(Statement st) throws java.sql.SQLException
+public void doSelect(SqlRunner str)
 {
 	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.SELECT);
 	for (int i=0; i<specs.length; ++i) {
@@ -142,30 +142,31 @@ public void doSelect(Statement st) throws java.sql.SQLException
 	}
 	setSelectWhere(q);	// Non-join where clauses (can include inner join as well)
 	String sql = q.getSql();
-System.out.println("JoinedSqlGenDbModel: " + sql);
-	ResultSet rs = st.executeQuery(sql);
-	int firstRow = specs[0].gen.getRowCount();
-	int n=0;
-	while (rs.next()) {
-		for (int i=0; i<specs.length; ++i) {
-			specs[i].gen.addRowNoFire(rs, specs[i].gen.getRowCount());
-		}
-		++n;
-	}
-	rs.close();
-	int lastRow = specs[0].gen.getRowCount() -1;
-	if (lastRow >= firstRow) {
-		for (int i=0; i<specs.length; ++i) {
-			specs[i].gen.fireTableRowsInserted(firstRow, lastRow);
-		}
-	}
 	
+	str.execSql(sql, new RsRunnable() {
+	public void run(ResultSet rs) throws SQLException {
+		int firstRow = specs[0].gen.getRowCount();
+		int n=0;
+		while (rs.next()) {
+			for (int i=0; i<specs.length; ++i) {
+				specs[i].gen.addRowNoFire(rs, specs[i].gen.getRowCount());
+			}
+			++n;
+		}
+		rs.close();
+		int lastRow = specs[0].gen.getRowCount() -1;
+		if (lastRow >= firstRow) {
+			for (int i=0; i<specs.length; ++i) {
+				specs[i].gen.fireTableRowsInserted(firstRow, lastRow);
+			}
+		}
+	}});
 }
 
 // -----------------------------------------------------------
 /** Get Sql query to insert record into database,
 * assuming it isn't already there. */
-public void doInsert(Statement st) throws java.sql.SQLException
+public void doInsert(SqlRunner str)
 {
 //	for (int row = 0; row < specs[0].gen.getRowCount(); ++row) {
 ////System.out.println("doSimpleInsert on row " + row + " of " + gen.getRowCount());
@@ -194,49 +195,28 @@ int getRowStatus(int row)
 /** Get Sql query to flush updates to database.
 * Only updates records that have changed; returns null
 * if nothing has changed. */
-public void doUpdate(Statement st, int row) throws java.sql.SQLException
+public void doUpdate(SqlRunner str, int row)
 {
 	int status = getRowStatus(row);
 	for (int i=0; i<specs.length; ++i) {
-				doSimpleUpdate(i, row, st);
-//	//System.out.println("doUpdate.status(" + row + ") = " + gen.getStatus(row));
-//		switch(status) {
-//			// case DELETED | INSERTED :
-//				// Do nothing; we inserted then deleted record.
-//			// break;
-//			case DELETED :
-//			case DELETED | CHANGED :
-//				doSimpleDelete(specs[i].gen, row, st);
-//			break;
-//			case INSERTED :
-//				if (insertBlankRow) doSimpleInsert(specs[i].gen, row, st);
-//				else specs[i].gen.removeRow(row);
-//			break;
-//			case INSERTED | CHANGED :
-//				doSimpleInsert(specs[i].gen, row, st);
-//			break;
-//			case 0 :
-//			case CHANGED :	// No status bits, just a normal record
-//				doSimpleUpdate(specs[i].gen, row, st);
-//			break;
-//		}
+		doSimpleUpdate(i, row, str);
 	}
 	
 	for (int i=0; i<specs.length; ++i) {
-		if (dbChange != null) dbChange.fireTableChanged(st, specs[i].tableName);
+		if (dbChange != null) dbChange.fireTableWillChange(str, specs[i].tableName);
 	}
 }
 // -----------------------------------------------------------
 /** Get Sql query to flush updates to database.
 * Only updates records that have changed; returns null
 * if nothing has changed. */
-public void doUpdate(Statement st) throws java.sql.SQLException
+public void doUpdate(SqlRunner str)
 {
-	for (int row = 0; row < specs[0].gen.getRowCount(); ++row) doUpdate(st, row);
+	for (int row = 0; row < specs[0].gen.getRowCount(); ++row) doUpdate(str, row);
 }
 // -----------------------------------------------------------
 /** Get Sql query to delete current record. */
-public void doDelete(Statement st) throws java.sql.SQLException
+public void doDelete(SqlRunner str)
 {
 //	for (int row = 0; row < specs[0].gen.getRowCount(); ++row) {
 //		int rowStatus = getRowStatus(row);
@@ -253,7 +233,7 @@ public void doDelete(Statement st) throws java.sql.SQLException
 /** Get Sql query to flush updates to database.
 * Only updates records that have changed; returns null
 * if nothing has changed. */
-protected ConsSqlQuery doSimpleUpdate(int tab, int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleUpdate(final int tab, final int row, SqlRunner str)
 {
 	SqlGen gen = specs[tab].gen;
 	if (gen.valueChanged(row)) {
@@ -267,13 +247,15 @@ protected ConsSqlQuery doSimpleUpdate(int tab, int row, Statement st) throws jav
 		int afterWhere = q.numWhereClauses();
 		System.out.println(q.getSql());
 		if (beforeWhere == afterWhere) {
-			throw new SQLException("Update statement missing key fields in WHERE clause\n"
+			throw new IllegalArgumentException("Update statement missing key fields in WHERE clause\n"
 				+ q.getSql());
 		}
-		String sql = q.getSql();
-System.out.println("doSimpleUpdate: " + sql);
-		st.executeUpdate(sql);
-		specs[tab].gen.setStatus(row, 0);
+		final String sql = q.getSql();
+
+		str.execSql(sql, new UpdRunnable() {
+		public void run() {
+			specs[tab].gen.setStatus(row, 0);
+		}});
 		return q;
 	} else {
 		specs[tab].gen.setStatus(row, 0);
@@ -283,26 +265,28 @@ System.out.println("doSimpleUpdate: " + sql);
 // -----------------------------------------------------------
 
 /** Get Sql query to delete current record. */
-protected ConsSqlQuery doSimpleDelete(int tab, int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleDelete(final int tab, final int row, SqlRunner str)
 {
 	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.DELETE);
 	q.setMainTable(specs[tab].tableName);
 	specs[tab].gen.getWhereKey(row, q, specs[tab].tableName);
 System.out.println(q.getSql());
 	if (q.numWhereClauses() == 0) {
-		throw new SQLException("Delete statement missing WHERE clause\n" +
+		throw new IllegalArgumentException("Delete statement missing WHERE clause\n" +
 			q.getSql());
 	}
 	String sql = q.getSql();
-System.out.println("doSimpleDelete: " + sql);
-	st.executeUpdate(sql);
-	specs[tab].gen.removeRow(row);
+	
+	str.execSql(sql, new UpdRunnable() {
+	public void run() {
+		specs[tab].gen.removeRow(row);
+	}});
 	return q;
 }
 // -----------------------------------------------------------
 /** Get Sql query to insert record into database,
 * assuming it isn't already there. */
-protected ConsSqlQuery doSimpleInsert(int tab, int row, Statement st) throws java.sql.SQLException
+protected ConsSqlQuery doSimpleInsert(final int tab, final int row, SqlRunner str)
 {
 	ConsSqlQuery q = new ConsSqlQuery(ConsSqlQuery.INSERT);
 	q.setMainTable(specs[tab].tableName);
@@ -311,8 +295,10 @@ System.out.println("doSimpleInsert: ");
 	setInsertKeys(tab, row, q);
 	String sql = q.getSql();
 System.out.println("   sql = " + sql);
-	st.executeUpdate(sql);
-	specs[tab].gen.setStatus(row, 0);
+	str.execSql(sql, new UpdRunnable() {
+	public void run() {
+		specs[tab].gen.setStatus(row, 0);
+	}});
 	return q;
 }
 // -----------------------------------------------------------

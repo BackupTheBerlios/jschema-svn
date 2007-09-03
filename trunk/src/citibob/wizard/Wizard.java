@@ -28,6 +28,9 @@ package citibob.wizard;
 
 
 import java.util.*;
+import java.sql.*;
+import citibob.sql.*;
+import citibob.app.*;
 
 /**
  *
@@ -42,22 +45,24 @@ protected HashMap wizCache;	// Wiz screens are cached through course of a run...
 
 protected String startState = "start";
 
+protected App app;
 protected String state;
 protected State stateRec;
 protected Wiz wiz;			// The current Wizard for the current state
 protected TypedHashMap v;		// Info we get out of the wizard screens
 protected HashMap states;
 protected String wizardName;
+//protected SqlBatch str;		// Batch SQL queries service used by Wiz constructors & State.process()
 
 protected abstract class State {
 	public String name;		// Name of this Wiz screen.
 	public String back;		// Wiz normally traversed to on back button
 	public String next;
-	public abstract Wiz newWiz() throws Exception;	// User implements this
-	/** Runs before the Wiz */
+	public abstract Wiz newWiz(SqlRunner str) throws Exception;	// User implements this
+	/** Runs before the Wiz, even if cached Wiz is being re-used. */
 	public void pre() throws Exception {}
 	/** Runs after the Wiz */
-	public abstract void process() throws Exception;
+	public abstract void process(SqlRunner str) throws Exception;
 	
 	public State(String name, String back, String next) {
 		this.name = name;
@@ -105,19 +110,19 @@ protected boolean checkFieldsFilledIn()
 }
 
 /** Override this to post-process wiz after it's created */
-protected Wiz createWiz(State stateRec) throws Exception {
-	return stateRec.newWiz();
+protected Wiz createWiz(State stateRec, SqlRunner xstr) throws Exception {
+	return stateRec.newWiz(xstr);
 }
 
-public TypedHashMap runWizard() throws Exception
+public TypedHashMap runWizard() throws Throwable
 {
 	return runWizard(startState, null);
 }
-public TypedHashMap runWizard(String startState) throws Exception
+public TypedHashMap runWizard(String startState) throws Throwable
 { return runWizard(startState, null); }
 /** Returns the values collected from the Wizard (for any work not
 accomplished by Wizard already). */
-public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Exception
+public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Throwable
 {
 	state = startState;
 	String prevState = null;
@@ -126,15 +131,23 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 		v = (xv == null ? new TypedHashMap() : xv);
 		wizCache = new HashMap();
 		for (state = startState; state != null;) {
+			SqlBatch str;
+			
+			// ============= Create the Wiz
+			str = new SqlBatch();
 			stateRec = (State)states.get(state);
 			if (stateRec == null) return v;		// Fell off the state graph
 			wiz = (Wiz)wizCache.get(state);
 			if (wiz == null) {
-				wiz = createWiz(stateRec);
+				wiz = createWiz(stateRec, str);
 				if (wiz.getCacheWiz()) wizCache.put(state, wiz);
 			}
 			curState = state;	// State now becomes (semantically) nextState
 			stateRec.pre();		// Prepare the Wiz...
+			str.exec(app.getPool());	// Finish creating Wiz
+
+			// =============== Let user interact with the Wiz
+			str = new SqlBatch();
 			runWiz(wiz);
 			wiz.getAllValues(v);
 
@@ -151,7 +164,8 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 			} else if ("cancel".equals(submit) && reallyCancel()) break;
 
 			// Do screen-specific processing
-			stateRec.process();
+			stateRec.process(str);
+			str.exec(app.getPool());	// Finish processing
 			prevState = curState;
 		}
 		return v;

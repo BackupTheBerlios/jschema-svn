@@ -30,6 +30,8 @@ package citibob.util;
 
 import java.sql.*;
 import java.util.*;
+import citibob.sql.*;
+
 //import
 /**
  *
@@ -96,21 +98,32 @@ public void addItem(Object key, Object item)
 	addItem(oi);
 }
 
-public void addAllItems(ResultSet rs, int keyCol, int itemCol) throws SQLException
+//public void addAllItems(SqlRunner str, String sql, int keyCol, int itemCol) throws SQLException
+//{
+////System.out.println("addAllItems: this = " + this);
+//	while (rs.next()) addItem(rs.getObject(keyCol), rs.getObject(itemCol));
+//}
+
+public void addAllItems(SqlRunner str, String sql, final int keyCol, final int itemCol)
 {
-//System.out.println("addAllItems: this = " + this);
-	while (rs.next()) addItem(rs.getObject(keyCol), rs.getObject(itemCol));
+	str.execSql(sql, new RsRunnable() {
+	public void run(ResultSet rs) throws SQLException {
+		while (rs.next()) {
+			addItem(rs.getObject(keyCol),
+				rs.getObject(itemCol));
+		}
+	}});
 }
 
-public void addAllItems(ResultSet rs, String keyCol, String itemCol)
-throws SQLException
+public void addAllItems(SqlRunner str, String sql, final String keyCol, final String itemCol)
 {
-//System.out.println("addAllItems: this = " + this);
-	//ResultSetMetaData md = rs.getMetaData();
-	while (rs.next()) {
-		addItem(rs.getObject(keyCol),
-			rs.getObject(itemCol));
-	}
+	str.execSql(sql, new RsRunnable() {
+	public void run(ResultSet rs) throws SQLException {
+		while (rs.next()) {
+			addItem(rs.getObject(keyCol),
+				rs.getObject(itemCol));
+		}
+	}});
 }
 
 /** Converts key value to a string, if the key exists in the model;
@@ -123,13 +136,13 @@ public String toString(Object key)
 	return oi.toString();
 }
 // -------------------------------------------------------------------
-public void KeyedModel(ResultSet rs, int keyCol, int itemCol) throws SQLException
+public void KeyedModel(SqlRunner str, String sql, int keyCol, int itemCol)
 {
-	addAllItems(rs,keyCol,itemCol);
+	addAllItems(str, sql, keyCol, itemCol);
 }
-public void KeyedModel(ResultSet rs, String keyCol, String itemCol) throws SQLException
+public void KeyedModel(SqlRunner str, String sql, String keyCol, String itemCol)
 {
-	addAllItems(rs,keyCol,itemCol);
+	addAllItems(str, sql, keyCol, itemCol);
 }
 /** Creates a KeyedModel in which key == value. */
 public KeyedModel(Object[] objs)

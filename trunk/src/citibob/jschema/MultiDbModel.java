@@ -20,6 +20,7 @@ package citibob.jschema;
 import java.util.*;
 import java.sql.*;
 import citibob.jschema.log.*;
+import citibob.sql.*;
 
 /** A DbModel that controls many sub DbModels */
 public class MultiDbModel implements DbModel
@@ -43,17 +44,17 @@ private int getStatus()
 	{ return 0; }	// Not needed, we're overriding doUpdate() and doDelete().
 
 // ---------------------------------------------------
-public void doUpdate(Statement st)
-throws java.sql.SQLException
+public void doUpdate(SqlRunner str)
+//throws java.sql.SQLException
 {
 	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
 		DbModel m = (DbModel)ii.next();
-		m.doUpdate(st);
+		m.doUpdate(str);
 	}
 }
 
-// public void doSimpleUpdate(Statement st)
-// throws java.sql.SQLException
+// public void doSimpleUpdate(SqlRunner str)
+//
 // {
 // 	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
 // 		DbModel m = (DbModel)ii.next();
@@ -61,16 +62,16 @@ throws java.sql.SQLException
 // 	}
 // }
 
-public void doDelete(Statement st)
-throws java.sql.SQLException
+public void doDelete(SqlRunner str)
+//throws java.sql.SQLException
 {
 	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
 		DbModel m = (DbModel)ii.next();
-		m.doDelete(st);
+		m.doDelete(str);
 	}
 }
-// public void doSimpleDelete(Statement st)
-// throws java.sql.SQLException
+// public void doSimpleDelete(SqlRunner str)
+//
 // {
 // 	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
 // 		DbModel m = (DbModel)ii.next();
@@ -78,28 +79,28 @@ throws java.sql.SQLException
 // 	}
 // }
 // ---------------------------------------------------
-public void doInit(Statement st)
-throws java.sql.SQLException
+public void doInit(SqlRunner str)
+//throws java.sql.SQLException
 {
 	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
 		DbModel m = (DbModel)ii.next();
-		m.doInit(st);
+		m.doInit(str);
 	}
 }
-public void doSelect(Statement st)
-throws java.sql.SQLException
+public void doSelect(SqlRunner str)
+//throws java.sql.SQLException
 {
 	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
 		DbModel m = (DbModel)ii.next();
-		m.doSelect(st);
+		m.doSelect(str);
 	}
 }
-public void doInsert(Statement st)
-throws java.sql.SQLException
+public void doInsert(SqlRunner str)
+//throws java.sql.SQLException
 {
 	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
 		DbModel m = (DbModel)ii.next();
-		m.doInsert(st);
+		m.doInsert(str);
 	}
 }
 public boolean valueChanged()

@@ -21,7 +21,7 @@ public class SqlBatch implements SqlRunner {
 
 // Used while building query
 StringBuffer sqlBuf = new StringBuffer();
-List<RssRunnable> handlers = new ArrayList();
+List<SqlRunnable> handlers = new ArrayList();
 
 // Used while interpreting results
 int nextCurrent = Statement.CLOSE_ALL_RESULTS;
@@ -34,28 +34,23 @@ public SqlBatch() {
 public int size() { return handlers.size(); }
 
 
-/** Adds update SQL to the batch --- no ResultSets returned, no handler. */
-public void execUpdate(String sql)
-{
-	execQuery(sql, (RssRunnable)null);
-}
 
-/** Adds SQL to the batch --- exactly one ResultSet returned */
-public void execQuery(String sql, final RsRunnable r)
-{
-	execQuery(sql, new RssRunnable() {
-	public void run(ResultSet[] rss, SqlBatch nextBatch) throws Throwable {
-		r.run(rss[0]);
-	}});
-}
+
+public void execSql(String sql)
+	{ execSql(sql, null); }
 
 /** Adds SQL to the batch --- multiple ResultSets returned, and it can create
  additional SQL as needed. */
-public void execQuery(String sql, RssRunnable r)
+public void execSql(String sql, SqlRunnable rr)
 {
 	sqlBuf.append(sql);
 	sqlBuf.append(";\n select 'hello' as __divider__;\n");
-	handlers.add(r);
+	handlers.add(rr);
+}
+
+public void execUpdate(UpdRunnable r)
+{
+	execSql("", r);
 }
 
 
@@ -76,6 +71,27 @@ public void execQuery(String sql, RssRunnable r)
 //		}
 //	}
 //}
+
+
+public void exec(ConnPool pool) throws Throwable
+{
+	if (size() == 0) return;
+	Throwable ret = null;
+	Statement st = null;
+	Connection dbb = null;
+	try {
+		dbb = pool.checkout();
+		st = dbb.createStatement();
+		this.exec(st);
+	} finally {
+		try {
+			if (st != null) st.close();
+		} catch(SQLException se) {}
+		try {
+			pool.checkin(dbb);
+		} catch(SQLException se) {}
+	}
+}
 
 /** Recursively executes this batch and all batches its execution creates. */
 public void exec(Statement st) throws Throwable
@@ -98,10 +114,12 @@ SqlBatch execOneBatch(Statement st) throws Throwable
 {
 	SqlBatch nextBatch = new SqlBatch();
 	String sql = sqlBuf.toString();
+System.out.println("Executing batch with " + size() + " segments: \n" + sql +
+"=================================================");
 	st.execute(sql);
 
 	ResultSet rs;
-	Iterator<RssRunnable> curHandler = handlers.iterator();
+	Iterator<SqlRunnable> curHandler = handlers.iterator();
 	for (int n=0;; ++n,st.getMoreResults(nextCurrent)) {
 		nextCurrent = Statement.KEEP_CURRENT_RESULT;
 		rs = st.getResultSet();
@@ -118,13 +136,21 @@ SqlBatch execOneBatch(Statement st) throws Throwable
 			rs.close();
 
 			// It was --- process all buffered result sets
-			System.out.println("DIVIDER");
+//			System.out.println("DIVIDER");
 			ResultSet[] rss = new ResultSet[xrss.size()];
 			xrss.toArray(rss);
 
 			// Process this batch of ResultSets
-			RssRunnable handler = curHandler.next();
-			if (handler != null) handler.run(rss, nextBatch);
+			SqlRunnable handler = curHandler.next();
+			if (handler != null) {
+				if (handler instanceof RssRunnable) {
+					((RssRunnable)handler).run(rss, nextBatch);
+				} else if (handler instanceof RsRunnable) {		
+					((RsRunnable)handler).run(rss[0]);
+				} else if (handler instanceof UpdRunnable) {
+					((UpdRunnable)handler).run();
+				}
+			}
 
 			// Get ready for new batch
 			xrss.clear();

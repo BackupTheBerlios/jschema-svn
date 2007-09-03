@@ -64,10 +64,10 @@ SqlTypeSet tset, String sql)
 	this.joinCol = joinCol;
 }
 
-public void executeQuery(Statement st, String sql) throws SQLException
+public void executeQuery(SqlRunner str, String sql)
 {
 	setRowCount(main.getRowCount());
-	super.executeQuery(st, sql);
+	super.executeQuery(str, sql);
 }
 
 public void addAllRows(ResultSet rs)

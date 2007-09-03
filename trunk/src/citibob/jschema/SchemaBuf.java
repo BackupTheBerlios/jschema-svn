@@ -170,7 +170,7 @@ public int addRowNoFire(ResultSet rs, int rowIndex) throws SQLException
 }
 
 /** Appends a row in the data */
-public void addRow(ResultSet rs) throws java.sql.SQLException
+public void addRow(ResultSet rs) throws SQLException
 {
 	int rowIndex = addRowNoFire(rs, rows.size());
 	fireTableRowsInserted(rowIndex, rowIndex);
@@ -178,7 +178,7 @@ public void addRow(ResultSet rs) throws java.sql.SQLException
 }
 // --------------------------------------------------
 /** Convenience function (sort of)... */
-public void addAllRows(ResultSet rs) throws java.sql.SQLException
+public void addAllRows(ResultSet rs) throws SQLException
 {
 	int firstRow = rows.size();
 	int n = 0;
@@ -199,7 +199,7 @@ public void addAllRows(ResultSet rs) throws java.sql.SQLException
 }
 // --------------------------------------------------
 // /** Convenience functions for single-row SchemaBufs */
-// public void setOneRow(ResultSet rs) throws java.sql.SQLException
+// public void setOneRow(ResultSet rs)
 // {
 // 	clear();
 // 	rs.next();

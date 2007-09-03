@@ -54,10 +54,10 @@ public void fireTableRowsInserted(int firstRow, int lastRow);
 
 
 /** Add a new row from the current place in a result set */
-void addRow(ResultSet rs) throws java.sql.SQLException;
+void addRow(ResultSet rs) throws SQLException;
 
 /** Add all the rows from a result set, starting with rs.next(), then close the result set. */
-void addAllRows(ResultSet rs) throws java.sql.SQLException;
+void addAllRows(ResultSet rs) throws SQLException;
 
 /** Removes a row from the buffer... */
 void removeRow(int row);
@@ -66,7 +66,7 @@ void removeRow(int row);
 //public void resetRow(int row);
 
 ///** Convenience functions for single-row SchemaBufs */
-//void setOneRow(ResultSet rs) throws java.sql.SQLException;
+//void setOneRow(ResultSet rs);
 
 // ===============================================================
 // Write rows to the database

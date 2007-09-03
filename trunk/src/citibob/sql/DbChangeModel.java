@@ -30,22 +30,22 @@ public class DbChangeModel
 {
 public static interface Listener {
 //    /** Something has changed in the terms table. */
-//    termsChanged(Statement st) throws SQLException;
+//    termsChanged(SqlRunner str) throws SQLException;
 
 //    /** Something has changed in the courses table. */
-//    coursesChanged(Statement st) throws SQLException;
+//    coursesChanged(SqlRunner str) throws SQLException;
 
-    public void tableChanged(Statement st, String table) throws SQLException;
+    public void tableWillChange(SqlRunner str, String table);
 }
 // ======================================================
 public static class Adapter implements DbChangeModel.Listener {
 //    /** Something has changed in the terms table. */
-//    termsChanged(Statement st) throws SQLException;
+//    termsChanged(SqlRunner str) throws SQLException;
 
 //    /** Something has changed in the courses table. */
-//    coursesChanged(Statement st) throws SQLException;
+//    coursesChanged(SqlRunner str) throws SQLException;
 
-    public void tableChanged(Statement st, String table) throws SQLException
+    public void tableWillChange(SqlRunner str, String table)
 	{}
 }
 // ======================================================
@@ -68,14 +68,13 @@ public void removeListener(String table, DbChangeModel.Listener l)
 }
 
 // ======================================================
-public void fireTableChanged(Statement st, String table)
-throws SQLException
+public void fireTableWillChange(SqlRunner str, String table)
 {
 	LinkedList listeners = (LinkedList)tListeners.get(table);
 	if (listeners == null) return;
 	for (java.util.Iterator ii=listeners.iterator(); ii.hasNext(); ) {
 		DbChangeModel.Listener l = (DbChangeModel.Listener)ii.next();
-		l.tableChanged(st, table);
+		l.tableWillChange(str, table);
 	}
 }
 }

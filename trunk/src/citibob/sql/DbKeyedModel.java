@@ -50,43 +50,39 @@ String sql;
 /** @param change model that will tell us when we need to requery.
  @param idTableName Name of table on which a change should trigger a requery.
  @parm sql Query to generate key/value pairs; ID must be in column 1, Name in column 2. */
-public DbKeyedModel(Statement st, DbChangeModel change,
+public DbKeyedModel(SqlRunner str, DbChangeModel change,
 String idTableName, String sql)
-throws SQLException
+//throws SQLException
 {
 	super();
 	this.sql = sql;
 	this.idTableName = idTableName;
 	this.change = change;
-	requery(st);
+	requery(str);
 	if (change != null) change.addListener(idTableName, this);
 }
-public DbKeyedModel(Statement st, DbChangeModel change,
+public DbKeyedModel(SqlRunner str, DbChangeModel change,
 String idTableName, String idFieldName,
 String nameFieldName, String orderFieldName)
 throws SQLException
 {
-	this(st, change, idTableName,
+	this(str, change, idTableName,
 		"select " + idFieldName + ", " + nameFieldName + " from " +
 			idTableName + " order by " + orderFieldName);
 }
 
 /** Re-load keyed model from database... */
-public void requery(Statement st) throws SQLException
+public void requery(SqlRunner str)
 {
 	clear();
-//	ResultSet rs = st.executeQuery("select " + idFieldName + ", " + nameFieldName + " from " +
-//			idTableName + " order by " + orderFieldName);
-	ResultSet rs = st.executeQuery(sql);
-	addAllItems(rs, 1, 2);
-	rs.close();
+	addAllItems(str, sql, 1, 2);
 }
 
 /** Called when the data potentially changes in the database. */
-public void tableChanged(Statement st, String table)
-throws SQLException
+public void tableWillChange(SqlRunner str, String table)
+//throws SQLException
 {
-	requery(st);
+	requery(str);
 }
 
 }

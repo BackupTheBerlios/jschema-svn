@@ -32,6 +32,10 @@ import citibob.wizard.*;
 import javax.swing.*;
 import java.util.*;
 import java.awt.Component;
+import citibob.sql.*;
+import java.util.prefs.*;
+import citibob.app.*;
+import citibob.swing.prefs.*;
 
 /**
  * Assumes Wiz components of class SwingWiz (and JDialog)
@@ -41,6 +45,9 @@ public class SwingWizard extends Wizard {
 
 
 protected java.awt.Frame frame;
+protected App app;
+java.util.prefs.Preferences wizardPref;		// Root node for this wizard
+SwingPrefs swingPrefs = new SwingPrefs();	// Could change this if we like
 
 
 
@@ -56,13 +63,25 @@ new State("", "", "") {
 */
 
 /** @param frame Parent frame for the modal dialogs created by the Wizard. */
-public SwingWizard(String wizardName, java.awt.Frame frame, String startState)
+public SwingWizard(String wizardName, App app, java.awt.Frame frame, String startState)
+//	String wizardName, java.awt.Frame frame, String startState)
 {
 	super(wizardName, startState);
 //	this.wizardName = wizardName;
 	this.frame = frame;
 //	this.startState = startState;
 //	states = new HashMap();
+	wizardPref = app.userRoot().node("wizard").node(wizardName);
+	this.app = app;
+}
+
+public Wiz createWiz(State state, SqlRunner xstr) throws Exception
+{
+	// Overridden to post-process wiz after it's created
+	Wiz wiz = super.createWiz(state, xstr);
+	Preferences wizPref = wizardPref.node(state.name);
+	swingPrefs.setPrefs((Component)wiz, "", wizPref);
+	return wiz;
 }
 
 protected boolean checkFieldsFilledIn()

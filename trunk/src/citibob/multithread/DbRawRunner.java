@@ -72,28 +72,40 @@ public static Throwable run(StRunnable r, ConnPool pool)
 	
 public static Throwable run(BatchRunnable r, ConnPool pool)
 {
-	Throwable ret = null;
-	Statement st = null;
-	Connection dbb = null;
+	SqlBatch batch = new SqlBatch();
 	try {
-		SqlBatch batch = new SqlBatch();
 		r.run(batch);
-		dbb = pool.checkout();
-		st = dbb.createStatement();
-		batch.exec(st);
+		batch.exec(pool);
 	} catch(Throwable e) {
-		ret = e;
-//		eh.consume(e);
-	} finally {
-		try {
-			if (st != null) st.close();
-		} catch(SQLException se) {}
-		try {
-			pool.checkin(dbb);
-		} catch(SQLException se) {}
+		return e;
 	}
-	return ret;
+	return null;
 }
+
+//public static Throwable run(BatchRunnable r, ConnPool pool)
+//{
+//	Throwable ret = null;
+//	Statement st = null;
+//	Connection dbb = null;
+//	try {
+//		SqlBatch batch = new SqlBatch();
+//		r.run(batch);
+//		dbb = pool.checkout();
+//		st = dbb.createStatement();
+//		batch.exec(st);
+//	} catch(Throwable e) {
+//		ret = e;
+////		eh.consume(e);
+//	} finally {
+//		try {
+//			if (st != null) st.close();
+//		} catch(SQLException se) {}
+//		try {
+//			pool.checkin(dbb);
+//		} catch(SQLException se) {}
+//	}
+//	return ret;
+//}
 
 public static Throwable run(DbRunnable r, ConnPool pool)
 {
