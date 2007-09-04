@@ -184,10 +184,11 @@ protected ConsSqlQuery doSimpleUpdate(final int row, SqlRunner str)
 		}
 	String sql = q.getSql();
 System.out.println("doSimpleUpdate: " + sql);
-		str.execSql(sql, new UpdRunnable() {
-		public void run(SqlRunner str) {
+		str.execSql(sql);
+//		str.execSql(sql, new UpdRunnable() {
+//		public void run(SqlRunner str) {
 			gen.setStatus(row, 0);
-		}});
+//		}});
 		return q;
 	} else {
 		gen.setStatus(row, 0);

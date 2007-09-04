@@ -76,9 +76,10 @@ public class SqlSerial extends SqlInteger implements SqlSequence
 	public static void getCurVal(SqlRunner str, final String seq)
 	{
 		String sql = curValSql(seq);
-		str.execSql(sql, new RssRunnable() {
-		public void run(SqlRunner str, ResultSet[] rss) throws Exception {
-			int val = rss[0].getInt(1);
+		str.execSql(sql, new RsRunnable() {
+		public void run(SqlRunner str, ResultSet rs) throws Exception {
+			rs.next();
+			int val = rs.getInt(1);
 			str.put(seq, val);
 		}});
 	}
@@ -86,10 +87,11 @@ public class SqlSerial extends SqlInteger implements SqlSequence
 	/** Return current value of the sequence (after an INSERT has been called that incremented it.) */
 	public static void getNextVal(SqlRunner str, final String seq)
 	{
-		String sql = curValSql(seq);
-		str.execSql(sql, new RssRunnable() {
-		public void run( SqlRunner str, ResultSet[] rss) throws Exception {
-			int val = rss[0].getInt(1);
+		String sql = nextValSql(seq);
+		str.execSql(sql, new RsRunnable() {
+		public void run( SqlRunner str, ResultSet rs) throws Exception {
+			rs.next();
+			int val = rs.getInt(1);
 			str.put(seq, val);
 		}});
 	}

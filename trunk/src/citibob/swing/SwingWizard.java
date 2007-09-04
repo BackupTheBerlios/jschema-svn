@@ -66,7 +66,7 @@ new State("", "", "") {
 public SwingWizard(String wizardName, App app, java.awt.Frame frame, String startState)
 //	String wizardName, java.awt.Frame frame, String startState)
 {
-	super(wizardName, startState);
+	super(wizardName, app, startState);
 //	this.wizardName = wizardName;
 	this.frame = frame;
 //	this.startState = startState;

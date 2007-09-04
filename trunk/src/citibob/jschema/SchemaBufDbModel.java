@@ -93,7 +93,10 @@ public void setOrderClause(String orderClause)
 public void doSelect(SqlRunner str)
 {
 //	gen.fireRefreshStart();
-	getSchemaBuf().clear();
+	str.execUpdate(new UpdRunnable() {
+	public void run(SqlRunner str) throws Exception {
+		getSchemaBuf().clear();		
+	}});
 	super.doSelect(str);
 //	gen.fireRefreshFinish();
 }

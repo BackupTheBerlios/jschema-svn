@@ -50,6 +50,9 @@ public void execSql(String sql)
  additional SQL as needed. */
 public void execSql(String sql, SqlRunnable rr)
 {
+if (sql != null && sql.endsWith("FROM persons")) {
+	System.out.println("hoi");
+}
 	if (inExec) throw new IllegalStateException("Cannot use execSql() or execUpdate() while executing the SQL batch.");
 	sqlBuf.append(sql);
 	sqlBuf.append(";\n select 'hello' as __divider__;\n");
@@ -118,7 +121,7 @@ private static void exec(SqlBatch batch, Statement st) throws Exception
 	for (;;) {
 		batch.execOneBatch(st);
 		if (batch.next().size() == 0) return;
-		batch.map = batch.next().map;		// Transfer values over
+		batch.next().map = batch.map;		// Transfer values over
 		batch = batch.next();
 	}
 }

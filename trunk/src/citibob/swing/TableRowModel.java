@@ -120,7 +120,7 @@ public void tableChanged(TableModelEvent e)
 //System.out.println("TableRowModel.tableChanged: " + e.getType());
 	switch(e.getType()) {
 		case TableModelEvent.INSERT : if (listenTableModel) {
-			if (curRow == -1) {
+			if (curRow == NOROW) {
 				// We weren't looking at any row: look at the first
 				// row just inserted.
 				setCurRow(e.getFirstRow());

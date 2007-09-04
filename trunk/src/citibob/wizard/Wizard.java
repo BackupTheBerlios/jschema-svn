@@ -85,10 +85,11 @@ protected String getResourceName(String rname)
 protected abstract void runWiz(Wiz wiz) throws Exception;
 protected boolean reallyCancel() throws Exception { return true; }
 
-public Wizard(String wizardName, String startState)
+public Wizard(String wizardName, App app, String startState)
 {
 	this.wizardName = wizardName;
 	this.startState = startState;
+	this.app = app;
 	states = new HashMap();
 }
 

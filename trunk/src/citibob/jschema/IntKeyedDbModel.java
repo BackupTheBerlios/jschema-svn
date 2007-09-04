@@ -32,10 +32,6 @@ int idValue;
 String keyField;
 int keyCol;
 
-/** Should we add the key field to the SQL statement when we insert records?  Generally,
-this will be false for main tables (because they have auto-insert), and
-true for subsidiary tables. Defaults to true. */
-boolean doInsertKeys;
 
 public void setKey(int idValue)
 {
@@ -56,38 +52,57 @@ public int getIntKey() { return idValue; }
 //	return (I == null ? -1 : I.intValue());
 //}
 // --------------------------------------------------------------
-public IntKeyedDbModel(SchemaBuf buf, String keyField, boolean doInsertKeys)
-{ this(buf, keyField, doInsertKeys, null); }
+public static class Params {
+	public Params(boolean doInsertKeys, boolean selectAllOnNull) {
+		this.doInsertKeys = doInsertKeys;
+		this.selectAllOnNull = selectAllOnNull;
+	}
+	public Params(boolean doInsertKeys) {
+		this.doInsertKeys = doInsertKeys;
+	}
+	public Params() {}
+	
+	/** Should we add the key field to the SQL statement when we insert records?  Generally,
+	this will be false for main tables (because they have auto-insert), and
+	true for subsidiary tables. Defaults to true. */
+	public boolean doInsertKeys = true;
+	/** Should we select entire table if key value is null (-1)? */
+	public boolean selectAllOnNull = false;
+}
+Params prm;
+// --------------------------------------------------------------
+public IntKeyedDbModel(SchemaBuf buf, String keyField)
+{ this(buf, keyField, new Params()); }
+public IntKeyedDbModel(SchemaBuf buf, String keyField, Params prm)
+{ this(buf, keyField, null, prm); }
 
-public IntKeyedDbModel(SchemaBuf buf, String keyField, boolean doInsertKeys, DbChangeModel dbChange)
+public IntKeyedDbModel(SchemaBuf buf, String keyField, DbChangeModel dbChange, Params prm)
 {
 	super(buf, dbChange);
+	this.prm = prm;
 	this.keyField = keyField;
 	this.keyCol = buf.findColumn(keyField);
-	this.doInsertKeys = doInsertKeys;	
-}
-public IntKeyedDbModel(Schema schema, String keyField, boolean doInsertKeys)
-{ this(schema, keyField, doInsertKeys, null); }
-public IntKeyedDbModel(Schema schema, String keyField, boolean doInsertKeys, DbChangeModel dbChange)
-{
-	this(new SchemaBuf(schema), keyField, doInsertKeys, dbChange);
 }
 
-public IntKeyedDbModel(Schema schema, String keyField, DbChangeModel dbChange)
-	{ this(schema, keyField, true, dbChange); }
 public IntKeyedDbModel(Schema schema, String keyField)
-	{ this(schema, keyField, null); }
+{ this(schema, keyField, new Params()); }
+public IntKeyedDbModel(Schema schema, String keyField, Params prm)
+{ this(schema, keyField, null, prm); }
+public IntKeyedDbModel(Schema schema, String keyField, DbChangeModel dbChange, Params prm)
+{
+	this(new SchemaBuf(schema), keyField, dbChange, prm);
+}
 // --------------------------------------------------------------
 
 public void setSelectWhere(ConsSqlQuery q)
 {
 	super.setSelectWhere(q);
-	if (idValue >= 0) q.addWhereClause(keyField + " = " + idValue);
+	if (idValue >= 0 || !prm.selectAllOnNull) q.addWhereClause(keyField + " = " + idValue);
 }
 public void setInsertKeys(int row, ConsSqlQuery q)
 {
 	super.setInsertKeys(row, q);
-	if (doInsertKeys) q.addColumn(keyField, SqlInteger.sql(idValue));
+	if (prm.doInsertKeys) q.addColumn(keyField, SqlInteger.sql(idValue));
 //	q.addColumn("lastupdated", "now()");
 }
 // -----------------------------------------------------------
