@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.util;
 
 import java.util.Iterator;
-
+import java.io.*;
 
 public class CircularArrayList extends java.util.AbstractList
     implements java.util.List, java.io.Serializable {
@@ -64,6 +64,10 @@ public class CircularArrayList extends java.util.AbstractList
     }
 
     public CircularArrayList(int circularSize) {
+		setCircularSize(circularSize);
+	}
+	public int getCircularSize() { return circularSize; }
+    private void setCircularSize(int circularSize) {
 		this.circularSize = circularSize;
         array = new Object[circularSize+1];
     }
@@ -73,6 +77,18 @@ public class CircularArrayList extends java.util.AbstractList
         array = new Object[c.size()];
         c.toArray(array);
     }
+
+//private void writeObject(ObjectOutputStream out) throws IOException
+//{
+//	super.writeObject(out);
+//	out.writeInt(circularSize);
+//}
+//
+//private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
+//{
+//	super.readObject(in);
+//	circularSize = in.readInt();
+//}
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
@@ -347,6 +363,7 @@ public class CircularArrayList extends java.util.AbstractList
 
     private void writeObject(java.io.ObjectOutputStream s)
         throws java.io.IOException {
+        s.writeInt(circularSize);
         s.writeInt(size);
         for (int i = 0; i != size; i++) {
             s.writeObject(array[convert(i)]);
@@ -356,17 +373,22 @@ public class CircularArrayList extends java.util.AbstractList
     private void readObject(java.io.ObjectInputStream s)
         throws java.io.IOException, ClassNotFoundException {
         // Read in size of list and allocate array
-        head = 0;
-        size = tail = s.readInt();
-        if (tail < DEFAULT_SIZE) {
-            array = new Object[DEFAULT_SIZE];
-        } else {
-            array = new Object[tail];
-        }
+		int csize = s.readInt();
+		int size = s.readInt();
+		setCircularSize(csize);
+		for (int i=0; i<size; ++i) addCircular(s.readObject());
+		
+//        head = 0;
+//        size = tail = s.readInt();
+//        if (tail < DEFAULT_SIZE) {
+//            array = new Object[DEFAULT_SIZE];
+//        } else {
+//            array = new Object[tail];
+//        }
 
-        // Read in all elements in the proper order.
-        for (int i = 0; i < tail; i++)
-            array[i] = s.readObject();
+//        // Read in all elements in the proper order.
+//        for (int i = 0; i < tail; i++)
+//            array[i] = s.readObject();
     }
 }
 
