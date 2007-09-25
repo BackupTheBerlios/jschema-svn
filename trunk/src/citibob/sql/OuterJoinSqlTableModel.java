@@ -64,15 +64,27 @@ SqlTypeSet tset, String sql)
 	this.joinCol = joinCol;
 }
 
+//public void executeQuery(SqlRunner str, String sql)
+//{
+//	str.execUpdate(new UpdRunnable() {
+//	public void run(SqlRunner str) throws Exception {
+//	}});xxx
+//	super.executeQuery(str, sql);
+//}
+/** All-in-one: execute a query, set up row headers, and add all rows to the table model. */
 public void executeQuery(SqlRunner str, String sql)
 {
-	setRowCount(main.getRowCount());
-	super.executeQuery(str, sql);
+//	setNumRows(0);
+	str.execSql(sql, new RsRunnable() {
+	public void run(SqlRunner str, ResultSet rs) throws SQLException {
+//		if (tset != null) setColHeaders(rs);
+		addAllRows(rs);
+	}});
 }
-
 public void addAllRows(ResultSet rs)
 throws SQLException
 {
+	setRowCount(main.getRowCount());
 	ResultSetMetaData meta = rs.getMetaData();
 	int ncol = meta.getColumnCount();
 	//int ijoinCol = meta.this.findColumn(joinCol);
