@@ -42,11 +42,11 @@ KeyedModel kmodel;
 String nullText;
 
 /** Creates a new instance of KeyedFormatter */
-public KeyedFormatter(KeyedModel kmodel) {
+public KeyedFormatter(KeyedModel kmodel, String nullText) {
 	this.kmodel = kmodel;
+	this.nullText = nullText;
 }
-
-public void setNullText(String s) { nullText = s; }
+public KeyedFormatter(KeyedModel kmodel) { this(kmodel, ""); }
 
 /** Not to be used */
 public Object  stringToValue(String text)

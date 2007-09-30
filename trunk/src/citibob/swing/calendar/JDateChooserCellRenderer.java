@@ -15,40 +15,40 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-package citibob.swing.calendar;
-
-import java.util.Date;
-
-import java.awt.Component;
-import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
-
-import citibob.swing.calendar.JDateChooser;
-
-
-public class JDateChooserCellRenderer 
-		implements TableCellRenderer {
-
-	JDateChooser chooser;
-	private static final long serialVersionUID = 5326414052628982795L;
-
-	public JDateChooserCellRenderer(JDateChooser chooser)
-	{ this.chooser = chooser; }
-	
-	public Component getTableCellRendererComponent(
-            JTable table, Object value ,
-            boolean isSelected, boolean hasFocus,
-            int row, int column) {
-		
-		Date date ;
-		if (value instanceof Date) 
-			date = (Date) value; // nb: date can be null
-		else 
-			date = null;
-		
-		chooser.getModel().setTime((Date)date);
-		return chooser;
-	}
-
-}
+//
+//package citibob.swing.calendar;
+//
+//import java.util.Date;
+//
+//import java.awt.Component;
+//import javax.swing.JTable;
+//import javax.swing.table.TableCellRenderer;
+//
+//import citibob.swing.calendar.JDateChooser;
+//
+//
+//public class JDateChooserCellRenderer 
+//		implements TableCellRenderer {
+//
+//	JDateChooser chooser;
+//	private static final long serialVersionUID = 5326414052628982795L;
+//
+//	public JDateChooserCellRenderer(JDateChooser chooser)
+//	{ this.chooser = chooser; }
+//	
+//	public Component getTableCellRendererComponent(
+//            JTable table, Object value ,
+//            boolean isSelected, boolean hasFocus,
+//            int row, int column) {
+//		
+//		Date date ;
+//		if (value instanceof Date) 
+//			date = (Date) value; // nb: date can be null
+//		else 
+//			date = null;
+//		
+//		chooser.getModel().setTime((Date)date);
+//		return chooser;
+//	}
+//
+//}

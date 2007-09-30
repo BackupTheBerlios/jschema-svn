@@ -63,7 +63,7 @@ public boolean isInstance(Object o)
 //		cal.get(Calendar.MILLISECOND) == 0);
 }
 // ==================================================	
-public Calendar getCalendar() { return cal; }
+public TimeZone getTimeZone() { return cal.getTimeZone(); }
 ///** Reads the date with the appropriate timezone. */
 //public java.util.Date get(java.sql.ResultSet rs, int col)
 //{
@@ -76,6 +76,7 @@ public Calendar getCalendar() { return cal; }
 //}
 public java.util.Date truncate(java.util.Date dt)
 {
+	if (dt == null) return null;
 	cal.setTime(dt);
 	cal.set(Calendar.HOUR_OF_DAY, 0);
 	cal.set(Calendar.MINUTE, 0);

@@ -77,14 +77,14 @@ public void setKeyedModel(KeyedModel kmodel)
 }
 public KeyedModel getKeyedModel()
 { return kmodel; }
-public void setJType(Swinger f)
-{
-	JType jType = f.getJType();
-	if (!(jType instanceof JEnum)) 
-		throw new ClassCastException("Expected Enum type, got " + jType);
-	JEnum etype = (JEnum)jType;
-	setKeyedModel(etype.getKeyedModel());
-}
+//public void setJType(Swinger f)
+//{
+//	JType jType = f.getJType();
+//	if (!(jType instanceof JEnum)) 
+//		throw new ClassCastException("Expected Enum type, got " + jType);
+//	JEnum etype = (JEnum)jType;
+//	setKeyedModel(etype.getKeyedModel());
+//}
 // --------------------------------------------------------------
 public boolean isInstance(Object o)
 {

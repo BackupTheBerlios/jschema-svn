@@ -155,7 +155,8 @@ public static void setJType(TypedWidget tw, SchemaRowModel bufRow, String colNam
 		JType sqlType = schema.getCol(col).getType();
 		Swinger f = map.newSwinger(sqlType);		// Default ways to render & edit
 	//System.out.println("colName = " + colName);
-		tw.setJType(f);
+		f.configureWidget(tw);
+		//tw.setJType(f);
 	}
 }
 // -------------------------------------------------------------------------------
@@ -285,7 +286,8 @@ SwingerMap map, citibob.sql.SqlTypeSet typeset) throws java.sql.SQLException
 	SqlType sqlType = typeset.getSqlType(rs, col);
 	Swinger swinger = map.newSwinger(sqlType);
 System.out.println("Binder.setValue: tw = " + tw.getClass() + "\n     swinger = " + swinger.getClass());
-	tw.setJType(swinger);
+	//tw.setJType(swinger);
+	swinger.configureWidget(tw);
 	tw.setValue(sqlType.get(rs, col));
 }
 

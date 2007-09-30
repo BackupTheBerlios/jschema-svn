@@ -59,7 +59,7 @@ public SqlSFormatterMap(final TimeZone tz) {
 	// SqlDate
 	this.addMaker(SqlDate.class, new SFormatterMap.Maker() {
 	public SFormatter newSFormatter(JType sqlType) {
-		return new JDateSFormatter(tz, "MM-dd-yyyy");
+		return new JDateSFormatter("MM/dd/yyyy", tz);
 	}});
 
 	// SqlInteger
@@ -90,7 +90,7 @@ public SqlSFormatterMap(final TimeZone tz) {
 	// SqlTimestamp
 	this.addMaker(SqlTimestamp.class, new SFormatterMap.Maker() {
 	public SFormatter newSFormatter(JType sqlType) {
-		return new JDateSFormatter(tz, "MM-dd-yyyy HH:mm");
+		return new JDateSFormatter("MM-dd-yyyy HH:mm", tz);
 	}});
 }
 	

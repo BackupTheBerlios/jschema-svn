@@ -171,7 +171,7 @@ public static void main(String[] args) throws Exception
 {
 	Licensor l = new Licensor();
 //	l.relicenseFile(new File("/home/citibob/svn/jschema/src/citibob/licensor/Licensor.java"));
-	l.relicenseDir(new File("/home/citibob/svn/jschema/src/citibob"));
+	l.relicenseDir(new File("/export/home/citibob/tmp/svnmac/jschema/src/citibob"));
 }
 
 }

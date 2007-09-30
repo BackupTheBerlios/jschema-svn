@@ -25,10 +25,11 @@ import java.awt.*;
  *
  * @author  citibob
  */
-public abstract class JCalendar extends javax.swing.JPanel {
-	
-protected CalModel model;
+//public abstract class JCalendar extends citibob.swing.typed.JTypedPanel {
+public interface JCalendar {
 
-public abstract void setModel(CalModel m);
+//protected CalModel model;
+
+public void setModel(CalModel m);
 
 }

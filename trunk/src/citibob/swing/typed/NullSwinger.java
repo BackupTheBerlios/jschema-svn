@@ -54,10 +54,11 @@ public class NullSwinger implements Swinger
 	public javax.swing.text.DefaultFormatterFactory newFormatterFactory() { return null; }
 
 	/** Create a widget suitable for editing this type of data. */
-	public citibob.swing.typed.TypedWidget newTypedWidget() {
+	public citibob.swing.typed.TypedWidget newWidget() {
 		return null;
 	}
-	
+	public void configureWidget(TypedWidget w) {}
+
 	public boolean renderWithWidget() { return false; }
 	
 }

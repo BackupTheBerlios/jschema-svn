@@ -36,7 +36,7 @@ public class ConfigPanel extends javax.swing.JPanel {
     /** Creates new form ConfigPanel */
     public ConfigPanel() {
         initComponents();
-		this.port.setJType(new JIntegerSwinger());
+		new JIntegerSwinger().configureWidget(port);
 		readConfig();
     }
     

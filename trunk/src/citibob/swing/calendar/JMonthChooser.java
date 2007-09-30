@@ -48,6 +48,8 @@ public JMonthChooser() {
     }});
 //	// TODO: Java 1.4.2 doesn't work with a JComboBox in a JPopupMenu
 //	// For now, disable the combo box.
+// This doesn't work in Java 1.5 either.  When the JMonth popup shows,
+// the overall JCalendar popup disappears.'
 	monthBox.setEnabled(false);
 	
 	spinner.getUp().addMouseListener(new SpinnerListener(-1));
@@ -128,7 +130,7 @@ public void dayButtonSelected() {}
 		JFrame f = new JFrame();
 		f.getContentPane().setLayout(new javax.swing.BoxLayout(f.getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 		
-		CalModel cm = new CalModel(Calendar.getInstance(), true);
+		CalModel cm = new CalModel(TimeZone.getDefault(), true);
 		
 		JMonthChooser jm = new JMonthChooser();
 		jm.setModel(cm);
@@ -143,7 +145,7 @@ public void dayButtonSelected() {}
 		f.getContentPane().add(jd);
 		
 		f.setSize(400,400);
-		f.show();
+		f.setVisible(true);
 	}
 	
 }

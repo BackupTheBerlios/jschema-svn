@@ -37,7 +37,7 @@ import citibob.jschema.*;
 public interface JDateType extends JType
 {
 
-public Calendar getCalendar();
+public TimeZone getTimeZone();
 
 /** Returns a truncated version of the input; i.e. if this is a SqlDate,
  *then truncates off hour, minute, second. */

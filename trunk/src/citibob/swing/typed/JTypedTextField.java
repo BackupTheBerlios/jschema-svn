@@ -33,6 +33,7 @@ import citibob.exception.*;
 import citibob.sql.*;
 import citibob.swing.typed.SwingerMap;
 import java.beans.*;
+import java.text.*;
 //import citibob.sql.JType;
 
 /**
@@ -45,26 +46,16 @@ implements TypedWidget, KeyListener {
 
 /** Our best guess of the class this takes. */
 //Class objClass = null;
-JType jType;	
+protected JType jType;	
+protected boolean selectOnSet = true;
 
 public JTypedTextField()
 {
 	super();
 	addKeyListener(this);
 }
-public JTypedTextField(Swinger f)
-{
-	this();
-	setJType(f);
-}
 
 // --------------------------------------------------------------
-public void setJType(Swinger f)
-{
-//System.out.println("JTypedTextField.setJType: " + f + ", " + f.getJType());
-	jType = f.getJType();
-	super.setFormatterFactory(f.newFormatterFactory());
-}
 public void setJType(JType jt, AbstractFormatterFactory ffactory)
 {
 	jType = jt;
@@ -75,16 +66,19 @@ public void setJType(Class klass, AbstractFormatterFactory ffactory)
 	jType = new JavaJType(klass);
 	super.setFormatterFactory(ffactory);	
 }
-public void setJType(JType jt, JFormattedTextField.AbstractFormatter defaultFormatter)
-{
-	setJType(jt, new DefaultFormatterFactory(defaultFormatter));
-}
-public void setJType(Class klass, JFormattedTextField.AbstractFormatter defaultFormatter)
-{
-	setJType(klass, new DefaultFormatterFactory(defaultFormatter));
-}
-// --------------------------------------------------------------
 
+// --------------------------------------------------------------
+/** Override */
+public void setText(String t)
+{
+	super.setText(t);
+	if (selectOnSet) selectAll();
+}
+/** Should we do a "select all" on the field when it is re-set (which
+happens whenever focus is gained, among other times)? */
+public void setSelectOnSet(boolean b) { selectOnSet = b; }
+public boolean getSelectOnset() { return selectOnSet; }
+// --------------------------------------------------------------
 public boolean isInstance(Object o)
 {
 	return jType.isInstance(o);
@@ -128,6 +122,20 @@ public String getColName() { return colName; }
 public void setColName(String col) { colName = col; }
 public Object clone() throws CloneNotSupportedException { return super.clone(); }
 // ---------------------------------------------------
+// =================================================================
+// Convenience functions for subclasses that want to override newFormatterFactory()
+public static DefaultFormatterFactory newFormatterFactory(Format fmt, String nullText)
+{
+	return newFormatterFactory(new FormatFormatter(fmt, nullText));
+}
+public static DefaultFormatterFactory newFormatterFactory(Format fmt)
+	{ return newFormatterFactory(fmt, ""); }
+public static DefaultFormatterFactory newFormatterFactory(
+JFormattedTextField.AbstractFormatter afmt)
+{
+	return new DefaultFormatterFactory(afmt);	
+}
+// -------------------------------------------------------------------
 // ===================== KeyListener =====================
 public void keyTyped(KeyEvent e) {
 	if (e.getKeyChar() == '\033') setValue(getValue());		// revert

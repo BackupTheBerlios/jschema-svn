@@ -46,9 +46,16 @@ public JEnumSwinger(JEnum sqlType) {
 public boolean renderWithWidget() { return false; }
 
 /** Create a widget suitable for editing this type of data. */
-public citibob.swing.typed.TypedWidget createTypedWidget()
+public citibob.swing.typed.TypedWidget createWidget()
 {
 	return new JKeyedComboBox();
+}
+
+public void configureWidget(TypedWidget tw)
+{
+	JEnum tt = (JEnum)jType;
+	JKeyedComboBox w = (JKeyedComboBox)tw;
+	w.setKeyedModel(tt.getKeyedModel());
 }
 
 /** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this

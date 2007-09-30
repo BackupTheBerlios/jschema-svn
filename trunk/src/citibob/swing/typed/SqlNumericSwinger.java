@@ -46,9 +46,10 @@ public SqlNumericSwinger(SqlNumeric sqlType) {
 public boolean renderWithWidget() { return false; }
 
 /** Create a widget suitable for editing this type of data. */
-protected citibob.swing.typed.TypedWidget createTypedWidget()
+protected citibob.swing.typed.TypedWidget createWidget()
 	{ return new JTypedTextField(); }
 
+public void configureWidget(TypedWidget w) {}
 
 
 
@@ -63,7 +64,8 @@ protected citibob.swing.typed.TypedWidget createTypedWidget()
 	{
 		SqlNumeric tt = (SqlNumeric)jType;
 		NumberFormatter nff = new LooseNumberFormatter(tt);
-		return new DefaultFormatterFactory(nff);
+		return newFormatterFactory(nff);
+//		return new DefaultFormatterFactory(nff);
 		
 //		NumberFormat nf;
 //		if (tt.getScale() == 0) {

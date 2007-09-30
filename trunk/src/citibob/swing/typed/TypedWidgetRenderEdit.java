@@ -55,7 +55,7 @@ public TypedWidgetRenderEdit(Swinger f, boolean editable)
 	//SqlTypeMap.Factory f = map.getFactory(type);
 	
 	// Set the editor
-	TypedWidget widget = f.newTypedWidget();
+	TypedWidget widget = f.newWidget();
 	editor = new Editor(widget);
 
 	// Set the renderer --- use either the widget, or a formatted label
@@ -63,7 +63,7 @@ public TypedWidgetRenderEdit(Swinger f, boolean editable)
 		DefaultFormatterFactory ffactory = f.newFormatterFactory();
 		if (ffactory != null) renderer = new FormattedTableCellRenderer(ffactory);
 	}
-	if (renderer == null) renderer = new Renderer(f.newTypedWidget());
+	if (renderer == null) renderer = new Renderer(f.newWidget());
 }
 // ==================================================================
 public static class Renderer implements TableCellRenderer

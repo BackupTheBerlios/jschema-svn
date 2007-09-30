@@ -43,10 +43,12 @@ public boolean stopEditing();
  * If so, then setValue() will work.  See SqlType.. */
 public boolean isInstance(Object o);
 
-/** Set up widget to edit a specific SqlType.  Note that this widget does not
- have to be able to edit ALL SqlTypes... it can throw a ClassCastException
- if asked to edit a SqlType it doesn't like. */
-public void setJType(citibob.swing.typed.Swinger f) throws ClassCastException;
+///** Set up widget to edit a specific SqlType, with specific formatting.
+// The type, along with type-specific formatting information, is included
+// in the Swinger.  Note that this widget does not
+// have to be able to edit ALL SqlTypes... it can throw a ClassCastException
+// if asked to edit a JType it doesn't like. */
+//public void setJType(citibob.swing.typed.Swinger f) throws ClassCastException;
 
 /** Row (if any) in a RowModel we will bind this to at runtime. */
 public String getColName();

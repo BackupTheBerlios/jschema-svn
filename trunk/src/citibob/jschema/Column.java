@@ -49,7 +49,7 @@ public Column(SqlType type, String name)
 //}
 
 /** Convenience function */
-public java.util.TimeZone getTimeZone() { return ((JDateType)getType()).getCalendar().getTimeZone(); }
+public java.util.TimeZone getTimeZone() { return ((JDateType)getType()).getTimeZone(); }
 /** Convenience function */
 public JDateType getJDateType() { return ((JDateType)getType()); }
 /** Convenience function */

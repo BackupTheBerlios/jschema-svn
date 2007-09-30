@@ -16,21 +16,46 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
- * SqlRunnable.java
+ * FlexiDateFormat.java
  *
- * Created on September 2, 2007, 12:03 AM
+ * Created on September 6, 2007, 10:04 PM
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
 
-package citibob.sql;
+package citibob.text;
+
+import java.text.*;
+import java.util.*;
 
 /**
  *
  * @author citibob
  */
-public interface SqlRunnable extends citibob.multithread.CBRunnable
+public class DateFlexiFormat extends FlexiFormat {
+
+public DateFlexiFormat(String[] sfmts, TimeZone tz)
 {
-	
+	super(newFormats(sfmts, tz));
+}
+
+public static Format[] newFormats(String[] sfmts, TimeZone tz)
+{
+	Format[] fmts = new Format[sfmts.length];
+	for (int i=0; i<fmts.length; ++i) {
+		fmts[i] = newFormat(sfmts[i], tz);
+	}
+	return fmts;
+}
+
+public static DateFormat newFormat(String sfmt, TimeZone tz)
+{
+	DateFormat dff;
+	if (sfmt == null) dff = DateFormat.getDateInstance();
+	else dff = new SimpleDateFormat(sfmt);
+	if (tz != null) dff.setTimeZone(tz);
+	return dff;
+}
+
 }

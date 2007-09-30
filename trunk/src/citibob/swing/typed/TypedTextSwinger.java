@@ -50,25 +50,11 @@ public TypedTextSwinger(JType jType) {
 public boolean renderWithWidget() { return false; }
 
 /** Create a widget suitable for editing this type of data. */
-protected citibob.swing.typed.TypedWidget createTypedWidget()
+protected citibob.swing.typed.TypedWidget createWidget()
 	{ return new JTypedTextField(); }
 
-
-
-
-/** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
- SqlType is never to be edited with a JFormattedTextField, it can just
- return null.  NOTE: This should return a new instance of AbstractFormatterFactory
- because one instance is required per JFormattedTextField.  It's OK for the
- factory to just store instances of 4 AbstractFormatters and return them as needed. */
-//public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
-//{
-//	SqlInteger tt = (SqlInteger)jType;
-//
-//	NumberFormat nf = NumberFormat.getIntegerInstance();
-//	NumberFormatter nff = new NumberFormatter(nf);
-//	return new DefaultFormatterFactory(nff);
-//}
-
-
+public void configureWidget(TypedWidget tw)
+{
+	((JTypedTextField)tw).setJType(jType, newFormatterFactory());
+}
 }

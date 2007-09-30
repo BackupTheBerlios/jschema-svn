@@ -35,6 +35,9 @@ import citibob.sql.*;
  */
 public class JavaSwingerMap extends SwingerMap
 {
+
+
+
 public JavaSwingerMap() {
 
 	// =========== Standard Java classes

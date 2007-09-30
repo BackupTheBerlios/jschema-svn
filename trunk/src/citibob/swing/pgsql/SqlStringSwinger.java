@@ -37,19 +37,13 @@ import citibob.sql.pgsql.*;
  *
  * @author citibob
  */
-public class SqlStringSwinger extends TypedWidgetSwinger
+public class SqlStringSwinger extends TypedTextSwinger
 {
 
 /** Creates a new instance of TypedWidgetSTFactory */
 public SqlStringSwinger(SqlString sqlType) {
 	super(sqlType);
 }
-
-public boolean renderWithWidget() { return false; }
-
-/** Create a widget suitable for editing this type of data. */
-protected citibob.swing.typed.TypedWidget createTypedWidget()
-	{ return new JTypedTextField(); }
 
 /** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
  SqlType is never to be edited with a JFormattedTextField, it can just
@@ -60,8 +54,7 @@ public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 {
 	SqlString tt = (SqlString)jType;
 
-	StringFormatter sff = new StringFormatter(tt.getLimit());
-	return new DefaultFormatterFactory(sff);
+	return JTypedTextField.newFormatterFactory(new StringFormatter(tt.getLimit()));
 }
 
 }

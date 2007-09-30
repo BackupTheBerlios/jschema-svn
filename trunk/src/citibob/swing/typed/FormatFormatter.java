@@ -42,25 +42,37 @@ implements citibob.text.SFormatter
 {
 
 java.text.Format format;
+String nullText;
 
+// ---------------------------------------------
 public FormatFormatter(Format format)
 {
-	this.format = format;
+	this(format, "");
 }
-public Object  stringToValue(String text)
+public FormatFormatter(Format format, String nullText)
+{
+	this.format = format;
+	this.nullText = nullText;
+}
+// ---------------------------------------------
+public Object stringToValue(String text)
 {
 	try {
-		return format.parseObject(text);
+		if (nullText.equals(text)) {
+			super.setEditValid(true);
+			return null;
+		}
+		Object ret = format.parseObject(text);
+		super.setEditValid(true);
+		return ret;
 	} catch(java.text.ParseException e) {
+		super.setEditValid(false);
 		return null;
 	}
 }
 public String  valueToString(Object value)
 {
-	if (value == null) return null;
-//if (format instanceof java.text.NumberFormat) {
-//		System.out.println("ohi");
-//}
+	if (value == null) return nullText;
 	return format.format(value);
 }
 }

@@ -15,15 +15,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
- * TypedWidgetSTFactory.java
- *
- * Created on March 18, 2006, 6:14 PM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
 
 package citibob.swing.pgsql;
 
@@ -38,33 +29,20 @@ import citibob.sql.pgsql.*;
 public class SqlTimeSwinger extends TypedTextSwinger
 {
 
-DateFormat dfmt;
-	
-public SqlTimeSwinger(JType jType, String format)
+String[] sfmt;
+String nullText;
+
+public SqlTimeSwinger(JType jType, String[] sfmt, String nullText)
 {
 	super(jType);
-	dfmt = new SimpleTimeFormat(format);
+	this.sfmt = sfmt;
+	this.nullText = nullText;
 }
 
-public SqlTimeSwinger()
-	{ this(true, "HH:mm"); }
-public SqlTimeSwinger(boolean nullable, String format)
-{
-	this(new SqlTime(nullable), format);
-}
-
-/** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
- SqlType is never to be edited with a JFormattedTextField, it can just
- return null.  NOTE: This should return a new instance of AbstractFormatterFactory
- because one instance is required per JFormattedTextField.  It's OK for the
- factory to just store instances of 4 AbstractFormatters and return them as needed. */
 public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 {
-//	SqlTime type = (SqlTime)jType;
-//	type.
-//	NumberFormat nf = NumberFormat.getIntegerInstance();
-//	NumberFormatter nff = new NumberFormatter(nf);
-	return new DefaultFormatterFactory(new FormatFormatter(dfmt));
+	return JTypedTextField.newFormatterFactory(
+		new DateFlexiFormat(sfmt, ((JDate)jType).getTimeZone()), nullText);
 }
 
 }

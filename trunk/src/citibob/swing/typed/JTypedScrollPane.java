@@ -54,11 +54,11 @@ public boolean stopEditing() { return subWidget().stopEditing(); }
  * If so, then setValue() will work.  See SqlType.. */
 public boolean isInstance(Object o) {return subWidget().isInstance(o); }
 
-/** Set up widget to edit a specific SqlType.  Note that this widget does not
- have to be able to edit ALL SqlTypes... it can throw a ClassCastException
- if asked to edit a SqlType it doesn't like. */
-public void setJType(citibob.swing.typed.Swinger f) throws ClassCastException
-{ subWidget().setJType(f); }
+///** Set up widget to edit a specific SqlType.  Note that this widget does not
+// have to be able to edit ALL SqlTypes... it can throw a ClassCastException
+// if asked to edit a SqlType it doesn't like. */
+//public void setJType(citibob.swing.typed.Swinger f) throws ClassCastException
+//{ subWidget().setJType(f); }
 
 /** Row (if any) in a RowModel we will bind this to at runtime. */
 public String getColName() { return subWidget().getColName(); }

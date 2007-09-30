@@ -53,8 +53,12 @@ public interface Swinger {
 	 factory to just store instances of 4 AbstractFormatters and return them as needed. */
 	public javax.swing.text.DefaultFormatterFactory newFormatterFactory();
 
-	/** Create a widget suitable for editing this type of data. */
-	public citibob.swing.typed.TypedWidget newTypedWidget();
+	/** Given a pre-existing widget, configure it suitably for types and
+	formatting of this Swinger. */
+	public void configureWidget(TypedWidget tw);	
+
+	/** Create and configure a widget suitable for editing this type of data. */
+	public citibob.swing.typed.TypedWidget newWidget();
 	
 	public boolean renderWithWidget();
 	

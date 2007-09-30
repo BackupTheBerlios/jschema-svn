@@ -61,13 +61,13 @@ public class JDateSFormatter extends javax.swing.text.DateFormatter implements S
 //	return dff;
 //}
 //
-public JDateSFormatter(TimeZone tz, String fmt)
+public JDateSFormatter(String sfmt, TimeZone tz)
 {
-	this(citibob.swing.typed.JDateSwinger.newDateFormat(tz, fmt));
+	this(DateFlexiFormat.newFormat(sfmt, tz));
 }
-public JDateSFormatter(String fmt)
+public JDateSFormatter(String sfmt)
 {
-	this(null, fmt);
+	this(sfmt, null);
 }
 
 	

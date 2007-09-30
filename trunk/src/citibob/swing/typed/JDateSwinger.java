@@ -15,15 +15,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
- * TypedWidgetSTFactory.java
- *
- * Created on March 18, 2006, 6:14 PM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
 
 package citibob.swing.typed;
 
@@ -31,7 +22,9 @@ import citibob.sql.*;
 import javax.swing.text.*;
 import java.text.*;
 import java.util.*;
-
+import citibob.swing.calendar.*;
+import javax.swing.*;
+import citibob.text.*;
 
 /**
  *
@@ -39,51 +32,62 @@ import java.util.*;
  */
 public class JDateSwinger extends TypedWidgetSwinger
 {
-protected String fmt;
-protected DateFormat dfmt;
+protected String[] sfmt;
+protected String nullText;
+protected JCalendar jcal;
+
+//public static JCalendar newJcalDateOnly() { return new JCalendarDateOnly(); }
+//public static JCalendar newJcalDateHHMM() { return new JCalendarDateHHMM(); }
 
 // -------------------------------------------------------------------------
 /** Creates a new instance of TypedWidgetSTFactory */
-public JDateSwinger(JDateType sqlType, DateFormat dfmt) {
-	super(sqlType);
-	this.dfmt = dfmt;
+public JDateSwinger(JDateType jt, String[] sfmt, String nullText, JCalendar jcal) {
+	super(jt);
+	this.sfmt = sfmt;
+	this.nullText = nullText;
+	this.jcal = jcal;
 }
-public static DateFormat newDateFormat(TimeZone tz, String fmt)
-{
-	DateFormat dff;
-	if (fmt == null) dff = DateFormat.getDateInstance();
-	else dff = new SimpleDateFormat(fmt);
-	if (tz != null) dff.setTimeZone(tz);
-	return dff;
+/** Creates a new instance of TypedWidgetSTFactory */
+public JDateSwinger(JDateType jt, String[] sfmt, JCalendar jcal) {
+	this(jt, sfmt, "", jcal);
 }
-public JDateSwinger(JDateType sqlType, TimeZone tz, String fmt)
-{
-	this(sqlType, newDateFormat(tz, fmt));
-	this.fmt = fmt;
-}
-public Calendar getCalendar()
-{
-	return dfmt.getCalendar();
-}
-//public JDateSwinger(JDateType sqlType, String fmt)
-//{
-//	this(sqlType, TimeZone.getDefault(), fmt);
-//}
 // -------------------------------------------------------------------------
-public boolean renderWithWidget() { return true; }
+//public boolean renderWithWidget() { return true; }
+
+public void configureWidget(TypedWidget tw)
+{
+	JTypedDateChooser jtdc = (JTypedDateChooser)tw;
+	jtdc.setJType((JDateType)jType, sfmt, nullText, jcal);
+}
+
 
 /** Create a widget suitable for editing this type of data. */
-protected citibob.swing.typed.TypedWidget createTypedWidget()
+public citibob.swing.typed.TypedWidget createWidget()
 {
-	JTypedDateChooser dc = new JTypedDateChooser(); 
-	if (fmt != null) dc.setDateFormatString(getCalendar(), fmt);
-	return dc;
+	return new JTypedDateChooser(); 
 }
 
 public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 {
-	return new DefaultFormatterFactory(new DateFormatter(dfmt));
+	return JTypedTextField.newFormatterFactory(
+		new DateFlexiFormat(sfmt, ((JDate)jType).getTimeZone()));
 }
-
-
+// ================================================================
+//static class NullableDateFormatter extends DateFormatter
+//{
+//	String nullText = "";
+//	public NullableDateFormatter(DateFormat dfmt, String nullText) {
+//		super(dfmt);
+//		this.nullText = nullText;
+//	}
+//	public Object stringToValue(String text)throws java.text.ParseException {
+//		if (text == null || nullText.equals(text)) return null;
+//		return super.stringToValue(text);
+//	}
+//	public String valueToString(Object val)throws java.text.ParseException {
+//		if (val == null) return nullText;
+//		return super.valueToString(val);
+//	}
+//}
+// ================================================================
 }

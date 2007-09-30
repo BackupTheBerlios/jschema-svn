@@ -62,23 +62,15 @@ public void setNullable(boolean n)
 public boolean isNullable() { return nullable; }
 
 // ============================================================
-//public CalModel() {
-//	this(getCalInstance(), true);
-//}
-/** Wraps a Calendar object. */
-public CalModel(Calendar xcal, boolean nullable)
+public CalModel(TimeZone tz, boolean nullable)
 {
-	this.cal = (Calendar)xcal.clone();
-//	cal.set(Calendar.HOUR_OF_DAY, 0);
-//	cal.set(Calendar.MINUTE, 0);
-//	cal.set(Calendar.SECOND, 0);
-//	cal.set(Calendar.MILLISECOND, 0);
+	this.cal = Calendar.getInstance((tz));
 	this.nullable = nullable;
-	//finalCal = (Calendar)cal.clone();
 }
-//public CalModel(boolean nullable) {
-//	this(getCalInstance(), nullable);
-//}
+public CalModel(citibob.swing.typed.JDateType jdt)
+{
+	this(jdt.getTimeZone(), jdt.isInstance(null));
+}
 // ============================================================
 public Calendar getCal()
 	{ return cal; }
@@ -92,11 +84,15 @@ public Date getTime()
 
 /** Clear the null field, setting date back to what it was before
  *this was nulled. */
-public void setNull(boolean nll)
+public void setNullNoFire(boolean nll)
 {
 	if (!nullable) return;	// Not legal if we're not nullable...
 	if (nll == nullValue) return;
 	nullValue = nll;
+}
+public void setNull(boolean nll)
+{
+	setNullNoFire(nll);
 	fireNullChanged();
 }
 public boolean isNull() { return nullValue; }
@@ -178,8 +174,10 @@ public void setTime(Date date)
 	if (date == null) {
 		setNull(true);
 	} else {
-		setCalTime(date);
-		setNull(false);
+		cal.setTime(date);
+		setNullNoFire(false);
+		fireNullChanged();
+		fireCalChanged();
 	}
 }
 //   void  setTimeInMillis(long millis) 

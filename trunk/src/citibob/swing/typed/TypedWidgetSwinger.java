@@ -29,6 +29,10 @@ package citibob.swing.typed;
 
 //import citibob.sql.*;
 //import citibob.jschema.JType;
+import java.text.*;
+import javax.swing.text.*;
+import javax.swing.*;
+
 
 /**
  *
@@ -60,15 +64,32 @@ public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 	{ return null; }
 public boolean renderWithWidget() { return true; }
 
-/** Create a widget suitable for editing this type of data. */
-public citibob.swing.typed.TypedWidget newTypedWidget()
+
+// -------------------------------------------------------------------
+// =================================================================
+// Convenience functions for subclasses that want to override newFormatterFactory()
+public static DefaultFormatterFactory newFormatterFactory(Format fmt, String nullText)
+	{ return citibob.swing.typed.JTypedTextField.newFormatterFactory(fmt, nullText); }
+public static DefaultFormatterFactory newFormatterFactory(Format fmt)
+	{ return citibob.swing.typed.JTypedTextField.newFormatterFactory(fmt); }
+public static DefaultFormatterFactory newFormatterFactory(JFormattedTextField.AbstractFormatter afmt)
 {
-	TypedWidget tww = createTypedWidget();
-	tww.setJType(this);	// relies on newFormatterFactory
-	return tww;	
+	{ return citibob.swing.typed.JTypedTextField.newFormatterFactory(afmt); }
+}// -------------------------------------------------------------------
+// -------------------------------------------------------------------
+/** Create a widget suitable for editing this type of data. */
+public citibob.swing.typed.TypedWidget newWidget()
+{
+	TypedWidget tw = createWidget();
+	configureWidget(tw);
+	return tw;
 }
 
-/** Just create the widget with a new command. */
-abstract protected citibob.swing.typed.TypedWidget createTypedWidget();
+/** Just create the widget, do not configure it. */
+abstract protected citibob.swing.typed.TypedWidget createWidget();
+
+///** Override this.  Most swingers don't have to configure their widgets,
+//but Swingers for complex widget types do. */
+//public void configureWidget(TypedWidget tw) {}
 
 }

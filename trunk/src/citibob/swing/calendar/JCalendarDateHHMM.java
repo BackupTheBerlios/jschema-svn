@@ -26,7 +26,7 @@ import java.util.*;
  *
  * @author  citibob
  */
-public class JCalendarDateHHMM extends JCalendar {
+public class JCalendarDateHHMM extends javax.swing.JPanel implements JCalendar {
 	
 	CalModel model;
 	
@@ -182,14 +182,14 @@ public class JCalendarDateHHMM extends JCalendar {
 	{
 		JFrame f = new JFrame();
 		
-		CalModel cm = new CalModel(Calendar.getInstance(), true);
+		CalModel cm = new CalModel(TimeZone.getDefault(), true);
 		
 		JCalendar jc = new JCalendarDateHHMM();
 		jc.setModel(cm);
-		f.getContentPane().add(jc);
+		f.getContentPane().add((javax.swing.JPanel)jc);
 		
 		f.setSize(400,400);
 		f.pack();
-		f.show();
+		f.setVisible(true);
 	}
 }

@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.mail;
 
+import citibob.swing.typed.JIntegerSwinger;
 import java.util.prefs.*;
 import javax.swing.*;
 
@@ -39,8 +40,8 @@ Preferences prefs;
         super(owner, true);     // make it modal
 		initComponents();
 		
-		
-		this.port.setJType(new citibob.swing.typed.JIntegerSwinger());
+		new JIntegerSwinger().configureWidget(port);
+		//this.port.setJType(new citibob.swing.typed.JIntegerSwinger());
 		pack();
 
 //		// Mess with preferences

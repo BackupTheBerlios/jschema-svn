@@ -98,7 +98,7 @@ public TypedWidget addWidget(String instanceName, String colName, Schema schema)
 {
 	JType jt = schema.getCol(colName).getType();
 	Swinger sw = swingers.newSwinger(jt);
-	TypedWidget w = sw.newTypedWidget();
+	TypedWidget w = sw.newWidget();
 	addWidget(instanceName, (JComponent)w);
 	return w;
 }

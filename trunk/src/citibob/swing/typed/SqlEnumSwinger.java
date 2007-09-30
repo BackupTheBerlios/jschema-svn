@@ -46,10 +46,11 @@ public SqlEnumSwinger(SqlEnum sqlType) {
 public boolean renderWithWidget() { return false; }
 
 /** Create a widget suitable for editing this type of data. */
-public citibob.swing.typed.TypedWidget createTypedWidget()
+public citibob.swing.typed.TypedWidget createWidget()
 {
 	return new JKeyedComboBox();
 }
+public void configureWidget(TypedWidget w) {}
 
 /** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
  SqlType is never to be edited with a JFormattedTextField, it can just

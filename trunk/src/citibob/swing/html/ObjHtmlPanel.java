@@ -69,7 +69,8 @@ public class ObjHtmlPanel extends ObjHtmlPanelMVC
 	
 	public JTypedTextField addTextField(String name, Swinger swinger)
 	{
-		JTypedTextField widget = new JTypedTextField(swinger);
+		JTypedTextField widget = new JTypedTextField();
+		swinger.configureWidget(widget);
 		widgetMap.put(name, widget);
 
 		// Set text field size to 150 pixels wide x default height

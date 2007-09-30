@@ -15,16 +15,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
- * TypedWidgetSTFactory.java
- *
- * Created on March 18, 2006, 6:14 PM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
-
 package citibob.swing.typed;
 
 import citibob.sql.*;
@@ -32,6 +22,7 @@ import javax.swing.text.*;
 import java.text.*;
 import citibob.swing.typed.*;
 import citibob.sql.pgsql.*;
+import static citibob.swing.typed.JTypedTextField.*;
 
 /**
  *
@@ -40,8 +31,16 @@ import citibob.sql.pgsql.*;
 public class JIntegerSwinger extends TypedTextSwinger
 {
 
+NumberFormat nf;
+ 
 public JIntegerSwinger(JType jType)
-	{ super(jType); }
+{ this(jType, NumberFormat.getIntegerInstance()); }
+
+public JIntegerSwinger(JType jType, NumberFormat nf)
+{
+	super(jType);
+	this.nf = nf;
+}
 
 public JIntegerSwinger()
 	{ this(true); }
@@ -69,10 +68,10 @@ public JIntegerSwinger(boolean nullable)
  factory to just store instances of 4 AbstractFormatters and return them as needed. */
 public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 {
-	NumberFormat nf = NumberFormat.getIntegerInstance();
 	NumberFormatter nff = new NumberFormatter(nf);
-	return new DefaultFormatterFactory(nff);
+	return citibob.swing.typed.JTypedTextField.newFormatterFactory(new NumberFormatter(nf));
 }
+//import static citibob.swing.typed.JTypedTextField.*;
 
 
 }

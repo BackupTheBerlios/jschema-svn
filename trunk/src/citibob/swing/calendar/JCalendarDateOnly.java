@@ -25,7 +25,7 @@ import java.awt.*;
  *
  * @author  citibob
  */
-public class JCalendarDateOnly extends JCalendar {
+public class JCalendarDateOnly extends javax.swing.JPanel implements JCalendar {
 	
 	CalModel model;
 	
@@ -98,7 +98,7 @@ public class JCalendarDateOnly extends JCalendar {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         jPanel1.add(bClose, gridBagConstraints);
 
-        jNull.setText("null");
+        jNull.setText(null);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -108,8 +108,7 @@ public class JCalendarDateOnly extends JCalendar {
 
         add(jDay, java.awt.BorderLayout.CENTER);
 
-    }
-    // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
 	private void bCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCloseActionPerformed
 		model.fireDayButtonSelected();
@@ -133,7 +132,7 @@ public class JCalendarDateOnly extends JCalendar {
 	{
 		JFrame f = new JFrame();
 		
-		CalModel cm = new CalModel(java.util.Calendar.getInstance(), true);
+		CalModel cm = new CalModel(java.util.TimeZone.getDefault(), true);
 		
 		JCalendarDateOnly jc = new JCalendarDateOnly();
 		jc.setModel(cm);
@@ -141,6 +140,6 @@ public class JCalendarDateOnly extends JCalendar {
 		
 		f.setSize(400,400);
 		f.pack();
-		f.show();
+		f.setVisible(true);
 	}
 }
