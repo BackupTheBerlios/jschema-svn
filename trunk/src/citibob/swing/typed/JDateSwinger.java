@@ -34,30 +34,44 @@ public class JDateSwinger extends TypedWidgetSwinger
 {
 protected String[] sfmt;
 protected String nullText;
-protected JCalendar jcal;
+//protected JCalendar jcal;
+protected Class jcalClass;
+protected TimeZone displayTZ;
 
 //public static JCalendar newJcalDateOnly() { return new JCalendarDateOnly(); }
 //public static JCalendar newJcalDateHHMM() { return new JCalendarDateHHMM(); }
 
 // -------------------------------------------------------------------------
 /** Creates a new instance of TypedWidgetSTFactory */
-public JDateSwinger(JDateType jt, String[] sfmt, String nullText, JCalendar jcal) {
+public JDateSwinger(JDateType jt, String[] sfmt, String nullText, TimeZone displayTZ, Class jcalClass) {
 	super(jt);
 	this.sfmt = sfmt;
 	this.nullText = nullText;
-	this.jcal = jcal;
+	this.jcalClass = jcalClass;
+	this.displayTZ = displayTZ;
 }
-/** Creates a new instance of TypedWidgetSTFactory */
-public JDateSwinger(JDateType jt, String[] sfmt, JCalendar jcal) {
-	this(jt, sfmt, "", jcal);
-}
+///** Creates a new instance of TypedWidgetSTFactory */
+//public JDateSwinger(JDateType jt, String[] sfmt, JCalendar jcal) {
+//	this(jt, sfmt, "", jcal);
+//}
 // -------------------------------------------------------------------------
 //public boolean renderWithWidget() { return true; }
 
 public void configureWidget(TypedWidget tw)
 {
-	JTypedDateChooser jtdc = (JTypedDateChooser)tw;
-	jtdc.setJType((JDateType)jType, sfmt, nullText, jcal);
+	if (tw instanceof JTypedDateChooser) {
+		JTypedDateChooser jtdc = (JTypedDateChooser)tw;
+		try {
+			JCalendar jcal = (JCalendar)jcalClass.newInstance();
+			jtdc.setJType((JDateType)jType, sfmt, nullText, displayTZ, jcal);
+		} catch(Exception e) {
+			// Shouldn't happen
+			e.printStackTrace();
+		}
+	} else if (tw instanceof TextTypedWidget) {
+		TextTypedWidget tf = (TextTypedWidget)tw;
+		tf.setJType(jType, newFormatterFactory());
+	}
 }
 
 
@@ -69,9 +83,21 @@ public citibob.swing.typed.TypedWidget createWidget()
 
 public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 {
-	return JTypedTextField.newFormatterFactory(
-		new DateFlexiFormat(sfmt, ((JDate)jType).getTimeZone()));
+	TimeZone tz = (displayTZ == null ? ((JDate)jType).getTimeZone() : displayTZ);
+	return JTypedTextField.newFormatterFactory(new DateFlexiFormat(sfmt, tz));
 }
+//public citibob.swing.table.RenderEdit newRenderEdit(boolean editable)
+//{
+//	TypedWidgetRenderEdit twre = new TypedWidgetRenderEdit(this, editable);
+//	
+//	// Remove border from Date chooser widgets in table
+//	TypedWidgetRenderEdit.Renderer r = (TypedWidgetRenderEdit.Renderer)twre.getRenderer();
+//	TypedWidgetRenderEdit.Editor e = (TypedWidgetRenderEdit.Editor)twre.getEditor();
+//	if (r != null) ((JComponent)r.tw).setBorder(null);
+//	if (e != null) ((JComponent)e.tw).setBorder(null);
+//	return twre;
+//}
+
 // ================================================================
 //static class NullableDateFormatter extends DateFormatter
 //{

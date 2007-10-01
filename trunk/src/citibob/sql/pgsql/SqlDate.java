@@ -20,6 +20,7 @@ package citibob.sql.pgsql;
 import java.text.*;
 import java.util.*;
 import java.sql.*;
+import citibob.sql.pgsql.*;
 
 public class SqlDate extends citibob.swing.typed.JDate
 implements citibob.sql.SqlDateType

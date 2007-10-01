@@ -41,7 +41,7 @@ import java.beans.*;
  */
 public class JTypedLabel
 extends JLabel
-implements TypedWidget {
+implements TextTypedWidget {
 
 /** Our best guess of the class this takes. */
 //Class objClass = null;
@@ -55,14 +55,14 @@ public JTypedLabel()
 {
 	super();
 }
-public JTypedLabel(Swinger f)
-{
-	this();
-	setJType(f);
-}
+//public JTypedLabel(Swinger f)
+//{
+//	this();
+//	setJType(f);
+//}
 public JTypedLabel(String s)
 {
-	this(new JStringSwinger());
+	formatter = new StringFormatter();
 	setValue(s);
 }
 	
@@ -70,22 +70,28 @@ public void setNullText(String s)
 	{ nullText = s; }
 public String getNullText() { return nullText; }
 // --------------------------------------------------------------
-public void setJType(Swinger f)
-{
-//System.out.println("JTypedTextField.setJType: " + f + ", " + f.getJType());
-	jType = f.getJType();
-	formatter = f.newFormatterFactory().getDefaultFormatter();
-}
+//public void setJType(Swinger f)
+//{
+////System.out.println("JTypedTextField.setJType: " + f + ", " + f.getJType());
+//	jType = f.getJType();
+//	formatter = f.newFormatterFactory().getDefaultFormatter();
+//}
 public void setJType(JType jt, JFormattedTextField.AbstractFormatter formatter)
 {
-	jType = jt;
+	this.jType = jt;
 	this.formatter = formatter;
+}
+public void setJType(JType jt, javax.swing.text.DefaultFormatterFactory ffactory)
+{
+	jType = jt;
+	this.formatter = ffactory.getDefaultFormatter();
 }
 /** Convenience function.
  @param nullText String to use for null value, or else <null> if this is not nullable. */
 public void setJType(citibob.util.KeyedModel kmodel, String nullText)
 {
-	setJType(new SqlEnumSwinger(new SqlEnum(kmodel, nullText)));
+	SqlEnum tt = new SqlEnum(kmodel, nullText);
+	formatter = new KeyedFormatter(tt.getKeyedModel());
 }
 
 
@@ -105,6 +111,9 @@ public void setValue(Object o)
 	val = o;
 	if (val == null) setText(nullText);
 	else {
+//if (formatter == null) {
+//	System.out.println("hoi formatter is null");
+//}
 		try {
 //System.out.println(getColName());
 			String text = formatter.valueToString(val);

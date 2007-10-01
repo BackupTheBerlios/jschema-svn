@@ -55,6 +55,6 @@ protected citibob.swing.typed.TypedWidget createWidget()
 
 public void configureWidget(TypedWidget tw)
 {
-	((JTypedTextField)tw).setJType(jType, newFormatterFactory());
+	((TextTypedWidget)tw).setJType(jType, newFormatterFactory());
 }
 }

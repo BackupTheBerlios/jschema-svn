@@ -50,7 +50,11 @@ public citibob.swing.typed.TypedWidget createWidget()
 {
 	return new JKeyedComboBox();
 }
-public void configureWidget(TypedWidget w) {}
+public void configureWidget(TypedWidget w) {
+	JEnum etype = (JEnum)jType;
+	JKeyedComboBox ww = (JKeyedComboBox)w;
+	ww.setKeyedModel(etype.getKeyedModel());
+}
 
 /** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
  SqlType is never to be edited with a JFormattedTextField, it can just

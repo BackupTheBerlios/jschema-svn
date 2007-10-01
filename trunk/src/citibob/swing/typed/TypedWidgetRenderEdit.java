@@ -68,7 +68,7 @@ public TypedWidgetRenderEdit(Swinger f, boolean editable)
 // ==================================================================
 public static class Renderer implements TableCellRenderer
 {
-	TypedWidget tw;
+	protected TypedWidget tw;
 	public Renderer(TypedWidget tw) { this.tw = tw;}
 	public Component getTableCellRendererComponent(
             JTable table, Object value ,
@@ -88,7 +88,7 @@ public static class Renderer implements TableCellRenderer
 // ==================================================================
 public static class Editor extends AbstractCellEditor  implements TableCellEditor
 {
-	TypedWidget tw;
+	protected TypedWidget tw;
 	public Editor(TypedWidget tw) { this.tw = tw;}
 
 // This method is called when a cell value is edited by the user.

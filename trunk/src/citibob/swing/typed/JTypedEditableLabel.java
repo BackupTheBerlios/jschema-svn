@@ -39,7 +39,7 @@ import java.beans.*;
  */
 public class JTypedEditableLabel
 extends javax.swing.JPanel
-implements TypedWidget, PropertyChangeListener, ActionListener
+implements TextTypedWidget, PropertyChangeListener, ActionListener
 {
 
 TypedWidget popupWidget;		// The widget we display in the popup to change the value.
@@ -183,20 +183,25 @@ protected Object selectValue()
 { return null; }
 
 
-public JTypedEditableLabel(JType jt, JFormattedTextField.AbstractFormatter formatter)
-{ setJType(jt, formatter); }
+//public JTypedEditableLabel(JType jt, JFormattedTextField.AbstractFormatter formatter)
+//{ setJType(jt, formatter); }
 
 // --------------------------------------------------------------
-public void setJType(Swinger f)
-{
-	label.setJType(f);
-	JType jt = f.getJType();
-	ckNull.setEnabled(jt.isInstance(null));
-}
+//public void setJType(Swinger f)
+//{
+//	label.setJType(f);
+//	JType jt = f.getJType();
+//	ckNull.setEnabled(jt.isInstance(null));
+//}
 
 public void setJType(JType jt, JFormattedTextField.AbstractFormatter formatter)
 {
 	label.setJType(jt, formatter);
+	ckNull.setEnabled(jt.isInstance(null));	
+}
+public void setJType(JType jt, javax.swing.text.DefaultFormatterFactory ffactory)
+{
+	label.setJType(jt, ffactory);
 	ckNull.setEnabled(jt.isInstance(null));
 }
 

@@ -37,6 +37,9 @@ public SqlTimeSwinger(JType jType, String[] sfmt, String nullText)
 	super(jType);
 	this.sfmt = sfmt;
 	this.nullText = nullText;
+//if (nullText == null) {
+//		System.out.println("SqlTimeSwinger hoi");
+//}
 }
 
 public javax.swing.text.DefaultFormatterFactory newFormatterFactory()

@@ -42,7 +42,7 @@ import java.text.*;
  */
 public class JTypedTextField
 extends JFormattedTextField
-implements TypedWidget, KeyListener {
+implements TextTypedWidget, KeyListener {
 
 /** Our best guess of the class this takes. */
 //Class objClass = null;
@@ -56,7 +56,7 @@ public JTypedTextField()
 }
 
 // --------------------------------------------------------------
-public void setJType(JType jt, AbstractFormatterFactory ffactory)
+public void setJType(JType jt, javax.swing.text.DefaultFormatterFactory ffactory)
 {
 	jType = jt;
 	super.setFormatterFactory(ffactory);	
@@ -65,6 +65,16 @@ public void setJType(Class klass, AbstractFormatterFactory ffactory)
 {
 	jType = new JavaJType(klass);
 	super.setFormatterFactory(ffactory);	
+}
+public void setJType(JType jt, JFormattedTextField.AbstractFormatter afmt)
+{
+	jType = jt;
+	super.setFormatterFactory(newFormatterFactory(afmt));
+}
+public void setJType(Class klass, JFormattedTextField.AbstractFormatter afmt)
+{
+	jType = new JavaJType(klass);
+	super.setFormatterFactory(newFormatterFactory(afmt));
 }
 
 // --------------------------------------------------------------

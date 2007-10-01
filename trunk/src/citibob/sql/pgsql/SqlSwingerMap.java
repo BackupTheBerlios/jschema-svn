@@ -59,12 +59,14 @@ public SqlSwingerMap(final TimeZone tz) {
 		return new SqlBoolSwinger((SqlBool)sqlType);
 	}});
 	
-	// SqlDate
+	// SqlDate --- stored in native TimeZone, render in same TimeZone as is stored.
 	this.addMaker(SqlDate.class, new SwingerMap.Maker() {
-	public Swinger newSwinger(JType sqlType) {
-		return new JDateSwinger((SqlDate)sqlType,
+	public Swinger newSwinger(JType jType) {
+		SqlDateType jt = (SqlDateType)jType;
+		return new JDateSwinger(jt,
 			new String[] {"MM/dd/yyyy", "yyyy-MM-dd", "MM/dd/yy", "MMddyy", "MMddyyyy"},
-			new citibob.swing.calendar.JCalendarDateOnly());
+			"", jt.getTimeZone(),
+			citibob.swing.calendar.JCalendarDateOnly.class);
 	}});
 
 	// SqlInteger
@@ -85,12 +87,13 @@ public SqlSwingerMap(final TimeZone tz) {
 		return new SqlTimeSwinger((SqlTime)sqlType, new String[] {"HH:mm:ss"}, "");
 	}});
 
-	// SqlTimestamp
+	// SqlTimestamp --- always stored in GMT, render in application native TimeZone
 	this.addMaker(SqlTimestamp.class, new SwingerMap.Maker() {
-	public Swinger newSwinger(JType sqlType) {
-		return new JDateSwinger((SqlDate)sqlType,
+	public Swinger newSwinger(JType jType) {
+		return new JDateSwinger((SqlDateType)jType,
 			new String[] {"MM/dd/yyyy hh:mm a", "MM/dd/yy hh:mm a", "MMddyy hh:mm a", "MMddyyyy hh:mm a"},
-			new citibob.swing.calendar.JCalendarDateOnly());
+			"", tz,
+			citibob.swing.calendar.JCalendarDateOnly.class);
 	}});
 }
 	

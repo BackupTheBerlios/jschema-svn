@@ -49,7 +49,11 @@ public boolean renderWithWidget() { return false; }
 protected citibob.swing.typed.TypedWidget createWidget()
 	{ return new JTypedTextField(); }
 
-public void configureWidget(TypedWidget w) {}
+public void configureWidget(TypedWidget w)
+{
+	TextTypedWidget tt = (TextTypedWidget)w;
+	tt.setJType(jType, newFormatterFactory());
+}
 
 
 

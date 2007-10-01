@@ -1,33 +1,24 @@
-/*
-JSchema: library for GUI-based database applications
-This file Copyright (c) 2006-2007 by Robert Fischer
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 ///*
-// * TypedWidgetSTFactory.java
-// *
-// * Created on March 18, 2006, 6:14 PM
-// *
-// * To change this template, choose Tools | Options and locate the template under
-// * the Source Creation and Management node. Right-click the template and choose
-// * Open. You can then make changes to the template in the Source Editor.
-// */
+//JSchema: library for GUI-based database applications
+//This file Copyright (c) 2006-2007 by Robert Fischer
 //
+//This program is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//*/
 //package citibob.swing.pgsql;
 //
 //import citibob.sql.*;
+//import citibob.swing.CitibobJTable;
 //import javax.swing.text.*;
 //import java.text.*;
 //import citibob.swing.typed.*;
@@ -63,30 +54,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //	super(sqlType, newTimestampFormat(cal, fmt));
 //	this.fmt = fmt;
 //}
-//public SqlTimestampSwinger(JDateType sqlType, TimeZone tz, String fmt)
+//public SqlTimestampSwinger(JDateType sqlType, String[] sfmt, String nullText)
 //{
-//	this(sqlType, Calendar.getInstance(tz), fmt);
+//	super(sqlType, sfmt, nullText, new citibob.swing.calendar.JCalendarDateHHMM());
 //}
-//public SqlTimestampSwinger(String sDatabaseTZ, TimeZone displayTZ, String fmt)
-//{ this(new citibob.sql.pgsql.SqlTimestamp(sDatabaseTZ), displayTZ, fmt); }
+//public SqlTimestampSwinger(String sDatabaseTZ, String fmt)
+//	{ this(new citibob.sql.pgsql.SqlTimestamp(sDatabaseTZ), displayTZ, fmt); }
 //public SqlTimestampSwinger(TimeZone displayTZ, String fmt)
 //{ this("GMT", displayTZ, fmt); }
-//
-//// -------------------------------------------------------------------------
-//public boolean renderWithWidget() { return true; }
-//
-///** Create a widget suitable for editing this type of data. */
-//protected citibob.swing.typed.TypedWidget createTypedWidget()
-//{
-//	JTypedTimestampChooser dc = new JTypedTimestampChooser(); 
-//	if (fmt != null) dc.setDateFormatString(getCalendar(), fmt);
-//	return dc;
-//}
-//
-//public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
-//{
-//	return new DefaultFormatterFactory(new DateFormatter(dfmt));
-//}
 //
 //
 //}

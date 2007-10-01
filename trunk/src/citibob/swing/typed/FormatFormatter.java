@@ -53,6 +53,9 @@ public FormatFormatter(Format format, String nullText)
 {
 	this.format = format;
 	this.nullText = nullText;
+//if (nullText == null) {
+//	System.out.println("FormatFormatter hoi");
+//}
 }
 // ---------------------------------------------
 public Object stringToValue(String text)
