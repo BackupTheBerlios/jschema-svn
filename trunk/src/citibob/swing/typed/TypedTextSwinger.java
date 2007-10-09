@@ -55,6 +55,9 @@ protected citibob.swing.typed.TypedWidget createWidget()
 
 public void configureWidget(TypedWidget tw)
 {
-	((TextTypedWidget)tw).setJType(jType, newFormatterFactory());
+	if (tw instanceof TextTypedWidget) {
+		// This is the only class of widgets we know how to configure.
+		((TextTypedWidget)tw).setJType(jType, newFormatterFactory());
+	}
 }
 }
