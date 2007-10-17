@@ -33,7 +33,7 @@ import java.beans.*;
  * @author  citibob
  * Doesn't hold NULL values.
  */
-public class JBoolCheckbox extends JCheckBox implements TypedWidget {
+public class JBoolCheckbox extends JCheckBox implements SimpleTypedWidget {
 
 //PropertyChangeSupport support = new PropertyChangeSupport(this);
 Boolean val;
@@ -73,9 +73,9 @@ public boolean isInstance(Object o)
 /** Set up widget to edit a specific JType.  Note that this widget does not
  have to be able to edit ALL JTypes... it can throw a ClassCastException
  if asked to edit a JType it doesn't like. */
-public void setJType(citibob.swing.typed.Swinger f) throws ClassCastException
+public void setJType(JType jType) throws ClassCastException
 {
-	Class klass = f.getJType().getObjClass();
+	Class klass = jType.getObjClass();
 	if (!(Boolean.class.isAssignableFrom(klass)))
 		throw new ClassCastException("Expected Boolean type, got " + klass);
 }

@@ -47,6 +47,7 @@ public JIntegerSwinger()
 public JIntegerSwinger(boolean nullable)
 {
 	super(new JavaJType(Integer.class, nullable));
+	nf = new java.text.DecimalFormat("#");
 }
 	
 ///** Creates a new instance of TypedWidgetSTFactory */
@@ -69,7 +70,7 @@ public JIntegerSwinger(boolean nullable)
 public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 {
 	NumberFormatter nff = new NumberFormatter(nf);
-	return citibob.swing.typed.JTypedTextField.newFormatterFactory(new NumberFormatter(nf));
+	return citibob.swing.typed.JTypedTextField.newFormatterFactory(nff);
 }
 //import static citibob.swing.typed.JTypedTextField.*;
 

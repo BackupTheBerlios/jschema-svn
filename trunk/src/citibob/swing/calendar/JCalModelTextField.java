@@ -30,6 +30,7 @@ import citibob.swing.typed.*;
 import java.util.*;
 import javax.swing.*;
 import citibob.text.*;
+import java.awt.event.*;
 
 /**
  *
@@ -37,7 +38,7 @@ import citibob.text.*;
  */
 public class JCalModelTextField
 extends JTypedTextField
-implements CalModel.Listener, java.beans.PropertyChangeListener, JCalendar
+implements CalModel.Listener, java.beans.PropertyChangeListener, JCalendar, java.awt.event.FocusListener
 {
 
 /** Creates a new instance of JCalModelTextFied */
@@ -50,6 +51,7 @@ public void setModel(CalModel model) {
 	this.model = model;
 	model.addListener(this);	// Changes in model --> changes in text field
 	this.addPropertyChangeListener("value", this);	// Changes in text field --> changes in model
+//	this.addFocusListener(this);
 }
 public void setJType(JType jt, String[] sfmt, String nullText, CalModel cmod)
 {
@@ -77,12 +79,19 @@ System.out.println("Property Changed: " + evt.getNewValue());
 	inPropertyChange = false;
 }
 // =========================================================
+// FocusListener
+public void focusGained(FocusEvent e) {}
+public void focusLost(FocusEvent e) {
+	super.stopEditing();
+	model.setTime((Date)super.getValue());
+}
+// =========================================================
 // CalModel.Listener
 /**  Value has changed. */
 public void calChanged()
 {
 	if (inPropertyChange) return;
-System.out.println("Cal Changed: " + model.getTime());
+//System.out.println("Cal Changed: " + model.getTime());
 	this.setValue(model.getTime());
 }
 

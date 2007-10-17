@@ -54,7 +54,12 @@ public citibob.swing.typed.TypedWidget createWidget()
 	return new JBoolButton();
 }
 
-public void configureWidget(TypedWidget w) {}
+public void configureWidget(TypedWidget w)
+{
+	if (w instanceof SimpleTypedWidget) {
+		((SimpleTypedWidget)w).setJType(this.getJType());
+	}
+}
 
 /** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
  SqlType is never to be edited with a JFormattedTextField, it can just

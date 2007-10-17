@@ -33,7 +33,8 @@ import java.util.*;
  *
  * @author  citibob
  */
-public class JTypedDateChooser extends javax.swing.JPanel implements TypedWidget
+public class JTypedDateChooser extends javax.swing.JPanel
+implements TypedWidget, CalModel.Listener
 {
 
 protected CalModel cmod;		// Underlying nullable value model
@@ -99,11 +100,7 @@ public void setJType(JDateType jt, String[] sfmt, String nullText, TimeZone disp
 	jcal.setModel(cmod);
 	dtfield.setJType(jType, sfmt, nullText, cmod);
 
-	// Make popup disappear when user chooses a day in jcal
-	cmod.addListener(new CalModel.Adapter() {
-	public void dayButtonSelected() {
-			popupHide();
-	}});
+	cmod.addListener(this);
 
 	// Configure popup to display the chosen JCalendar.
 	popup = new JPopupMenu();
@@ -155,18 +152,19 @@ public Object getValue()
 public void setValue(Object o)
 {
 	java.util.Date d = (java.util.Date)o;
-
-	cmod.setTime(d);
+//
+//	cmod.setTime(d);
 
 // TODO: Temporarily allow null in ALL fields --- to make it work
 // in the query editor for dates...
 if (d != null) {
 	if (!isInstance(d)) throw new ClassCastException("Bad type " + d.getClass() + " " + d);
 }
-	java.util.Date dt = (d == null ? null :  jType.truncate((java.util.Date)d));
+	java.util.Date dt = (d == null ? null :  jType.truncate(d));
 	
-System.out.println("JTDC: Setting date to " + dt );
+//System.out.println("JTDC: Setting date to " + dt );
 	java.util.Date oldDt = cmod.getTime();
+//	if (oldDt.getTime() == dt.getTime()) return;
 	cmod.setTime(dt);
 
 }
@@ -180,7 +178,10 @@ public boolean isInstance(Object o) { return jType.isInstance(o); }
  * as the value of the editor. The editor returns false if editing was not
  * stopped; this is useful for editors that validate and can not accept
  * invalid entries. */
-public boolean stopEditing() { return true; }
+public boolean stopEditing() {
+	return dtfield.stopEditing();
+//	return true;
+}
 
 String col;
 /** Row (if any) in a RowModel we will bind this to at runtime. */
@@ -254,6 +255,23 @@ private void calendarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
 
 
 // =========================================================
+// CalModel.Listener
+
+/** Make popup disappear when user chooses a day in jcal */
+public void dayButtonSelected() {
+	popupHide();
+}
+/**  Value has changed. */
+public void calChanged() {
+	if (!cmod.isNull()) {
+		firePropertyChange("value", null, cmod.getTime());
+	}
+}
+
+/**  Nullness has changed. */
+public void nullChanged() { firePropertyChange("value", null, cmod.getTime()); }
+// =========================================================
+
 /** Testing code */
 private static JTypedDateChooser newField(JDateType jdt)
 {

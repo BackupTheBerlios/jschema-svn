@@ -31,7 +31,8 @@ import citibob.sql.*;
  * A boolean checkbox that allows Y/N/null.
  * @author  citibob
  */
-public class JBoolButton extends JButton implements TypedWidget {
+public class JBoolButton extends JButton
+implements SimpleTypedWidget {
 
 //PropertyChangeSupport support = new PropertyChangeSupport(this);
 Boolean val;
@@ -69,10 +70,10 @@ public boolean isInstance(Object o)
 /** Set up widget to edit a specific JType.  Note that this widget does not
  have to be able to edit ALL JTypes... it can throw a ClassCastException
  if asked to edit a JType it doesn't like. */
-public void setJType(citibob.swing.typed.Swinger f) throws ClassCastException
+public void setJType(JType jType) throws ClassCastException
 {
-	jType = f.getJType();
-	Class klass = f.getJType().getObjClass();
+	this.jType = jType;
+	Class klass = jType.getObjClass();
 	if (!(Boolean.class.isAssignableFrom(klass)))
 		throw new ClassCastException("Expected Boolean type, got " + klass);
 }

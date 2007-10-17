@@ -106,7 +106,7 @@ public boolean stopEditing()
 // --------------------------------------------------------------
 public Object getValue()
 {
-	String text = super.getText();
+//	String text = super.getText();
 	Object o = super.getValue();
 //	Class oclass = (o == null ? null : o.getClass());
 //	System.out.println("JTypedTextField returning value: " + text + " --> " + o + "(" + oclass + ")");
