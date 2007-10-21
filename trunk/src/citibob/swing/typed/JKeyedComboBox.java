@@ -66,7 +66,7 @@ public void setKeyedModel(KeyedModel kmodel)
 	kformatter = new KeyedFormatter(kmodel);
 	Vector keyList = kmodel.getKeyList();
 	// Handle null specially if it is in our key list.
-	if (kmodel.get(null) != null) {
+	if (kmodel.containsKey(null)) {
 		keyList = (Vector)keyList.clone();
 		for (int i=0; i<keyList.size(); ++i)
 			if (keyList.get(i) == null) keyList.set(i, NULL);

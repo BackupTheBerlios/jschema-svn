@@ -40,8 +40,8 @@ import java.util.*;
  can be saved back to the database.
  * @author citibob
  */
-public class SuperSchemaBuf extends AbstractTableModel
-implements JTypeTableModel
+public class SuperSchemaBuf extends AbstractJTypeTableModel
+//implements JTypeTableModel
 {
 
 public static class ColInfo
@@ -113,7 +113,7 @@ public int getRowCount()
 {
 	return sbuf.getRowCount();
 }
-// =========================================================
+// --------------------------------------------------------
 public void tableChanged(TableModelEvent e_u) 
 {
 	

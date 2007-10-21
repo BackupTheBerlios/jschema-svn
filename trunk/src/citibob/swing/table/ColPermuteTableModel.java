@@ -21,7 +21,7 @@ import java.util.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
 import javax.swing.*;
-
+import citibob.swing.typed.*;
 
 import java.io.*;
 
@@ -199,6 +199,12 @@ public void setValueAt(Object val, int row, int column)
 //System.out.println("ColpermuteTableModel: setValueAt(" + val + ", " + row + ", " + column);
 	model_u.setValueAt(val, row, colMap[column]);
 }
+// ------------------------------------------------------
+public Object getValueAt(int row, String col)
+	{ return getValueAt(row, findColumn(col)); }
+public void setValueAt(Object val, int row, String col)
+	{ setValueAt(val, row, findColumn(col)); }
+// --------------------------------------------------------
 
 // =========================================================
 public void tableChanged(TableModelEvent e_u) 

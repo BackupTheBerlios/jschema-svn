@@ -35,8 +35,8 @@ import citibob.swing.typed.*;
  *
  * @author citibob
  */
-public class MultiJTypeTableModel extends AbstractTableModel
-implements JTypeTableModel
+public class MultiJTypeTableModel extends AbstractJTypeTableModel
+//implements JTypeTableModel
 {
 
 JTypeTableModel[] models;	// Sub-models

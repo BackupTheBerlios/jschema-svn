@@ -35,7 +35,7 @@ implements SqlType
 		super(kmodel);
 		this.nullable = (nullText != null);
 		if (nullable) {
-			if (kmodel.get(null) == null) kmodel.addItem(null, nullText);
+			if (!kmodel.containsKey(null)) kmodel.addItem(null, nullText);
 		}
 	}
 	
@@ -55,7 +55,7 @@ implements SqlType
 	{
 		if (o == null) return nullable;
 		if (!(o instanceof Integer)) return false;
-		return (kmodel.get(o) != null);
+		return (kmodel.containsKey(o));
 	}
 	public Object get(java.sql.ResultSet rs, int col) throws SQLException
 		{ return rs.getObject(col); }

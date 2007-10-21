@@ -34,8 +34,6 @@ public interface JType
 	/** Name of type in the database.  The format varies too much to bother describing it in more detail here.  However, this field can be used (for example) for JTypedTextField to discover length limits. */
 //	String getDbType();
 
-
-
 	/** Subclasses of this implement a compareTo() that compares only class.
 	 * This is so we can use SqlType objects as a key in a HashMap. */
 }

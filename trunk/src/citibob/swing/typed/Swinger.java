@@ -59,7 +59,11 @@ public interface Swinger {
 
 	/** Create and configure a widget suitable for editing this type of data. */
 	public citibob.swing.typed.TypedWidget newWidget();
-	
+
+	/** Should we use newWidget() to render in a JTable, or should we use just plain Strings?
+	TODO: Change this to newTableWidget() instead... */
 	public boolean renderWithWidget();
-	
+
+	/** Used to sort on items of this column/type/etc. */
+	public java.util.Comparator getComparator();
 }

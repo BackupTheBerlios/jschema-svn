@@ -27,8 +27,8 @@ import citibob.sql.*;
 import java.io.*;
 import citibob.swing.typed.JType;
 
-public class StatusSchemaBuf extends AbstractTableModel
-implements JTypeTableModel, TableModelListener, SchemaBuf.Listener
+public class StatusSchemaBuf extends AbstractJTypeTableModel
+implements TableModelListener, SchemaBuf.Listener
 {
 
 SchemaBuf sb;
@@ -42,6 +42,13 @@ public StatusSchemaBuf(SchemaBuf sb)
 	sb.addSchemaBufListener(this);
 }
 // -------------------------------------------------------------------
+//public Object getValueAt(int row, String col)
+//	{ return getValueAt(row, findColumn(col)); }
+//public void setValueAt(Object val, int row, String col)
+//	{ setValueAt(val, row, findColumn(col)); }
+//public JType getJType(int row, String col)
+//	{ return getJType(row, findColumn(col)); }
+// --------------------------------------------------------
 public int findColumn(String colName)
 {
 	if ("__status__".equals(colName)) return 0;

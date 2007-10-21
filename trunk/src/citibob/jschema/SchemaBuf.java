@@ -28,8 +28,8 @@ import citibob.sql.ConsSqlQuery;
 import citibob.swing.typed.JType;
 import static citibob.jschema.RowStatusConst.*;
 
-public class SchemaBuf extends AbstractTableModel
-implements SqlBuf, JTypeTableModel
+public class SchemaBuf extends AbstractJTypeTableModel
+implements SqlBuf //, JTypeTableModel
 {
 /** Data model we'll use for our columns. */
 Schema schema;
@@ -447,11 +447,11 @@ public void setValueAt(Object val, int row, int col)
 	// Update listeners
 	fireTableCellUpdated(row, col);
 }
-/** Convenience function, select column by name! */
-public void setValueAt(Object val, int row, String col)
-{
-	setValueAt(val, row, findColumn(col));
-}
+///** Convenience function, select column by name! */
+//public void setValueAt(Object val, int row, String col)
+//{
+//	setValueAt(val, row, findColumn(col));
+//}
 // --------------------------------------------------
 public int getColumnCount()
 	{ return schema.getColCount(); }
@@ -462,11 +462,11 @@ public Object getValueAt(int rowIndex, int colIndex)
 	SqlRow r = (SqlRow)rows.get(rowIndex);
 	return r.data[colIndex];
 }
-/** Convenience function, select column by name! */
-public Object getValueAt(int row, String col)
-{
-	return getValueAt(row, findColumn(col));
-}
+///** Convenience function, select column by name! */
+//public Object getValueAt(int row, String col)
+//{
+//	return getValueAt(row, findColumn(col));
+//}
 // --------------------------------------------------
 //// ===============================================================
 //// Implementation of CitibobTableModel (prototype stuff)

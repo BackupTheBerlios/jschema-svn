@@ -21,8 +21,37 @@ import java.util.*;
 
 listeners CalModelMVC
 {
+    eventThrown(String eventName, Map<String,Object> eventParameters)
+
+map = new HashMap();
+map.put("oldDate", ..);
+fireEvnet("calChanged", map);
+
+
+xxxx(Object o)
+
+calChanged(CalChangedEvent e)
+
+class CalChangedEvent {
+    Date oldDate;
+    Date newDate;
+}
+
+fireCalChanged(new CalChangedEvnet(oldDate, newDate));
+
     /** Value has changed. */
-    calChanged();
+    calChanged(Date oldDate, Date newDate);
+
+void fireCalChanged(final Date oldDate, final Date newDate)
+{
+    Task t = new ListenerTask() {
+    void run(ListenerList list) {
+	for (Listener l : list) { l.calChanged(olDate, newDate);
+    }};
+    queueTask(t);
+}
+
+
 
     /** Nullness has changed. */
     nullChanged();

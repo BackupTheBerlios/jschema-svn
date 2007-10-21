@@ -43,7 +43,7 @@ public class JEnum implements JType
 
 	public boolean isInstance(Object o)
 	{
-		return (kmodel.get(o) != null);
+		return (kmodel.containsKey(o)); //get(o) != null);
 	}
 
 }

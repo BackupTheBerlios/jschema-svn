@@ -32,13 +32,14 @@ package citibob.swing.typed;
 import java.text.*;
 import javax.swing.text.*;
 import javax.swing.*;
+import java.util.*;
 
 
 /**
  *
  * @author citibob
  */
-public abstract class TypedWidgetSwinger implements Swinger
+public abstract class TypedWidgetSwinger implements Swinger, java.util.Comparator
 {
 
 //TypedWidget tw;
@@ -92,4 +93,13 @@ abstract protected citibob.swing.typed.TypedWidget createWidget();
 //but Swingers for complex widget types do. */
 //public void configureWidget(TypedWidget tw) {}
 
+// ===================================================================
+// Comparator
+public Comparator getComparator() { return this; }
+
+/** Use the natural ordering here --- otherwise override. */
+public int compare(Object o1, Object o2)
+{
+	return ((Comparable)o1).compareTo(o2);
+}
 }

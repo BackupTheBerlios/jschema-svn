@@ -42,11 +42,13 @@ public class KeyedModel {
 Map itemMap = new HashMap();	// HashMap instead of TreeMap doesn't require comparision method
 Vector keyList = new Vector();
 //String nullString = "<none>";
+int nextSerial = 0;
 
 /** An item to be added to the combo box in JIntComboBox. */
 public class Item {
 	public Object key;
 	public Object obj;
+	public Integer serial;	// Order of this item in the KeyedModel list
 	public String toString() {
 		if (obj == null) return null;
 		return obj.toString();
@@ -73,12 +75,15 @@ public Vector getKeyList()
 	{ return keyList; }
 public Map getItemMap()
 	{ return itemMap; }
+
+public boolean containsKey(Object key)
+{
+	return itemMap.get(key) != null;
+}
 public KeyedModel.Item get(Object key)
 {
-	//KeyedModel.Item ret;
 	return (KeyedModel.Item)itemMap.get(key);
 }
-
 
 protected void clear()
 {
@@ -87,6 +92,7 @@ protected void clear()
 }
 private void addItem(KeyedModel.Item oi)
 {
+	oi.serial = new Integer(nextSerial++);
 	itemMap.put(oi.key, oi);
 	keyList.add(oi.key);
 }
@@ -134,6 +140,13 @@ public String toString(Object key)
 	KeyedModel.Item oi = (Item)itemMap.get(key);
 	if (oi == null) return null;
 	return oi.toString();
+}
+public Integer getSerial(Object key)
+{
+	//if (key == null) return null;
+	KeyedModel.Item oi = (Item)itemMap.get(key);
+	if (oi == null) return null;
+	return oi.serial;
 }
 // -------------------------------------------------------------------
 public void KeyedModel(SqlRunner str, String sql, int keyCol, int itemCol)

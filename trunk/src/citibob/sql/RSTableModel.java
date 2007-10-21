@@ -26,8 +26,8 @@ import java.util.*;
 
 /** Reads in a record set and makes the data available as a (read-only) table model. */
 public class RSTableModel
-extends DefaultTableModel
-implements JTypeTableModel
+extends DefaultJTypeTableModel
+//implements JTypeTableModel
 {
 
 List proto;		// Prototypes for CitibobTableModel
@@ -174,6 +174,7 @@ public void addAllRows(ResultSet rs) throws SQLException
 // Implementation of TableModel
 
 // --------------------------------------------------
+// --------------------------------------------------------
 public int findColumn(String colName)
 {
 	for (int i = 0; i < getColumnCount(); ++i) {

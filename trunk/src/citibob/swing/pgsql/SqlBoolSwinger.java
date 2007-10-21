@@ -29,10 +29,11 @@ package citibob.swing.pgsql;
 
 import citibob.swing.typed.*;
 import citibob.sql.*;
+import java.util.Arrays;
 import javax.swing.text.*;
 import java.text.*;
 import citibob.sql.pgsql.*;
-
+import java.util.Comparator;
 
 /**
  *
@@ -75,5 +76,6 @@ public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 //	KeyedFormatter fmt = new KeyedFormatter(tt.getKeyedModel());
 //	return new DefaultFormatterFactory(fmt);
 //}
+
 
 }

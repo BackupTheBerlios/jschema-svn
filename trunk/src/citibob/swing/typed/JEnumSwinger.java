@@ -70,4 +70,14 @@ public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 	return new DefaultFormatterFactory(fmt);
 }
 
+/** By default, sort based on KeyedModel's ordering. */
+public int compare(Object o1, Object o2)
+{
+	JEnum je = (JEnum)jType;
+	citibob.util.KeyedModel kmodel = je.getKeyedModel();
+	int i1 = kmodel.getSerial(o1);
+	int i2 = kmodel.getSerial(o2);
+	return i1 - i2;
+}
+
 }

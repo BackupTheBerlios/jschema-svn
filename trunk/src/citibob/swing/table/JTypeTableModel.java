@@ -30,4 +30,16 @@ public interface JTypeTableModel extends CitibobTableModel
 
 	/** Return SqlType for a cell.  If type depends only on col, ignores the row argument. */
 	public JType getJType(int row, int col);
+
+	/** Convenience function */
+	public JType getJType(int row, String col);
+
+//	/** Return a value we can sort on --- usually the same as getValueAt().  But, eg,
+//	if a column is an integer key with a KeyedModel, then it would be sorted according
+//	to the KeyedModel sort order. */
+//	public Object getSortValueAt(int row, int col);
+
+
+// --------------------------------------------------------
+
 }
