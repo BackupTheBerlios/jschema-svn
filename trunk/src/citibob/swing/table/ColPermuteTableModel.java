@@ -56,12 +56,27 @@ public ColPermuteTableModel(CitibobTableModel model_u, String[] colNames, int[] 
 {
 	init(model_u, colNames, colMap, null);
 }
+public ColPermuteTableModel(CitibobTableModel model_u, String[] sColNames, String[] colMap)
+{
+	init(model_u, sColNames, colMap, null);
+}
 
 /** @param model_u Underlying table model
  @param colNames Display names -- Null if you wish to just use names of underlying columns
  @param sColMap Names of underlying columns --- Null if wish to use all underlying columns
  @param editable Is each column editable?  If null, use underlying table's isEditable() function. */
 public ColPermuteTableModel(CitibobTableModel model_u,
+String[] colNames,			// Display names
+String[] sColMap,			// Underlying names
+boolean[] editable)			// Is each column editable?
+{
+	init(model_u, colNames, sColMap, editable);
+}
+/** @param model_u Underlying table model
+ @param colNames Display names -- Null if you wish to just use names of underlying columns
+ @param sColMap Names of underlying columns --- Null if wish to use all underlying columns
+ @param editable Is each column editable?  If null, use underlying table's isEditable() function. */
+public void init(CitibobTableModel model_u,
 String[] colNames,			// Display names
 String[] sColMap,			// Underlying names
 boolean[] editable)			// Is each column editable?
@@ -74,9 +89,9 @@ boolean[] editable)			// Is each column editable?
 	} else {
 		colMap = new int[sColMap.length];
 		for (int i = 0; i < colMap.length; ++i) {
-			for (int j = 0; j < model_u.getColumnCount(); ++j) {
+//			for (int j = 0; j < model_u.getColumnCount(); ++j) {
 				colMap[i] = (sColMap[i] == null ? -1 : model_u.findColumn(sColMap[i]));
-			}
+//			}
 		}
 	}
 

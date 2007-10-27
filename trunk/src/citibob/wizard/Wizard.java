@@ -69,6 +69,9 @@ protected abstract class State {
 		this.back = back;
 		this.next = next;
 	}
+	public State(String name) {
+		this(name, null, null);
+	}
 }
 
 /** Returns output from Wizard. */
