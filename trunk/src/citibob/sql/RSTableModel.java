@@ -31,7 +31,6 @@ extends DefaultJTypeTableModel
 {
 
 List proto;		// Prototypes for CitibobTableModel
-SqlType[] jTypes;		// JType of each column
 
 // =====================================================
 // DefaultTableModel handles data storage
@@ -112,7 +111,7 @@ public void addRow(ResultSet rs) throws java.sql.SQLException
 	Object[] data = new Object[ncol];
 	for (int i = 0; i < ncol; ++i) {
 //if (i == )
-		data[i] = jTypes[i].get(rs, i+1);
+		data[i] = ((SqlType)jTypes[i]).get(rs, i+1);
 //			rs.getObject(i+1);
 //		data[i] = rs.getObject(i+1);
 	}
