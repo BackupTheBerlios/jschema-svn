@@ -52,6 +52,8 @@ public void setUserPrefs(java.awt.Component c, String base);
 public citibob.text.SFormatterMap getSFormatterMap();
 public SchemaSet getSchemaSet();
 public Schema getSchema(String name);	// Get schema by name
+public citibob.reports.Reports getReports();
+
 /** Get default conversion between database types and SqlType objects */
 public citibob.sql.SqlTypeSet getSqlTypeSet();
 /** @returns Root user preferences node for this application */
