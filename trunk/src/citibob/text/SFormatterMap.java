@@ -19,6 +19,7 @@ package citibob.text;
 
 import citibob.sql.*;
 import citibob.swing.typed.*;
+import citibob.swing.table.JTypeTableModel;
 import java.util.*;
 import java.text.*;
 
@@ -73,5 +74,34 @@ public SFormatter newSFormatter(JType t)
 	return null;
 }
 
+/** Create SFormatter for an entire set of columns */
+public SFormatter[] newSFormatters(JTypeTableModel model)
+{
+	int n = model.getColumnCount();
+	SFormatter[] sfmt = new SFormatter[n];
+	for (int i=0; i<n; ++i) sfmt[i] = newSFormatter(model.getJType(0, i));
+	return sfmt;
+}
+
+public SFormatter[] newSFormatters(JTypeTableModel model,
+String[] scol, SFormatter[] sfmt)
+{
+	int n = model.getColumnCount();
+	SFormatter[] sfmt2 = new SFormatter[n];
+	
+	// Set up specialized formatters
+	if (scol != null)
+	for (int i=0; i<scol.length; ++i) {
+		int col = model.findColumn(scol[i]);
+		sfmt2[col] = sfmt[i];
+	}
+	
+	// Fill in defaults
+	for (int i=0; i<n; ++i) if (sfmt2[i] == null) {
+		sfmt2[i] = newSFormatter(model.getJType(0, i));
+	}
+
+	return sfmt2;
+}
 
 }
