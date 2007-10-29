@@ -77,6 +77,12 @@
 <target name="-post-jar">
     <copy todir="dist">
         <fileset dir="./lib"><include name="*.jar"/></fileset>
+        <fileset dir="./lib/commons"><include name="*.jar"/></fileset>
+        <fileset dir="./lib/jasperreports"><include name="*.jar"/></fileset>
+        <fileset dir="./lib/jodconverter"><include name="*.jar"/></fileset>
+        <fileset dir="./lib/jooreports"><include name="*.jar"/></fileset>
+        <fileset dir="./lib/xstream"><include name="*.jar"/></fileset>
+	
     </copy>
 </target>
 
