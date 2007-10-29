@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.sql;
 
 /**
- *
+ * This interface should NOT be implemented directly!
  * @author citibob
  */
 public interface SqlRunnable extends citibob.multithread.CBRunnable
