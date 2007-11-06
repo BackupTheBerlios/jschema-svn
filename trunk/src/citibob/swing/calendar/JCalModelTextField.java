@@ -72,7 +72,7 @@ public void setValue(Object o)
 boolean inPropertyChange = false;
 public void propertyChange(java.beans.PropertyChangeEvent evt)
 {
-System.out.println("Property Changed: " + evt.getNewValue());
+//System.out.println("Property Changed: " + evt.getNewValue());
 	if (inPropertyChange) return;
 	inPropertyChange = true;
 	model.setTime((Date)evt.getNewValue());

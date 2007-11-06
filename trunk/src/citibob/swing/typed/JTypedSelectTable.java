@@ -44,14 +44,12 @@ implements TypedWidget, ListSelectionListener
 
 int valueColU = 0;		// This column in the selected row will be returned as the value
 Object val = null;
-boolean isHighlightMouseover = true;		// SHould we highlight rows when mousing over?
 protected boolean inSelect;		// Are we in the middle of having the user change the value?
 
 public JTypedSelectTable()
 {
 	super();
-	this.addMouseListener(new MyMouseAdapter());
-	this.addMouseMotionListener(new MyMouseMotionAdapter());
+	setHighlightMouseover(true);
 }
 
 /** Controls which column in selected row will be returned as the value */
@@ -90,8 +88,6 @@ public void setValue(Object o)
 	}
 }
 
-public void setHighlightMouseover(boolean b) { isHighlightMouseover = b; }
-public boolean getHighlightMouseover(boolean b) { return isHighlightMouseover; }
 
 /** From TableCellEditor (in case this is being used in a TableCellEditor):
  * Tells the editor to stop editing and accept any partially edited value
@@ -121,63 +117,19 @@ public String getColName() { return colName; }
 public void setColName(String col) { colName = col; }
 //public Object clone() throws CloneNotSupportedException { return super.clone(); }
 // ---------------------------------------------------
-// ================================================================
-// Stuff to highlight on mouseover
-// See: http://forum.java.sun.com/thread.jspa?threadID=280692&messageID=1091824
-// TODO: Actually, we need to use different colors (and fonts) if this is being
-// used in a popup.  We should subclass for that...  But it's OK for now.
-Color cTextHighlightBg = UIManager.getDefaults().getColor("List.selectionBackground");
-Color cTextBg = UIManager.getDefaults().getColor("List.background");
-Color cTextHighlightFg = UIManager.getDefaults().getColor("List.selectionForeground");
-Color cTextFg = UIManager.getDefaults().getColor("List.foreground");
-public Component prepareRenderer(TableCellRenderer renderer, int row, int col)
-{
-	Component c = super.prepareRenderer(renderer, row, col);
-	if (row == mouseRow) {
-		c.setBackground(cTextHighlightBg);
-		c.setForeground(cTextHighlightFg);
-	} else {
-		c.setBackground(cTextBg);
-		c.setForeground(cTextFg);
-	}
-	return c;
-}
-int mouseRow = -1;		// Row the mouse is currently hovering over.
-class MyMouseMotionAdapter extends MouseMotionAdapter {
-public void mouseMoved(MouseEvent e) {
-	if (!isHighlightMouseover) return;
-	
-	JTable aTable =  (JTable)e.getSource();
-	int oldRow = mouseRow;
-	mouseRow = aTable.rowAtPoint(e.getPoint());
-//	itsColumn = aTable.columnAtPoint(e.getPoint());
-	if (oldRow != mouseRow) aTable.repaint();
-}}
-class MyMouseAdapter extends MouseAdapter {
-public void mouseExited(MouseEvent e) {
-	if (!isHighlightMouseover) return;
-	
-	JTable aTable =  (JTable)e.getSource();
-	mouseRow = -1;
-	aTable.repaint();
-}}
+
 
 // ================================================================
 // ListSelectionListener
-//class SharedListSelectionHandler implements ListSelectionListener {
+/** JTable implements ListSelectionListener.  This method overrides that implementation. */
 public void valueChanged(ListSelectionEvent e) {
-//	ListSelectionModel lsm = (ListSelectionModel)e.getSource();
-//
-//	int firstIndex = e.getFirstIndex();
-//	int lastIndex = e.getLastIndex();
-//	boolean isAdjusting = e.getValueIsAdjusting();
+	super.valueChanged(e);
 	inSelect = true;
 	Object oldval = val;
 	
 	int selRow = this.getSelectedRow();
 	if (selRow < 0) val = null;
 	else val = getModelU().getValueAt(selRow, valueColU);
-//	if (oldval == val) return;		// Try to filter out at least a few spurious events.
 	firePropertyChange("value", oldval, val);
 	inSelect = false;
 }
