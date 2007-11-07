@@ -37,32 +37,25 @@ import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.event.*;
 import citibob.sql.*;
+import citibob.text.*;
 
 /**
  *
  * @author citibob
  */
-public class FormattedTableCellRenderer
+public class SFormatterTableCellRenderer
 extends DefaultTableCellRenderer
 {
-	DefaultFormatterFactory ffactory;
-	public FormattedTableCellRenderer(DefaultFormatterFactory ffactory)
+	SFormatter sfmt;
+	
+	public SFormatterTableCellRenderer(SFormatter sfmt)
 	{
-		this.ffactory = ffactory;
-	}
-	JFormattedTextField.AbstractFormatter getFormatter(Object val)
-	{
-		JFormattedTextField.AbstractFormatter fmt;
-		if (val == null) fmt = ffactory.getNullFormatter();
-		else fmt = ffactory.getDisplayFormatter();
-		if (fmt == null) fmt = ffactory.getDefaultFormatter();
-		return fmt;
+		this.sfmt = sfmt;
 	}
 
 	public void setValue(Object o) {
-		JFormattedTextField.AbstractFormatter fmt = getFormatter(o);
 		try {
-			setText(fmt.valueToString(o));
+			setText(sfmt.valueToString(o));
 		} catch(java.text.ParseException e) {
 			setText(e.toString());		// Should not happen
 		}

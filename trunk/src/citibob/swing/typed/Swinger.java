@@ -36,6 +36,9 @@ public interface Swinger {
 	
 	/** Set up which type this Swinger is making stuff for. */
 	//public void setSqlType(citibob.sql.SqlType sqlType);
+
+	/** Re-configure the way data are displayed and formatted --- for SOME types */
+	public void setFormatString(String sfmt);
 	
 	public citibob.swing.typed.JType getJType();
 	

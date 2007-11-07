@@ -21,7 +21,8 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-
+import java.text.*;
+import citibob.text.*;
 import citibob.swing.table.*;
 //import de.chka.swing.components.*;
 
@@ -98,13 +99,24 @@ public void setRenderEdit(int colNo, RenderEdit re)
 }
 
 /** Sets a renderer and editor pair at once, for a column. */
-public void setRender(int colNo, TableCellRenderer re)
+public void setRenderer(int colNo, TableCellRenderer re)
 {
 	if (re == null) return;		// Don't change, if we don't know what to set it TO.
 	
 	TableColumn col = getColumnModel().getColumn(colNo);
 	col.setCellRenderer(re);
 }
+
+public void setSFormatter(int col, SFormatter sfmt)
+	{ setRenderer(col, new citibob.swing.typed.SFormatterTableCellRenderer(sfmt)); }
+public void setSFormatter(String scol, SFormatter sfmt)
+	{ setSFormatter(getCBModel().findColumn(scol), sfmt); }
+public void setFormat(int col, Format fmt)
+	{ setRenderer(col, new citibob.swing.typed.FormatTableCellRenderer(fmt)); }
+public void setFormat(String scol, Format fmt)
+	{ setFormat(getCBModel().findColumn(scol), fmt); }
+
+
 
 ///** Sets a renderer and editor pair at once, for a column. */
 //public void setDefaultRenderEdit(Class klass, RenderEdit re)
@@ -130,7 +142,19 @@ Color cTextHighlightFg = UIManager.getDefaults().getColor("List.selectionForegro
 Color cTextFg = UIManager.getDefaults().getColor("List.foreground");
 public Component prepareRenderer(TableCellRenderer renderer, int row, int col)
 {
+	
 	Component c = super.prepareRenderer(renderer, row, col);
+
+	// Tooltips
+	if (c instanceof JComponent) {
+		JComponent jc = (JComponent)c;
+		String ttip = getTooltip(row, col);
+//	System.out.println(ttip);
+		jc.setToolTipText(ttip);
+//		jc.setToolTipText("<html>This is the first line<br>This is the second line</html>");
+	}
+
+	// Highlight row the mouse is over
 	if (row == mouseRow) {
 		c.setBackground(cTextHighlightBg);
 		c.setForeground(cTextHighlightFg);
@@ -141,6 +165,9 @@ public Component prepareRenderer(TableCellRenderer renderer, int row, int col)
 	return c;
 }
 int mouseRow = -1;		// Row the mouse is currently hovering over.
+
+/** Override this to do tooltips in custom manner.  For now, we return the "tooltip column" */
+public String getTooltip(int row, int col) { return null; }
 // =====================================================================
 // MouseMotionListener
 /**
