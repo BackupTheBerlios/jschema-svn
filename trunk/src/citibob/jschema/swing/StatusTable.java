@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.jschema.swing;
 
+import citibob.swing.typed.SwingerMap;
 import javax.swing.table.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -60,7 +61,7 @@ boolean[] xEditable, SwingerMap swingers)
 	ssb = new StatusSchemaBuf(schemaBuf);
 	super.setModelU(ssb, colNames, sColMap, editable, swingers);
 
-	setRenderEditU("__status__", new citibob.swing.table.StatusRenderEdit());
+	setRendererU("__status__", new StatusRenderer());
 }
 
 public void setModelU(SchemaBuf schemaBuf,
@@ -85,8 +86,25 @@ boolean[] xEditable, SwingerMap swingers, citibob.text.SFormatMap smap)
 	ssb = new StatusSchemaBuf(schemaBuf);
 	super.setModelU(ssb, colNames, sColMap, ttColMap, editable, swingers, smap);
 
-	setRenderEditU("__status__", new citibob.swing.table.StatusRenderEdit());
+	setRendererU("__status__", new StatusRenderer());
 }	
-
+// ==========================================================================
+static class StatusRenderer
+extends DefaultTableCellRenderer
+implements citibob.jschema.RowStatusConst {
+	public void setValue(Object o) {
+		if (o instanceof Integer) {
+			String s = "";
+			int status = ((Integer)o).intValue();
+			if ((status & INSERTED) != 0) s += "I";
+			if ((status & DELETED) != 0) s += "D";
+			if ((status & CHANGED) != 0) s += "*";
+			setText(s);
+		} else {
+			setText("<ERROR>");
+		}
+	}
+}
+// =====================================================================
 
 }

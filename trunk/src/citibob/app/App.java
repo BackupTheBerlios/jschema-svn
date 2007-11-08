@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.app;
+import citibob.swing.typed.SwingerMap;
 import java.sql.*;
 import java.util.*;
 import citibob.sql.*;

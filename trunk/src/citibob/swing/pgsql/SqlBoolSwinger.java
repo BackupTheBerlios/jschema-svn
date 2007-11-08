@@ -27,8 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing.pgsql;
 
+import citibob.swing.swingers.AbstractSwinger;
 import citibob.swing.typed.*;
 import citibob.sql.*;
+import citibob.text.BoolSFormat;
 import java.util.Arrays;
 import javax.swing.text.*;
 import java.text.*;
@@ -39,15 +41,13 @@ import java.util.Comparator;
  *
  * @author citibob
  */
-public class SqlBoolSwinger extends TypedWidgetSwinger
+public class SqlBoolSwinger extends AbstractSwinger
 {
 
 /** Creates a new instance of TypedWidgetSTFactory */
 public SqlBoolSwinger(SqlBool sqlType) {
-	super(sqlType);
+	super(sqlType, new BoolSFormat());
 }
-
-public boolean renderWithWidget() { return true; }
 
 /** Create a widget suitable for editing this type of data. */
 public citibob.swing.typed.TypedWidget createWidget()
@@ -59,23 +59,9 @@ public void configureWidget(TypedWidget w)
 {
 	if (w instanceof SimpleTypedWidget) {
 		((SimpleTypedWidget)w).setJType(this.getJType());
+	} else if (w instanceof TextTypedWidget) {
+		((TextTypedWidget)w).setJType(this.getJType(), getSFormat());
 	}
 }
-
-/** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
- SqlType is never to be edited with a JFormattedTextField, it can just
- return null.  NOTE: This should return a new instance of AbstractFormatterFactory
- because one instance is required per JFormattedTextField.  It's OK for the
- factory to just store instances of 4 AbstractFormatters and return them as needed. */
-public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
-{
-	return new DefaultFormatterFactory(new BoolFormatter());
-
-}
-//	SqlEnum tt = (SqlEnum)sqlType;
-//	KeyedFormatter fmt = new KeyedFormatter(tt.getKeyedModel());
-//	return new DefaultFormatterFactory(fmt);
-//}
-
 
 }

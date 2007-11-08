@@ -31,79 +31,12 @@ import java.text.*;
  * This is a lot like SwingerMap, but much simpler.
  * @author citibob
  */
-public class SFormatMap
+public interface SFormatMap
 {
 
-//HashMap constMap = new HashMap();
-HashMap makerMap = new HashMap();
-	
-// ===========================================================
-protected static interface Maker
-{
-	/** Gets a new swinger for an editable cell. */
-	SFormat newSFormat(JType jType);
-}
-// ===========================================================
-//protected void addConst(SqlSwinger swing)
-//{
-//	constMap.put(swing.getSqlType().getClass(), swing);
-//}
-protected void addMaker(Class klass, Maker maker)
-{
-	makerMap.put(klass, maker);
-}
-//public Swinger newSwinger(JType t)
-//{ return newSwinger(t, true); }
-/** Gets a new swinger for a cell of a certain type, depending on whether or not it is editable. */
+public SFormat newSFormat(JType t);
+public SFormat[] newSFormats(JTypeTableModel model);
+public SFormat[] newSFormats(JTypeTableModel model, String[] scol, SFormat[] sfmt);
 
-public SFormat newSFormat(JType t)
-//public Swinger newSwinger(JType t, boolean editable)
-{
-	// Index on general class of the JType, or on its underlying
-	// Java Class (for JavaJType)
-	Class klass = t.getClass();
-	if (klass == JavaJType.class) klass = ((JavaJType) t).getObjClass();
-
-	Maker m = null;
-	for (;;) {
-		m = (Maker)makerMap.get(klass);
-		if (m != null) break;
-		klass = klass.getSuperclass();
-		if (klass == Object.class) break;
-	}
-	if (m != null) return m.newSFormat(t);
-	
-	return null;
-}
-
-/** Create SFormat for an entire set of columns */
-public SFormat[] newSFormats(JTypeTableModel model)
-{
-	int n = model.getColumnCount();
-	SFormat[] sfmt = new SFormat[n];
-	for (int i=0; i<n; ++i) sfmt[i] = newSFormat(model.getJType(0, i));
-	return sfmt;
-}
-
-public SFormat[] newSFormats(JTypeTableModel model,
-String[] scol, SFormat[] sfmt)
-{
-	int n = model.getColumnCount();
-	SFormat[] sfmt2 = new SFormat[n];
-	
-	// Set up specialized formatters
-	if (scol != null)
-	for (int i=0; i<scol.length; ++i) {
-		int col = model.findColumn(scol[i]);
-		sfmt2[col] = sfmt[i];
-	}
-	
-	// Fill in defaults
-	for (int i=0; i<n; ++i) if (sfmt2[i] == null) {
-		sfmt2[i] = newSFormat(model.getJType(0, i));
-	}
-
-	return sfmt2;
-}
 
 }

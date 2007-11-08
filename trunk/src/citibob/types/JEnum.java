@@ -22,7 +22,8 @@ import citibob.jschema.*;
 import citibob.sql.*;
 import citibob.types.KeyedModel;
 
-/** For enumerate types... Nullable depends on KeyedModel. */
+/** For enumerate types... Nullable depends on KeyedModel.
+This REALLY IS different from SqlEnum!!! */
 public class JEnum implements JType
 {
 	protected KeyedModel kmodel;

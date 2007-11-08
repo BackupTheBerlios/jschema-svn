@@ -25,59 +25,56 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.typed;
+package citibob.swing.swingers;
 
 //import citibob.sql.*;
 //import citibob.jschema.JType;
+import citibob.swing.typed.*;
+import citibob.swing.typed.Swinger;
 import citibob.types.JType;
 import java.text.*;
 import javax.swing.text.*;
 import javax.swing.*;
 import java.util.*;
-
+import javax.swing.table.*;
+import citibob.text.*;
 
 /**
  *
  * @author citibob
  */
-public abstract class TypedWidgetSwinger implements Swinger, java.util.Comparator
+public abstract class AbstractSwinger implements Swinger
 {
 
-//TypedWidget tw;
 protected JType jType;
-
+protected SFormat sformat;
+boolean renderWithWidget;		// Should the editor use the TypedWidget (or just a standard String label)?
 
 /** Creates a new instance of TypedWidgetSTFactory */
-public TypedWidgetSwinger(JType jType) {
-	//this.tw = tw;
+public AbstractSwinger(JType jType, SFormat sformat)
+	{ this(jType, sformat, false); }
+public AbstractSwinger(JType jType, SFormat sformat, boolean renderWithWidget)
+{
 	this.jType = jType;
+	this.sformat = sformat;
+	this.renderWithWidget = renderWithWidget;
 }
 
+
+public void setRenderWithWidget(boolean b) { this.renderWithWidget = b; }
+public boolean isRenderWithWidget() { return this.renderWithWidget; }
+
+public SFormat getSFormat() { return sformat; }
 public JType getJType() { return jType; }
 
 /** Renderer and editor for a CitibobJTable.  If JTable's default
  renderer and editor is desired, just return null.  Normally, this will
  just return new TypedWidgetRenderEdit(newTypedWidget()) */
-public citibob.swing.table.RenderEdit newRenderEdit(boolean editable)
-	{ return new TypedWidgetRenderEdit(this, editable); }
-
-/** By default, no associated text formatter; render with widget. */
-public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
-	{ return null; }
-public boolean renderWithWidget() { return true; }
+public RenderEdit newRenderEdit()
+	{ return new MyRenderEdit(newWidget(), getSFormat(), renderWithWidget); }
 
 
 // -------------------------------------------------------------------
-// =================================================================
-// Convenience functions for subclasses that want to override newFormatterFactory()
-public static DefaultFormatterFactory newFormatterFactory(Format fmt, String nullText)
-	{ return citibob.swing.typed.JTypedTextField.newFormatterFactory(fmt, nullText); }
-public static DefaultFormatterFactory newFormatterFactory(Format fmt)
-	{ return citibob.swing.typed.JTypedTextField.newFormatterFactory(fmt); }
-public static DefaultFormatterFactory newFormatterFactory(JFormattedTextField.AbstractFormatter afmt)
-{
-	{ return citibob.swing.typed.JTypedTextField.newFormatterFactory(afmt); }
-}// -------------------------------------------------------------------
 // -------------------------------------------------------------------
 /** Create a widget suitable for editing this type of data. */
 public citibob.swing.typed.TypedWidget newWidget()
@@ -94,13 +91,24 @@ abstract protected citibob.swing.typed.TypedWidget createWidget();
 //but Swingers for complex widget types do. */
 //public void configureWidget(TypedWidget tw) {}
 
-// ===================================================================
-// Comparator
-public Comparator getComparator() { return this; }
-
-/** Use the natural ordering here --- otherwise override. */
-public int compare(Object o1, Object o2)
+// ============================================================
+static class MyRenderEdit implements RenderEdit
 {
-	return ((Comparable)o1).compareTo(o2);
+	TableCellEditor editor;
+	TableCellRenderer rendererEditable;
+	TableCellRenderer rendererNotEditable;
+	public MyRenderEdit(TypedWidget tw, SFormat sformat, boolean renderWithWidget)
+	{
+		rendererEditable = new TypedWidgetRenderer(tw);
+		rendererNotEditable = (renderWithWidget ? rendererEditable :
+			new SFormatRenderer(sformat));
+		editor = new TypedWidgetEditor(tw);
+	}
+	public TableCellEditor getEditor()
+		{return editor; }
+	public TableCellRenderer getRenderer(boolean editable)
+	{
+		return editable ? rendererEditable : rendererNotEditable;
+	}
 }
 }

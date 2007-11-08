@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing.html;
 
+import citibob.swing.typed.Swinger;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;

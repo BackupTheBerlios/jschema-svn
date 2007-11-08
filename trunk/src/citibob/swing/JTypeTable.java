@@ -27,6 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing;
 
+import citibob.swing.typed.Swinger;
+import citibob.swing.typed.SwingerMap;
 import citibob.types.JType;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -46,30 +48,35 @@ import citibob.swing.typed.*;
 public class JTypeTable extends CitibobJTable
 {
 	SwingerMap smap;
-	HashMap editableREMap;		// HashMap of RenderEdit objects created for table cells.
-	HashMap readonlyREMap;		// HashMap of RenderEdit objects created for table cells.
+	Map<JType,Swinger.RenderEdit> reMap;
 	
 	public void setSwingerMap(SwingerMap smap)
 		{ this.smap = smap; }
 
 	/** Creates a new instance of JTypeTable */
 	public JTypeTable() {
-		editableREMap = new HashMap();
-		readonlyREMap = new HashMap();
+		reMap = new HashMap();
 	}
 
 	public TableCellEditor getCellEditor(int row, int col)
 	{
-		RenderEdit re = getRenderEdit(row, col);
-//System.out.println("JTypeTable: got RenderEdit for edit: " + re + "(JType = " + ((JTypeTableModel)getModel()).getJType(row, col));
-		return (re != null ? re.getEditor() : super.getCellEditor(row, col));
+		Swinger.RenderEdit re = getRenderEdit(row, col);
+		if (re != null) {
+			TableCellEditor ee = re.getEditor();
+			if (ee != null) return ee;
+		}
+		return super.getCellEditor(row, col);
 	}
 	public TableCellRenderer getCellRenderer(int row, int col)
 	{
-		RenderEdit re = getRenderEdit(row, col);
-		return (re != null ? re.getRenderer() : super.getCellRenderer(row, col));
+		Swinger.RenderEdit re = getRenderEdit(row, col);
+		if (re != null) {
+			TableCellRenderer rr = re.getRenderer(isCellEditable(row,col));
+			if (rr == null) return rr;
+		}
+		return super.getCellRenderer(row, col);
 	}
-	public RenderEdit getRenderEdit(int row, int col)
+	public Swinger.RenderEdit getRenderEdit(int row, int col)
 	{
 		if (smap == null) return null;
 		
@@ -79,14 +86,13 @@ public class JTypeTable extends CitibobJTable
 		
 		// See if we have cached a RenderEdit for this type
 		boolean editable = mod.isCellEditable(row, col);
-		HashMap reMap = (editable ? editableREMap : readonlyREMap);
-		RenderEdit re = (RenderEdit)reMap.get(jType);
+		Swinger.RenderEdit re = (Swinger.RenderEdit)reMap.get(jType);
 		if (re != null) return re;
 		
 		// Get the swinger to make us a new RenderEdit
 		Swinger swinger = smap.newSwinger(jType);
 		if (swinger == null) return null;
-		re = swinger.newRenderEdit(editable);
+		re = swinger.newRenderEdit();
 		reMap.put(jType, re);
 System.out.println("New RenderEdit: " + jType + " --> " + re);
 		return re;

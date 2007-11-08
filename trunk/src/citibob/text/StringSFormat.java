@@ -16,48 +16,51 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
- * FormattedTableCellRenderer.java
+ * KeyedFormatter.java
  *
- * Created on March 18, 2006, 1:58 PM
+ * Created on March 18, 2006, 4:37 PM
  *
  * To change this template, choose Tools | Options and locate the template under
  * the Source Creation and Management node. Right-click the template and choose
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.typed;
+package citibob.text;
 
-
-import java.awt.*;
-import javax.swing.table.*;
-//import citibob.swing.typed.*;
-import java.sql.*;
-import citibob.types.*;
+import citibob.types.KeyedModel;
 import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.event.*;
-import citibob.sql.*;
-import citibob.text.*;
 
 /**
  *
  * @author citibob
  */
-public class SFormatTableCellRenderer
-extends DefaultTableCellRenderer
+public class StringSFormat
+implements citibob.text.SFormat
 {
-	SFormat sfmt;
-	
-	public SFormatTableCellRenderer(SFormat sfmt)
-	{
-		this.sfmt = sfmt;
-	}
 
-	public void setValue(Object o) {
-		try {
-			setText(sfmt.valueToString(o));
-		} catch(java.text.ParseException e) {
-			setText(e.toString());		// Should not happen
-		}
-	}
+int limit;
+String nullText;
+
+/** Creates a new instance of KeyedFormatter */
+public StringSFormat(int limit, String nullText) {
+	this.limit = limit;
+}
+public String getNullText() { return nullText; }
+
+public StringSFormat()
+	{ this(-1, ""); }
+
+public void setNullText(String s) { nullText = s; }
+
+/** Not to be used */
+public Object  stringToValue(String text)
+{
+	if (nullText.equals(text)) return null;
+	return text;
+}
+public String  valueToString(Object value)
+{
+	if (value == null) return nullText;
+	else return (String)value;
+}
 }

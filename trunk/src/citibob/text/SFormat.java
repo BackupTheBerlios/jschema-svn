@@ -32,6 +32,9 @@ package citibob.text;
  */
 public interface SFormat
 {
-	public Object  stringToValue(String text) throws java.text.ParseException;
-	public String  valueToString(Object value) throws java.text.ParseException;
+	public Object stringToValue(String text) throws java.text.ParseException;
+	public String valueToString(Object value) throws java.text.ParseException;
+
+	/** Should equal valueToString(null); */
+	public String getNullText();
 }

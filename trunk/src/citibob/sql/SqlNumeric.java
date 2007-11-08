@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.sql;
 
 import java.sql.*;
+import java.text.*;
 
 public class SqlNumeric implements SqlType
 {
@@ -67,5 +68,22 @@ public class SqlNumeric implements SqlType
 		{ return ii == null ? "null" : ii.toString(); }
 	public static String sql(int i)
 		{ return ""+i; }
+
+/** Makes a NumberFormat object appropriate to this SQL Type */
+public NumberFormat newNumberFormat()
+{
+	NumberFormat nf;
+	if (getScale() == 0) {
+		nf = NumberFormat.getIntegerInstance();
+	} else {
+		nf = NumberFormat.getInstance();
+		nf.setMinimumIntegerDigits(0);
+		nf.setMaximumIntegerDigits(getPrecision() - getScale());
+		nf.setMinimumFractionDigits(getScale());
+		nf.setMaximumFractionDigits(getScale());
+	}
+	return nf;
+}
+
 
 }

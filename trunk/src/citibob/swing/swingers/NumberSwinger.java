@@ -15,32 +15,35 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
- * MultiTableCellEditor.java
- *
- * Created on June 30, 2005, 11:41 PM
- */
+package citibob.swing.swingers;
 
-package citibob.swing.table;
-
-import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.event.*;
-import java.util.*;
-import java.awt.*;
-import citibob.swing.*;
+import citibob.sql.*;
+import citibob.types.JType;
+import citibob.types.JavaJType;
+import javax.swing.text.*;
+import java.text.*;
+import citibob.swing.typed.*;
+import citibob.sql.pgsql.*;
+import static citibob.swing.typed.JTypedTextField.*;
+import citibob.text.*;
 
 /**
  *
  * @author citibob
  */
-public class MultiTableCellEditor extends MultiCellEditor implements TableCellEditor {
-
-public Component getTableCellEditorComponent(JTable table, Object value,
-	boolean isSelected, int row, int column)
+public class NumberSwinger extends TypedTextSwinger
 {
-	TableCellEditor tcur = (TableCellEditor)getCur();
-	return tcur.getTableCellEditorComponent(table, value, isSelected, row, column);
+
+public NumberSwinger(JType jType, NumberFormat nf)
+	{ super(jType, nf); }
+
+
+public javax.swing.JFormattedTextField.AbstractFormatter newAbsFormatter()
+{
+	FormatSFormat sfmt = (FormatSFormat)getSFormat();
+	NumberFormatter nff = new NumberFormatter((NumberFormat)sfmt.getFormat());
+	return nff;
 }
+
 
 }

@@ -25,9 +25,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.typed;
+package citibob.swing.swingers;
 
 import citibob.sql.*;
+import citibob.text.StringSFormat;
 import citibob.types.JavaJType;
 import javax.swing.text.*;
 import java.text.*;
@@ -43,18 +44,8 @@ public class JStringSwinger extends TypedTextSwinger
 
 /** Creates a new instance of TypedWidgetSTFactory */
 public JStringSwinger() {
-	super(new JavaJType(String.class));
+	super(new JavaJType(String.class), new StringSFormat());
 }
 
-/** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
- SqlType is never to be edited with a JFormattedTextField, it can just
- return null.  NOTE: This should return a new instance of AbstractFormatterFactory
- because one instance is required per JFormattedTextField.  It's OK for the
- factory to just store instances of 4 AbstractFormatters and return them as needed. */
-public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
-{
-	StringFormatter sff = new StringFormatter();
-	return new DefaultFormatterFactory(sff);
-}
 
 }

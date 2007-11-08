@@ -1,3 +1,4 @@
+package citibob.swing.text;
 ///*
 //JSchema: library for GUI-based database applications
 //This file Copyright (c) 2006-2007 by Robert Fischer

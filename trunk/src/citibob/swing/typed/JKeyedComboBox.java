@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.swing.typed;
 //import java.text.DateFormat;
 //import java.util.Date;
+import citibob.text.KeyedSFormat;
 import javax.swing.*;
 import java.util.*;
 import java.sql.*;
@@ -35,7 +36,7 @@ Used to make a combo box that returns one of a fixed set of integer values.  The
  */
 public class JKeyedComboBox extends JComboBox implements TypedWidget {
 KeyedModel kmodel;
-KeyedFormatter kformatter;
+KeyedSFormat kformatter;
 Object value;
 //JType jType;
 
@@ -63,7 +64,7 @@ public JKeyedComboBox(KeyedModel kmodel)
 public void setKeyedModel(KeyedModel kmodel)
 {
 	this.kmodel = kmodel;
-	kformatter = new KeyedFormatter(kmodel);
+	kformatter = new KeyedSFormat(kmodel);
 	Vector keyList = kmodel.getKeyList();
 	// Handle null specially if it is in our key list.
 	if (kmodel.containsKey(null)) {

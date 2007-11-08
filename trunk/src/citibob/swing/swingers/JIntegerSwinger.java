@@ -15,45 +15,36 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
- * FormattedTableCellRenderer.java
- *
- * Created on March 18, 2006, 1:58 PM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
+package citibob.swing.swingers;
 
-package citibob.swing.typed;
-
-
-import java.awt.*;
-import javax.swing.table.*;
-//import citibob.swing.typed.*;
-import java.sql.*;
-import citibob.types.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.event.*;
 import citibob.sql.*;
+import citibob.types.JType;
+import citibob.types.JavaJType;
+import javax.swing.text.*;
 import java.text.*;
+import citibob.swing.typed.*;
+import citibob.sql.pgsql.*;
+import static citibob.swing.typed.JTypedTextField.*;
+import citibob.text.*;
 
 /**
  *
  * @author citibob
  */
-public class FormatTableCellRenderer
-extends DefaultTableCellRenderer
+public class JIntegerSwinger extends NumberSwinger
 {
-	Format sfmt;
-	
-	public FormatTableCellRenderer(Format sfmt)
-	{
-		this.sfmt = sfmt;
-	}
 
-	public void setValue(Object o) {
-		setText(sfmt.format(o));
-	}
+public JIntegerSwinger(JType jType)
+	{ this(jType, NumberFormat.getIntegerInstance()); }
+public JIntegerSwinger(JType jType, NumberFormat nf)
+	{ super(jType, nf); }
+
+public JIntegerSwinger(boolean nullable, NumberFormat nf)
+	{this(new JavaJType(Integer.class, nullable), nf); }
+public JIntegerSwinger(boolean nullable)
+	{ this(nullable, NumberFormat.getIntegerInstance()); }
+public JIntegerSwinger()
+	{ this(true); }
+
+
 }

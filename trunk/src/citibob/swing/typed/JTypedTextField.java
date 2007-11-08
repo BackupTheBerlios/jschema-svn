@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing.typed;
 
+import citibob.swing.text.SFormatAbsFormatter;
 import citibob.types.JType;
 import citibob.types.JavaJType;
 import java.text.DateFormat;
@@ -36,7 +37,7 @@ import citibob.sql.*;
 import citibob.swing.typed.SwingerMap;
 import java.beans.*;
 import java.text.*;
-//import citibob.sql.JType;
+import citibob.text.*;
 
 /**
  *
@@ -63,22 +64,27 @@ public void setJType(JType jt, javax.swing.text.DefaultFormatterFactory ffactory
 	jType = jt;
 	super.setFormatterFactory(ffactory);	
 }
-public void setJType(Class klass, AbstractFormatterFactory ffactory)
+public void setJType(JType jt, SFormat sformat)
 {
-	jType = new JavaJType(klass);
-	super.setFormatterFactory(ffactory);	
+	setJType(jt, new DefaultFormatterFactory(new SFormatAbsFormatter(sformat)));
 }
-public void setJType(JType jt, JFormattedTextField.AbstractFormatter afmt)
-{
-	jType = jt;
-	super.setFormatterFactory(newFormatterFactory(afmt));
-}
-public void setJType(Class klass, JFormattedTextField.AbstractFormatter afmt)
-{
-	jType = new JavaJType(klass);
-	super.setFormatterFactory(newFormatterFactory(afmt));
-}
-
+//
+//public void setJType(Class klass, AbstractFormatterFactory ffactory)
+//{
+//	jType = new JavaJType(klass);
+//	super.setFormatterFactory(ffactory);	
+//}
+//public void setJType(JType jt, JFormattedTextField.AbstractFormatter afmt)
+//{
+//	jType = jt;
+//	super.setFormatterFactory(newFormatterFactory(afmt));
+//}
+//public void setJType(Class klass, JFormattedTextField.AbstractFormatter afmt)
+//{
+//	jType = new JavaJType(klass);
+//	super.setFormatterFactory(newFormatterFactory(afmt));
+//}
+//
 // --------------------------------------------------------------
 /** Override */
 public void setText(String t)
@@ -138,10 +144,16 @@ public Object clone() throws CloneNotSupportedException { return super.clone(); 
 // Convenience functions for subclasses that want to override newFormatterFactory()
 public static DefaultFormatterFactory newFormatterFactory(Format fmt, String nullText)
 {
-	return newFormatterFactory(new FormatFormatter(fmt, nullText));
+	return newFormatterFactory(new citibob.swing.text.FormatAbsFormatter(fmt, nullText));
 }
 public static DefaultFormatterFactory newFormatterFactory(Format fmt)
 	{ return newFormatterFactory(fmt, ""); }
+
+public static DefaultFormatterFactory newFormatterFactory(citibob.text.SFormat sfmt)
+{
+	return new DefaultFormatterFactory(new citibob.swing.text.SFormatAbsFormatter(sfmt));	
+}
+
 public static DefaultFormatterFactory newFormatterFactory(
 JFormattedTextField.AbstractFormatter afmt)
 {

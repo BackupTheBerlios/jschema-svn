@@ -27,6 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing.typed;
 
+import citibob.swing.CitibobJTable;
+import citibob.types.*;
+import javax.swing.table.*;
+
 /**
  * Class that generates various Swing-related renderers, formatters and editors
  * based on an SqlType.
@@ -40,33 +44,39 @@ public interface Swinger {
 //	/** Re-configure the way data are displayed and formatted --- for SOME types */
 //	public void setFormatString(String sfmt);
 	
-	public citibob.types.JType getJType();
+	/** The type this Swinger is associated with. */
+	public JType getJType();
+
+	/** Returns an SFormat associated with this Swinger. */
+	public citibob.text.SFormat getSFormat();
 	
 	/** Renderer and editor for a CitibobJTable.  If JTable's default
 	 renderer and editor is desired, just return null.  Normally, this will
 	 just return new TypedWidgetRenderEdit(newTypedWidget())
 	 @param editable Is the item we want to render & edit editable?
 	 Used to determine which form of renderer is used*/
-	public citibob.swing.table.RenderEdit newRenderEdit(boolean editable);
+	public RenderEdit newRenderEdit();
 	
-	/** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
-	 SqlType is never to be edited with a JFormattedTextField, it can just
-	 return null.  NOTE: This should return a new instance of AbstractFormatterFactory
-	 because one instance is required per JFormattedTextField.  It's OK for the
-	 factory to just store instances of 4 AbstractFormatters and return them as needed. */
-	public javax.swing.text.DefaultFormatterFactory newFormatterFactory();
+
+
+
+	/** Create and configure a widget suitable for editing this type of data. */
+	public citibob.swing.typed.TypedWidget newWidget();
 
 	/** Given a pre-existing widget, configure it suitably for types and
 	formatting of this Swinger. */
 	public void configureWidget(TypedWidget tw);	
 
-	/** Create and configure a widget suitable for editing this type of data. */
-	public citibob.swing.typed.TypedWidget newWidget();
+//	/** Should we use newWidget() to render in a JTable, or should we use just plain Strings?
+//	TODO: Change this to newTableWidget() instead... */
+//	public boolean renderWithWidget();
 
-	/** Should we use newWidget() to render in a JTable, or should we use just plain Strings?
-	TODO: Change this to newTableWidget() instead... */
-	public boolean renderWithWidget();
+//	/** Used to sort on items of this column/type/etc. */
+//	public java.util.Comparator getComparator();
+// ====================================================
+public interface RenderEdit {
+	public TableCellRenderer getRenderer(boolean editable);
+	public TableCellEditor getEditor();
+}
 
-	/** Used to sort on items of this column/type/etc. */
-	public java.util.Comparator getComparator();
 }

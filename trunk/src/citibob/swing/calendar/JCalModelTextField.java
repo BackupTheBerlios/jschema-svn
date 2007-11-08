@@ -55,13 +55,17 @@ public void setModel(CalModel model) {
 	this.addPropertyChangeListener("value", this);	// Changes in text field --> changes in model
 //	this.addFocusListener(this);
 }
-public void setJType(JType jt, String[] sfmt, String nullText, CalModel cmod)
+public void setJType(JType jt, SFormat sformat, CalModel cmod)
 {
 	JDateType jdt = (JDateType)jt;
-	this.setJType(jdt, newFormatterFactory(
-		new DateFlexiFormat(sfmt, jdt.getTimeZone()),
-		nullText));
+	this.setJType(jdt, newFormatterFactory(sformat));
 	setModel(cmod);
+}
+public void setJType(JType jt, String[] sfmts, TimeZone displayTZ, String nullText, CalModel cmod)
+{
+	this.setJType(jt,
+		new FormatSFormat(new DateFlexiFormat(sfmts, displayTZ), nullText),
+		cmod);
 }
 public void setValue(Object o)
 {
@@ -122,7 +126,8 @@ static JCalModelTextField newField(JDateType jdt, CalModel cal)
 	JCalModelTextField tf;
 	tf = new JCalModelTextField();
 //	tf.setText("");
-	tf.setJType(jdt, new String[] {null, "yyyy-MM-dd", "MM/dd/yy", "MM/dd/yyyy"},  "", cal);
+	TimeZone displayTZ = jdt.getTimeZone();
+	tf.setJType(jdt, new String[] {null, "yyyy-MM-dd", "MM/dd/yy", "MM/dd/yyyy"}, displayTZ, "", cal);
 //	tf.setModel(cal);
 	tf.setPreferredSize(new java.awt.Dimension(200,19));
 

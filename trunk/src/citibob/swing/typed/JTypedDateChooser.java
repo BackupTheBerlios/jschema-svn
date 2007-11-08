@@ -29,6 +29,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.util.*;
+import citibob.text.*;
+import java.text.*;
+
 
 /**
  *
@@ -82,24 +85,25 @@ public JTypedDateChooser() {
 //	if (dtfield == null) return super.getBorder();
 //	return dtfield.getBorder();
 //}
-/** Configures type being edited, dropdown to display, etc. --- will be called
-manually or from JDateSwinger. */
-public void setJType(JDateType jt, String[] sfmt, String nullText, JCalendar jcal)
-{
-	setJType(jt, sfmt, nullText, jt.getTimeZone(), jcal);
-}
-public void setJType(JDateType jt, String[] sfmt, String nullText, TimeZone displayTZ, JCalendar jcal)
+///** Configures type being edited, dropdown to display, etc. --- will be called
+//manually or from JDateSwinger. */
+//public void setJType(JDateType jt, String[] sfmt, String nullText, JCalendar jcal)
+//{
+//	setJType(jt, sfmt, nullText, jt.getTimeZone(), jcal);
+//}
+//public void setJType(JDateType jt, String[] sfmt, String nullText, TimeZone displayTZ, JCalendar jcal)
+public void setJType(JDateType jt, DateSFormat sformat, JCalendar jcal)
 {
 	this.jType = jt;
 	this.jcal = jcal;
 
 	// Create CalModel to edit, based on our data type.
-	cmod = new CalModel(displayTZ, jt.isInstance(null));
+	cmod = new CalModel(sformat.getDisplayTZ(), jt.isInstance(null));
 //	cmod = new CalModel(jType);
 
 	// Configure sub-components
 	jcal.setModel(cmod);
-	dtfield.setJType(jType, sfmt, nullText, cmod);
+	dtfield.setJType(jType, sformat, cmod);
 
 	cmod.addListener(this);
 
@@ -283,8 +287,8 @@ private static JTypedDateChooser newField(JDateType jdt)
 	JTypedDateChooser tf;
 	tf = new JTypedDateChooser();
 	tf.setJType(jdt,
-		new String[] {"MM/dd/yyyy", "yyyy-MM-dd", "MM/dd/yy", "MMddyy", "MMddyyyy"},
-		"", new JCalendarDateOnly());
+		new DateSFormat(new String[] {"MM/dd/yyyy", "yyyy-MM-dd", "MM/dd/yy", "MMddyy", "MMddyyyy"},
+		"", jdt.getTimeZone()), new JCalendarDateOnly());
 //	tf.setModel(cal);
 	tf.setPreferredSize(new java.awt.Dimension(200,19));
 

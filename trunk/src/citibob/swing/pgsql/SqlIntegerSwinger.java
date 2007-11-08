@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.swing.pgsql;
 
 import citibob.sql.*;
+import citibob.swing.swingers.JIntegerSwinger;
 import citibob.types.JType;
 import javax.swing.text.*;
 import java.text.*;

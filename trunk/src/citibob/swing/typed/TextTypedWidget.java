@@ -22,5 +22,5 @@ import citibob.types.JType;
 /** A TypedWidget that involves some kind of formatted text. */
 public interface TextTypedWidget extends TypedWidget
 {
-	public void setJType(JType jt, javax.swing.text.DefaultFormatterFactory formatter);
+	public void setJType(JType jt, citibob.text.SFormat sformat);
 }

@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing;
 
+import citibob.swing.typed.Swinger;
 import javax.swing.table.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -68,13 +69,13 @@ public CitibobTableModel getModelU()
 }
 
 /** Sets a render/edit on a colum, by UNDERLYING column name. */
-public void setRenderEditU(String underlyingName, RenderEdit re)
+public void setRenderEditU(String underlyingName, Swinger.RenderEdit re)
 {
 	setRenderEdit(findColumnU(underlyingName), re);
 }
 
 /** Sets a render/edit on a colum, by UNDERLYING column name. */
-public void setRenderU(String underlyingName, javax.swing.table.TableCellRenderer re)
+public void setRendererU(String underlyingName, javax.swing.table.TableCellRenderer re)
 {
 	setRenderer(findColumnU(underlyingName), re);
 }
@@ -82,7 +83,7 @@ public void setRenderU(String underlyingName, javax.swing.table.TableCellRendere
 public void setRenderEditU(String underlyingName, Swinger swinger)
 {
 	int col = findColumnU(underlyingName);
-	setRenderEdit(col, swinger.newRenderEdit(isCellEditable(0, col)));
+	setRenderEdit(col, swinger.newRenderEdit());
 }
 ///** Sets a render/edit on a colum, by UNDERLYING column name,
 // * according to the columns declared class getColumnClass(). */

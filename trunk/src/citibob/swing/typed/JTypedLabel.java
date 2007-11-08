@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing.typed;
 
+import citibob.text.KeyedSFormat;
+import citibob.text.StringSFormat;
 import citibob.types.JType;
 import java.text.DateFormat;
 import java.util.Date;
@@ -35,6 +37,7 @@ import citibob.sql.*;
 import citibob.swing.typed.SwingerMap;
 import java.beans.*;
 //import citibob.sql.JType;
+import citibob.text.*;
 
 /**
  *
@@ -47,29 +50,20 @@ implements TextTypedWidget {
 /** Our best guess of the class this takes. */
 //Class objClass = null;
 JType jType;	
-JFormattedTextField.AbstractFormatter formatter;
+SFormat sformat;
 Object val;
-String nullText = "";
 boolean useToolTips = true;		// Should we set the tooltip to the same as the label text?
 
 public JTypedLabel()
 {
 	super();
 }
-//public JTypedLabel(Swinger f)
-//{
-//	this();
-//	setJType(f);
-//}
 public JTypedLabel(String s)
 {
-	formatter = new StringFormatter();
+	sformat = new StringSFormat();
 	setValue(s);
 }
 	
-public void setNullText(String s)
-	{ nullText = s; }
-public String getNullText() { return nullText; }
 // --------------------------------------------------------------
 //public void setJType(Swinger f)
 //{
@@ -77,23 +71,19 @@ public String getNullText() { return nullText; }
 //	jType = f.getJType();
 //	formatter = f.newFormatterFactory().getDefaultFormatter();
 //}
-public void setJType(JType jt, JFormattedTextField.AbstractFormatter formatter)
+public void setJType(JType jt, SFormat sformat)
 {
 	this.jType = jt;
-	this.formatter = formatter;
+	this.sformat = sformat;
 }
-public void setJType(JType jt, javax.swing.text.DefaultFormatterFactory ffactory)
-{
-	jType = jt;
-	this.formatter = ffactory.getDefaultFormatter();
-}
-/** Convenience function.
- @param nullText String to use for null value, or else <null> if this is not nullable. */
-public void setJType(citibob.types.KeyedModel kmodel, String nullText)
-{
-	SqlEnum tt = new SqlEnum(kmodel, nullText);
-	formatter = new KeyedFormatter(tt.getKeyedModel());
-}
+
+///** Convenience function.
+// @param nullText String to use for null value, or else <null> if this is not nullable. */
+//public void setJType(citibob.types.KeyedModel kmodel, String nullText)
+//{
+//	SqlEnum tt = new SqlEnum(kmodel, nullText);
+//	formatter = new KeyedSFormat(tt.getKeyedModel());
+//}
 
 
 // --------------------------------------------------------------
@@ -110,14 +100,14 @@ public void setValue(Object o)
 	if (val == o && val != null) return;		// This was called multiple times; ignore
 	Object oldVal = val;
 	val = o;
-	if (val == null) setText(nullText);
+	if (val == null) setText(sformat.getNullText());
 	else {
 //if (formatter == null) {
 //	System.out.println("hoi formatter is null");
 //}
 		try {
 //System.out.println(getColName());
-			String text = formatter.valueToString(val);
+			String text = sformat.valueToString(val);
 			setText(text);
 			if (useToolTips) setToolTipText(text);
 		} catch(java.text.ParseException e) {

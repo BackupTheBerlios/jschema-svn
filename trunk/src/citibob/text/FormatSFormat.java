@@ -35,18 +35,28 @@ import java.text.*;
 public class FormatSFormat implements SFormat
 {
 	Format fmt;
-	
-	/** Creates a new instance of FormatSFormat */
+	String nullText;
+
+	public String getNullText() { return nullText; }
+	public Format getFormat() { return fmt; }
+
 	public FormatSFormat(Format fmt)
+		{ this(fmt, ""); }
+
+	/** Creates a new instance of FormatSFormat */
+	public FormatSFormat(Format fmt, String nullText)
 	{
 		this.fmt = fmt;
+		this.nullText = nullText;
 	}
-	public Object  stringToValue(String text)  throws java.text.ParseException
+	public Object stringToValue(String text)  throws java.text.ParseException
 	{
+		if (nullText.equals(text)) return null;
 		return fmt.parseObject(text);
 	}
-	public String  valueToString(Object value) throws java.text.ParseException
+	public String valueToString(Object value) throws java.text.ParseException
 	{
+		if (value == null) return nullText;
 		return fmt.format(value);
 	}
 	

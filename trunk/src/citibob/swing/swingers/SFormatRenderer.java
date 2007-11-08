@@ -16,50 +16,49 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
- * StatusTableCellRenderer.java
+ * FormattedTableCellRenderer.java
  *
- * Created on May 8, 2005, 7:42 PM
+ * Created on March 18, 2006, 1:58 PM
+ *
+ * To change this template, choose Tools | Options and locate the template under
+ * the Source Creation and Management node. Right-click the template and choose
+ * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.table;
+package citibob.swing.swingers;
 
-import javax.swing.table.*;
+
 import citibob.swing.typed.*;
+import java.awt.*;
+import javax.swing.table.*;
+//import citibob.swing.typed.*;
 import java.sql.*;
-import citibob.types.KeyedModel;
+import citibob.types.*;
+import javax.swing.*;
+import javax.swing.text.*;
+import javax.swing.event.*;
+import citibob.sql.*;
+import citibob.text.*;
 
 /**
  *
  * @author citibob
  */
-public class StatusRenderEdit extends RenderEdit
-{
-
-public StatusRenderEdit()
-{
-	renderer = new StatusTableCellRenderer();
-	editor = null;
-}
-// =====================================================================
-public static class StatusTableCellRenderer
+public class SFormatRenderer
 extends DefaultTableCellRenderer
-implements citibob.jschema.RowStatusConst {
+{
+	SFormat sfmt;
+	
+	public SFormatRenderer(SFormat sfmt)
+	{
+		this.sfmt = sfmt;
+	}
 
-
-public void setValue(Object o) {
-	if (o instanceof Integer) {
-		String s = "";
-		int status = ((Integer)o).intValue();
-		if ((status & INSERTED) != 0) s += "I";
-		if ((status & DELETED) != 0) s += "D";
-		if ((status & CHANGED) != 0) s += "*";
-		setText(s);
-	} else {
-		setText("<ERROR>");
+	public void setValue(Object o) {
+		try {
+			setText(sfmt.valueToString(o));
+		} catch(java.text.ParseException e) {
+			setText(e.toString());		// Should not happen
+		}
 	}
 }
-
-}
-}
-
-

@@ -25,47 +25,56 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.typed;
+package citibob.swing.text;
 
 import citibob.types.KeyedModel;
 import javax.swing.*;
 import java.util.*;
+import java.text.Format;
 
 /**
- *
+ * AbstractFormatter based on any kind of java.text.Format object
+ * Mostly used for dates.
  * @author citibob
  */
-public class BoolFormatter extends JFormattedTextField.AbstractFormatter
-implements citibob.text.SFormat
+public class FormatAbsFormatter extends JFormattedTextField.AbstractFormatter
 {
 
-int limit;
-String nullText = "";
+java.text.Format format;
+String nullText;
 
-static TreeMap<String, Boolean> vals;
-static {
-	vals = new TreeMap();
-	vals.put("false", Boolean.FALSE);
-	vals.put("no", Boolean.FALSE);
-	vals.put("f", Boolean.FALSE);
-	vals.put("n", Boolean.FALSE);
-	vals.put("true", Boolean.TRUE);
-	vals.put("yes", Boolean.TRUE);
-	vals.put("t", Boolean.TRUE);
-	vals.put("y", Boolean.TRUE);
+// ---------------------------------------------
+public FormatAbsFormatter(Format format)
+{
+	this(format, "");
 }
-public void setNullText(String s) { nullText = s; }
-
-/** Not to be used */
-public Object  stringToValue(String text)
+public FormatAbsFormatter(Format format, String nullText)
 {
-	if (text == null || text.equals(nullText)) return null;
-	return vals.get(text.toLowerCase());
+	this.format = format;
+	this.nullText = nullText;
+//if (nullText == null) {
+//	System.out.println("FormatFormatter hoi");
+//}
+}
+// ---------------------------------------------
+public Object stringToValue(String text)
+{
+	try {
+		if (nullText.equals(text)) {
+			super.setEditValid(true);
+			return null;
+		}
+		Object ret = format.parseObject(text);
+		super.setEditValid(true);
+		return ret;
+	} catch(java.text.ParseException e) {
+		super.setEditValid(false);
+		return null;
+	}
 }
 public String  valueToString(Object value)
 {
 	if (value == null) return nullText;
-	boolean b = ((Boolean)value).booleanValue();
-	return (b ? "true" : "false");
+	return format.format(value);
 }
 }

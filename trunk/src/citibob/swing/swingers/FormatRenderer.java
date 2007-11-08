@@ -25,46 +25,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.typed;
+package citibob.swing.swingers;
 
 
+import citibob.swing.typed.*;
 import java.awt.*;
 import javax.swing.table.*;
 //import citibob.swing.typed.*;
 import java.sql.*;
-import citibob.types.KeyedModel;
+import citibob.types.*;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.event.*;
 import citibob.sql.*;
+import java.text.*;
 
 /**
  *
  * @author citibob
  */
-public class FormattedTableCellRenderer
+public class FormatRenderer
 extends DefaultTableCellRenderer
 {
-	DefaultFormatterFactory ffactory;
-	public FormattedTableCellRenderer(DefaultFormatterFactory ffactory)
+	Format sfmt;
+	
+	public FormatRenderer(Format sfmt)
 	{
-		this.ffactory = ffactory;
-	}
-	JFormattedTextField.AbstractFormatter getFormatter(Object val)
-	{
-		JFormattedTextField.AbstractFormatter fmt;
-		if (val == null) fmt = ffactory.getNullFormatter();
-		else fmt = ffactory.getDisplayFormatter();
-		if (fmt == null) fmt = ffactory.getDefaultFormatter();
-		return fmt;
+		this.sfmt = sfmt;
 	}
 
 	public void setValue(Object o) {
-		JFormattedTextField.AbstractFormatter fmt = getFormatter(o);
-		try {
-			setText(fmt.valueToString(o));
-		} catch(java.text.ParseException e) {
-			setText(e.toString());		// Should not happen
-		}
+		setText(sfmt.format(o));
 	}
 }

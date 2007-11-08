@@ -25,25 +25,58 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.pgsql;
+package citibob.swing.swingers;
 
 import citibob.sql.*;
-import citibob.swing.swingers.TypedTextSwinger;
-import citibob.text.StringSFormat;
+import citibob.types.JType;
 import javax.swing.text.*;
 import java.text.*;
 import citibob.swing.typed.*;
 import citibob.sql.pgsql.*;
+import citibob.text.*;
 
 /**
- *
+ * Base class for Swingers that involve formatted JTypedTextFields...
+ * Subclasses must implement newFormatterFactory().
  * @author citibob
  */
-public class SqlStringSwinger extends TypedTextSwinger
+public class TypedTextSwinger extends AbstractSwinger
 {
 
+
+/** Override as needed... */
+public javax.swing.JFormattedTextField.AbstractFormatter newAbsFormatter()
+{
+	return new citibob.swing.text.SFormatAbsFormatter(getSFormat());
+}
+
+
+/** Override as needed... */
+public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
+{
+	return new DefaultFormatterFactory(newAbsFormatter());
+}
+
 /** Creates a new instance of TypedWidgetSTFactory */
-public SqlStringSwinger(SqlString sqlType) {
-	super(sqlType, new citibob.text.StringSFormat(sqlType.getLimit(), ""));
+public TypedTextSwinger(JType jType, SFormat sformat) {
+	super(jType, sformat, false);
+}
+public TypedTextSwinger(JType jType, Format format) {
+	this(jType, new FormatSFormat(format));
+}
+
+/** Create a widget suitable for editing this type of data. */
+protected citibob.swing.typed.TypedWidget createWidget()
+	{ return new JTypedTextField(); }
+
+public void configureWidget(TypedWidget tw)
+{
+	if (tw instanceof JTypedTextField) {
+		// This is the only class of widgets we know how to configure.
+		((JTypedTextField)tw).setJType(jType, newFormatterFactory());
+	} else if (tw instanceof TextTypedWidget) {
+		((TextTypedWidget)tw).setJType(jType, getSFormat());
+
+	}
 }
 }

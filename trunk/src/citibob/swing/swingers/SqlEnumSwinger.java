@@ -25,9 +25,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.typed;
+package citibob.swing.swingers;
 
 import citibob.sql.*;
+import citibob.swing.typed.*;
+import citibob.text.KeyedSFormat;
 import citibob.types.JEnum;
 import javax.swing.text.*;
 import java.text.*;
@@ -36,49 +38,22 @@ import java.text.*;
  *
  * @author citibob
  */
-public class JEnumSwinger extends TypedWidgetSwinger
+public class SqlEnumSwinger extends AbstractSwinger
 {
 
 /** Creates a new instance of TypedWidgetSTFactory */
-public JEnumSwinger(JEnum sqlType) {
-	super(sqlType);
+public SqlEnumSwinger(SqlEnum sqlType) {
+	super(sqlType, new KeyedSFormat(sqlType.getKeyedModel()), false);
 }
-
-public boolean renderWithWidget() { return false; }
 
 /** Create a widget suitable for editing this type of data. */
 public citibob.swing.typed.TypedWidget createWidget()
+	{ return new JKeyedComboBox(); }
+public void configureWidget(TypedWidget w)
 {
-	return new JKeyedComboBox();
-}
-
-public void configureWidget(TypedWidget tw)
-{
-	JEnum tt = (JEnum)jType;
-	JKeyedComboBox w = (JKeyedComboBox)tw;
-	w.setKeyedModel(tt.getKeyedModel());
-}
-
-/** Creates an AbstractFormatterFactory for a JFormattedTextField.  If this
- SqlType is never to be edited with a JFormattedTextField, it can just
- return null.  NOTE: This should return a new instance of AbstractFormatterFactory
- because one instance is required per JFormattedTextField.  It's OK for the
- factory to just store instances of 4 AbstractFormatters and return them as needed. */
-public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
-{
-	JEnum tt = (JEnum)jType;
-	KeyedFormatter fmt = new KeyedFormatter(tt.getKeyedModel());
-	return new DefaultFormatterFactory(fmt);
-}
-
-/** By default, sort based on KeyedModel's ordering. */
-public int compare(Object o1, Object o2)
-{
-	JEnum je = (JEnum)jType;
-	citibob.types.KeyedModel kmodel = je.getKeyedModel();
-	int i1 = kmodel.getSerial(o1);
-	int i2 = kmodel.getSerial(o2);
-	return i1 - i2;
+	JEnum etype = (JEnum)jType;
+	JKeyedComboBox ww = (JKeyedComboBox)w;
+	ww.setKeyedModel(etype.getKeyedModel());
 }
 
 }

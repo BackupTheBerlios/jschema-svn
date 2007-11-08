@@ -33,7 +33,11 @@ import java.util.*;
  *
  * @author citibob
  */
-public class DateFlexiFormat extends FlexiFormat {
+public class DateFlexiFormat extends FlexiFormat
+{
+
+public TimeZone getTimeZone()
+{ return ((DateFormat)super.formats[0]).getTimeZone(); }
 
 public DateFlexiFormat(String[] sfmts, TimeZone tz)
 {

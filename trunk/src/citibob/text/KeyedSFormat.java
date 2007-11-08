@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.typed;
+package citibob.text;
 
 import citibob.types.KeyedModel;
 import javax.swing.*;
@@ -34,7 +34,7 @@ import javax.swing.*;
  *
  * @author citibob
  */
-public class KeyedFormatter extends JFormattedTextField.AbstractFormatter
+public class KeyedSFormat
 implements citibob.text.SFormat
 {
 
@@ -42,11 +42,11 @@ KeyedModel kmodel;
 String nullText;
 
 /** Creates a new instance of KeyedFormatter */
-public KeyedFormatter(KeyedModel kmodel, String nullText) {
+public KeyedSFormat(KeyedModel kmodel, String nullText) {
 	this.kmodel = kmodel;
 	this.nullText = nullText;
 }
-public KeyedFormatter(KeyedModel kmodel) { this(kmodel, ""); }
+public KeyedSFormat(KeyedModel kmodel) { this(kmodel, ""); }
 
 /** Not to be used */
 public Object  stringToValue(String text)

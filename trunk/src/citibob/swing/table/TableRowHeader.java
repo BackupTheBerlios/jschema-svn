@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing.table;
 
+import citibob.swing.table.RowHeaderRenderer;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import java.awt.*;

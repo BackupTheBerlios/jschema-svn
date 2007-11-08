@@ -25,40 +25,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.typed;
+package citibob.swing.swingers;
 
 import citibob.sql.*;
-import citibob.types.JType;
+import citibob.swing.typed.*;
+import citibob.text.KeyedSFormat;
+import citibob.types.JEnum;
 import javax.swing.text.*;
 import java.text.*;
-import citibob.swing.typed.*;
-import citibob.sql.pgsql.*;
 
 /**
- * Base class for Swingers that involve formatted JTypedTextFields...
- * Subclasses must implement newFormatterFactory().
+ *
  * @author citibob
  */
-public abstract class TypedTextSwinger extends TypedWidgetSwinger
+public class JEnumSwinger extends AbstractSwinger
 {
 
 /** Creates a new instance of TypedWidgetSTFactory */
-public TypedTextSwinger(JType jType) {
-	super(jType);
+public JEnumSwinger(JEnum sqlType) {
+	super(sqlType, new KeyedSFormat(sqlType.getKeyedModel()), false);
 }
 
-/** Display this type as a simple text label.  Do NOT use some fancy widget to display it. */
-public boolean renderWithWidget() { return false; }
-
 /** Create a widget suitable for editing this type of data. */
-protected citibob.swing.typed.TypedWidget createWidget()
-	{ return new JTypedTextField(); }
+public citibob.swing.typed.TypedWidget createWidget()
+{
+	return new JKeyedComboBox();
+}
 
 public void configureWidget(TypedWidget tw)
 {
-	if (tw instanceof TextTypedWidget) {
-		// This is the only class of widgets we know how to configure.
-		((TextTypedWidget)tw).setJType(jType, newFormatterFactory());
-	}
+	JEnum tt = (JEnum)jType;
+	JKeyedComboBox w = (JKeyedComboBox)tw;
+	w.setKeyedModel(tt.getKeyedModel());
 }
+
 }

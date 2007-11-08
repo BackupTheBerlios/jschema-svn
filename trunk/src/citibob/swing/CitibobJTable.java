@@ -24,6 +24,7 @@ import java.awt.event.*;
 import java.text.*;
 import citibob.text.*;
 import citibob.swing.table.*;
+import citibob.swing.typed.*;
 //import de.chka.swing.components.*;
 
 public class CitibobJTable extends JTable
@@ -89,13 +90,15 @@ public CitibobTableModel getCBModel()
 //	{ return rhu.isEnabled(); }
 
 /** Sets a renderer and editor pair at once, for a column. */
-public void setRenderEdit(int colNo, RenderEdit re)
+public void setRenderEdit(int colNo, Swinger.RenderEdit re)
 {
 	if (re == null) return;		// Don't change, if we don't know what to set it TO.
 	
 	TableColumn col = getColumnModel().getColumn(colNo);
-	if (re.getRenderer() != null) col.setCellRenderer(re.getRenderer());
-	if (re.getEditor() != null) col.setCellEditor(re.getEditor());
+	TableCellRenderer rr = re.getRenderer(getModel().isCellEditable(0, colNo));
+		if (rr != null) col.setCellRenderer(rr);
+	TableCellEditor ee = re.getEditor();
+		if (ee != null) col.setCellEditor(ee);
 }
 
 /** Sets a renderer and editor pair at once, for a column. */
@@ -108,11 +111,11 @@ public void setRenderer(int colNo, TableCellRenderer re)
 }
 
 public void setSFormat(int col, SFormat sfmt)
-	{ setRenderer(col, new citibob.swing.typed.SFormatTableCellRenderer(sfmt)); }
+	{ setRenderer(col, new citibob.swing.swingers.SFormatRenderer(sfmt)); }
 public void setSFormat(String scol, SFormat sfmt)
 	{ setSFormat(getCBModel().findColumn(scol), sfmt); }
 public void setFormat(int col, Format fmt)
-	{ setRenderer(col, new citibob.swing.typed.FormatTableCellRenderer(fmt)); }
+	{ setRenderer(col, new citibob.swing.swingers.FormatRenderer(fmt)); }
 public void setFormat(String scol, Format fmt)
 	{ setFormat(getCBModel().findColumn(scol), fmt); }
 
