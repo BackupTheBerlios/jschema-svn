@@ -39,7 +39,7 @@ import citibob.types.JType;
  *
  * @author citibob
  */
-public class JavaSwingerMap extends SwingerMap
+public class JavaSwingerMap extends DefaultSwingerMap
 {
 
 
@@ -47,31 +47,31 @@ public class JavaSwingerMap extends SwingerMap
 public JavaSwingerMap() {
 
 	// =========== Standard Java classes
-	this.addMaker(String.class, new SwingerMap.Maker() {
+	this.addMaker(String.class, new DefaultSwingerMap.Maker() {
 	public Swinger newSwinger(JType sqlType) {
 		return new JStringSwinger();
 	}});
 	
-	this.addMaker(Integer.class, new SwingerMap.Maker() {
+	this.addMaker(Integer.class, new DefaultSwingerMap.Maker() {
 	public Swinger newSwinger(JType sqlType) {
 		return new JIntegerSwinger();
 	}});
 
 	// =========== JTypes
-	this.addMaker(JEnum.class, new SwingerMap.Maker() {
+	this.addMaker(JEnum.class, new DefaultSwingerMap.Maker() {
 	public Swinger newSwinger(JType jType) {
 		return new JEnumSwinger((JEnum)jType);
 	}});
 	
 	// =========== SQL Types
 	// SqlNumeric
-	this.addMaker(SqlNumeric.class, new SwingerMap.Maker() {
+	this.addMaker(SqlNumeric.class, new DefaultSwingerMap.Maker() {
 	public Swinger newSwinger(JType sqlType) {
 		return new SqlNumericSwinger((SqlNumeric)sqlType);
 	}});
 	
 	// SqlEnum
-	this.addMaker(SqlEnum.class, new SwingerMap.Maker() {
+	this.addMaker(SqlEnum.class, new DefaultSwingerMap.Maker() {
 	public Swinger newSwinger(JType sqlType) {
 		return new SqlEnumSwinger((SqlEnum)sqlType);
 	}});

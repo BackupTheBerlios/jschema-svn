@@ -58,7 +58,7 @@ public void configureWidget(TypedWidget tw)
 		}
 	} else if (tw instanceof TextTypedWidget) {
 		TextTypedWidget tf = (TextTypedWidget)tw;
-		tf.setJType(jType, JTypedTextField.newFormatterFactory(getSFormat()));
+		tf.setJType(jType, getSFormat());
 	}
 }
 

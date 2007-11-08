@@ -35,11 +35,12 @@ import java.text.*;
 public class ToStringSFormat implements SFormat
 {
 //	Format fmt;
-	String nullval = "";
+	String nullText = "";
 	
+	public String getNullText() { return nullText; }
 	public String  valueToString(Object value) throws java.text.ParseException
 	{
-		return (value == null ? nullval : value.toString());
+		return (value == null ? nullText : value.toString());
 //		return value.toString();
 	}
 	public Object  stringToValue(String text)  throws java.text.ParseException

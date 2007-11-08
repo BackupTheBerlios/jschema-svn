@@ -26,13 +26,17 @@ import javax.swing.event.*;
 import java.io.*;
 import citibob.swing.text.CircularPlainDocument;
 import citibob.io.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class JLogScrollPane extends JScrollPane
 {
 	
 	final JTextArea textArea;
 	Writer logWriter;
-	boolean autoScroll;
+	boolean autoScroll = true;
+	boolean scrollLock = false;			// True if user scrolled down to the very end; stop autoScroll temporary in that case.
+	Color oldBG;						// Original background color of scrollbar
 	boolean timed_buffer;
 	int time_delay;
 	int buffersize;
@@ -43,37 +47,73 @@ public class JLogScrollPane extends JScrollPane
 	public JLogScrollPane()
 	{
 		super();
+		
+//		getVerticalScrollBar().addAdjustmentListener(new java.awt.event.AdjustmentListener() {
+//	    public void adjustmentValueChanged(java.awt.event.AdjustmentEvent e) {
+//			if (e.getValueIsAdjusting()) {
+//				scrollLock = true;
+//			} else {
+//				Adjustable adj = e.getAdjustable();
+//				scrollLock = !(adj.getValue() + adj.getVisibleAmount() == adj.getMaximum());
+////					e.getValue() == e.getAdjustable().getMaximum());
+////System.err.println("scrollLock = " + scrollLock + " x" + adj.getVisibleAmount() + " " +
+////	adj.getValue() + " " + adj.getMaximum());
+//			}
+//System.err.println("scrollLock = " + scrollLock);
+//
+//		}});
+		
+		
+		getVerticalScrollBar().addMouseListener(new MouseAdapter() {
+        public void mouseClicked(MouseEvent evt) {
+			if ((evt.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
+//            if (evt.getClickCount() == 2) {          // Double-click
+				scrollLock = !scrollLock;
+				JScrollBar sb = getVerticalScrollBar();
+				if (scrollLock) {
+					oldBG = sb.getBackground();
+					sb.setBackground(Color.RED);
+					
+					System.err.println("caret: " + textArea.getCaretPosition() + " " + textArea.getDocument().getLength());
+					int len = textArea.getDocument().getLength();
+					if (textArea.getCaretPosition() == len) {
+						textArea.setCaretPosition(len-1);
+					}
+//					if (textArea.getCaretPosition() >= this.textArea.getDocument().getLength())
+//		this.textArea.setCaretPosition(this.textArea.getDocument().getLength());
+				} else {
+					sb.setBackground(oldBG);
+//					int len = textArea.getDocument().getLength();
+//					textArea.setCaretPosition(len-1);
+					scrollToEnd();
+				}
+				
+System.err.println("scrollLock = " + scrollLock);
+			}
+		}});
+		
 		textArea = new JTextArea();
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
 		textArea.setEditable(false);
 		
 		setViewportView(textArea);
-		
+
 		this.timed_buffer = false;
 		this.time_delay = 0;
 		this.buffersize=0;
 	}
 	
-	public JLogScrollPane(boolean timed_buffer, int delay, int bufsize)
+	public JLogScrollPane(boolean timed_buffer, int delayMS, int bufsize)
 	{
-		super();
-		textArea = new JTextArea();
-		textArea.setLineWrap(true);
-		textArea.setWrapStyleWord(true);
-		textArea.setEditable(false);
-		
-		this.timed_buffer = timed_buffer;
-		this.time_delay = delay;
-		this.buffersize = bufsize;
-		
-		setViewportView(textArea);
+		this();
+		setTimedBuffering(timed_buffer, delayMS, bufsize);
 	}
 	
-	public void setTimedBuffering(boolean timed_buffering, int delay, int bufsize)
+	public void setTimedBuffering(boolean timed_buffering, int delayMS, int bufsize)
 	{
 		this.timed_buffer = timed_buffering;
-		this.time_delay = delay;
+		this.time_delay = delayMS;
 		this.buffersize = bufsize;
 	}
 	
@@ -89,7 +129,7 @@ public class JLogScrollPane extends JScrollPane
 	public void setDocument(Document doc)
 	{
 		textArea.setDocument(doc);
-		textArea.setCaretPosition(textArea.getDocument().getLength());
+//		textArea.setCaretPosition(textArea.getDocument().getLength());
 //System.out.println("textArea text is (this = " + this + "):" + textArea.getText());
 //	if (autoScroll) {
 //		doc.addDocumentListener(new DocumentListener() {
@@ -106,32 +146,39 @@ public class JLogScrollPane extends JScrollPane
 	{
 		this.textArea.setCaretPosition(this.textArea.getDocument().getLength());
 	
-		// Scroll to end
+//		// Scroll to end
 //		final JScrollBar sb = getVerticalScrollBar();
-//		if (sb.getValue() != sb.getMaximum())
-//		{
-//			java.awt.EventQueue.invokeLater(new Runnable()
-//			{
-//				public void run()
-//				{
-//					sb.setValue(sb.getMaximum());
-//				}
-//			});
+//		final int max = sb.getMaximum() - sb.getVisibleAmount();
+//		if (sb.getValue() != max) {
+//			java.awt.EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				sb.setValue(max);
+//			}});
 //		}
+////		if (sb.getValue() != sb.getMaximum())
+////		{
+////			java.awt.EventQueue.invokeLater(new Runnable()
+////			{
+////				public void run()
+////				{
+////					sb.setValue(sb.getMaximum());
+////				}
+////			});
+////		}
 	}
 	
-	public void newDocument(int nlines)
+	public void newDocument(int nchars)
 	{
-		Document doc = new CircularPlainDocument(nlines);
+		Document doc = new CircularPlainDocument(nchars);
 		doc.addDocumentListener(new DocumentListener()
 		{
 			public void changedUpdate(DocumentEvent e)
 			{
-				if (autoScroll) scrollToEnd();
+				if (autoScroll && !scrollLock) scrollToEnd();
 			}
 			public void insertUpdate(DocumentEvent e)
 			{
-				if (autoScroll) scrollToEnd();
+				if (autoScroll && !scrollLock) scrollToEnd();
 			}
 			public void removeUpdate(DocumentEvent e)
 			{
@@ -159,10 +206,11 @@ public class JLogScrollPane extends JScrollPane
 		
 	}
 	
-	public void redirectStdout(int nlines, boolean autoScroll)
+	public void setHistorySize(int nchars) {
+		newDocument(nchars);
+	}
+	public void redirectStdout()
 	{
-		this.autoScroll = autoScroll;
-		newDocument(nlines);
 		OutputStream screenOut = new WriterOutputStream(logWriter);
 		System.setOut(new PrintStream(screenOut));
 	}
@@ -201,7 +249,8 @@ public class JLogScrollPane extends JScrollPane
 		
 		try { Thread.sleep(4000); } catch (InterruptedException ie) { }
 		
-		sp.redirectStdout(1000, true);
+		sp.setHistorySize(10000);
+		sp.redirectStdout();
 		
 		System.out.println("Hello World Redirect");
 		System.out.println("I like you too");

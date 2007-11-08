@@ -48,6 +48,8 @@ public KeyedSFormat(KeyedModel kmodel, String nullText) {
 }
 public KeyedSFormat(KeyedModel kmodel) { this(kmodel, ""); }
 
+public String getNullText() { return nullText; }
+
 /** Not to be used */
 public Object  stringToValue(String text)
 {

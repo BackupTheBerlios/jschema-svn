@@ -195,22 +195,17 @@ protected Object selectValue()
 //	ckNull.setEnabled(jt.isInstance(null));
 //}
 
-public void setJType(JType jt, JFormattedTextField.AbstractFormatter formatter)
+public void setJType(JType jt, citibob.text.SFormat sformat)
 {
-	label.setJType(jt, formatter);
+	label.setJType(jt, sformat);
 	ckNull.setEnabled(jt.isInstance(null));	
 }
-public void setJType(JType jt, javax.swing.text.DefaultFormatterFactory ffactory)
-{
-	label.setJType(jt, ffactory);
-	ckNull.setEnabled(jt.isInstance(null));
-}
 
-public void setNullText(String s) {
-	ckNull.setText(s);
-	label.setNullText(s);
-}
-public String getNullText(String s) { return label.getNullText(); }
+//public void setNullText(String s) {
+//	ckNull.setText(s);
+//	label.setNullText(s);
+//}
+//public String getNullText(String s) { return label.getNullText(); }
 
 public void setPopupWidget(TypedWidget w)
 {

@@ -38,6 +38,7 @@ import citibob.swing.typed.SwingerMap;
 import java.beans.*;
 //import citibob.sql.JType;
 import citibob.text.*;
+import citibob.types.*;
 
 /**
  *
@@ -77,13 +78,13 @@ public void setJType(JType jt, SFormat sformat)
 	this.sformat = sformat;
 }
 
-///** Convenience function.
-// @param nullText String to use for null value, or else <null> if this is not nullable. */
-//public void setJType(citibob.types.KeyedModel kmodel, String nullText)
-//{
-//	SqlEnum tt = new SqlEnum(kmodel, nullText);
-//	formatter = new KeyedSFormat(tt.getKeyedModel());
-//}
+/** Convenience function.
+ @param nullText String to use for null value, or else <null> if this is not nullable. */
+public void setJType(citibob.types.KeyedModel kmodel, String nullText)
+{
+	JEnum tt = new JEnum(kmodel);
+	setJType(tt, new KeyedSFormat(kmodel, nullText));
+}
 
 
 // --------------------------------------------------------------
