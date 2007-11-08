@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.swing.typed;
 
+import citibob.types.JType;
 import java.text.DateFormat;
 import java.util.Date;
 import javax.swing.*;

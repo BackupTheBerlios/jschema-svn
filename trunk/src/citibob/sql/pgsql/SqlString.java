@@ -38,6 +38,9 @@ public class SqlString implements citibob.sql.SqlType
 	{
 		this(limit, true);
 	}
+	/** Returns the SQL string that encodes this data type. */
+	public String sqlType()
+		{ return "varchar(" + limit + ")"; }
 	public SqlString(boolean nullable)
 		{ this(0, nullable); }
 	public SqlString()

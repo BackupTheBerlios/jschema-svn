@@ -29,6 +29,8 @@ package citibob.text;
 
 import citibob.sql.*;
 import citibob.swing.typed.*;
+import citibob.types.JEnum;
+import citibob.types.JType;
 import java.text.*;
 
 /**

@@ -9,6 +9,8 @@
 
 package citibob.reports;
 
+import citibob.types.JType;
+import citibob.types.JavaJType;
 import com.sun.crypto.provider.RSACipher;
 import java.io.*;
 import java.util.*;

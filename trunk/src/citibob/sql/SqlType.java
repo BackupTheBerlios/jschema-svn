@@ -33,10 +33,13 @@ import java.sql.*;
  *
  * @author citibob
  */
-public interface SqlType extends citibob.swing.typed.JType
+public interface SqlType extends citibob.types.JType
 {
 	/** Convert an element of this type to an Sql string for use in a query */
 	String toSql(Object o);
+
+	/** Returns the SQL string that encodes this data type. */
+	String sqlType();
 
 	/** Read element of this type out of the result set (& convert appropriately to Java type). */
 	public Object get(java.sql.ResultSet rs, int col) throws SQLException;

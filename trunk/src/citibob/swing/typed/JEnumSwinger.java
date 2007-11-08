@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.swing.typed;
 
 import citibob.sql.*;
+import citibob.types.JEnum;
 import javax.swing.text.*;
 import java.text.*;
 
@@ -74,7 +75,7 @@ public javax.swing.text.DefaultFormatterFactory newFormatterFactory()
 public int compare(Object o1, Object o2)
 {
 	JEnum je = (JEnum)jType;
-	citibob.util.KeyedModel kmodel = je.getKeyedModel();
+	citibob.types.KeyedModel kmodel = je.getKeyedModel();
 	int i1 = kmodel.getSerial(o1);
 	int i2 = kmodel.getSerial(o2);
 	return i1 - i2;

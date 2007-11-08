@@ -29,7 +29,7 @@ package citibob.jschema;
 
 import citibob.sql.*;
 import java.util.*;
-import citibob.swing.typed.JDateType;
+import citibob.types.JDateType;
 
 /**
  *

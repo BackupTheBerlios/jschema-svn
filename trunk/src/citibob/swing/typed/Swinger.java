@@ -37,10 +37,10 @@ public interface Swinger {
 	/** Set up which type this Swinger is making stuff for. */
 	//public void setSqlType(citibob.sql.SqlType sqlType);
 
-	/** Re-configure the way data are displayed and formatted --- for SOME types */
-	public void setFormatString(String sfmt);
+//	/** Re-configure the way data are displayed and formatted --- for SOME types */
+//	public void setFormatString(String sfmt);
 	
-	public citibob.swing.typed.JType getJType();
+	public citibob.types.JType getJType();
 	
 	/** Renderer and editor for a CitibobJTable.  If JTable's default
 	 renderer and editor is desired, just return null.  Normally, this will

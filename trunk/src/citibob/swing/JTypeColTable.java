@@ -36,7 +36,7 @@ import citibob.sql.*;
 import citibob.jschema.*;
 import citibob.swing.table.*;
 import citibob.swing.typed.*;
-import citibob.swing.typed.JType;
+import citibob.types.JType;
 import java.awt.*;
 import citibob.text.*;
 
@@ -125,24 +125,24 @@ public void setModelU(JTypeTableModel schemaBuf,
 	}
 }
 
-/** Convenience function --- allows us to set formatter for common
- data types based soley on a format string. */
-public void setFormat(int col, String fmtString)
-{
-	JTypeTableModel model = (JTypeTableModel)this.getModel();
-	JType jtype = model.getJType(0, col);
-	Class klass = jtype.getClass();
-	Format fmt;
-	TableCellRendererer re = null;
-
-	if (Number.class.isAssignableFrom(klass)) {
-		fmt = new DecimalFormat(fmtString);
-	} else if (Date.class.isAssignableFrom(klass)) {
-		fmt = new SimpleDateFormat(fmtString);
-	}
-	if (fmt != null) setRenderer()
-		re = new citibob.swing.typed.FormatTableCellRenderer(fmt);
-}
+///** Convenience function --- allows us to set formatter for common
+// data types based soley on a format string. */
+//public void setFormat(int col, String fmtString)
+//{
+//	JTypeTableModel model = (JTypeTableModel)this.getModel();
+//	JType jtype = model.getJType(0, col);
+//	Class klass = jtype.getClass();
+//	Format fmt;
+//	TableCellRendererer re = null;
+//
+//	if (Number.class.isAssignableFrom(klass)) {
+//		fmt = new DecimalFormat(fmtString);
+//	} else if (Date.class.isAssignableFrom(klass)) {
+//		fmt = new SimpleDateFormat(fmtString);
+//	}
+//	if (fmt != null) setRenderer()
+//		re = new citibob.swing.typed.FormatTableCellRenderer(fmt);
+//}
 ///** @pa */
 //public void setFormatU(String scol, Format fmt)
 

@@ -31,7 +31,7 @@ package citibob.jschema;
 import java.text.*;
 import java.util.Date;
 import java.util.*;
-import citibob.util.KeyedModel;
+import citibob.types.KeyedModel;
 
 /**
  * Sets up a keyed model for days of the week, 1 = Sunday (Java convention)

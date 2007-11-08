@@ -44,6 +44,9 @@ public String toSql(Object o)
 	System.out.println("o.class = " + o.getClass());
 	return SqlTimeMS.sql((Integer)o);
 }
+	/** Returns the SQL string that encodes this data type. */
+	public String sqlType()
+		{ return "int"; }
 
 public boolean isInstance(Object o)
 {

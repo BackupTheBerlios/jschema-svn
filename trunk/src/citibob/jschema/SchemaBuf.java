@@ -25,7 +25,7 @@ import citibob.swing.table.*;
 
 import java.util.*;
 import citibob.sql.ConsSqlQuery;
-import citibob.swing.typed.JType;
+import citibob.types.JType;
 import static citibob.jschema.RowStatusConst.*;
 
 public class SchemaBuf extends AbstractJTypeTableModel

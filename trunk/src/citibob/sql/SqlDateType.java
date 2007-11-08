@@ -33,7 +33,7 @@ import java.sql.*;
  *
  * @author citibob
  */
-public interface SqlDateType extends SqlType, citibob.swing.typed.JDateType
+public interface SqlDateType extends SqlType, citibob.types.JDateType
 {
 //public java.util.Date get(java.sql.ResultSet rs, int col) throws SQLException;
 //public java.util.Date get(java.sql.ResultSet rs, String col) throws SQLException;

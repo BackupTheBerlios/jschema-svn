@@ -28,6 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.swing.typed;
 
 import citibob.sql.*;
+import citibob.types.JEnum;
+import citibob.types.JType;
 
 /**
  *

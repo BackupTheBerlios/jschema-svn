@@ -32,6 +32,9 @@ public class SqlChar implements citibob.sql.SqlType
 	{
 		this(true);
 	}
+	/** Returns the SQL string that encodes this data type. */
+	public String sqlType()
+		{ return "char"; }
 	
 	/** Java class used to represent this type */
 	public Class getObjClass()

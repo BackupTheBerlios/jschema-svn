@@ -10,6 +10,7 @@
 package citibob.swing.table;
 
 import citibob.swing.typed.*;
+import citibob.types.JType;
 
 /**
  *

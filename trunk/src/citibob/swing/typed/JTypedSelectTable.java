@@ -28,6 +28,7 @@ package citibob.swing.typed;
 
 import citibob.swing.*;
 import citibob.swing.table.*;
+import citibob.types.JType;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.table.*;

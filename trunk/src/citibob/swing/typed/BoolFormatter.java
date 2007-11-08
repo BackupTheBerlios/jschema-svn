@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing.typed;
 
-import citibob.util.KeyedModel;
+import citibob.types.KeyedModel;
 import javax.swing.*;
 import java.util.*;
 

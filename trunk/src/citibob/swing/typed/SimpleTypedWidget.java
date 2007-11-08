@@ -1,5 +1,7 @@
 package citibob.swing.typed;
 
+import citibob.types.JType;
+
 /**
  *
  * @author citibob

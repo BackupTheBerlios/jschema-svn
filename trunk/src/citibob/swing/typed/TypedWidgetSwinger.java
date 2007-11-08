@@ -29,6 +29,7 @@ package citibob.swing.typed;
 
 //import citibob.sql.*;
 //import citibob.jschema.JType;
+import citibob.types.JType;
 import java.text.*;
 import javax.swing.text.*;
 import javax.swing.*;

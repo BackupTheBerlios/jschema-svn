@@ -64,6 +64,10 @@ public String toSql(Object o)
 	java.util.Date ts = (java.util.Date)o;
 	return ts == null ? "null" : '\'' + sqlFmt.format(ts) + '\'';
 }
+	/** Returns the SQL string that encodes this data type. */
+	public String sqlType()
+		{ return "date"; }
+
 public boolean isInstance(Object o)
 {
 	if (o == null) return nullable;

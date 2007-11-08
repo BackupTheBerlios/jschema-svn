@@ -17,9 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.sql;
 
+import citibob.types.JEnum;
 import java.sql.*;
 import citibob.jschema.*;
-import citibob.util.KeyedModel;
+import citibob.types.KeyedModel;
 import citibob.swing.typed.*;
 
 /** For enumerate types...  NOTE: does NOT extend JEnum*/
@@ -50,6 +51,10 @@ implements SqlType
 	/** Convert an element of this type to an Sql string for use in a query */
 	public String toSql(Object o)
 		{ return (o == null ? "null" : o.toString()); }
+
+	/** Returns the SQL string that encodes this data type. */
+	public String sqlType()
+		{ return "int"; }
 
 	public boolean isInstance(Object o)
 	{

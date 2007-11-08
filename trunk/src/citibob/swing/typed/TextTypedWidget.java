@@ -17,6 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.swing.typed;
 
+import citibob.types.JType;
+
 /** A TypedWidget that involves some kind of formatted text. */
 public interface TextTypedWidget extends TypedWidget
 {

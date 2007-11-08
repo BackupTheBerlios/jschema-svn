@@ -28,6 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.swing.typed;
 
 import citibob.sql.*;
+import citibob.types.JType;
+import citibob.types.JavaJType;
 import java.util.*;
 
 
@@ -68,7 +70,7 @@ public Swinger newSwinger(JType t)
 	// Index on general class of the JType, or on its underlying
 	// Java Class (for JavaJType)
 	Class klass = t.getClass();
-	if (klass == JavaJType.class) klass = ((JavaJType) t).klass;
+	if (klass == JavaJType.class) klass = ((JavaJType) t).getObjClass();
 
 	Maker m = null;
 	for (;;) {

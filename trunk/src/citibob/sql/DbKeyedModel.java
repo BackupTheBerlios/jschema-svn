@@ -29,7 +29,7 @@ package citibob.sql;
 
 import java.sql.*;
 import java.util.*;
-import citibob.util.KeyedModel;
+import citibob.types.KeyedModel;
 
 /**
  *

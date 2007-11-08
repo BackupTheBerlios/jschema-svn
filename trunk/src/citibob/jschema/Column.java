@@ -17,8 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.jschema;
 
-import citibob.swing.typed.JType;
-import citibob.swing.typed.JDateType;
+import citibob.types.JType;
+import citibob.types.JDateType;
 import citibob.sql.SqlType;
 //import citibob.sql.SqlType;
 

@@ -25,7 +25,7 @@ import citibob.swing.table.*;
 import citibob.sql.*;
 
 import java.io.*;
-import citibob.swing.typed.JType;
+import citibob.types.JType;
 
 public class StatusSchemaBuf extends AbstractJTypeTableModel
 implements TableModelListener, SchemaBuf.Listener

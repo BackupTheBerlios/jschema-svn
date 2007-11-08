@@ -27,6 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.swing.calendar;
 
 import citibob.swing.typed.*;
+import citibob.types.JDateType;
+import citibob.types.JType;
 import java.util.*;
 import javax.swing.*;
 import citibob.text.*;

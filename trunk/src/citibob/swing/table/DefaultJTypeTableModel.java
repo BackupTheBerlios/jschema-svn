@@ -11,6 +11,7 @@ package citibob.swing.table;
 
 import citibob.swing.CitibobJTable;
 import citibob.swing.typed.*;
+import citibob.types.JType;
 
 /**
  *
@@ -20,7 +21,7 @@ public class DefaultJTypeTableModel extends javax.swing.table.DefaultTableModel
 implements JTypeTableModel
 {
 
-protected citibob.swing.typed.JType[] jTypes;		// JType of each column
+protected citibob.types.JType[] jTypes;		// JType of each column
 
 // -----------------------------------------------------------
 public DefaultJTypeTableModel(Object[][] data, Object[] columnNames, JType[] jTypes)

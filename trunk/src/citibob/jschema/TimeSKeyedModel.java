@@ -30,7 +30,7 @@ package citibob.jschema;
 import java.text.*;
 import java.util.Date;
 import java.util.*;
-import citibob.util.KeyedModel;
+import citibob.types.KeyedModel;
 
 /**
  *

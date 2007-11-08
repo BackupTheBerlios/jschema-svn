@@ -36,7 +36,7 @@ import citibob.swing.pgsql.SqlStringSwinger;
 import citibob.swing.pgsql.SqlTimeSwinger;
 //import citibob.swing.pgsql.SqlTimestampSwinger;
 import citibob.sql.pgsql.*;
-import citibob.swing.typed.JType;
+import citibob.types.JType;
 import java.util.*;
 
 

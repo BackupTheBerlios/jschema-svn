@@ -23,7 +23,7 @@ package citibob.swing.typed;
 import javax.swing.*;
 import java.util.*;
 import java.sql.*;
-import citibob.util.KeyedModel;
+import citibob.types.KeyedModel;
 import java.awt.*;
 import java.awt.event.*;
 import citibob.sql.*;

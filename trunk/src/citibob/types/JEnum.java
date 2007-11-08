@@ -15,12 +15,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package citibob.swing.typed;
+package citibob.types;
 
 import java.sql.*;
 import citibob.jschema.*;
 import citibob.sql.*;
-import citibob.util.KeyedModel;
+import citibob.types.KeyedModel;
 
 /** For enumerate types... Nullable depends on KeyedModel. */
 public class JEnum implements JType

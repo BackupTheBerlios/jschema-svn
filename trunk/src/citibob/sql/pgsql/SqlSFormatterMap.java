@@ -32,6 +32,7 @@ import citibob.sql.*;
 import citibob.sql.pgsql.*;
 import citibob.text.*;
 import citibob.swing.typed.*;
+import citibob.types.JType;
 import java.util.*;
 
 /**

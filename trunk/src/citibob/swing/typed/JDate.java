@@ -20,7 +20,7 @@ package citibob.swing.typed;
 import java.text.*;
 import java.util.*;
 
-public class JDate implements citibob.swing.typed.JDateType
+public class JDate implements citibob.types.JDateType
 {
 protected boolean nullable = true;
 protected Calendar cal;	// Calendar (& TimeZone) used to convert SQL to Java dates

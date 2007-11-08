@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing.typed;
 
+import citibob.types.JType;
 import java.text.DateFormat;
 import java.util.Date;
 import javax.swing.*;
@@ -88,7 +89,7 @@ public void setJType(JType jt, javax.swing.text.DefaultFormatterFactory ffactory
 }
 /** Convenience function.
  @param nullText String to use for null value, or else <null> if this is not nullable. */
-public void setJType(citibob.util.KeyedModel kmodel, String nullText)
+public void setJType(citibob.types.KeyedModel kmodel, String nullText)
 {
 	SqlEnum tt = new SqlEnum(kmodel, nullText);
 	formatter = new KeyedFormatter(tt.getKeyedModel());

@@ -32,7 +32,7 @@ import java.awt.*;
 import javax.swing.table.*;
 //import citibob.swing.typed.*;
 import java.sql.*;
-import citibob.util.KeyedModel;
+import citibob.types.KeyedModel;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.event.*;

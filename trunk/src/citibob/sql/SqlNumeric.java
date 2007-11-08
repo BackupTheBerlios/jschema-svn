@@ -40,6 +40,10 @@ public class SqlNumeric implements SqlType
 	public Class getObjClass()
 		{ return Double.class; }
 
+	/** Returns the SQL string that encodes this data type. */
+	public String sqlType()
+		{ return "numeric(" + precision + "," + scale + ")"; }
+
 	/** Convert an element of this type to an Sql string for use in a query */
 	public String toSql(Object o)
 		{ return (o == null ? "null" : o.toString()); }

@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.sql;
 
 import citibob.swing.table.*;
+import citibob.types.JType;
 import java.sql.*;
 import javax.swing.table.*;
 import javax.swing.event.*;

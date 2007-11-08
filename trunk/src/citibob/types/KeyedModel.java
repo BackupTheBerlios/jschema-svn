@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * or times selected from the DB.
  */
 
-package citibob.util;
+package citibob.types;
 
 import java.sql.*;
 import java.util.*;

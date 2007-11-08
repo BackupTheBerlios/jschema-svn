@@ -21,7 +21,7 @@ import java.util.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
 import citibob.sql.*;
-import citibob.swing.typed.JType;
+import citibob.types.JType;
 
 public interface JTypeTableModel extends CitibobTableModel
 {

@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing.html;
 
+import citibob.types.JType;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;

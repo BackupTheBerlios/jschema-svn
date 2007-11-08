@@ -20,6 +20,8 @@ package citibob.text;
 import citibob.sql.*;
 import citibob.swing.typed.*;
 import citibob.swing.table.JTypeTableModel;
+import citibob.types.JType;
+import citibob.types.JavaJType;
 import java.util.*;
 import java.text.*;
 

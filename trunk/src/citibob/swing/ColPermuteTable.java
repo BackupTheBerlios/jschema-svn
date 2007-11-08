@@ -76,7 +76,7 @@ public void setRenderEditU(String underlyingName, RenderEdit re)
 /** Sets a render/edit on a colum, by UNDERLYING column name. */
 public void setRenderU(String underlyingName, javax.swing.table.TableCellRenderer re)
 {
-	setRender(findColumnU(underlyingName), re);
+	setRenderer(findColumnU(underlyingName), re);
 }
 
 public void setRenderEditU(String underlyingName, Swinger swinger)

@@ -52,6 +52,9 @@ public SqlTimestamp(TimeZone tz, boolean nullable) {
 	super(tz, nullable);
 	setFmt();
 }
+	/** Returns the SQL string that encodes this data type. */
+	public String sqlType()
+		{ return "timestamp"; }
 /** @param stz TimeZone of timestamps stored in database. */
 public SqlTimestamp(String stz, boolean nullable)
 	{ this(TimeZone.getTimeZone(stz), nullable); }

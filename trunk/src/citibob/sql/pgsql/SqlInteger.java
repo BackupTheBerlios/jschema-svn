@@ -34,6 +34,9 @@ public class SqlInteger implements citibob.sql.SqlType
 	/** Convert an element of this type to an Sql string for use in a query */
 	public String toSql(Object o)
 		{ return (o == null ? "null" : o.toString()); }
+	/** Returns the SQL string that encodes this data type. */
+	public String sqlType()
+		{ return "int"; }
 
 	public boolean isInstance(Object o)
 		{ return (o instanceof Integer || (nullable && o == null)); }

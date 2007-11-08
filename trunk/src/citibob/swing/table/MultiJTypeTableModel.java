@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing.table;
 
+import citibob.types.JType;
 import javax.swing.table.*;
 import java.util.*;
 import javax.swing.event.*;

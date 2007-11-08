@@ -67,7 +67,7 @@ public CalModel(TimeZone tz, boolean nullable)
 	this.cal = Calendar.getInstance((tz));
 	this.nullable = nullable;
 }
-public CalModel(citibob.swing.typed.JDateType jdt)
+public CalModel(citibob.types.JDateType jdt)
 {
 	this(jdt.getTimeZone(), jdt.isInstance(null));
 }

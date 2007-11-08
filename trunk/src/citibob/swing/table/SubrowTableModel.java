@@ -13,7 +13,7 @@ import java.sql.*;
 import citibob.text.*;
 import citibob.sql.*;
 import java.io.*;
-import citibob.swing.typed.JType;
+import citibob.types.JType;
 import com.Ostermiller.util.*;
 import javax.swing.table.*;
 

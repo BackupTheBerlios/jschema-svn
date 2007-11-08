@@ -46,9 +46,12 @@ public SqlTime()
 /** Convert an element of this type to an Sql string for use in a query */
 public String toSql(Object o)
 {
-System.out.println("o.class = " + o.getClass());
+//System.out.println("o.class = " + o.getClass());
 	return SqlTime.sql((java.util.Date)o);
 }
+	/** Returns the SQL string that encodes this data type. */
+	public String sqlType()
+		{ return "time"; }
 // ==================================================	
 /** Reads the date with the appropriate timezone. */
 public java.util.Date get(java.sql.ResultSet rs, int col) throws SQLException
