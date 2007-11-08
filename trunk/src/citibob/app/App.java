@@ -49,7 +49,7 @@ public MailSender getMailSender();
 public SwingerMap getSwingerMap();
 public SwingPrefs getSwingPrefs();
 public void setUserPrefs(java.awt.Component c, String base);
-public citibob.text.SFormatterMap getSFormatterMap();
+public citibob.text.SFormatMap getSFormatMap();
 public SchemaSet getSchemaSet();
 public Schema getSchema(String name);	// Get schema by name
 public citibob.reports.Reports getReports();

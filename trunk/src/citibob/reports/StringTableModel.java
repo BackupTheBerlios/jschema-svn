@@ -43,10 +43,10 @@ import javax.swing.table.*;
  */
 public class StringTableModel extends AbstractTableModel {
 
-SFormatter[] formatters;		// Formatter for each column
+SFormat[] formatters;		// Formatter for each column
 JTypeTableModel mod;
 
-public StringTableModel(JTypeTableModel mod, SFormatter[] formatters)
+public StringTableModel(JTypeTableModel mod, SFormat[] formatters)
 {
 	this.mod = mod;
 	this.formatters = formatters;
@@ -56,25 +56,25 @@ public StringTableModel(JTypeTableModel mod, SFormatter[] formatters)
 /** @param colNames Name of each column in finished report --- Null if use underlying column names
  @param sColMap Name of each column in underlying uModel  --- Null if wish to use all underlying columns */
 public StringTableModel(JTypeTableModel mod,
-SFormatterMap sfmap)
+SFormatMap sfmap)
 {
-	this(mod, sfmap.newSFormatters(mod));
+	this(mod, sfmap.newSFormats(mod));
 }
 public StringTableModel(JTypeTableModel mod,
-SFormatterMap sfmap, String[] scol, SFormatter[] sfmt)
+SFormatMap sfmap, String[] scol, SFormat[] sfmt)
 {
-	this(mod, sfmap.newSFormatters(mod, scol, sfmt));
+	this(mod, sfmap.newSFormats(mod, scol, sfmt));
 }
 /** Used to set a special (non-default) formatter for a particular column. */
-public void setSFormatter(String uname, SFormatter fmt)
+public void setSFormat(String uname, SFormat fmt)
 {
 	int col = mod.findColumn(uname);
 	formatters[col] = fmt;
 }
 
 /** Convenience function. */
-public void setSFormatter(String uname, java.text.Format fmt)
-	{ setSFormatter(uname, new FormatSFormatter(fmt)); }
+public void setSFormat(String uname, java.text.Format fmt)
+	{ setSFormat(uname, new FormatSFormat(fmt)); }
 // -----------------------------------------------------------------------
 
 public int getRowCount() { return mod.getRowCount(); }

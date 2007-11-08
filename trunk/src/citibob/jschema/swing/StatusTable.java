@@ -65,7 +65,7 @@ boolean[] xEditable, SwingerMap swingers)
 
 public void setModelU(SchemaBuf schemaBuf,
 String[] xColNames, String[] xSColMap, String[] xTtColMap,
-boolean[] xEditable, SwingerMap swingers, citibob.text.SFormatterMap smap)
+boolean[] xEditable, SwingerMap swingers, citibob.text.SFormatMap smap)
 {
 	// Prepend 1 column to column list
 	boolean[] editable = (xEditable == null ? null : new boolean[xEditable.length + 1]);

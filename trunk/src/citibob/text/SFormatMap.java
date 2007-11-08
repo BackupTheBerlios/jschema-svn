@@ -31,7 +31,7 @@ import java.text.*;
  * This is a lot like SwingerMap, but much simpler.
  * @author citibob
  */
-public class SFormatterMap
+public class SFormatMap
 {
 
 //HashMap constMap = new HashMap();
@@ -41,7 +41,7 @@ HashMap makerMap = new HashMap();
 protected static interface Maker
 {
 	/** Gets a new swinger for an editable cell. */
-	SFormatter newSFormatter(JType jType);
+	SFormat newSFormat(JType jType);
 }
 // ===========================================================
 //protected void addConst(SqlSwinger swing)
@@ -56,7 +56,7 @@ protected void addMaker(Class klass, Maker maker)
 //{ return newSwinger(t, true); }
 /** Gets a new swinger for a cell of a certain type, depending on whether or not it is editable. */
 
-public SFormatter newSFormatter(JType t)
+public SFormat newSFormat(JType t)
 //public Swinger newSwinger(JType t, boolean editable)
 {
 	// Index on general class of the JType, or on its underlying
@@ -71,25 +71,25 @@ public SFormatter newSFormatter(JType t)
 		klass = klass.getSuperclass();
 		if (klass == Object.class) break;
 	}
-	if (m != null) return m.newSFormatter(t);
+	if (m != null) return m.newSFormat(t);
 	
 	return null;
 }
 
-/** Create SFormatter for an entire set of columns */
-public SFormatter[] newSFormatters(JTypeTableModel model)
+/** Create SFormat for an entire set of columns */
+public SFormat[] newSFormats(JTypeTableModel model)
 {
 	int n = model.getColumnCount();
-	SFormatter[] sfmt = new SFormatter[n];
-	for (int i=0; i<n; ++i) sfmt[i] = newSFormatter(model.getJType(0, i));
+	SFormat[] sfmt = new SFormat[n];
+	for (int i=0; i<n; ++i) sfmt[i] = newSFormat(model.getJType(0, i));
 	return sfmt;
 }
 
-public SFormatter[] newSFormatters(JTypeTableModel model,
-String[] scol, SFormatter[] sfmt)
+public SFormat[] newSFormats(JTypeTableModel model,
+String[] scol, SFormat[] sfmt)
 {
 	int n = model.getColumnCount();
-	SFormatter[] sfmt2 = new SFormatter[n];
+	SFormat[] sfmt2 = new SFormat[n];
 	
 	// Set up specialized formatters
 	if (scol != null)
@@ -100,7 +100,7 @@ String[] scol, SFormatter[] sfmt)
 	
 	// Fill in defaults
 	for (int i=0; i<n; ++i) if (sfmt2[i] == null) {
-		sfmt2[i] = newSFormatter(model.getJType(0, i));
+		sfmt2[i] = newSFormat(model.getJType(0, i));
 	}
 
 	return sfmt2;

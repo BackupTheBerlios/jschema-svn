@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
- * JDateSFormatter.java
+ * JDateSFormat.java
  *
  * Created on February 26, 2007, 1:23 AM
  *
@@ -35,13 +35,13 @@ import java.text.*;
  *
  * @author citibob
  */
-public class JDateSFormatter extends javax.swing.text.DateFormatter implements SFormatter
+public class JDateSFormat extends javax.swing.text.DateFormatter implements SFormat
 {
     /**
      * This is shorthand for
      * <code>new DateFormatter(DateFormat.getDateInstance())</code>.
      */
-    public JDateSFormatter() { super(); }
+    public JDateSFormat() { super(); }
 
     /**
      * Returns a DateFormatter configured with the specified
@@ -49,7 +49,7 @@ public class JDateSFormatter extends javax.swing.text.DateFormatter implements S
      *
      * @param format Format used to dictate legal values
      */
-    public JDateSFormatter(DateFormat format) { super(format); }
+    public JDateSFormat(DateFormat format) { super(format); }
 
 	
 //public static DateFormat newDateFormat(TimeZone tz, String fmt)
@@ -61,11 +61,11 @@ public class JDateSFormatter extends javax.swing.text.DateFormatter implements S
 //	return dff;
 //}
 //
-public JDateSFormatter(String sfmt, TimeZone tz)
+public JDateSFormat(String sfmt, TimeZone tz)
 {
 	this(DateFlexiFormat.newFormat(sfmt, tz));
 }
-public JDateSFormatter(String sfmt)
+public JDateSFormat(String sfmt)
 {
 	this(sfmt, null);
 }

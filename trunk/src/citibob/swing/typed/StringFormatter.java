@@ -36,7 +36,7 @@ import javax.swing.*;
  */
 public class StringFormatter
 extends JFormattedTextField.AbstractFormatter
-implements citibob.text.SFormatter
+implements citibob.text.SFormat
 {
 
 int limit;

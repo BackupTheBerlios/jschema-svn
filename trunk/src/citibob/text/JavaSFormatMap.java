@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
- * JavaSFormatterMap.java
+ * JavaSFormatMap.java
  *
  * Created on March 18, 2006, 8:00 PM
  *
@@ -37,37 +37,37 @@ import java.text.*;
  *
  * @author citibob
  */
-public class JavaSFormatterMap extends SFormatterMap
+public class JavaSFormatMap extends SFormatMap
 {
-public JavaSFormatterMap() {
+public JavaSFormatMap() {
 
 	// =========== Standard Java classes
-	this.addMaker(String.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType sqlType) {
-		return new ToStringSFormatter();
+	this.addMaker(String.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType sqlType) {
+		return new ToStringSFormat();
 	}});
 	
-	this.addMaker(Integer.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType sqlType) {
-		return new ToStringSFormatter();
+	this.addMaker(Integer.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType sqlType) {
+		return new ToStringSFormat();
 	}});
 
 	// =========== JTypes
-	this.addMaker(JEnum.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType jType) {
+	this.addMaker(JEnum.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType jType) {
 		return new citibob.swing.typed.KeyedFormatter(((JEnum)jType).getKeyedModel());
 	}});
 	
 	// =========== SQL Types
 	// SqlNumeric
-	this.addMaker(SqlNumeric.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType sqlType) {
+	this.addMaker(SqlNumeric.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType sqlType) {
 		return new LooseNumberFormatter((SqlNumeric)sqlType);
 	}});
 	
 	// SqlEnum
-	this.addMaker(SqlEnum.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType sqlType) {
+	this.addMaker(SqlEnum.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType sqlType) {
 		return new citibob.swing.typed.KeyedFormatter(((SqlEnum)sqlType).getKeyedModel());
 	}});
 	

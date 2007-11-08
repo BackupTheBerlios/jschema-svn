@@ -107,10 +107,10 @@ public void setRenderer(int colNo, TableCellRenderer re)
 	col.setCellRenderer(re);
 }
 
-public void setSFormatter(int col, SFormatter sfmt)
-	{ setRenderer(col, new citibob.swing.typed.SFormatterTableCellRenderer(sfmt)); }
-public void setSFormatter(String scol, SFormatter sfmt)
-	{ setSFormatter(getCBModel().findColumn(scol), sfmt); }
+public void setSFormat(int col, SFormat sfmt)
+	{ setRenderer(col, new citibob.swing.typed.SFormatTableCellRenderer(sfmt)); }
+public void setSFormat(String scol, SFormat sfmt)
+	{ setSFormat(getCBModel().findColumn(scol), sfmt); }
 public void setFormat(int col, Format fmt)
 	{ setRenderer(col, new citibob.swing.typed.FormatTableCellRenderer(fmt)); }
 public void setFormat(String scol, Format fmt)

@@ -28,7 +28,7 @@ import citibob.text.*;
 public class StringTableModelGrouper extends TableModelGrouper
 {
 
-SFormatter[] formatters;
+SFormat[] formatters;
 	
 /** Do the grouping, plus a bit of extra packaging for JodReports */
 public Map groupRowsMap()
@@ -54,12 +54,12 @@ Object formatVal(Object val, int col)
 }
 
 public StringTableModelGrouper(JTypeTableModel model, String[][] sgcols,
-SFormatter[] formatters)
+SFormat[] formatters)
 {
 	this(model, getGcols(model, sgcols), formatters);
 }
 public StringTableModelGrouper(JTypeTableModel model, int[][] gcols,
-SFormatter[] formatters)
+SFormat[] formatters)
 {
 	super(model, gcols);
 	this.formatters = formatters;

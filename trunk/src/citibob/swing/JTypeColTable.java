@@ -49,7 +49,7 @@ public class JTypeColTable extends ColPermuteTable
 {
 
 ColPermuteTableModel ttModel;	// Tooltips for each column
-SFormatter[] ttFmt;				// Formatter for each tooltip
+SFormat[] ttFmt;				// Formatter for each tooltip
 
 ///** Do tooltips.  This could be pushed up the class hierarchy if we wish. */
 //public Component prepareRenderer(TableCellRenderer renderer,
@@ -109,19 +109,19 @@ public void setModelU(JTypeTableModel schemaBuf,
  */
 public void setModelU(JTypeTableModel schemaBuf,
 		String[] colNames, String[] sColMap, String[] ttColMap, boolean[] editable,
-		citibob.swing.typed.SwingerMap swingers, citibob.text.SFormatterMap smap)
+		citibob.swing.typed.SwingerMap swingers, citibob.text.SFormatMap smap)
 {
 	this.setModelU(schemaBuf, colNames, sColMap, editable, swingers);
 	
 	// Come up with model for all the tooltips
 	ttModel = new ColPermuteTableModel(schemaBuf, colNames, ttColMap, editable);
-	ttFmt = new SFormatter[ttModel.getColumnCount()];
+	ttFmt = new SFormat[ttModel.getColumnCount()];
 	for (int i=0; i<ttModel.getColumnCount(); ++i) {
 		int colU = ttModel.getColMap(i);
 		if (colU < 0) continue;
 		JType jt = schemaBuf.getJType(0, colU);
 		if (jt == null) continue;
-		ttFmt[i] = smap.newSFormatter(jt);
+		ttFmt[i] = smap.newSFormat(jt);
 	}
 }
 

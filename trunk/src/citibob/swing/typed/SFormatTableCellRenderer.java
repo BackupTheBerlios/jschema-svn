@@ -43,12 +43,12 @@ import citibob.text.*;
  *
  * @author citibob
  */
-public class SFormatterTableCellRenderer
+public class SFormatTableCellRenderer
 extends DefaultTableCellRenderer
 {
-	SFormatter sfmt;
+	SFormat sfmt;
 	
-	public SFormatterTableCellRenderer(SFormatter sfmt)
+	public SFormatTableCellRenderer(SFormat sfmt)
 	{
 		this.sfmt = sfmt;
 	}

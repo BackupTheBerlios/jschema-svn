@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
- * FormatSFormatter.java
+ * FormatSFormat.java
  *
  * Created on February 26, 2007, 12:52 AM
  *
@@ -32,12 +32,12 @@ import java.text.*;
  *
  * @author citibob
  */
-public class FormatSFormatter implements SFormatter
+public class FormatSFormat implements SFormat
 {
 	Format fmt;
 	
-	/** Creates a new instance of FormatSFormatter */
-	public FormatSFormatter(Format fmt)
+	/** Creates a new instance of FormatSFormat */
+	public FormatSFormat(Format fmt)
 	{
 		this.fmt = fmt;
 	}

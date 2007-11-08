@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
- * SqlSFormatterMap.java
+ * SqlSFormatMap.java
  *
  * Created on March 18, 2006, 8:24 PM
  *
@@ -39,59 +39,59 @@ import java.util.*;
  *
  * @author citibob
  */
-public class SqlSFormatterMap extends JavaSFormatterMap
+public class SqlSFormatMap extends JavaSFormatMap
 {
 
 
 /**
- * Creates a new instance of SqlSFormatterMap 
+ * Creates a new instance of SqlSFormatMap 
  */
-public SqlSFormatterMap() { this(null); }
+public SqlSFormatMap() { this(null); }
 
-public SqlSFormatterMap(final TimeZone tz) {
+public SqlSFormatMap(final TimeZone tz) {
 	super();
 	
 	// SqlBool
-	this.addMaker(SqlBool.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType sqlType) {
+	this.addMaker(SqlBool.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType sqlType) {
 		return new BoolFormatter();
 	}});
 	
 	// SqlDate
-	this.addMaker(SqlDate.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType sqlType) {
-		return new JDateSFormatter("MM/dd/yyyy", tz);
+	this.addMaker(SqlDate.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType sqlType) {
+		return new JDateSFormat("MM/dd/yyyy", tz);
 	}});
 
 	// SqlInteger
-	this.addMaker(SqlInteger.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType sqlType) {
-		return new ToStringSFormatter();
+	this.addMaker(SqlInteger.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType sqlType) {
+		return new ToStringSFormat();
 	}});
 
 	// SqlString
-	this.addMaker(SqlString.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType sqlType) {
-		return new ToStringSFormatter();
+	this.addMaker(SqlString.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType sqlType) {
+		return new ToStringSFormat();
 	}});
 
 	// SqlString
-	this.addMaker(SqlChar.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType sqlType) {
-		return new ToStringSFormatter();
+	this.addMaker(SqlChar.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType sqlType) {
+		return new ToStringSFormat();
 	}});
 
 	// SqlTime
-	this.addMaker(SqlTime.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType sqlType) {
-		return new FormatSFormatter(new SimpleTimeFormat("HH:mm:ss"));
-//			JDateSFormatter(java.util.TimeZone.getTimeZone("GMT"), "HH:mm:ss");
+	this.addMaker(SqlTime.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType sqlType) {
+		return new FormatSFormat(new SimpleTimeFormat("HH:mm:ss"));
+//			JDateSFormat(java.util.TimeZone.getTimeZone("GMT"), "HH:mm:ss");
 	}});
 
 	// SqlTimestamp
-	this.addMaker(SqlTimestamp.class, new SFormatterMap.Maker() {
-	public SFormatter newSFormatter(JType sqlType) {
-		return new JDateSFormatter("MM-dd-yyyy HH:mm", tz);
+	this.addMaker(SqlTimestamp.class, new SFormatMap.Maker() {
+	public SFormat newSFormat(JType sqlType) {
+		return new JDateSFormat("MM-dd-yyyy HH:mm", tz);
 	}});
 }
 	

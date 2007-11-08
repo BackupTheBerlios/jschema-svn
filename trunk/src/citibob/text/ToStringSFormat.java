@@ -16,9 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
- * SFormat.java
+ * FormatSFormat.java
  *
- * Created on February 26, 2007, 12:46 AM
+ * Created on February 26, 2007, 12:52 AM
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
@@ -26,12 +26,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.text;
 
+import java.text.*;
+
 /**
- * SFormat = Simple Format or String Format.  A subset of the JFormattedTextString.AbstractFormatter functionality.
+ *
  * @author citibob
  */
-public interface SFormatter
+public class ToStringSFormat implements SFormat
 {
-	public Object  stringToValue(String text) throws java.text.ParseException;
-	public String  valueToString(Object value) throws java.text.ParseException;
+//	Format fmt;
+	String nullval = "";
+	
+	public String  valueToString(Object value) throws java.text.ParseException
+	{
+		return (value == null ? nullval : value.toString());
+//		return value.toString();
+	}
+	public Object  stringToValue(String text)  throws java.text.ParseException
+	{
+		throw new ParseException("ToStringSFormat doesn't know how to parse!", 0);
+	}
+	
 }

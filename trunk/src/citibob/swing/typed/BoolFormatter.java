@@ -36,7 +36,7 @@ import java.util.*;
  * @author citibob
  */
 public class BoolFormatter extends JFormattedTextField.AbstractFormatter
-implements citibob.text.SFormatter
+implements citibob.text.SFormat
 {
 
 int limit;

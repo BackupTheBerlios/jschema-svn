@@ -55,11 +55,11 @@ throws java.sql.SQLException
 // ===================================================================
 public StringTableModel format(JTypeTableModel mod)
 {
-	return new StringTableModel(mod, app.getSFormatterMap());
+	return new StringTableModel(mod, app.getSFormatMap());
 }
-public StringTableModel format(JTypeTableModel mod, String[] scol, SFormatter[] sfmt)
+public StringTableModel format(JTypeTableModel mod, String[] scol, SFormat[] sfmt)
 {
-	return new StringTableModel(mod, app.getSFormatterMap(), scol, sfmt);
+	return new StringTableModel(mod, app.getSFormatMap(), scol, sfmt);
 }
 // ===================================================================
 public JRDataSource toJasper(java.sql.ResultSet rs)
@@ -83,16 +83,16 @@ public JRDataSource toJasper(java.util.Collection model)
  */
 public List toJodList(JTypeTableModel model,
 String[][] sgcols,
-String[] scols, SFormatter[] sfmt)
+String[] scols, SFormat[] sfmt)
 {
-	SFormatter[] formatters = app.getSFormatterMap().newSFormatters(model, scols, sfmt);
+	SFormat[] formatters = app.getSFormatMap().newSFormats(model, scols, sfmt);
 	StringTableModelGrouper grouper =
 		new StringTableModelGrouper(model, sgcols, formatters);
 	return grouper.groupRowsList();
 }
 public List toJodList(java.sql.ResultSet rs,
 String[][] sgcols,
-String[] scols, SFormatter[] sfmt)
+String[] scols, SFormat[] sfmt)
 throws SQLException
 {
 	return toJodList(toTableModel(rs), sgcols, scols, sfmt);
@@ -105,7 +105,7 @@ throws SQLException
 }
 public Map toJodMap(JTypeTableModel model,
 String[][] sgcols,
-String[] scols, SFormatter[] sfmt)
+String[] scols, SFormat[] sfmt)
 {
 	List list = toJodList(model, sgcols, scols, sfmt);
 	Map map = new TreeMap();

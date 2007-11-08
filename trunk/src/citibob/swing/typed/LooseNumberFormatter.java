@@ -37,7 +37,7 @@ import java.text.*;
  * @author citibob
  */
 public class LooseNumberFormatter extends NumberFormatter
-implements citibob.text.SFormatter
+implements citibob.text.SFormat
 {
 
 public LooseNumberFormatter() { super(); }

@@ -35,7 +35,7 @@ import javax.swing.*;
  * @author citibob
  */
 public class KeyedFormatter extends JFormattedTextField.AbstractFormatter
-implements citibob.text.SFormatter
+implements citibob.text.SFormat
 {
 
 KeyedModel kmodel;
