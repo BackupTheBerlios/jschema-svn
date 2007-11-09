@@ -49,7 +49,7 @@ implements TextTypedWidget, KeyListener {
 
 /** Our best guess of the class this takes. */
 //Class objClass = null;
-protected JType jType;	
+protected JType jType;
 protected boolean selectOnSet = true;
 
 public JTypedTextField()
@@ -68,6 +68,12 @@ public void setJType(JType jt, SFormat sformat)
 {
 	setJType(jt, new DefaultFormatterFactory(new SFormatAbsFormatter(sformat)));
 }
+public void setJType(Class klass, SFormat sformat)
+{
+	setJType(new JavaJType(klass), sformat);
+}
+public void setJTypeString()
+	{ setJType(String.class, new StringSFormat()); }
 //
 //public void setJType(Class klass, AbstractFormatterFactory ffactory)
 //{
@@ -99,7 +105,7 @@ public boolean getSelectOnset() { return selectOnSet; }
 // --------------------------------------------------------------
 public boolean isInstance(Object o)
 {
-	return jType.isInstance(o);
+	return (jType == null ? true : jType.isInstance(o));
 }
 public boolean stopEditing()
 {

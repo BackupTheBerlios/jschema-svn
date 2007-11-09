@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.swingers;
+package citibob.swingers;
 
 
 import citibob.swing.typed.*;
@@ -38,27 +38,23 @@ import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.event.*;
 import citibob.sql.*;
-import citibob.text.*;
+import java.text.*;
 
 /**
  *
  * @author citibob
  */
-public class SFormatRenderer
+public class FormatRenderer
 extends DefaultTableCellRenderer
 {
-	SFormat sfmt;
+	Format sfmt;
 	
-	public SFormatRenderer(SFormat sfmt)
+	public FormatRenderer(Format sfmt)
 	{
 		this.sfmt = sfmt;
 	}
 
 	public void setValue(Object o) {
-		try {
-			setText(sfmt.valueToString(o));
-		} catch(java.text.ParseException e) {
-			setText(e.toString());		// Should not happen
-		}
+		setText(sfmt.format(o));
 	}
 }

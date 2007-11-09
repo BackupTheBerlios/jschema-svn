@@ -37,7 +37,7 @@ import citibob.multithread.*;
  * An AbstractFormatter that must make a database query to do its formatting.
  * @author citibob
  */
-public abstract class DBSFormat extends JFormattedTextField.AbstractFormatter
+public abstract class DBSFormat extends AbstractSFormat
 {
 
 ConnPool pool;

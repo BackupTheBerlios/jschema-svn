@@ -33,6 +33,15 @@ public DateSFormat(DateFlexiFormat fmt, String nullText)
 	displayTZ = fmt.getTimeZone();
 }
 
+private static DateFormat newSimpleDateFormat(String fmtString, TimeZone displayTZ)
+{
+	DateFormat dfmt = new SimpleDateFormat(fmtString);
+	dfmt.setTimeZone(displayTZ);
+	return dfmt;
+}
+public DateSFormat(String fmtString, String nullText, TimeZone displayTZ)
+	{ this(newSimpleDateFormat(fmtString, displayTZ), nullText); }
+
 /** Convenience */
 public DateSFormat(String[] sfmts, String nullText, TimeZone displayTZ)
 {

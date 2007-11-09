@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing.pgsql;
 
-import citibob.swing.swingers.AbstractSwinger;
+import citibob.swingers.AbstractSwinger;
 import citibob.swing.typed.*;
 import citibob.sql.*;
 import citibob.text.BoolSFormat;

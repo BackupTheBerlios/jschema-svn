@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.mail;
 
-import citibob.swing.swingers.JIntegerSwinger;
+import citibob.swingers.JIntegerSwinger;
 import java.util.prefs.*;
 import javax.swing.*;
 

@@ -59,5 +59,8 @@ public class FormatSFormat implements SFormat
 		if (value == null) return nullText;
 		return fmt.format(value);
 	}
+
+
+
 	
 }

@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-package citibob.swing.swingers;
+package citibob.swingers;
 
 import citibob.swing.typed.*;
 import javax.swing.table.*;

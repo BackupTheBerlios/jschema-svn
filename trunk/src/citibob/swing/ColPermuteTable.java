@@ -35,7 +35,8 @@ import java.sql.*;
 import citibob.jschema.*;
 import citibob.swing.table.*;
 import citibob.swing.typed.*;
-
+import citibob.text.*;
+import citibob.types.*;
 
 /**
  *
@@ -69,22 +70,34 @@ public CitibobTableModel getModelU()
 }
 
 /** Sets a render/edit on a colum, by UNDERLYING column name. */
+public void setRenderEditU(String underlyingName, Swinger swinger)
+	{ setRenderEdit(findColumnU(underlyingName), swinger); }
+
 public void setRenderEditU(String underlyingName, Swinger.RenderEdit re)
-{
-	setRenderEdit(findColumnU(underlyingName), re);
-}
+	{ setRenderEdit(findColumnU(underlyingName), re); }
+
+public void setRenderEditU(String underlyingName, KeyedModel kmodel)
+	{ setRenderEdit(findColumnU(underlyingName), kmodel); }
 
 /** Sets a render/edit on a colum, by UNDERLYING column name. */
-public void setRendererU(String underlyingName, javax.swing.table.TableCellRenderer re)
+public void setRenderEditU(String underlyingName, SFormat sfmt)
+	{ setRenderEdit(findColumnU(underlyingName), sfmt); }
+
+public void setRenderEditU(String underlyingName, java.text.Format fmt)
+	{ setRenderEdit(findColumnU(underlyingName), fmt); }
+
+public void setRenderEditU(String underlyingName, String fmtString)
+	{ setRenderEdit(findColumnU(underlyingName), fmtString); }
+
+
+
+/** Sets a renderer on a colum, by UNDERLYING column name.  Only sets
+renderer, not editor; only used in special cases. */
+public void setRendererU(String underlyingName, TableCellRenderer renderer)
 {
-	setRenderer(findColumnU(underlyingName), re);
+	setRenderer(findColumnU(underlyingName), renderer);
 }
 
-public void setRenderEditU(String underlyingName, Swinger swinger)
-{
-	int col = findColumnU(underlyingName);
-	setRenderEdit(col, swinger.newRenderEdit());
-}
 ///** Sets a render/edit on a colum, by UNDERLYING column name,
 // * according to the columns declared class getColumnClass(). */
 //public void setRenderEditU(String underlyingName, RenderEditSet res)

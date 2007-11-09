@@ -16,45 +16,44 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
- * FormattedTableCellRenderer.java
+ * TypedWidgetSTFactory.java
  *
- * Created on March 18, 2006, 1:58 PM
+ * Created on March 18, 2006, 6:14 PM
  *
  * To change this template, choose Tools | Options and locate the template under
  * the Source Creation and Management node. Right-click the template and choose
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.swingers;
+package citibob.swingers;
 
-
-import citibob.swing.typed.*;
-import java.awt.*;
-import javax.swing.table.*;
-//import citibob.swing.typed.*;
-import java.sql.*;
-import citibob.types.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.event.*;
 import citibob.sql.*;
+import citibob.swing.typed.*;
+import citibob.text.KeyedSFormat;
+import citibob.types.JEnum;
+import javax.swing.text.*;
 import java.text.*;
 
 /**
  *
  * @author citibob
  */
-public class FormatRenderer
-extends DefaultTableCellRenderer
+public class SqlEnumSwinger extends AbstractSwinger
 {
-	Format sfmt;
-	
-	public FormatRenderer(Format sfmt)
-	{
-		this.sfmt = sfmt;
-	}
 
-	public void setValue(Object o) {
-		setText(sfmt.format(o));
-	}
+/** Creates a new instance of TypedWidgetSTFactory */
+public SqlEnumSwinger(SqlEnum sqlType) {
+	super(sqlType, new KeyedSFormat(sqlType.getKeyedModel()), false);
+}
+
+/** Create a widget suitable for editing this type of data. */
+public citibob.swing.typed.TypedWidget createWidget()
+	{ return new JKeyedComboBox(); }
+public void configureWidget(TypedWidget w)
+{
+	JEnum etype = (JEnum)jType;
+	JKeyedComboBox ww = (JKeyedComboBox)w;
+	ww.setKeyedModel(etype.getKeyedModel());
+}
+
 }

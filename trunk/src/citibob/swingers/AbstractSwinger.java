@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.swingers;
+package citibob.swingers;
 
 //import citibob.sql.*;
 //import citibob.jschema.JType;
@@ -71,7 +71,7 @@ public JType getJType() { return jType; }
  renderer and editor is desired, just return null.  Normally, this will
  just return new TypedWidgetRenderEdit(newTypedWidget()) */
 public RenderEdit newRenderEdit()
-	{ return new MyRenderEdit(newWidget(), getSFormat(), renderWithWidget); }
+	{ return new TypedWidgetRenderEdit(newWidget(), getSFormat(), renderWithWidget); }
 
 
 // -------------------------------------------------------------------
@@ -92,23 +92,5 @@ abstract protected citibob.swing.typed.TypedWidget createWidget();
 //public void configureWidget(TypedWidget tw) {}
 
 // ============================================================
-static class MyRenderEdit implements RenderEdit
-{
-	TableCellEditor editor;
-	TableCellRenderer rendererEditable;
-	TableCellRenderer rendererNotEditable;
-	public MyRenderEdit(TypedWidget tw, SFormat sformat, boolean renderWithWidget)
-	{
-		rendererEditable = new TypedWidgetRenderer(tw);
-		rendererNotEditable = (renderWithWidget ? rendererEditable :
-			new SFormatRenderer(sformat));
-		editor = new TypedWidgetEditor(tw);
-	}
-	public TableCellEditor getEditor()
-		{return editor; }
-	public TableCellRenderer getRenderer(boolean editable)
-	{
-		return editable ? rendererEditable : rendererNotEditable;
-	}
-}
+
 }

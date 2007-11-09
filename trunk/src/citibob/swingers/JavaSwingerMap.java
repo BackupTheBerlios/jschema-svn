@@ -25,10 +25,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.swingers;
+package citibob.swingers;
 
 import citibob.sql.*;
-import citibob.swing.swingers.SqlNumericSwinger;
+import citibob.swingers.SqlNumericSwinger;
 import citibob.swing.typed.*;
 import citibob.swing.typed.Swinger;
 import citibob.swing.typed.SwingerMap;

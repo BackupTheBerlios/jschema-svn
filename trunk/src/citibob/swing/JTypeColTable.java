@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swing;
 
-import bsh.This;
+//import bsh.This;
 import citibob.swing.typed.Swinger;
 import javax.swing.table.*;
 import javax.swing.*;
@@ -85,7 +85,7 @@ public String getTooltip(int row, int col)
  */
 public void setModelU(JTypeTableModel schemaBuf,
 		String[] colNames, String[] sColMap, boolean[] editable,
-		citibob.swing.typed.SwingerMap swingers)
+		citibob.swing.typed.SwingerMap smap)
 {
 	super.setModelU(schemaBuf, colNames, sColMap, editable);
 	ColPermuteTableModel model = (ColPermuteTableModel)getModel();
@@ -97,9 +97,9 @@ public void setModelU(JTypeTableModel schemaBuf,
 		int bcol = model.getColMap(c);
 		JType sqlType = schemaBuf.getJType(0,bcol);
 		if (sqlType == null) continue;
-		Swinger swing = swingers.newSwinger(sqlType);
+		Swinger swing = smap.newSwinger(sqlType);
 		if (swing == null) continue;
-		setRenderEdit(c, swing.newRenderEdit());
+		setRenderEdit(c, swing);
 	}
 }
 
@@ -110,9 +110,9 @@ public void setModelU(JTypeTableModel schemaBuf,
  */
 public void setModelU(JTypeTableModel schemaBuf,
 		String[] colNames, String[] sColMap, String[] ttColMap, boolean[] editable,
-		citibob.swing.typed.SwingerMap swingers, citibob.text.SFormatMap smap)
+		citibob.swing.typed.SwingerMap smap)
 {
-	this.setModelU(schemaBuf, colNames, sColMap, editable, swingers);
+	this.setModelU(schemaBuf, colNames, sColMap, editable, smap);
 	
 	// Come up with model for all the tooltips
 	ttModel = new ColPermuteTableModel(schemaBuf, colNames, ttColMap, editable);
@@ -122,7 +122,7 @@ public void setModelU(JTypeTableModel schemaBuf,
 		if (colU < 0) continue;
 		JType jt = schemaBuf.getJType(0, colU);
 		if (jt == null) continue;
-		ttFmt[i] = smap.newSFormat(jt);
+		ttFmt[i] = smap.newSwinger(jt).getSFormat();
 	}
 }
 

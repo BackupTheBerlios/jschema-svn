@@ -53,7 +53,7 @@ public StringSFormat()
 public void setNullText(String s) { nullText = s; }
 
 /** Not to be used */
-public Object  stringToValue(String text)
+public Object stringToValue(String text)
 {
 	if (nullText.equals(text)) return null;
 	return text;
@@ -61,6 +61,6 @@ public Object  stringToValue(String text)
 public String  valueToString(Object value)
 {
 	if (value == null) return nullText;
-	else return (String)value;
+	else return value.toString();
 }
 }

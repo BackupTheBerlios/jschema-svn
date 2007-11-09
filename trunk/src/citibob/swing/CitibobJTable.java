@@ -25,6 +25,8 @@ import java.text.*;
 import citibob.text.*;
 import citibob.swing.table.*;
 import citibob.swing.typed.*;
+import citibob.swingers.*;
+import citibob.types.*;
 //import de.chka.swing.components.*;
 
 public class CitibobJTable extends JTable
@@ -89,6 +91,19 @@ public CitibobTableModel getCBModel()
 //public boolean isRowHeightUpdaterEnabled()
 //	{ return rhu.isEnabled(); }
 
+public void setRenderEdit(int colNo, Swinger swinger)
+{
+	if (swinger == null) return;
+	Swinger.RenderEdit re = swinger.newRenderEdit();
+	setRenderEdit(colNo, re);
+}
+
+public void setRenderEdit(int colNo, KeyedModel kmodel)
+{
+	setRenderEdit(colNo,
+		new TypedWidgetRenderEdit(new JKeyedComboBox(kmodel)));
+}
+
 /** Sets a renderer and editor pair at once, for a column. */
 public void setRenderEdit(int colNo, Swinger.RenderEdit re)
 {
@@ -101,23 +116,53 @@ public void setRenderEdit(int colNo, Swinger.RenderEdit re)
 		if (ee != null) col.setCellEditor(ee);
 }
 
+//public void setRenderEdit(int colNo, TypedWidget tw)
+//{
+//	TableColumn col = getColumnModel().getColumn(colNo);
+//	col.setCellRenderer(new SFormatRenderer(sformat));
+//	JTypedTextField tw = new JTypedTextField();
+//	tw.setJType((JType)null, sformat);		// We don't really know about JTypes at CitibobJTable anyway
+//	col.setCellEditor(new TypedWidgetEditor(tw));
+//}
+
+/** Sets a text-based renderer and editor pair at once, for a column,
+without going through Swingers or anything.  Works for simpler text-based
+renderers and editors ONLY. */
+public void setRenderEdit(int colNo, SFormat sformat)
+{
+	TableColumn col = getColumnModel().getColumn(colNo);
+	col.setCellRenderer(new SFormatRenderer(sformat));
+	JTypedTextField tw = new JTypedTextField();
+	tw.setJType((JType)null, sformat);		// We don't really know about JTypes at CitibobJTable anyway
+	col.setCellEditor(new TypedWidgetEditor(tw));
+}
+
+public void setRenderEdit(int colNo, java.text.Format fmt)
+	{ setRenderEdit(colNo, new FormatSFormat(fmt)); }
+
+/** Sets up a renderer and editor based on a format string.  Works for a small
+number of well-known types, this is NOT general. */
+public void setRenderEdit(int colNo, String fmtString)
+{
+	Class klass = getModel().getColumnClass(colNo);
+	setRenderEdit(colNo, FormatUtils.newFormat(klass, fmtString));
+}
+
 /** Sets a renderer and editor pair at once, for a column. */
 public void setRenderer(int colNo, TableCellRenderer re)
 {
-	if (re == null) return;		// Don't change, if we don't know what to set it TO.
-	
 	TableColumn col = getColumnModel().getColumn(colNo);
 	col.setCellRenderer(re);
 }
 
-public void setSFormat(int col, SFormat sfmt)
-	{ setRenderer(col, new citibob.swing.swingers.SFormatRenderer(sfmt)); }
-public void setSFormat(String scol, SFormat sfmt)
-	{ setSFormat(getCBModel().findColumn(scol), sfmt); }
-public void setFormat(int col, Format fmt)
-	{ setRenderer(col, new citibob.swing.swingers.FormatRenderer(fmt)); }
-public void setFormat(String scol, Format fmt)
-	{ setFormat(getCBModel().findColumn(scol), fmt); }
+//public void setSFormat(int col, SFormat sfmt)
+//	{ setRenderer(col, new citibob.swingers.SFormatRenderer(sfmt)); }
+//public void setSFormat(String scol, SFormat sfmt)
+//	{ setSFormat(getCBModel().findColumn(scol), sfmt); }
+//public void setFormat(int col, Format fmt)
+//	{ setRenderer(col, new citibob.swingers.FormatRenderer(fmt)); }
+//public void setFormat(String scol, Format fmt)
+//	{ setFormat(getCBModel().findColumn(scol), fmt); }
 
 
 

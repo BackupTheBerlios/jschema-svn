@@ -15,27 +15,35 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-package citibob.swing.pgsql;
+package citibob.swingers;
 
 import citibob.sql.*;
-import citibob.swingers.JIntegerSwinger;
 import citibob.types.JType;
+import citibob.types.JavaJType;
 import javax.swing.text.*;
 import java.text.*;
 import citibob.swing.typed.*;
 import citibob.sql.pgsql.*;
+import static citibob.swing.typed.JTypedTextField.*;
+import citibob.text.*;
 
 /**
  *
  * @author citibob
  */
-public class SqlIntegerSwinger extends JIntegerSwinger
+public class NumberSwinger extends TypedTextSwinger
 {
 
-public SqlIntegerSwinger(JType jType)
+public NumberSwinger(JType jType, NumberFormat nf)
+	{ super(jType, nf); }
+
+
+public javax.swing.JFormattedTextField.AbstractFormatter newAbsFormatter()
 {
-	super(jType);
+	FormatSFormat sfmt = (FormatSFormat)getSFormat();
+	NumberFormatter nff = new NumberFormatter((NumberFormat)sfmt.getFormat());
+	return nff;
 }
-	
+
+
 }

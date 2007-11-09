@@ -25,27 +25,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Open. You can then make changes to the template in the Source Editor.
  */
 
-package citibob.swing.swingers;
+package citibob.swingers;
 
 import citibob.sql.*;
-import citibob.text.StringSFormat;
-import citibob.types.JavaJType;
+import citibob.swing.typed.*;
+import citibob.text.KeyedSFormat;
+import citibob.types.JEnum;
 import javax.swing.text.*;
 import java.text.*;
-import citibob.swing.typed.*;
-import citibob.sql.pgsql.*;
 
 /**
  *
  * @author citibob
  */
-public class JStringSwinger extends TypedTextSwinger
+public class JEnumSwinger extends AbstractSwinger
 {
 
 /** Creates a new instance of TypedWidgetSTFactory */
-public JStringSwinger() {
-	super(new JavaJType(String.class), new StringSFormat());
+public JEnumSwinger(JEnum sqlType) {
+	super(sqlType, new KeyedSFormat(sqlType.getKeyedModel()), false);
 }
 
+/** Create a widget suitable for editing this type of data. */
+public citibob.swing.typed.TypedWidget createWidget()
+{
+	return new JKeyedComboBox();
+}
+
+public void configureWidget(TypedWidget tw)
+{
+	JEnum tt = (JEnum)jType;
+	JKeyedComboBox w = (JKeyedComboBox)tw;
+	w.setKeyedModel(tt.getKeyedModel());
+}
 
 }

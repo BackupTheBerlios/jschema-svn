@@ -33,6 +33,11 @@ public JType getJType(int row, int col)
 {
 	return jTypes[col];
 }
+/** Overrides built-in JTable method. */
+public Class getColumnClass(int col)
+{
+	return getJType(0, col).getClass();
+}
 // -----------------------------------------------------------
 // ================= Basic convenience functions implemented
 public DefaultJTypeTableModel() { super(); }

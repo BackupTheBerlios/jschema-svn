@@ -41,6 +41,8 @@ import citibob.swing.html.ObjHtmlPanel;
 import java.net.URL;
 import citibob.jschema.*;
 import citibob.swing.typed.*;
+import citibob.text.*;
+import citibob.types.*;
 
 /**
  * Meant to be subclassed to produce Wizards, etc...
@@ -90,6 +92,18 @@ public JTypedTextField addTextField(String name, Swinger swinger)
 /** Add a text field with the correct Swinger already created... */
 public JTypedTextField addTextField(String name, Schema schema)
 	{ return addTextField(name, swingers.newSwinger(schema.getCol(name).getType())); }
+
+public JTypedTextField addTextField(String name, JType jType, citibob.text.SFormat sformat)
+	{ return html.addTextField(name, jType, sformat); }
+public JTypedTextField addTextField(String name, Class klass, java.text.Format fmt)
+	{ return html.addTextField(name, klass, fmt); }
+public JTypedTextField addTextField(String name, Class klass, String fmtString)
+	{ return html.addTextField(name, klass, fmtString); }
+
+/** Adds implicitly as String. */
+public JTypedTextField addTextField(String name)
+	{ return html.addTextField(name, new JavaJType(String.class), new StringSFormat()); }
+
 // ------------------------------------------------------------------
 public JComponent getWidget(String name)
 { return (JComponent)html.getMap().get(name); }

@@ -27,13 +27,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.sql.pgsql;
 
-import citibob.swing.swingers.JavaSwingerMap;
+import citibob.swingers.JavaSwingerMap;
 import citibob.swing.typed.Swinger;
 import citibob.swing.typed.SwingerMap;
 import citibob.swing.typed.*;
 import citibob.sql.*;
 import citibob.swing.pgsql.SqlBoolSwinger;
-import citibob.swing.swingers.JDateSwinger;
+import citibob.swingers.JDateSwinger;
 import citibob.swing.pgsql.SqlIntegerSwinger;
 import citibob.swing.pgsql.SqlStringSwinger;
 //import citibob.swing.pgsql.SqlTimestampSwinger;

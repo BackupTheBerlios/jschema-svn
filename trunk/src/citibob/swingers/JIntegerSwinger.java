@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package citibob.swing.swingers;
+package citibob.swingers;
 
 import citibob.sql.*;
 import citibob.types.JType;
@@ -31,19 +31,20 @@ import citibob.text.*;
  *
  * @author citibob
  */
-public class NumberSwinger extends TypedTextSwinger
+public class JIntegerSwinger extends NumberSwinger
 {
 
-public NumberSwinger(JType jType, NumberFormat nf)
+public JIntegerSwinger(JType jType)
+	{ this(jType, NumberFormat.getIntegerInstance()); }
+public JIntegerSwinger(JType jType, NumberFormat nf)
 	{ super(jType, nf); }
 
-
-public javax.swing.JFormattedTextField.AbstractFormatter newAbsFormatter()
-{
-	FormatSFormat sfmt = (FormatSFormat)getSFormat();
-	NumberFormatter nff = new NumberFormatter((NumberFormat)sfmt.getFormat());
-	return nff;
-}
+public JIntegerSwinger(boolean nullable, NumberFormat nf)
+	{this(new JavaJType(Integer.class, nullable), nf); }
+public JIntegerSwinger(boolean nullable)
+	{ this(nullable, NumberFormat.getIntegerInstance()); }
+public JIntegerSwinger()
+	{ this(true); }
 
 
 }

@@ -44,6 +44,8 @@ import java.util.*;
 import java.net.URL;
 import citibob.swing.typed.*;
 import org.xamjwg.html.domimpl.*;
+import citibob.text.*;
+import citibob.types.*;
 
 /**
  *
@@ -68,10 +70,9 @@ public class ObjHtmlPanel extends ObjHtmlPanelMVC
 //		setDocument(htmlIn, widgetMap, uri);
 //	}
 	
-	public JTypedTextField addTextField(String name, Swinger swinger)
+	/** Widget must be already configured. */
+	private JTypedTextField addTextField(String name, JTypedTextField widget)
 	{
-		JTypedTextField widget = new JTypedTextField();
-		swinger.configureWidget(widget);
 		widgetMap.put(name, widget);
 
 		// Set text field size to 150 pixels wide x default height
@@ -80,6 +81,28 @@ public class ObjHtmlPanel extends ObjHtmlPanelMVC
 		widget.setSize(d);
 		return widget;
 	}
+	public JTypedTextField addTextField(String name, Swinger swinger)
+	{
+		JTypedTextField widget = new JTypedTextField();
+		swinger.configureWidget(widget);
+		return addTextField(name, widget);
+	}
+	public JTypedTextField addTextField(String name, JType jType, citibob.text.SFormat sformat)
+	{
+		JTypedTextField widget = new JTypedTextField();
+		widget.setJType(jType, sformat);
+		return addTextField(name, widget);
+	}
+	public JTypedTextField addTextField(String name, Class klass, java.text.Format fmt)
+	{
+		JTypedTextField widget = new JTypedTextField();
+		widget.setJType(klass, new FormatSFormat(fmt));
+		return addTextField(name, widget);
+	}
+	public JTypedTextField addTextField(String name, Class klass, String fmtString)
+		{ return addTextField(name, klass, FormatUtils.newFormat(klass, fmtString)); }
+
+
 
 	public JButton addJButton(String name, String text)
 	{

@@ -26,7 +26,7 @@ package citibob.swing.typed;
 import citibob.text.KeyedSFormat;
 import citibob.text.StringSFormat;
 import citibob.types.JType;
-import java.text.DateFormat;
+import java.text.*;
 import java.util.Date;
 import javax.swing.*;
 import javax.swing.text.*;
@@ -59,12 +59,24 @@ public JTypedLabel()
 {
 	super();
 }
-public JTypedLabel(String s)
+public JTypedLabel(CharSequence initialVal)
 {
-	sformat = new StringSFormat();
-	setValue(s);
+	super();
+	setJType(initialVal.getClass(), new StringSFormat());
+	setValue(initialVal);
 }
-	
+public JTypedLabel(Object initialVal, String fmtString)
+{
+	super();
+	Class klass = initialVal.getClass();
+	setJType(klass, fmtString);
+	setValue(initialVal);
+}
+public JTypedLabel(Class klass, String fmtString)
+{
+	super();
+	setJType(klass, fmtString);
+}
 // --------------------------------------------------------------
 //public void setJType(Swinger f)
 //{
@@ -77,6 +89,21 @@ public void setJType(JType jt, SFormat sformat)
 	this.jType = jt;
 	this.sformat = sformat;
 }
+public void setJType(JType jt, Format fmt)
+	{ setJType(jt, new FormatSFormat(fmt)); }
+public void setJType(JType jt, String fmtString)
+	{ setJType(jt, citibob.text.FormatUtils.newFormat(jt.getClass(), fmtString)); }
+
+
+public void setJType(Class klass, SFormat sformat)
+	{ setJType(new JavaJType(klass), sformat); }
+public void setJType(Class klass, Format fmt)
+	{ setJType(klass, new FormatSFormat(fmt)); }
+public void setJType(Class klass, String fmtString)
+	{ setJType(klass, citibob.text.FormatUtils.newFormat(klass, fmtString)); }
+public void setJTypeString()
+	{ setJType(String.class, new StringSFormat()); }
+
 
 /** Convenience function.
  @param nullText String to use for null value, or else <null> if this is not nullable. */
@@ -91,6 +118,7 @@ public void setJType(citibob.types.KeyedModel kmodel, String nullText)
 
 public boolean isInstance(Object o)
 {
+	if (jType == null) return true;
 	return jType.isInstance(o);
 }
 public boolean stopEditing()
