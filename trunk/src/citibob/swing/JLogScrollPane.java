@@ -74,7 +74,7 @@ public class JLogScrollPane extends JScrollPane
 					oldBG = sb.getBackground();
 					sb.setBackground(Color.RED);
 					
-					System.err.println("caret: " + textArea.getCaretPosition() + " " + textArea.getDocument().getLength());
+//					System.err.println("caret: " + textArea.getCaretPosition() + " " + textArea.getDocument().getLength());
 					int len = textArea.getDocument().getLength();
 					if (textArea.getCaretPosition() == len) {
 						textArea.setCaretPosition(len-1);
@@ -88,7 +88,7 @@ public class JLogScrollPane extends JScrollPane
 					scrollToEnd();
 				}
 				
-System.err.println("scrollLock = " + scrollLock);
+//System.err.println("scrollLock = " + scrollLock);
 			}
 		}});
 		
@@ -188,12 +188,12 @@ System.err.println("scrollLock = " + scrollLock);
 		
 		if (timed_buffer)
 		{
-			System.err.println("Making TimedBufferedWriter");
+//			System.err.println("Making TimedBufferedWriter");
 			logWriter = new TimedBufferedWriter(new DocumentWriter(doc), time_delay, buffersize);
 		}
 		else
 		{
-			System.err.println("Making LineBufferWriter");
+//			System.err.println("Making LineBufferWriter");
 			logWriter = new LineBufferWriter(new DocumentWriter(doc));
 		}
 		setDocument(doc);
