@@ -40,7 +40,10 @@ protected TimeZone displayTZ;
 // -------------------------------------------------------------------------
 /** Creates a new instance of TypedWidgetSTFactory */
 public JDateSwinger(JDateType jt, String[] sfmt, String nullText, TimeZone displayTZ, Class jcalClass) {
-	super(jt, new DateSFormat(new DateFlexiFormat(sfmt, displayTZ), nullText), true);
+	super(jt, new DateSFormat(new DateFlexiFormat(sfmt, displayTZ), nullText), false);
+//if (jcalClass == null) {
+//System.out.println("jcalClass == null");
+//}
 	this.jcalClass = jcalClass;
 }
 
@@ -49,7 +52,7 @@ public void configureWidget(TypedWidget tw)
 	if (tw instanceof JTypedDateChooser) {
 		JTypedDateChooser jtdc = (JTypedDateChooser)tw;
 		try {
-			JCalendar jcal = (JCalendar)jcalClass.newInstance();
+			JCalendar jcal = jcalClass == null ? null : (JCalendar)jcalClass.newInstance();
 			DateSFormat dsfmt = (DateSFormat)super.getSFormat();
 			jtdc.setJType((JDateType)jType, dsfmt, jcal);
 		} catch(Exception e) {

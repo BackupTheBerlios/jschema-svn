@@ -61,7 +61,7 @@ throws java.sql.SQLException;
 
 public String valueToString(Object value)
 {
-//	if (value == null) return nullText;
+	if (value == null) return nullText;
 	
 	String ret = null;
 	Statement st = null;

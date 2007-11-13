@@ -57,7 +57,8 @@ public interface Swinger {
 	 Used to determine which form of renderer is used*/
 	public RenderEdit newRenderEdit();
 	
-
+//	/** Produces just a Renderer. */
+//	public TableCellRenderer newRenderer();
 
 
 	/** Create and configure a widget suitable for editing this type of data. */

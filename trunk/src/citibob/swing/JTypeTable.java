@@ -72,7 +72,7 @@ public class JTypeTable extends CitibobJTable
 		Swinger.RenderEdit re = getRenderEdit(row, col);
 		if (re != null) {
 			TableCellRenderer rr = re.getRenderer(isCellEditable(row,col));
-			if (rr == null) return rr;
+			if (rr != null) return rr;
 		}
 		return super.getCellRenderer(row, col);
 	}

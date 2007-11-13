@@ -129,11 +129,11 @@ public void setValue(Object o)
 	if (val == o && val != null) return;		// This was called multiple times; ignore
 	Object oldVal = val;
 	val = o;
-	if (val == null) setText(sformat.getNullText());
-	else {
-//if (formatter == null) {
-//	System.out.println("hoi formatter is null");
-//}
+//	if (val == null) setText(sformat.getNullText());
+//	else {
+////if (formatter == null) {
+////	System.out.println("hoi formatter is null");
+////}
 		try {
 //System.out.println(getColName());
 			String text = sformat.valueToString(val);
@@ -142,7 +142,7 @@ public void setValue(Object o)
 		} catch(java.text.ParseException e) {
 			setText("<parseException>");
 		}
-	}
+//	}
 	this.firePropertyChange("value", oldVal, val);
 }
 public Object getValue()

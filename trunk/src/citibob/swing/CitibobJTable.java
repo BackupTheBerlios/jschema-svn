@@ -101,7 +101,7 @@ public void setRenderEdit(int colNo, Swinger swinger)
 public void setRenderEdit(int colNo, KeyedModel kmodel)
 {
 	setRenderEdit(colNo,
-		new TypedWidgetRenderEdit(new JKeyedComboBox(kmodel)));
+		new KeyedRenderEdit(kmodel));
 }
 
 /** Sets a renderer and editor pair at once, for a column. */

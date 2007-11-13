@@ -44,13 +44,14 @@ String nullText;
 /** Creates a new instance of KeyedFormatter */
 public StringSFormat(int limit, String nullText) {
 	this.limit = limit;
+	this.nullText = nullText;
 }
 public String getNullText() { return nullText; }
 
 public StringSFormat()
 	{ this(-1, ""); }
 
-public void setNullText(String s) { nullText = s; }
+//public void setNullText(String s) { nullText = s; }
 
 /** Not to be used */
 public Object stringToValue(String text)

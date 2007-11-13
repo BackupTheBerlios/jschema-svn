@@ -71,7 +71,15 @@ public JType getJType() { return jType; }
  renderer and editor is desired, just return null.  Normally, this will
  just return new TypedWidgetRenderEdit(newTypedWidget()) */
 public RenderEdit newRenderEdit()
-	{ return new TypedWidgetRenderEdit(newWidget(), getSFormat(), renderWithWidget); }
+{
+	TableCellRenderer rendererNotEditable = new SFormatRenderer(sformat);
+	TableCellRenderer rendererEditable =
+		(renderWithWidget ? new TypedWidgetRenderer(newWidget()) : rendererNotEditable);
+	TableCellEditor editor = new TypedWidgetEditor(newWidget());
+	return new DefaultRenderEdit(rendererNotEditable, rendererEditable, editor);
+//	return new DefaultRenderEdit(rendererNotEditable, rendererEditable, editor);
+//	return new TypedWidgetRenderEdit(newWidget(), getSFormat(), renderWithWidget);
+}
 
 
 // -------------------------------------------------------------------

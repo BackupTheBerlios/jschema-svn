@@ -102,24 +102,27 @@ public void setJType(JDateType jt, DateSFormat sformat, JCalendar jcal)
 //	cmod = new CalModel(jType);
 
 	// Configure sub-components
-	jcal.setModel(cmod);
 	dtfield.setJType(jType, sformat, cmod);
-
 	cmod.addListener(this);
 
 	// Configure popup to display the chosen JCalendar.
-	popup = new JPopupMenu();
-	popup.setLightWeightPopupEnabled(true);
-	popup.add((java.awt.Component)jcal);
+	if (jcal != null) {
+		jcal.setModel(cmod);
+		popup = new JPopupMenu();
+		popup.setLightWeightPopupEnabled(true);
+		popup.add((java.awt.Component)jcal);
+	}
 }
 void popupHide()
 {
+	if (popup == null) return;
 //System.out.println("Hiding Popup");
 	myPopupState = false;
 	popup.setVisible(false);
 }
 void popupShow()
 {
+	if (popup == null) return;
 	// Un-set null if null is set
 	if (cmod.isNull()) cmod.setNull(false);
 

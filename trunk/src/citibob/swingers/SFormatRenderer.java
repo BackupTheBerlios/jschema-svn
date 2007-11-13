@@ -58,7 +58,7 @@ extends DefaultTableCellRenderer
 		try {
 			setText(sfmt.valueToString(o));
 		} catch(java.text.ParseException e) {
-			setText(e.toString());		// Should not happen
+			setText("x" + e.toString());		// Should not happen
 		}
 	}
 }
