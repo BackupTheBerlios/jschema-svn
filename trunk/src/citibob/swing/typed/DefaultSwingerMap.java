@@ -72,16 +72,19 @@ public Swinger newSwinger(JType t)
 	// Java Class (for JavaJType)
 	Class klass = t.getClass();
 	if (klass == JavaJType.class) klass = ((JavaJType) t).getObjClass();
+System.err.println("newSwinger: " + klass);
 
 	Maker m = null;
 	for (;;) {
+System.err.println("     trying: " + klass);
 		m = (Maker)makerMap.get(klass);
 		if (m != null) break;
 		klass = klass.getSuperclass();
-		if (klass == Object.class) break;
+		if (klass == null || klass == Object.class) break;
 	}
 	if (m != null) return m.newSwinger(t);
-	
+System.err.println("Failed to find a swinger");
+
 	return null;
 }
 

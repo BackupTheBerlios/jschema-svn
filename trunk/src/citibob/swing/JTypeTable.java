@@ -78,6 +78,9 @@ public class JTypeTable extends CitibobJTable
 	}
 	public Swinger.RenderEdit getRenderEdit(int row, int col)
 	{
+if (row == 6 && col == 3) {
+	System.out.println("hoi");
+}
 		if (smap == null) return null;
 		
 		JTypeTableModel mod = (JTypeTableModel)getModel();
@@ -87,14 +90,18 @@ public class JTypeTable extends CitibobJTable
 		// See if we have cached a RenderEdit for this type
 		boolean editable = mod.isCellEditable(row, col);
 		Swinger.RenderEdit re = (Swinger.RenderEdit)reMap.get(jType);
-		if (re != null) return re;
+		if (re != null || reMap.containsKey(jType)) return re;
 		
 		// Get the swinger to make us a new RenderEdit
 		Swinger swinger = smap.newSwinger(jType);
-		if (swinger == null) return null;
-		re = swinger.newRenderEdit();
-		reMap.put(jType, re);
+		if (swinger == null) {
+			reMap.put(jType, re);		// avoid requrerying later
+			return null;
+		} else {
+			re = swinger.newRenderEdit();
+			reMap.put(jType, re);
 System.out.println("New RenderEdit: " + jType + " --> " + re);
-		return re;
+			return re;
+		}
 	}
 }

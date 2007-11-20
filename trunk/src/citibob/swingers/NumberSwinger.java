@@ -41,8 +41,15 @@ public NumberSwinger(JType jType, NumberFormat nf)
 public javax.swing.JFormattedTextField.AbstractFormatter newAbsFormatter()
 {
 	FormatSFormat sfmt = (FormatSFormat)getSFormat();
-	NumberFormatter nff = new NumberFormatter((NumberFormat)sfmt.getFormat());
+	NumberFormat nf = (NumberFormat)sfmt.getFormat();
+	NumberFormatter nff = newNumberFormatter(nf);
 	return nff;
+}
+
+/** Override as needed */
+protected NumberFormatter newNumberFormatter(NumberFormat fmt)
+{
+	return new NumberFormatter(fmt);
 }
 
 

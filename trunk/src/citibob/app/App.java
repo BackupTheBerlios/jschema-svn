@@ -27,55 +27,67 @@ import javax.mail.internet.*;
 import citibob.jschema.*;
 import citibob.swing.prefs.*;
 
-public interface App
+public abstract class App
 {
 
-public Properties getProps();
-public ConnPool getPool();
-public ExpHandler getExpHandler();
-/** Allow to log all database changes */
-public citibob.jschema.log.QueryLogger getLogger();
+// =================================================================
+// Configuration, Properts and Preferences
 /** Directory containing configuration files, etc. for this application. */
-public java.io.File getConfigDir();
+public java.io.File getConfigDir() { return null; }
+/** Gets properties loaded from an application configuration file. */
+public Properties getProps() { return null; }
+public SwingPrefs getSwingPrefs() { return null; }
+public void setUserPrefs(java.awt.Component c, String base)
+	{ getSwingPrefs().setPrefs(c, userRoot().node(base)); }
 
-/** Runs an action started from a specific Swing component. */
-public void runGui(java.awt.Component c, CBRunnable r);
-/** Only runs the action if logged-in user is a member of the correct group */
-public void runGui(java.awt.Component c, String permissionGroup, CBRunnable r);
-public void runGui(java.awt.Component c, String[] permissionGroups, CBRunnable r);
-public void runApp(CBRunnable r);
-//public ActionRunner getGuiRunner();
-public ActionRunner getAppRunner();		// Useful for some things that need it.
-public MailSender getMailSender();
-public SwingerMap getSwingerMap();
-public SwingPrefs getSwingPrefs();
-public void setUserPrefs(java.awt.Component c, String base);
-public citibob.text.SFormatMap getSFormatMap();
-public SchemaSet getSchemaSet();
-public Schema getSchema(String name);	// Get schema by name
-public citibob.reports.Reports getReports();
-
-/** Get default conversion between database types and SqlType objects */
-public citibob.sql.SqlTypeSet getSqlTypeSet();
 /** @returns Root user preferences node for this application */
-public java.util.prefs.Preferences userRoot();
+public java.util.prefs.Preferences userRoot() { return null; }
 
 /** @returns Root system preferences node for this application */
-public java.util.prefs.Preferences systemRoot();
+public java.util.prefs.Preferences systemRoot() { return null; }
+// =================================================================
+// Connection Pools, Exception Handlers and Runners
+/** Connection pool of the default database */
+public ConnPool getPool() { return null; }
 
-public TimeZone getTimeZone();
+/** Handler for all unhandled exceptions */
+public ExpHandler getExpHandler() { return null; }
 
-//protected ConnPool pool;
-//protected SwingerMap swingerMap;
-//protected ActionRunner guiRunner;		// Run user-initiated actions; when user hits button, etc.
-//	// This will put on queue, etc.
-//protected ActionRunner appRunner;		// Run secondary events, in response to other events.  Just run immediately
-//protected MailSender mailSender;	// Way to send mail (TODO: make this class MVC.)
-// -------------------------------------------------------
-//public ConnPool getPool() { return pool; }
-//public ActionRunner getGuiRunner() { return guiRunner; }
-//public ActionRunner getAppRunner() { return appRunner; }
-//public MailSender getMailSender() { return mailSender; }
-//public SwingerMap getSwingerMap() { return swingerMap; }
+public ActionRunner getAppRunner() { return null; }		// Useful for some things that need it.
+
+protected ActionRunner getGuiRunner() { return null; }
+/** Runs an action started from a specific Swing component. */
+public void runGui(java.awt.Component c, CBRunnable r)
+	{ getGuiRunner().doRun(r); }
+public void runApp(CBRunnable r)
+	{ getAppRunner().doRun(r); }
+
+/** Only runs the action if logged-in user is a member of the correct group */
+public void runGui(java.awt.Component c, String permissionGroup, CBRunnable r) {  }
+public void runGui(java.awt.Component c, String[] permissionGroups, CBRunnable r) {  }
+// ============================================================================
+// Type conversions, Swingers, SFormats
+protected SchemaSet getSchemaSet() { return null; }
+public Schema getSchema(String name)
+	{ return getSchemaSet().get(name); }
+
+public SwingerMap getSwingerMap() { return null; }
+public citibob.text.SFormatMap getSFormatMap() { return null; }
+/** Get default conversion between database types and SqlType objects */
+public citibob.sql.SqlTypeSet getSqlTypeSet() { return null; }
+// ============================================================================
+// Misc
+/** Allow to log all database changes */
+public citibob.jschema.log.QueryLogger getLogger() { return null; }
+
+public MailSender getMailSender() { return null; }
+
+/** Object for report generation */
+public citibob.reports.Reports getReports() { return null; }
+
+/** Default time zone for desktop application */
+public TimeZone getTimeZone() { return null; }
+
+// =======================================================================
 
 }

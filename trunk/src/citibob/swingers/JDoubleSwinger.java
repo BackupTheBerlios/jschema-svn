@@ -31,26 +31,21 @@ import citibob.text.*;
  *
  * @author citibob
  */
-public class JIntegerSwinger extends NumberSwinger
+public class JDoubleSwinger extends NumberSwinger
 {
 
-//public JIntegerSwinger(JType jType)
-//	{ this(jType, NumberFormat.getIntegerInstance()); }
-//public JIntegerSwinger(JType jType, NumberFormat nf)
-//	{ super(jType, nf); }
-
-public JIntegerSwinger(boolean nullable, NumberFormat nf)
-	{super(new JavaJType(Integer.class, nullable), nf); }
-public JIntegerSwinger(boolean nullable)
-	{ this(nullable, NumberFormat.getIntegerInstance()); }
-public JIntegerSwinger()
-	{ this(true); }
+public JDoubleSwinger(boolean nullable, NumberFormat nf)
+	{super(new JavaJType(Double.class, nullable), nf); }
+public JDoubleSwinger(boolean nullable, String fmtString)
+	{ this(nullable, new DecimalFormat(fmtString)); }
+public JDoubleSwinger()
+	{ this(true, "#.0000"); }
 
 protected NumberFormatter newNumberFormatter(NumberFormat fmt) {
 return new NumberFormatter(fmt) {
 public Object stringToValue(String text) throws java.text.ParseException {
 	Number n = (Number)super.stringToValue(text);
-	return new Integer(n.intValue());
+	return new Double(n.doubleValue());
 }};}
 
 }

@@ -16,27 +16,40 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
- * SFormat.java
+ * KeyedFormatter.java
  *
- * Created on February 26, 2007, 12:46 AM
+ * Created on March 18, 2006, 4:37 PM
  *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
+ * To change this template, choose Tools | Options and locate the template under
+ * the Source Creation and Management node. Right-click the template and choose
+ * Open. You can then make changes to the template in the Source Editor.
  */
 
 package citibob.text;
 
+import citibob.types.KeyedModel;
+import javax.swing.*;
+import java.util.*;
+
 /**
- * SFormat = Simple Format or String Format.  A subset of the JFormattedTextString.AbstractFormatter functionality.
+ *
  * @author citibob
  */
-public interface SFormat
+public class TimeZoneSFormat extends AbstractSFormat
 {
-	public Object stringToValue(String text) throws java.text.ParseException;
-	public String valueToString(Object value) throws java.text.ParseException;
 
-	/** Should equal valueToString(null); */
-	public String getNullText();
+public TimeZoneSFormat() { super(""); }
 	
-	/** TODO: Add right-or-left justification information here... */
+/** Not to be used */
+public Object stringToValue(String text)
+{
+	if (text == null || nullText.equals(text)) return null;
+	return TimeZone.getTimeZone(text);
+}
+public String  valueToString(Object value)
+{
+	if (value == null) return nullText;
+	TimeZone tz = (TimeZone)value;
+	return tz.getID();
+}
 }

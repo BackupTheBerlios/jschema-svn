@@ -75,6 +75,7 @@ public RenderEdit newRenderEdit()
 	TableCellRenderer rendererNotEditable = new SFormatRenderer(sformat);
 	TableCellRenderer rendererEditable =
 		(renderWithWidget ? new TypedWidgetRenderer(newWidget()) : rendererNotEditable);
+//	TableCellRenderer rendererEditable = rendererNotEditable;
 	TableCellEditor editor = new TypedWidgetEditor(newWidget());
 	return new DefaultRenderEdit(rendererNotEditable, rendererEditable, editor);
 //	return new DefaultRenderEdit(rendererNotEditable, rendererEditable, editor);

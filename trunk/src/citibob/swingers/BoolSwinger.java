@@ -31,26 +31,26 @@ import citibob.text.*;
  *
  * @author citibob
  */
-public class JIntegerSwinger extends NumberSwinger
+public class BoolSwinger extends AbstractSwinger
 {
+static JType boolJType = new JavaJType(Boolean.class);
 
-//public JIntegerSwinger(JType jType)
-//	{ this(jType, NumberFormat.getIntegerInstance()); }
-//public JIntegerSwinger(JType jType, NumberFormat nf)
-//	{ super(jType, nf); }
+public BoolSwinger()
+{
+	super(boolJType, new BoolSFormat(), true);
+}
 
-public JIntegerSwinger(boolean nullable, NumberFormat nf)
-	{super(new JavaJType(Integer.class, nullable), nf); }
-public JIntegerSwinger(boolean nullable)
-	{ this(nullable, NumberFormat.getIntegerInstance()); }
-public JIntegerSwinger()
-	{ this(true); }
 
-protected NumberFormatter newNumberFormatter(NumberFormat fmt) {
-return new NumberFormatter(fmt) {
-public Object stringToValue(String text) throws java.text.ParseException {
-	Number n = (Number)super.stringToValue(text);
-	return new Integer(n.intValue());
-}};}
+/** Just create the widget, do not configure it. */
+protected citibob.swing.typed.TypedWidget createWidget()
+{
+	return new JBoolCheckbox();
+}
+
+/** Override this.  Most swingers don't have to configure their widgets,
+but Swingers for complex widget types do. */
+public void configureWidget(TypedWidget tw) {}
+
+
 
 }

@@ -32,8 +32,9 @@ import citibob.swingers.SqlNumericSwinger;
 import citibob.swing.typed.*;
 import citibob.swing.typed.Swinger;
 import citibob.swing.typed.SwingerMap;
-import citibob.types.JEnum;
-import citibob.types.JType;
+import citibob.types.*;
+import citibob.text.*;
+import java.util.*;
 
 /**
  *
@@ -44,19 +45,47 @@ public class JavaSwingerMap extends DefaultSwingerMap
 
 
 
-public JavaSwingerMap() {
+public JavaSwingerMap()
+{
+Maker maker;
 
 	// =========== Standard Java classes
 	this.addMaker(String.class, new DefaultSwingerMap.Maker() {
-	public Swinger newSwinger(JType sqlType) {
+	public Swinger newSwinger(JType jType) {
 		return new JStringSwinger();
 	}});
-	
-	this.addMaker(Integer.class, new DefaultSwingerMap.Maker() {
-	public Swinger newSwinger(JType sqlType) {
-		return new JIntegerSwinger();
-	}});
 
+	// Integer
+	maker = new DefaultSwingerMap.Maker() {
+	public Swinger newSwinger(JType jType) {
+		return new JIntegerSwinger();
+	}};
+	this.addMaker(Integer.class, maker);
+	this.addMaker(int.class, maker);
+	
+	// Double
+	maker = new DefaultSwingerMap.Maker() {
+	public Swinger newSwinger(JType jType) {
+		return new JDoubleSwinger();
+	}};
+	this.addMaker(Double.class, maker);
+	this.addMaker(double.class, maker);
+
+	// Boolean
+	maker = new DefaultSwingerMap.Maker() {
+	public Swinger newSwinger(JType jType) {
+		return new BoolSwinger();
+	}};
+	this.addMaker(Boolean.class, maker);
+	this.addMaker(boolean.class, maker);
+
+	// ================== Other Java Classes
+	// TimeZone
+	this.addMaker(java.util.TimeZone.class, new DefaultSwingerMap.Maker() {
+	public Swinger newSwinger(JType jType) {
+		return new TypedTextSwinger(new JavaJType(TimeZone.class), new TimeZoneSFormat());
+	}});
+	
 	// =========== JTypes
 	this.addMaker(JEnum.class, new DefaultSwingerMap.Maker() {
 	public Swinger newSwinger(JType jType) {
@@ -66,14 +95,14 @@ public JavaSwingerMap() {
 	// =========== SQL Types
 	// SqlNumeric
 	this.addMaker(SqlNumeric.class, new DefaultSwingerMap.Maker() {
-	public Swinger newSwinger(JType sqlType) {
-		return new SqlNumericSwinger((SqlNumeric)sqlType);
+	public Swinger newSwinger(JType jType) {
+		return new SqlNumericSwinger((SqlNumeric)jType);
 	}});
 	
 	// SqlEnum
 	this.addMaker(SqlEnum.class, new DefaultSwingerMap.Maker() {
-	public Swinger newSwinger(JType sqlType) {
-		return new SqlEnumSwinger((SqlEnum)sqlType);
+	public Swinger newSwinger(JType jType) {
+		return new SqlEnumSwinger((SqlEnum)jType);
 	}});
 	
 }

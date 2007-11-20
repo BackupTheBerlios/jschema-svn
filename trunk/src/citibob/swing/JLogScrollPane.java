@@ -76,9 +76,11 @@ public class JLogScrollPane extends JScrollPane
 					
 //					System.err.println("caret: " + textArea.getCaretPosition() + " " + textArea.getDocument().getLength());
 					int len = textArea.getDocument().getLength();
+//					int scrollVal = getVerticalScrollBar().getValue();
 					if (textArea.getCaretPosition() == len) {
 						textArea.setCaretPosition(len-1);
 					}
+//					getVerticalScrollBar().setValue(scrollVal);
 //					if (textArea.getCaretPosition() >= this.textArea.getDocument().getLength())
 //		this.textArea.setCaretPosition(this.textArea.getDocument().getLength());
 				} else {

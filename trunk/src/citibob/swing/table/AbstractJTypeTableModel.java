@@ -19,7 +19,6 @@ import citibob.types.JType;
 public abstract class AbstractJTypeTableModel extends javax.swing.table.AbstractTableModel
 implements JTypeTableModel
 {
-    
 public Object getValueAt(int row, String col)
 	{ return getValueAt(row, findColumn(col)); }
 public void setValueAt(Object val, int row, String col)
