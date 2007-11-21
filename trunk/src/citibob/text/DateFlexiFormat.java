@@ -37,11 +37,13 @@ public class DateFlexiFormat extends FlexiFormat
 {
 
 public TimeZone getTimeZone()
-{ return ((DateFormat)super.formats[0]).getTimeZone(); }
+{ return ((DateFormat)super.displayFormat).getTimeZone(); }
 
 public DateFlexiFormat(String[] sfmts, TimeZone tz)
+	{ this(sfmts[0], sfmts, tz); }
+public DateFlexiFormat(String displaySfmt, String[] sfmts, TimeZone tz)
 {
-	super(newFormats(sfmts, tz));
+	super(newFormat(displaySfmt, tz), newFormats(sfmts, tz));
 }
 
 public static Format[] newFormats(String[] sfmts, TimeZone tz)

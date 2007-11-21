@@ -34,10 +34,10 @@ import citibob.text.*;
 public class JIntegerSwinger extends NumberSwinger
 {
 
-//public JIntegerSwinger(JType jType)
-//	{ this(jType, NumberFormat.getIntegerInstance()); }
-//public JIntegerSwinger(JType jType, NumberFormat nf)
-//	{ super(jType, nf); }
+public JIntegerSwinger(JType jType)
+	{ this(jType, NumberFormat.getIntegerInstance()); }
+public JIntegerSwinger(JType jType, NumberFormat nf)
+	{ super(jType, nf); }
 
 public JIntegerSwinger(boolean nullable, NumberFormat nf)
 	{super(new JavaJType(Integer.class, nullable), nf); }
@@ -47,10 +47,14 @@ public JIntegerSwinger()
 	{ this(true); }
 
 protected NumberFormatter newNumberFormatter(NumberFormat fmt) {
-return new NumberFormatter(fmt) {
-public Object stringToValue(String text) throws java.text.ParseException {
-	Number n = (Number)super.stringToValue(text);
-	return new Integer(n.intValue());
-}};}
+	NumberFormatter nff = new NumberFormatter(fmt);
+	nff.setValueClass(Integer.class);
+	return nff;
+}
+//return new NumberFormatter(fmt) {
+//public Object stringToValue(String text) throws java.text.ParseException {
+//	Number n = (Number)super.stringToValue(text);
+//	return new Integer(n.intValue());
+//}};}
 
 }

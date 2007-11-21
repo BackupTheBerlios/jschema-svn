@@ -78,9 +78,6 @@ public class JTypeTable extends CitibobJTable
 	}
 	public Swinger.RenderEdit getRenderEdit(int row, int col)
 	{
-if (row == 6 && col == 3) {
-	System.out.println("hoi");
-}
 		if (smap == null) return null;
 		
 		JTypeTableModel mod = (JTypeTableModel)getModel();

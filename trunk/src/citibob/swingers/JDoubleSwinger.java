@@ -39,13 +39,19 @@ public JDoubleSwinger(boolean nullable, NumberFormat nf)
 public JDoubleSwinger(boolean nullable, String fmtString)
 	{ this(nullable, new DecimalFormat(fmtString)); }
 public JDoubleSwinger()
-	{ this(true, "#.0000"); }
+{
+	this(true, "#.0000");
+}
 
 protected NumberFormatter newNumberFormatter(NumberFormat fmt) {
-return new NumberFormatter(fmt) {
-public Object stringToValue(String text) throws java.text.ParseException {
-	Number n = (Number)super.stringToValue(text);
-	return new Double(n.doubleValue());
-}};}
+	NumberFormatter nff = new NumberFormatter(fmt);
+	nff.setValueClass(Double.class);
+	return nff;
+}
+//return new NumberFormatter(fmt) {
+//public Object stringToValue(String text) throws java.text.ParseException {
+//	Number n = (Number)super.stringToValue(text);
+//	return new Double(n.doubleValue());
+//}};}
 
 }

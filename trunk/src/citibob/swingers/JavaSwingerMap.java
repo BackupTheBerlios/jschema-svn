@@ -32,9 +32,11 @@ import citibob.swingers.SqlNumericSwinger;
 import citibob.swing.typed.*;
 import citibob.swing.typed.Swinger;
 import citibob.swing.typed.SwingerMap;
+import java.text.DecimalFormat;
 import citibob.types.*;
 import citibob.text.*;
 import java.util.*;
+import java.text.*;
 
 /**
  *
@@ -66,7 +68,11 @@ Maker maker;
 	// Double
 	maker = new DefaultSwingerMap.Maker() {
 	public Swinger newSwinger(JType jType) {
-		return new JDoubleSwinger();
+//		DecimalFormat fmt = new DecimalFormat("#");
+//		fmt.setPositiveSuffix("m");
+//		fmt.setNegativeSuffix("m");
+		return new TypedTextSwinger(new JavaJType(Double.class), new DivDoubleSFormat());
+//		return new JDoubleSwinger(true, fmt);
 	}};
 	this.addMaker(Double.class, maker);
 	this.addMaker(double.class, maker);

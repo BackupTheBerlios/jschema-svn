@@ -24,16 +24,20 @@ When parsing, each Format is tried in turn until there's a success.  For formatt
 PREFERRED (first) formatter is always used. */
 public class FlexiFormat extends Format
 {
+	Format displayFormat;	// The format we'll use to display
 	Format[] formats;		// The formats we'll use to try to parse
-	public FlexiFormat(Format[] formats) {
+	public FlexiFormat(Format[] formats)
+		{ this(formats[0], formats); }
+	public FlexiFormat(Format displayFormat, Format[] formats) {
 		this.formats = formats;
+		this.displayFormat = displayFormat;
 	}
 	public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos)
 	{
-		return formats[0].format(obj, toAppendTo, pos);
+		return displayFormat.format(obj, toAppendTo, pos);
 	}
 	public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
-		return formats[0].formatToCharacterIterator(obj);
+		return displayFormat.formatToCharacterIterator(obj);
 	}
 	public Object parseObject(String source, ParsePosition pos) {
 		for (Format f : formats) {
