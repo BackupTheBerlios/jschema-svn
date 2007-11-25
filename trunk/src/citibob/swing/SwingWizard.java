@@ -104,10 +104,11 @@ protected void runWiz(Wiz wiz) throws Exception
 
 protected boolean reallyCancel() throws Exception
 {
-	int ret = JOptionPane.showConfirmDialog(frame,
-		"Are you sure you wish to cancel the Wizard?",
-		"Really Cancel?", JOptionPane.YES_NO_OPTION);
-	return (ret == JOptionPane.YES_OPTION);
+//	int ret = JOptionPane.showConfirmDialog(frame,
+//		"Are you sure you wish to cancel the Wizard?",
+//		"Really Cancel?", JOptionPane.YES_NO_OPTION);
+//	return (ret == JOptionPane.YES_OPTION);
+	return true;
 }
 
 protected String vsql(Object val, String col, citibob.jschema.Schema schema)

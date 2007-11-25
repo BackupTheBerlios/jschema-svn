@@ -119,7 +119,18 @@ public void setColName(String col) { colName = col; }
 //public Object clone() throws CloneNotSupportedException { return super.clone(); }
 // ---------------------------------------------------
 
-
+/** Non-standard way to access any column of the selected row. */
+public Object getValue(int colU)
+{
+	int selRow = this.getSelectedRow();
+	if (selRow < 0) return null;
+	return getModelU().getValueAt(selRow, colU);
+}
+public Object getValue(String colName)
+{
+	int colU = getModelU().findColumn(colName);
+	return getValue(colU);
+}
 // ================================================================
 // ListSelectionListener
 /** JTable implements ListSelectionListener.  This method overrides that implementation. */

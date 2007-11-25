@@ -67,7 +67,8 @@ public void runGui(java.awt.Component c, String permissionGroup, CBRunnable r) {
 public void runGui(java.awt.Component c, String[] permissionGroups, CBRunnable r) {  }
 // ============================================================================
 // Type conversions, Swingers, SFormats
-protected SchemaSet getSchemaSet() { return null; }
+/** Override this. */
+public SchemaSet getSchemaSet() { return null; }
 public Schema getSchema(String name)
 	{ return getSchemaSet().get(name); }
 

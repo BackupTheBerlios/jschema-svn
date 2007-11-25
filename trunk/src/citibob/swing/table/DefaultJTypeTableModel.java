@@ -36,7 +36,7 @@ public JType getJType(int row, int col)
 /** Overrides built-in JTable method. */
 public Class getColumnClass(int col)
 {
-	return getJType(0, col).getClass();
+	return getJType(0, col).getObjClass();
 }
 // -----------------------------------------------------------
 // ================= Basic convenience functions implemented

@@ -145,7 +145,11 @@ number of well-known types, this is NOT general. */
 public void setRenderEdit(int colNo, String fmtString)
 {
 	Class klass = getModel().getColumnClass(colNo);
-	setRenderEdit(colNo, FormatUtils.newFormat(klass, fmtString));
+	Format fmt = FormatUtils.newFormat(klass, fmtString);
+//if (fmt == null) {
+//	Class klass3 = getModel().getColumnClass(colNo);	
+//}
+	setRenderEdit(colNo, fmt);
 }
 
 /** Sets a renderer and editor pair at once, for a column. */
