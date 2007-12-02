@@ -46,33 +46,13 @@ protected HashMap wizCache;	// Wiz screens are cached through course of a run...
 protected String startState = "start";
 
 protected App app;
-protected String state;
-protected State stateRec;
+protected String stateName;
+protected WizState stateRec;
 protected Wiz wiz;			// The current Wizard for the current state
 protected TypedHashMap v;		// Info we get out of the wizard screens
 protected HashMap states;
 protected String wizardName;
 //protected SqlBatch str;		// Batch SQL queries service used by Wiz constructors & State.process()
-
-protected abstract class State {
-	public String name;		// Name of this Wiz screen.
-	public String back;		// Wiz normally traversed to on back button
-	public String next;
-	public abstract Wiz newWiz(SqlRunner str) throws Exception;	// User implements this
-	/** Runs before the Wiz, even if cached Wiz is being re-used. */
-	public void pre() throws Exception {}
-	/** Runs after the Wiz */
-	public abstract void process(SqlRunner str) throws Exception;
-	
-	public State(String name, String back, String next) {
-		this.name = name;
-		this.back = back;
-		this.next = next;
-	}
-	public State(String name) {
-		this(name, null, null);
-	}
-}
 
 /** Returns output from Wizard. */
 public Object getVal(String name) { return v.get(name); }
@@ -96,9 +76,9 @@ public Wizard(String wizardName, App app, String startState)
 	states = new HashMap();
 }
 
-protected void addState(State st)
+protected void addState(WizState st)
 {
-	states.put(st.name, st);
+	states.put(st.getName(), st);
 }
 
 protected boolean checkFieldsFilledIn()
@@ -107,15 +87,15 @@ protected boolean checkFieldsFilledIn()
 	TypedHashMap m = new TypedHashMap();
 	wiz.getAllValues(m);
 	if (m.containsNull()) {
-		state = stateRec.name;
+		stateName = stateRec.getName();
 		return false;
 	}
 	return true;
 }
 
 /** Override this to post-process wiz after it's created */
-protected Wiz createWiz(State stateRec, SqlRunner xstr) throws Exception {
-	return stateRec.newWiz(xstr);
+protected Wiz createWiz(WizState stateRec, WizState.Context con) throws Exception {
+	return stateRec.newWiz(con);
 }
 
 public TypedHashMap runWizard() throws Exception
@@ -128,26 +108,27 @@ public TypedHashMap runWizard(String startState) throws Exception
 accomplished by Wizard already). */
 public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Exception
 {
-	state = startState;
+	stateName = startState;
 	String prevState = null;
 	String curState;
 	try {
 		v = (xv == null ? new TypedHashMap() : xv);
 		wizCache = new HashMap();
-		for (state = startState; state != null;) {
+		for (stateName = startState; stateName != null;) {
 			SqlBatch str;
 			
 			// ============= Create the Wiz
 			str = new SqlBatch();
-			stateRec = (State)states.get(state);
+			WizState.Context con = new WizState.Context(str, v);
+			stateRec = (WizState)states.get(stateName);
 			if (stateRec == null) return v;		// Fell off the state graph
-			wiz = (Wiz)wizCache.get(state);
+			wiz = (Wiz)wizCache.get(stateName);
 			if (wiz == null) {
-				wiz = createWiz(stateRec, str);
-				if (wiz.getCacheWiz()) wizCache.put(state, wiz);
+				wiz = createWiz(stateRec, con);
+				if (wiz.getCacheWiz()) wizCache.put(stateName, wiz);
 			}
-			curState = state;	// State now becomes (semantically) nextState
-			stateRec.pre();		// Prepare the Wiz...
+			curState = stateName;	// State now becomes (semantically) nextState
+			stateRec.pre(con);		// Prepare the Wiz...
 			str.exec(app.getPool());	// Finish creating Wiz
 
 			// =============== Let user interact with the Wiz
@@ -158,17 +139,18 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 			// Do default navigation; process() can change this.
 			String submit = v.getString("submit");
 	System.out.println("submit = " + submit);
-			if ("next".equals(submit)) state = stateRec.next;
+			if ("next".equals(submit)) stateName = stateRec.getNext();
 			else if ("back".equals(submit)) {
 				// Remove it from the cache so we re-make
 				// it going "forward" in the Wizard
-				if (!wiz.getCacheWizFwd()) wizCache.remove(state);
-				state = (stateRec.back == null ? prevState : stateRec.back);
+				if (!wiz.getCacheWizFwd()) wizCache.remove(stateName);
+				stateName = stateRec.getBack();
+				if (stateName == null) stateName = prevState;
 				continue;
 			} else if ("cancel".equals(submit) && reallyCancel()) break;
 
 			// Do screen-specific processing
-			stateRec.process(str);
+			stateRec.process(con);
 			str.exec(app.getPool());	// Finish processing
 			prevState = curState;
 		}
@@ -177,5 +159,6 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 		wizCache = null;		// Free memory...
 	}
 }
+// =================================================================
 
 }

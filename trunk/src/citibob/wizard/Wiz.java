@@ -32,7 +32,7 @@ package citibob.wizard;
  */
 public interface Wiz
 {
-	
+
 public void setTitle(String title);
 
 /** Should this Wiz screen be cached when "Back" is pressed? */

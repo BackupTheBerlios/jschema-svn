@@ -75,11 +75,11 @@ public SwingWizard(String wizardName, App app, java.awt.Frame frame, String star
 	this.app = app;
 }
 
-public Wiz createWiz(State state, SqlRunner xstr) throws Exception
+public Wiz createWiz(WizState state, WizState.Context con) throws Exception
 {
 	// Overridden to post-process wiz after it's created
-	Wiz wiz = super.createWiz(state, xstr);
-	Preferences wizPref = wizardPref.node(state.name);
+	Wiz wiz = super.createWiz(state, con);
+	Preferences wizPref = wizardPref.node(state.getName());
 	swingPrefs.setPrefs((Component)wiz, "", wizPref);
 	return wiz;
 }
