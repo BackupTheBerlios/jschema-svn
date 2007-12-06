@@ -71,7 +71,7 @@ public java.util.Date getDt(double serialDTime)
 	
 	// Convert to Java...
 	cal.set(Calendar.YEAR, nYear);
-	cal.set(Calendar.MONTH, nMonth);
+	cal.set(Calendar.MONTH, nMonth-1);
 	cal.set(Calendar.DAY_OF_MONTH, nDay);
 	cal.set(Calendar.HOUR_OF_DAY, hour);
 	cal.set(Calendar.MINUTE, minute);
@@ -108,7 +108,7 @@ public double getSerial(java.util.Date dt)
 	cal.setTime(dt);
 	int serialDate = DMYToExcelSerialDate(
 		cal.get(Calendar.DAY_OF_MONTH),
-		cal.get(Calendar.MONTH),
+		cal.get(Calendar.MONTH) + 1,
 		cal.get(Calendar.YEAR));
 	int timeMS =
 		cal.get(Calendar.MILLISECOND) +

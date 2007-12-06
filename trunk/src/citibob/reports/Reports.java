@@ -298,7 +298,7 @@ public void writeCSV(StringTableModel model, Writer out) throws IOException, jav
 	pout.flush();
 }
 // ===================================================================
-public void writeXls(Map<String,TableModel> models,
+public void writeXls(Map<String,Object> models,
 String templateName, File fout)
 throws IOException
 {
@@ -314,7 +314,7 @@ public void writeXls(TableModel model,
 String templateName, File fout)
 throws IOException
 {
-	Map<String,TableModel> models = new TreeMap();
+	Map<String,Object> models = new TreeMap();
 	models.put("rs", model);
 	writeXls(models, templateName, fout);
 }

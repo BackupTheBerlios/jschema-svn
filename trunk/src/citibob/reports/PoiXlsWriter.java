@@ -41,18 +41,30 @@ public PoiXlsWriter(InputStream templateIn, TimeZone displayTZ) throws IOExcepti
 // ----------------------------------------------------------
 // Utility functions to insert and delete rows
 
-public void insertRowsFixup(HSSFSheet sheet, int rowIx, int n)
+/** @param row0 example row to copy when inserting... 
+ Don't do fixup between xrow0 and xrow1, non-inclusive. */
+public void insertRowsFixup(HSSFSheet sheet, int rowIx, int n,
+int row0Ix, int xcol0, int xcol1, int xrow0, int xrow1)
 {
 	sheet.shiftRows(rowIx,sheet.getLastRowNum(),n,true,true);
-	fixupFormulas(sheet, rowIx, n);
+	HSSFRow row0 = sheet.getRow(row0Ix + n);
+	if (row0 != null) {
+		for (int r=rowIx; r < rowIx+n; ++r) {
+			HSSFRow row1 = sheet.createRow(r);
+			copyRow(row0, row1, xcol0, xcol1);
+		}
+	}
+	fixupFormulas(sheet, rowIx, n, xrow0, xrow1);
 }
-public void deleteRowsFixup(HSSFSheet sheet, int rowIx, int n)
+/** Don't do fixup between xrow0 and xrow1, non-inclusive. */
+public void deleteRowsFixup(HSSFSheet sheet, int rowIx, int n, int xrow0, int xrow1)
 {
 	sheet.shiftRows(rowIx+n,sheet.getLastRowNum(),-n,true,true);
-	fixupFormulas(sheet, rowIx, -n);
+	fixupFormulas(sheet, rowIx, -n, xrow0, xrow1);
 }
 
-public void fixupFormulas(HSSFSheet sheet, int rowIx, int n)
+/** Don't do fixup between xrow0 and xrow1, non-inclusive. */
+public void fixupFormulas(HSSFSheet sheet, int rowIx, int n, int xrow0, int xrow1)
 {
 //System.out.println("--------- fixupFormulas(" + rowIx + "," + n + ")");
 	int prows = sheet.getPhysicalNumberOfRows();
@@ -61,7 +73,7 @@ public void fixupFormulas(HSSFSheet sheet, int rowIx, int n)
 		HSSFRow row = sheet.getRow(r);
 		if (row == null) continue;
 		++pr;
-		
+				
 		int pcells = row.getPhysicalNumberOfCells();
 		int pc = 0;
 		for (int c=0; pc<pcells; ++c) {
@@ -88,7 +100,11 @@ public void fixupFormulas(HSSFSheet sheet, int rowIx, int n)
 					}
 				} else if (pi instanceof ReferencePtg) {
 					ReferencePtg pp = (ReferencePtg)pi;
-					if (pp.getRow() >= rowIx) pp.setRow((short)(pp.getRow() + n));
+					if (r >= xrow0 && r < xrow1) {
+						pp.setRow((short)(r));
+					} else if (pp.getRow() >= rowIx) {
+						pp.setRow((short)(pp.getRow() + n));
+					}
 				}
 			}
 			
@@ -103,7 +119,7 @@ public void fixupFormulas(HSSFSheet sheet, int rowIx, int n)
 
 
 /** Creates a new instance of PoiTest */
-public void replaceHolders(java.util.Map<String,TableModel> models)
+public void replaceHolders(java.util.Map<String,Object> models)
 //throws Exception
 {
 	for (int k = 0; k < wb.getNumberOfSheets(); k++) {
@@ -133,59 +149,142 @@ System.out.println(r + ", " + pr + ", " + prows);
 				if (!value.startsWith("${")) continue;
 				String rsname = value.substring(2,value.length()-1);
 			
-				// Do the replacement
-				TableModel mod = (models.size() == 1
-					? models.values().iterator().next()
-					: models.get(rsname));
-				r += replaceOneHolder(sheet, r, c, mod);
-				break;		// We just deleted the whole line!
+				int n = replaceOneHolder(sheet, r, c, models, rsname);
+				if (n > 0) {
+					r += n;
+					break;		// We just deleted the whole line!
+				}
 			}
 		}
 	}
 }
 
+void copyCellFormatting(HSSFCell c0, HSSFCell c1)
+{
+	if (c0.getCellComment() != null) c1.setCellComment(c0.getCellComment());
+//	c1.setCellNum(c0.getCellNum());
+	if (c0.getCellStyle() != null) c1.setCellStyle(c0.getCellStyle());
+}
+void copyCell(HSSFCell c0, HSSFCell c1)
+{
+	copyCellFormatting(c0, c1);
+	c1.setCellType(c0.getCellType());
+	switch(c0.getCellType()) {
+		case HSSFCell.CELL_TYPE_STRING :
+			c1.setCellValue(c0.getRichStringCellValue());
+		break;
+		case HSSFCell.CELL_TYPE_NUMERIC :
+			c1.setCellValue(c0.getNumericCellValue());
+		break;
+		case HSSFCell.CELL_TYPE_FORMULA :
+			c1.setCellFormula(c0.getCellFormula());
+		break;
+		case HSSFCell.CELL_TYPE_BOOLEAN :
+			c1.setCellValue(c0.getBooleanCellValue());
+		break;
+		case HSSFCell.CELL_TYPE_ERROR :
+			c1.setCellErrorValue(c0.getErrorCellValue());
+		break;
+	}
+}
+
+/** Only copies formatting from col0 to col1, non-inclusive. */
+void copyRow(HSSFRow r0, HSSFRow r1, int col0, int col1)
+{
+	// Clear r1
+	int pcells = r1.getPhysicalNumberOfCells();
+	int pc = 0;
+	for (int c=0; pc<pcells; ++c) {
+		HSSFCell c1  = r1.getCell((short)c);
+		if (c1 == null) continue;
+		++pc;
+		r1.removeCell(c1);
+	}
+	
+	// Copy over cells from r0
+	pcells = r0.getPhysicalNumberOfCells();
+	pc = 0;
+	for (int c=0; pc<pcells; ++c) {
+		HSSFCell c0 = r0.getCell((short)c);
+		if (c0 == null) continue;
+		++pc;
+		HSSFCell c1 = r1.createCell((short)c);
+		if (c >= col0 && c < col1) copyCellFormatting(c0, c1);
+		else copyCell(c0, c1);
+	}
+}
+
+int replaceOneHolder(HSSFSheet sheet, int row, int col, Map<String,Object> models, String rsname)
+{
+	// Do the replacement
+	Object mod = (models.size() == 1
+		? models.values().iterator().next()
+		: models.get(rsname));
+	if (mod == null) return 0;
+	if (mod instanceof TableModel) return replaceOneHolder(sheet, row, col, (TableModel)mod);
+	
+	// It's just a simple item; put it in
+	HSSFRow row0 = sheet.getRow(row);
+	HSSFCell c0 = row0.getCell((short)col);
+	HSSFComment comment = c0.getCellComment();
+	HSSFCellStyle style = c0.getCellStyle();
+	row0.removeCell(c0);
+	HSSFCell c1 = row0.createCell((short)col);
+	if (comment != null) c1.setCellComment(comment);
+	if (style != null) c1.setCellStyle(style);
+	setValue(c1, mod);
+	return 0;
+}
 /** @returns net number of rows inserted */
 int replaceOneHolder(HSSFSheet sheet, int row, int col, TableModel mod)
 {
 	int n = mod.getRowCount();
 	
 	// Set up proper number of rows
-	insertRowsFixup(sheet, row,n);
-	deleteRowsFixup(sheet, row+n,1);
+	insertRowsFixup(sheet, row,n, row, col,
+		col + mod.getColumnCount(), row, row + mod.getRowCount());
+	HSSFRow r0 = sheet.getRow(row+n);		// Our model row
 	
 	// Fill in the data, iterating through the model...
 	for (int r=0; r<mod.getRowCount(); ++r) {
 System.out.println("r=" + r);
-		HSSFRow r2 = sheet.createRow(row + r);
+		HSSFRow r2 = sheet.getRow(row + r);
+		if (r2 == null) r2 = sheet.createRow(row + r);
 
 		for (int c=0; c<mod.getColumnCount(); ++c) {
 System.out.println("  c=" + c);
-			HSSFCell c2 = r2.createCell((short)(col + c));
+			HSSFCell c2 = r2.getCell((short)(col + c));
+			if (c2 == null) c2 = r2.createCell((short)(col + c));
 			Object val = mod.getValueAt(r,c);
-			
-			// Poor man's convert to Excel data types
-			if (val instanceof java.util.Date) {
-				c2.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-				c2.setCellValue(xlserial.getSerial((java.util.Date)val));
-			} else if (val instanceof Number) {
-				c2.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-				c2.setCellValue(((Number)val).doubleValue());
-			} else if (val instanceof Boolean) {
-				c2.setCellType(HSSFCell.CELL_TYPE_BOOLEAN);
-				c2.setCellValue(((Boolean)val).booleanValue());
-			} else {
-				// Assume a String
-				if (val == null) {
-					c2.setCellType(HSSFCell.CELL_TYPE_BLANK);
-				} else {
-					String sval = val.toString();
-					c2.setCellType(HSSFCell.CELL_TYPE_STRING);
-					c2.setCellValue(new HSSFRichTextString(sval));
-				}
-			}
+			setValue(c2, val);
 		}
 	}
+	deleteRowsFixup(sheet, row+n,1,0,0);
 	return n-1;
+}
+
+void setValue(HSSFCell c2, Object val)
+{
+	// Poor man's convert to Excel data types
+	if (val instanceof java.util.Date) {
+		c2.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+		c2.setCellValue(xlserial.getSerial((java.util.Date)val));
+	} else if (val instanceof Number) {
+		c2.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+		c2.setCellValue(((Number)val).doubleValue());
+	} else if (val instanceof Boolean) {
+		c2.setCellType(HSSFCell.CELL_TYPE_BOOLEAN);
+		c2.setCellValue(((Boolean)val).booleanValue());
+	} else {
+		// Assume a String
+		if (val == null) {
+			c2.setCellType(HSSFCell.CELL_TYPE_BLANK);
+		} else {
+			String sval = val.toString();
+			c2.setCellType(HSSFCell.CELL_TYPE_STRING);
+			c2.setCellValue(new HSSFRichTextString(sval));
+		}
+	}	
 }
 
 
