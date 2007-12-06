@@ -32,6 +32,6 @@ public abstract class AbstractWizState implements WizState
 		this(name, null, null);
 	}
 	/** Runs before the Wiz, even if cached Wiz is being re-used. */
-	public void pre(Context con) throws Exception {}
+	public void pre(Wizard.Context con) throws Exception {}
 
 }

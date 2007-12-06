@@ -29,6 +29,11 @@ public DefaultJTypeTableModel(Object[][] data, Object[] columnNames, JType[] jTy
 	super(data, columnNames);
 	this.jTypes = jTypes;
 }
+public DefaultJTypeTableModel(Object[] columnNames, JType[] jTypes, int rowCount)
+{
+	super(columnNames, rowCount);
+	this.jTypes = jTypes;
+}
 public JType getJType(int row, int col)
 {
 	return jTypes[col];
@@ -41,6 +46,7 @@ public Class getColumnClass(int col)
 // -----------------------------------------------------------
 // ================= Basic convenience functions implemented
 public DefaultJTypeTableModel() { super(); }
+/** Use this if you're going to subclass getJType(). */
 public DefaultJTypeTableModel(String[] colNames, int nrow)
 	{ super(colNames, nrow); }
 public Object getValueAt(int row, String col)

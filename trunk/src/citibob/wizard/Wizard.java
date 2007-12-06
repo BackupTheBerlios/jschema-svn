@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.wizard;
 
 
+import bsh.This;
 import java.util.*;
 import java.sql.*;
 import citibob.sql.*;
@@ -52,6 +53,7 @@ protected Wiz wiz;			// The current Wizard for the current state
 protected TypedHashMap v;		// Info we get out of the wizard screens
 protected HashMap states;
 protected String wizardName;
+protected Navigator navigator;
 //protected SqlBatch str;		// Batch SQL queries service used by Wiz constructors & State.process()
 
 /** Returns output from Wizard. */
@@ -74,6 +76,15 @@ public Wizard(String wizardName, App app, String startState)
 	this.startState = startState;
 	this.app = app;
 	states = new HashMap();
+	navigator = new Navigator() {
+		public String getNext(WizState stateRec) { return stateRec.getNext(); }
+		public String getBack(WizState stateRec) { return stateRec.getBack(); }
+	};
+}
+
+public void setNavigator(Navigator navigator)
+{
+	this.navigator = navigator;
 }
 
 protected void addState(WizState st)
@@ -94,14 +105,25 @@ protected boolean checkFieldsFilledIn()
 }
 
 /** Override this to post-process wiz after it's created */
-protected Wiz createWiz(WizState stateRec, WizState.Context con) throws Exception {
+protected Wiz createWiz(WizState stateRec, Context con) throws Exception {
 	return stateRec.newWiz(con);
+}
+/** Override this to create context for Wiz's and WizState's */
+protected Context newContext() throws Exception
+{
+	return new Context(new SqlBatch(), v);
+}
+/** Write out any buffers in the context when Wiz/State is done with it. */
+protected void finishContext(Context con) throws Exception
+{
+	con.str.exec(app.getPool());
 }
 
 public TypedHashMap runWizard() throws Exception
 {
 	return runWizard(startState, null);
 }
+
 public TypedHashMap runWizard(String startState) throws Exception
 { return runWizard(startState, null); }
 /** Returns the values collected from the Wizard (for any work not
@@ -118,8 +140,7 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 			SqlBatch str;
 			
 			// ============= Create the Wiz
-			str = new SqlBatch();
-			WizState.Context con = new WizState.Context(str, v);
+			Context con = newContext();
 			stateRec = (WizState)states.get(stateName);
 			if (stateRec == null) return v;		// Fell off the state graph
 			wiz = (Wiz)wizCache.get(stateName);
@@ -129,9 +150,10 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 			}
 			curState = stateName;	// State now becomes (semantically) nextState
 			stateRec.pre(con);		// Prepare the Wiz...
-			str.exec(app.getPool());	// Finish creating Wiz
-
+			finishContext(con);
+			
 			// =============== Let user interact with the Wiz
+			con = newContext();
 			str = new SqlBatch();
 			runWiz(wiz);
 			wiz.getAllValues(v);
@@ -139,19 +161,19 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 			// Do default navigation; process() can change this.
 			String submit = v.getString("submit");
 	System.out.println("submit = " + submit);
-			if ("next".equals(submit)) stateName = stateRec.getNext();
+			if ("next".equals(submit)) stateName = navigator.getNext(stateRec);
 			else if ("back".equals(submit)) {
 				// Remove it from the cache so we re-make
 				// it going "forward" in the Wizard
 				if (!wiz.getCacheWizFwd()) wizCache.remove(stateName);
-				stateName = stateRec.getBack();
+				stateName = navigator.getBack(stateRec);
 				if (stateName == null) stateName = prevState;
 				continue;
 			} else if ("cancel".equals(submit) && reallyCancel()) break;
 
 			// Do screen-specific processing
 			stateRec.process(con);
-			str.exec(app.getPool());	// Finish processing
+			finishContext(con);
 			prevState = curState;
 		}
 		return v;
@@ -160,5 +182,17 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 	}
 }
 // =================================================================
-
+public static class Context {
+	public SqlBatch str;		// Access to database
+	public TypedHashMap v;		// Values passed around	
+	public Context(SqlBatch str, TypedHashMap v) {
+		this.str = str;
+		this.v = v;
+	}
+}
+public static interface Navigator
+{
+	public String getNext(WizState stateRec);
+	public String getBack(WizState stateRec);
+}
 }

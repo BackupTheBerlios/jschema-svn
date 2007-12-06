@@ -9,23 +9,18 @@
 
 package citibob.reports;
 
-import citibob.reports.StringTableModel;
-import citibob.swing.typed.*;
 import citibob.swing.table.*;
-import citibob.jschema.*;
 import javax.swing.*;
 import java.io.*;
 import java.util.*;
 import citibob.text.*;
 import com.Ostermiller.util.*;
-import citibob.reports.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.*;
-import net.sf.jasperreports.engine.xml.JRXmlWriter;
 import net.sf.jasperreports.engine.util.*;
-import net.sf.jooreports.templates.*;
 import citibob.sql.*;
 import java.sql.*;
+import javax.swing.table.TableModel;
 
 public abstract class Reports {
 
@@ -302,10 +297,25 @@ public void writeCSV(StringTableModel model, Writer out) throws IOException, jav
 	}
 	pout.flush();
 }
-
-
-
-
-
-
+// ===================================================================
+public void writeXls(Map<String,TableModel> models,
+String templateName, File fout)
+throws IOException
+{
+	InputStream reportIn = openTemplateFile(templateName);
+	PoiXlsWriter poiw = new PoiXlsWriter(reportIn, app.getTimeZone());
+System.out.println("AA1");
+	poiw.replaceHolders(models);
+System.out.println("AA2");
+	poiw.writeSheet(fout);
+System.out.println("AA3");
+}
+public void writeXls(TableModel model,
+String templateName, File fout)
+throws IOException
+{
+	Map<String,TableModel> models = new TreeMap();
+	models.put("rs", model);
+	writeXls(models, templateName, fout);
+}
 }
