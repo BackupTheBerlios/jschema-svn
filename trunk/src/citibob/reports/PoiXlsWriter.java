@@ -101,7 +101,7 @@ public void fixupFormulas(HSSFSheet sheet, int rowIx, int n, int xrow0, int xrow
 				} else if (pi instanceof ReferencePtg) {
 					ReferencePtg pp = (ReferencePtg)pi;
 					if (r >= xrow0 && r < xrow1) {
-						pp.setRow((short)(r));
+						if (pp.getRow() <= r && pp.isRowRelative()) pp.setRow((short)(r + pp.getRow() - rowIx));
 					} else if (pp.getRow() >= rowIx) {
 						pp.setRow((short)(pp.getRow() + n));
 					}

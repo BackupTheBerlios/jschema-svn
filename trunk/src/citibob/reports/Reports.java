@@ -118,6 +118,21 @@ public static Map toJodMap(String[] names, List[] lists)
 	return map;
 }
 // ===================================================================
+/** If fout is null, creates a temporary file name to use as output.
+ @param ext filename extension to create (without the dot) */
+File correctFile(String templateName, String ext, File fout)
+throws IOException
+{
+	if (fout != null) return fout;
+
+	// Create a temporary file if needed
+	int dot = templateName.lastIndexOf('.');
+	String outBase = templateName.substring(0, dot);
+	fout = File.createTempFile(outBase, "." + ext);
+	fout.deleteOnExit();
+	return fout;
+}
+
 /** Writes a bunch of JodReports, using template once per item in the list.
  @param fout File for output; null if we should create a temporary file.
  @returns Null if no pages generated, otherwise file they're written in. */
@@ -126,16 +141,11 @@ throws IOException, InterruptedException,
 net.sf.jooreports.templates.DocumentTemplateException,
 com.lowagie.text.DocumentException
 {
-	// Create a temporary file if needed
 	String outExt = "pdf";
 	int dot = templateName.lastIndexOf('.');
-	String outBase = templateName.substring(0, dot);
 	String inExt = templateName.substring(dot+1);
-	if (fout == null) {
-		fout = File.createTempFile(outBase, "." + outExt);
-		fout.deleteOnExit();
-	}
-	
+
+	fout = correctFile(templateName, outExt, fout);
 	JodPdfWriter jout = new JodPdfWriter(oofficeExe,
 		new FileOutputStream(fout), outExt);
 	try {
@@ -298,24 +308,36 @@ public void writeCSV(StringTableModel model, Writer out) throws IOException, jav
 	pout.flush();
 }
 // ===================================================================
-public void writeXls(Map<String,Object> models,
+public File writeXls(Map<String,Object> models,
 String templateName, File fout)
 throws IOException
 {
+	fout = correctFile(templateName, "xls", fout);
+	
 	InputStream reportIn = openTemplateFile(templateName);
+System.out.println("writeXls: reportIn = " + reportIn);
 	PoiXlsWriter poiw = new PoiXlsWriter(reportIn, app.getTimeZone());
 System.out.println("AA1");
 	poiw.replaceHolders(models);
 System.out.println("AA2");
 	poiw.writeSheet(fout);
 System.out.println("AA3");
+	return fout;
 }
-public void writeXls(TableModel model,
+public File writeXls(TableModel model,
 String templateName, File fout)
 throws IOException
 {
 	Map<String,Object> models = new TreeMap();
 	models.put("rs", model);
-	writeXls(models, templateName, fout);
+	return writeXls(models, templateName, fout);
 }
+
+public void viewXls(Map<String,Object> models, String templateName)
+throws IOException
+{
+	File f = writeXls(models, templateName, null);
+	citibob.gui.BareBonesXls.view(f);
+}
+
 }
