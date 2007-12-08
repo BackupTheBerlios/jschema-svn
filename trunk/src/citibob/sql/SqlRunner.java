@@ -36,18 +36,20 @@ import java.util.*;
  */
 public interface SqlRunner {
 
-/** Adds SQL to the batch --- multiple ResultSets returned, and it can create
+/** Adds SQL to the next batch to run.
+ Multiple ResultSets returned, and it can create
  additional SQL as needed.
  @param rr one of RssRunnable, RsRunnable, UpdRunnable */
 public void execSql(String sql, SqlRunnable rr);
 
-/** Adds Sql to current batch without any processing code. */
+/** Adds Sql to next batch to run, without any processing code. */
 public void execSql(String sql);
 
 /** Adds processing code to run without any SQL. */
 public void execUpdate(UpdRunnable r);
 
-/** Gets the SqlRunner for the next batch --- used inside SqlRunnable
+/** @deprecated
+ Gets the SqlRunner for the next batch --- used inside SqlRunnable
  to run things in sequence. */
 public SqlRunner next();
 

@@ -72,7 +72,7 @@ public static Throwable run(StRunnable r, ConnPool pool)
 	
 public static Throwable run(BatchRunnable r, ConnPool pool)
 {
-	SqlBatch batch = new SqlBatch();
+	SqlBatchSet batch = new SqlBatchSet();
 	try {
 		r.run(batch);
 		batch.exec(pool);

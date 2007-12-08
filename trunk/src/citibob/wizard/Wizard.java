@@ -111,7 +111,7 @@ protected Wiz createWiz(WizState stateRec, Context con) throws Exception {
 /** Override this to create context for Wiz's and WizState's */
 protected Context newContext() throws Exception
 {
-	return new Context(new SqlBatch(), v);
+	return new Context(new SqlBatchSet(), v);
 }
 /** Write out any buffers in the context when Wiz/State is done with it. */
 protected void finishContext(Context con) throws Exception
@@ -137,7 +137,7 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 		v = (xv == null ? new TypedHashMap() : xv);
 		wizCache = new HashMap();
 		for (stateName = startState; stateName != null;) {
-			SqlBatch str;
+			SqlBatchSet str;
 			
 			// ============= Create the Wiz
 			Context con = newContext();
@@ -154,7 +154,7 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 			
 			// =============== Let user interact with the Wiz
 			con = newContext();
-			str = new SqlBatch();
+			str = new SqlBatchSet();
 			runWiz(wiz);
 			wiz.getAllValues(v);
 
@@ -183,9 +183,9 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 }
 // =================================================================
 public static class Context {
-	public SqlBatch str;		// Access to database
+	public SqlBatchSet str;		// Access to database
 	public TypedHashMap v;		// Values passed around	
-	public Context(SqlBatch str, TypedHashMap v) {
+	public Context(SqlBatchSet str, TypedHashMap v) {
 		this.str = str;
 		this.v = v;
 	}
