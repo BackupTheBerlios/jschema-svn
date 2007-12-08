@@ -48,10 +48,10 @@ public void execSql(String sql);
 /** Adds processing code to run without any SQL. */
 public void execUpdate(UpdRunnable r);
 
-/** @deprecated
- Gets the SqlRunner for the next batch --- used inside SqlRunnable
- to run things in sequence. */
-public SqlRunner next();
+///** @deprecated
+// Gets the SqlRunner for the next batch --- used inside SqlRunnable
+// to run things in sequence. */
+//public SqlRunner next();
 
 /** While SqlRunnables are running --- store a value for retrieval by later SqlRunnable. */
 public void put(Object key, Object val);
