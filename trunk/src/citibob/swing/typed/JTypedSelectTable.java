@@ -47,6 +47,9 @@ int valueColU = 0;		// This column in the selected row will be returned as the v
 Object val = null;
 protected boolean inSelect;		// Are we in the middle of having the user change the value?
 
+/** Are we in the middle of having the user change the value? */
+public boolean isInSelect() { return inSelect; }
+
 public JTypedSelectTable()
 {
 	super();

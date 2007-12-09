@@ -28,19 +28,30 @@ import java.util.*;
  */
 public class SqlBatchSet implements SqlRunner {
 
+ConnPool xpool;
 HashMap map;				// Map of values to pass from from one SqlRunnable to the next
-SqlBatch batch;			// The batch we're constructing
+SqlBatch batch;			// The batch we're constructing (but not yet running)
 
 // ========================================================================
 // Setting up the batch
 
+/** @param pool Connection to use to run batches here; can be null; */
+public SqlBatchSet(ConnPool pool)
+{
+	this.xpool = pool;
+	init();
+}
+
 public SqlBatchSet()
+	{ this(null); }
+
+void init()
 {
 	// Set up initial batch
 	batch = new SqlBatch();
-	map = new HashMap();
+	map = new HashMap();	
 }
-public SqlRunner next() { return this; }
+//public SqlRunner next() { return this; }
 
 public void execSql(String sql)
 	{ execSql(sql, null); }
@@ -64,15 +75,15 @@ public Object get(Object key)
 
 // ---------------------------------------
 
-public void exec(App app)
+public void runBatches(App app)
 {
 	try {
-		exec(app.getPool());
+		runBatches(app.getPool());
 	} catch(Exception e) {
 		app.getExpHandler().consume(e);
 	}
 }
-public void exec(ConnPool pool) throws Exception
+public void runBatches(ConnPool pool) throws Exception
 {
 	if (batch.size() == 0) return;
 	Throwable ret = null;
@@ -81,7 +92,7 @@ public void exec(ConnPool pool) throws Exception
 	try {
 		dbb = pool.checkout();
 		st = dbb.createStatement();
-		this.exec(st);
+		runBatches(st);
 	} finally {
 		try {
 			if (st != null) st.close();
@@ -92,21 +103,36 @@ public void exec(ConnPool pool) throws Exception
 	}
 }
 
-/** Recursively executes this batch and all batches its execution creates. */
-public void exec(Statement st) throws Exception
+public void runBatches() throws Exception
 {
-	if (batch.size() == 0) return;
+	runBatches(xpool);
+}
 
+int recursionDepth = 0;
 
-	for (;;) {
-		// Update to next batch...
-		SqlBatch curBatch = batch;
-		batch = new SqlBatch();
-	
-		curBatch.execOneBatch(st, this);
-		if (batch.size() == 0) break;
+/** Recursively executes this batch and all batches its execution creates. */
+public void runBatches(Statement st) throws Exception
+{//	if (recursionDepth != 0)
+	++recursionDepth;
+	int nbatch = 0;
+	try {
+		if (batch.size() == 0) return;
+
+		for (;;) {
+			// Update to next batch...
+			SqlBatch curBatch = batch;
+			batch = new SqlBatch();
+
+			curBatch.execOneBatch(st, this);
+			++nbatch;
+			if (batch.size() == 0) break;
+		}
+	} finally {
+		// Prepare for next set of batches, so we can re-use SqlBatchSet
+		--recursionDepth;
+		if (recursionDepth == 0) init();
 	}
+	System.out.println("+++ Done running " + nbatch + " batches of SQL");
 }
 
 }
-

@@ -52,7 +52,7 @@ implements TextTypedWidget {
 //Class objClass = null;
 JType jType;	
 SFormat sformat;
-Object val;
+protected Object val;
 boolean useToolTips = true;		// Should we set the tooltip to the same as the label text?
 
 public JTypedLabel()
@@ -84,6 +84,8 @@ public JTypedLabel(Class klass, String fmtString)
 //	jType = f.getJType();
 //	formatter = f.newFormatterFactory().getDefaultFormatter();
 //}
+public void setJType(JType jt)
+	{ this.jType = jt; }
 public void setJType(JType jt, SFormat sformat)
 {
 	this.jType = jt;
@@ -124,26 +126,25 @@ public boolean isInstance(Object o)
 public boolean stopEditing()
 {  return true; }
 // --------------------------------------------------------------
-public void setValue(Object o)
+public void setValue(Object xval)
 {
-	if (val == o && val != null) return;		// This was called multiple times; ignore
+	if (val == xval && val != null) return;		// This was called multiple times; ignore
 	Object oldVal = val;
-	val = o;
-//	if (val == null) setText(sformat.getNullText());
-//	else {
-////if (formatter == null) {
-////	System.out.println("hoi formatter is null");
-////}
-		try {
-//System.out.println(getColName());
-			String text = sformat.valueToString(val);
-			setText(text);
-			if (useToolTips) setToolTipText(text);
-		} catch(java.text.ParseException e) {
-			setText("<parseException>");
-		}
-//	}
+	val = xval;
+	try {
+		String text = sformat.valueToString(val);
+		setDisplayValue(xval, text);
+	} catch(java.text.ParseException e) {
+		setText("<parseException>");
+	}
 	this.firePropertyChange("value", oldVal, val);
+}
+public void setDisplayValue(Object xval, String text)
+{
+
+	this.val = val;
+	setText(text);
+	if (useToolTips) setToolTipText(text);
 }
 public Object getValue()
 {

@@ -59,5 +59,8 @@ public void put(Object key, Object val);
 /** While SqlRunnables are running --- retrieve a previously stored value. */
 public Object get(Object key);
 
+// =================================================================
+// Something that keeps track of the "current available" SqlRunner
+
 }
 

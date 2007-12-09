@@ -57,6 +57,11 @@ public JTypedTextField()
 	super();
 	addKeyListener(this);
 }
+/** Once a formatter has figured out what the underlying value and display
+ should be, set it.  This is for DBFormatter, when we need to make a DB
+ query to format an item.  Only need to implement this method if we're
+ planning on making a "DB" subclass of this widget. */
+public void setDisplayValue(Object val, String display) {}
 
 // --------------------------------------------------------------
 public void setJType(JType jt, javax.swing.text.DefaultFormatterFactory ffactory)

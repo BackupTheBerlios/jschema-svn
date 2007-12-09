@@ -32,6 +32,7 @@ public class BusybeeDbActionRunner implements SwingActionRunner
 
 DbRawRunner raw;
 ExpHandler eh;
+int recursionDepth;
 
 //public ConnPool getPool() { return raw.getPool(); }
 
@@ -40,21 +41,23 @@ public BusybeeDbActionRunner(DbRawRunner raw, ExpHandler eh)
 	this.raw = raw;
 	this.eh = eh;
 }
-public BusybeeDbActionRunner(ConnPool pool, ExpHandler eh)
+public BusybeeDbActionRunner(SqlBatchSet batchSet, ConnPool pool, ExpHandler eh)
 {
-	this(new DbRawRunner(pool), eh);
+	this(new DbRawRunner(batchSet, pool), eh);
 }
-public BusybeeDbActionRunner(ConnPool pool)
+public BusybeeDbActionRunner(SqlBatchSet batchSet, ConnPool pool)
 {
-	this(new DbRawRunner(pool), new SimpleExpHandler());
+	this(new DbRawRunner(batchSet, pool), new SimpleExpHandler());
 }
 
 public void doRun(Component component, CBRunnable rr)
 {
-	SwingUtil.setCursor(component, Cursor.WAIT_CURSOR);
+	++recursionDepth;
+	if (recursionDepth == 1) SwingUtil.setCursor(component, Cursor.WAIT_CURSOR);
 	Throwable e = raw.doRun(rr);
 	SwingUtil.setCursor(component, Cursor.DEFAULT_CURSOR);
 	if (e != null && eh != null) eh.consume(e);
+	--recursionDepth;
 }
 
 }

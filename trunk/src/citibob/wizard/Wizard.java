@@ -111,12 +111,12 @@ protected Wiz createWiz(WizState stateRec, Context con) throws Exception {
 /** Override this to create context for Wiz's and WizState's */
 protected Context newContext() throws Exception
 {
-	return new Context(new SqlBatchSet(), v);
+	return new Context(app.getBatchSet(), v);
 }
 /** Write out any buffers in the context when Wiz/State is done with it. */
 protected void finishContext(Context con) throws Exception
 {
-	con.str.exec(app.getPool());
+	con.str.runBatches(app.getPool());
 }
 
 public TypedHashMap runWizard() throws Exception
@@ -154,7 +154,7 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 			
 			// =============== Let user interact with the Wiz
 			con = newContext();
-			str = new SqlBatchSet();
+			str = app.getBatchSet(); //new SqlBatchSet();
 			runWiz(wiz);
 			wiz.getAllValues(v);
 

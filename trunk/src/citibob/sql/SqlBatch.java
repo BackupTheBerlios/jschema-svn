@@ -97,7 +97,9 @@ public void execUpdate(UpdRunnable r)
 void execOneBatch(Statement st, SqlBatchSet str) throws Exception
 {
 	String sql = sqlBuf.toString();
-System.out.println("Executing batch with " + size() + " segments: \n" + sql +
+System.out.println(
+"=================================================\n" +
+	"Executing batch with " + size() + " segments: \n" + sql +
 "=================================================");
 	st.execute(sql);
 

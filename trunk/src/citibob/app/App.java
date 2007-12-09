@@ -49,6 +49,7 @@ public java.util.prefs.Preferences systemRoot() { return null; }
 // Connection Pools, Exception Handlers and Runners
 /** Connection pool of the default database */
 public ConnPool getPool() { return null; }
+public SqlBatchSet getBatchSet() { return null; }
 
 /** Handler for all unhandled exceptions */
 public ExpHandler getExpHandler() { return null; }

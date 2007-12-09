@@ -29,10 +29,13 @@ public class DbRawRunner implements RawRunner
 {
 
 ConnPool pool;
+SqlBatchSet batchSet;
+int recursionDepth;
 
 public ConnPool getPool() { return pool; }
-public DbRawRunner(ConnPool pool)
+public DbRawRunner(SqlBatchSet batchSet, ConnPool pool)
 {
+	this.batchSet = batchSet;
 	this.pool = pool;
 }
 
@@ -70,12 +73,23 @@ public static Throwable run(StRunnable r, ConnPool pool)
 	return ret;
 }
 	
-public static Throwable run(BatchRunnable r, ConnPool pool)
+//public static Throwable run(BatchRunnable r, ConnPool pool)
+//{
+//	SqlBatchSet batch = new SqlBatchSet();
+//	try {
+//		r.run(batch);
+//		batch.runBatches(pool);
+//	} catch(Throwable e) {
+//		return e;
+//	}
+//	return null;
+//}
+public Throwable run(BatchRunnable r, SqlBatchSet batchSet)
 {
-	SqlBatchSet batch = new SqlBatchSet();
+//	SqlBatchSet batch = new SqlBatchSet();
 	try {
-		r.run(batch);
-		batch.exec(pool);
+		r.run(batchSet);
+		if (recursionDepth == 1) batchSet.runBatches();
 	} catch(Throwable e) {
 		return e;
 	}
@@ -126,23 +140,25 @@ public static Throwable run(DbRunnable r, ConnPool pool)
 
 public Throwable doRun(CBRunnable rr)
 {
-	if (rr instanceof ERunnable) {
-		ERunnable r = (ERunnable)rr;
-		return run(r);
-	}
-	if (rr instanceof StRunnable) {
-		StRunnable r = (StRunnable)rr;
-		return run(r, pool);
-	}
-	if (rr instanceof DbRunnable) {
-		DbRunnable r = (DbRunnable)rr;
-		return run(r, pool);
-	}
+	Throwable ret;
+	++recursionDepth;
 	if (rr instanceof BatchRunnable) {
 		BatchRunnable r = (BatchRunnable)rr;
-		return run(r, pool);
+		ret = run(r, batchSet);
+	} else if (rr instanceof ERunnable) {
+		ERunnable r = (ERunnable)rr;
+		ret = run(r);
+	} else if (rr instanceof StRunnable) {
+		StRunnable r = (StRunnable)rr;
+		ret = run(r, pool);
+	} else if (rr instanceof DbRunnable) {
+		DbRunnable r = (DbRunnable)rr;
+		ret = run(r, pool);
+	} else {
+		ret = new ClassCastException("CBRunnable of class " + rr.getClass() + " is not one of ERunnable, StRunnable or DbRunnable");
 	}
-	return new ClassCastException("CBRunnable of class " + rr.getClass() + " is not one of ERunnable, StRunnable or DbRunnable");
+	--recursionDepth;
+	return ret;
 }
 
 }

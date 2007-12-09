@@ -42,9 +42,9 @@ public TaskQueue(RawRunner raw, ExpHandler ehandler)
 	this.raw = raw;
 	this.ehandler = ehandler;
 }
-public TaskQueue(ConnPool pool, ExpHandler ehandler)
+public TaskQueue(SqlBatchSet batchSet, ConnPool pool, ExpHandler ehandler)
 {
-	this(new DbRawRunner(pool), ehandler);
+	this(new DbRawRunner(batchSet, pool), ehandler);
 }
 
 public void setSingleTask(boolean b)

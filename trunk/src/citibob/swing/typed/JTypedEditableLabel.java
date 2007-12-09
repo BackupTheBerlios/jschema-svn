@@ -45,28 +45,16 @@ implements TextTypedWidget, PropertyChangeListener, ActionListener
 
 TypedWidget popupWidget;		// The widget we display in the popup to change the value.
 String colName;
-	
-//JFormattedTextField.AbstractFormatter
-    /** Creates new form JAdultLabel */
-    public JTypedEditableLabel() {
-        initComponents();
-		ckNull.addActionListener(this);
-		
-		popup.add(popupPanel);
-		
-		// Set image on the close button
-//		bClose.setIcon(new ImageIcon(getClass().getResource(
-//			"images/window-close.png")));
-//		bClose.setText(null);
-    }
 
-//public void setEditable(boolean editable)
-//{
-//	if (editable) {
-//		
-//	}
-//}
-//
+/** Creates new form JAdultLabel */
+public JTypedEditableLabel() {
+	initComponents();
+	ckNull.addActionListener(this);
+
+	popup.add(popupPanel);
+
+}
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -107,7 +95,7 @@ String colName;
 
         popupPanel.add(jPanel1, java.awt.BorderLayout.NORTH);
 
-        btnChange.setText("...");
+        btnChange.setText("v");
         btnChange.setPreferredSize(new java.awt.Dimension(35, 29));
         btnChange.addActionListener(new java.awt.event.ActionListener()
         {
@@ -230,6 +218,13 @@ public boolean stopEditing()
 /** This can be overridden */
 public void setValue(Object o)
 	{ label.setValue(o); }
+
+/** Once a formatter has figured out what the underlying value and display
+ should be, set it.  This is for DBFormatter, when we need to make a DB
+ query to format an item.  Only need to implement this method if we're
+ planning on making a "DB" subclass of this widget. */
+public void setDisplayValue(Object val, String display)
+	{ label.setDisplayValue(val, display); }
 
 public Object getValue()
 	{ return label.getValue(); }

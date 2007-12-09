@@ -38,13 +38,13 @@ public SimpleDbActionRunner(DbRawRunner raw, ExpHandler eh)
 	this.raw = raw;
 	this.eh = eh;
 }
-public SimpleDbActionRunner(ConnPool pool, ExpHandler eh)
+public SimpleDbActionRunner(SqlBatchSet batchSet, ConnPool pool, ExpHandler eh)
 {
-	this(new DbRawRunner(pool), eh);
+	this(new DbRawRunner(batchSet, pool), eh);
 }
-public SimpleDbActionRunner(ConnPool pool)
+public SimpleDbActionRunner(SqlBatchSet batchSet, ConnPool pool)
 {
-	this(new DbRawRunner(pool), new SimpleExpHandler());
+	this(new DbRawRunner(batchSet, pool), new SimpleExpHandler());
 }
 
 public void doRun(CBRunnable rr)
