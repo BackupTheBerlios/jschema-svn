@@ -80,7 +80,10 @@ public List<Map> groupRowsList()
 	for (int i = 0; i < gcols.length; ++i) last[i] = new Object[gcols[i].length];
 
 	// Process...
+	int nrow = 0;
 	outer : while (next()) {
+		++nrow;
+		
 		// See at what level current and last row mis-match
 		int mismatch;
 		for (mismatch = 0; mismatch < gcols.length; ++mismatch) {
@@ -107,6 +110,9 @@ System.out.println("row " + curRow + " mismatch = " + mismatch);
 System.out.println("row " + curRow + " mismatch = " + mismatch);
 		
 	}
+	
+	// No Data
+	if (nrow == 0) return null;
 
 	// Finish off all groupings
 	for (int i=gcols.length-1; i >= 0; --i) groupEnd(i);

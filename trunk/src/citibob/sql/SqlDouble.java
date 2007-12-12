@@ -50,6 +50,18 @@ public class SqlDouble implements SqlType
 		{ return rs.getObject(col); }
 	public Object get(java.sql.ResultSet rs, String col) throws SQLException
 		{ return rs.getObject(col); }
+//	public Object get(java.sql.ResultSet rs, int col) throws SQLException
+//	{
+//		Number num = (Number)rs.getObject(col);
+//		if (num == null) return null;
+//		return num.doubleValue();
+//	}
+//	public Object get(java.sql.ResultSet rs, String col) throws SQLException
+//	{
+//		Number num = (Number)rs.getObject(col);
+//		if (num == null) return null;
+//		return num.doubleValue();
+//	}
 // ================================================
 	public static String sql(Double ii)
 		{ return ii == null ? "null" : ii.toString(); }

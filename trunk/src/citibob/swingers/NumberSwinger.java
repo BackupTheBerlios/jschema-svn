@@ -17,13 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.swingers;
 
-import citibob.sql.*;
+import citibob.swing.text.NullNumberFormatter;
 import citibob.types.JType;
-import citibob.types.JavaJType;
 import javax.swing.text.*;
 import java.text.*;
-import citibob.swing.typed.*;
-import citibob.sql.pgsql.*;
 import static citibob.swing.typed.JTypedTextField.*;
 import citibob.text.*;
 
@@ -49,7 +46,11 @@ public javax.swing.JFormattedTextField.AbstractFormatter newAbsFormatter()
 /** Override as needed */
 protected NumberFormatter newNumberFormatter(NumberFormat fmt)
 {
-	return new NumberFormatter(fmt);
+	if (jType.isInstance(null)) {
+		return new NullNumberFormatter(fmt, "");		
+	} else {
+		return new NumberFormatter(fmt);
+	}
 }
 
 

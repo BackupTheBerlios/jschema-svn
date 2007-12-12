@@ -47,7 +47,7 @@ public JIntegerSwinger()
 	{ this(true); }
 
 protected NumberFormatter newNumberFormatter(NumberFormat fmt) {
-	NumberFormatter nff = new NumberFormatter(fmt);
+	NumberFormatter nff = super.newNumberFormatter(fmt);
 	nff.setValueClass(Integer.class);
 	return nff;
 }

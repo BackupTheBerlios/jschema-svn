@@ -24,8 +24,11 @@ import javax.swing.table.TableModel;
 
 public abstract class Reports {
 
-protected abstract InputStream openTemplateFile(String name)
-throws IOException;
+protected InputStream openTemplateFile(File dir, String name)
+throws IOException
+{
+	return new FileInputStream(new File(dir, name));
+}
 
 /** These must be set by subclass constructor */
 protected String oofficeExe;
@@ -72,6 +75,7 @@ public JRDataSource toJasper(java.util.Collection model)
 // ===================================================================
 /** @param sgcols Columns to group by.
  @param sfmap Default conversions between types and strings.
+ @param sgcols Columns to section by at different levels (null if no report sectioning)
  @param scols Columns for custom formatters (null if none)
  @param sfmt Custom formatters for those columns
  @returns A model suitable for JodReports.
@@ -135,12 +139,17 @@ throws IOException
 
 /** Writes a bunch of JodReports, using template once per item in the list.
  @param fout File for output; null if we should create a temporary file.
+ @param templateName Name of template to use
+ @param templateDir Directory template file is found in; null if it's in our own jar file
  @returns Null if no pages generated, otherwise file they're written in. */
-public File writeJodPdfs(List models, String templateName, File fout)
+public File writeJodPdfs(List models, File templateDir, String templateName, File fout)
 throws IOException, InterruptedException,
 net.sf.jooreports.templates.DocumentTemplateException,
 com.lowagie.text.DocumentException
 {
+	// No data
+	if (models == null) return null;
+	
 	String outExt = "pdf";
 	int dot = templateName.lastIndexOf('.');
 	String inExt = templateName.substring(dot+1);
@@ -151,7 +160,7 @@ com.lowagie.text.DocumentException
 	try {
 		for (Iterator ii=models.iterator(); ii.hasNext();) {
 			Map map = (Map)ii.next();
-			InputStream in = openTemplateFile(templateName);
+			InputStream in = openTemplateFile(templateDir, templateName);
 			System.out.println("Formatting report " + jout.getNumReports());
 			jout.writeReport(in, inExt, map);
 			in.close();
@@ -162,29 +171,32 @@ com.lowagie.text.DocumentException
 	return (jout.getNumReports() > 0 ? fout : null);
 }
 /** Writes just one JodReport using one template once. */
-public File writeJodPdf(Map map, String templateName, File fout)
+public File writeJodPdf(Map map, File templateDir, String templateName, File fout)
 throws IOException, InterruptedException,
 net.sf.jooreports.templates.DocumentTemplateException,
 com.lowagie.text.DocumentException
 {
+	// No data
+	if (map == null) return null;
+	
 	List list = new LinkedList();
 	list.add(map);
-	return writeJodPdfs(list, templateName, fout);
+	return writeJodPdfs(list, templateDir, templateName, fout);
 }
 // ===================================================================
-public void viewJodPdfs(List models, String templateName)
+public void viewJodPdfs(List models, File templateDir, String templateName)
 throws IOException, InterruptedException,
 net.sf.jooreports.templates.DocumentTemplateException,
 com.lowagie.text.DocumentException
 {
-	viewPdf(writeJodPdfs(models, templateName, null));
+	viewPdf(writeJodPdfs(models, templateDir, templateName, null));
 }
-public void viewJodPdf(Map map, String templateName)
+public void viewJodPdf(Map map, File templateDir, String templateName)
 throws IOException, InterruptedException,
 net.sf.jooreports.templates.DocumentTemplateException,
 com.lowagie.text.DocumentException
 {
-	viewPdf(writeJodPdf(map, templateName, null));
+	viewPdf(writeJodPdf(map, templateDir, templateName, null));
 }
 // ===================================================================
 public File viewPdf(File file)
@@ -200,10 +212,10 @@ public File viewPdf(File file)
 }
 // ===================================================================
 /** @param params extra variables sent to Jasper Report. */
-public void viewJasper(JRDataSource jrdata, Map params, String templateName)
+public void viewJasper(JRDataSource jrdata, Map params, File templateDir, String templateName)
 throws JRException, IOException
 {	
-	InputStream reportIn = openTemplateFile(templateName);
+	InputStream reportIn = openTemplateFile(templateDir, templateName);
 	try {
 		JasperReport jasperReport = (templateName.endsWith(".jrxml") ?
 			JasperCompileManager.compileReport(reportIn) :
@@ -216,10 +228,10 @@ throws JRException, IOException
 		reportIn.close();
 	}
 }
-public void viewJasper(JRDataSource jrdata, String templateName)
+public void viewJasper(JRDataSource jrdata, File templateDir, String templateName)
 throws JRException, IOException
 {
-	viewJasper(jrdata, new HashMap(), templateName);
+	viewJasper(jrdata, new HashMap(), templateDir, templateName);
 }
 // ===================================================================
 /** @param reportName Name of report to be used in preferences node pathname.
@@ -309,12 +321,12 @@ public void writeCSV(StringTableModel model, Writer out) throws IOException, jav
 }
 // ===================================================================
 public File writeXls(Map<String,Object> models,
-String templateName, File fout)
+File templateDir, String templateName, File fout)
 throws IOException
 {
 	fout = correctFile(templateName, "xls", fout);
 	
-	InputStream reportIn = openTemplateFile(templateName);
+	InputStream reportIn = openTemplateFile(templateDir, templateName);
 System.out.println("writeXls: reportIn = " + reportIn);
 	PoiXlsWriter poiw = new PoiXlsWriter(reportIn, app.getTimeZone());
 System.out.println("AA1");
@@ -325,18 +337,18 @@ System.out.println("AA3");
 	return fout;
 }
 public File writeXls(TableModel model,
-String templateName, File fout)
+File templateDir, String templateName, File fout)
 throws IOException
 {
 	Map<String,Object> models = new TreeMap();
 	models.put("rs", model);
-	return writeXls(models, templateName, fout);
+	return writeXls(models, templateDir, templateName, fout);
 }
 
-public void viewXls(Map<String,Object> models, String templateName)
+public void viewXls(Map<String,Object> models, File templateDir, String templateName)
 throws IOException
 {
-	File f = writeXls(models, templateName, null);
+	File f = writeXls(models, templateDir, templateName, null);
 	citibob.gui.BareBonesXls.view(f);
 }
 

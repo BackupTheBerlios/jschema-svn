@@ -44,7 +44,7 @@ public JDoubleSwinger()
 }
 
 protected NumberFormatter newNumberFormatter(NumberFormat fmt) {
-	NumberFormatter nff = new NumberFormatter(fmt);
+	NumberFormatter nff = super.newNumberFormatter(fmt);
 	nff.setValueClass(Double.class);
 	return nff;
 }

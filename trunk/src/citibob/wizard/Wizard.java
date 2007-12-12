@@ -58,6 +58,7 @@ protected Navigator navigator;
 
 /** Returns output from Wizard. */
 public Object getVal(String name) { return v.get(name); }
+public void setVal(String name, Object val) { v.put(name, val); }
 
 /** Gets the name of a resource in the same package as this class. */
 protected String getResourceName(String rname)
@@ -75,6 +76,7 @@ public Wizard(String wizardName, App app, String startState)
 	this.wizardName = wizardName;
 	this.startState = startState;
 	this.app = app;
+	this.v = new TypedHashMap();
 	states = new HashMap();
 	navigator = new Navigator() {
 		public String getNext(WizState stateRec) { return stateRec.getNext(); }
@@ -86,12 +88,16 @@ public void setNavigator(Navigator navigator)
 {
 	this.navigator = navigator;
 }
-
+public void setStartState(String startState)
+{
+	this.startState = startState;
+}
 protected void addState(WizState st)
 {
 	states.put(st.getName(), st);
 }
-
+public void setWizardName(String name)
+	{ this.wizardName = name; }
 protected boolean checkFieldsFilledIn()
 {
 	// Make sure all fields are filled in
@@ -111,7 +117,8 @@ protected Wiz createWiz(WizState stateRec, Context con) throws Exception {
 /** Override this to create context for Wiz's and WizState's */
 protected Context newContext() throws Exception
 {
-	return new Context(app.getBatchSet(), v);
+	return new Context(new SqlBatchSet(), v);
+//	return new Context(app.getBatchSet(), v);
 }
 /** Write out any buffers in the context when Wiz/State is done with it. */
 protected void finishContext(Context con) throws Exception
@@ -120,24 +127,19 @@ protected void finishContext(Context con) throws Exception
 }
 
 public TypedHashMap runWizard() throws Exception
-{
-	return runWizard(startState, null);
-}
+{ return runWizard(startState); }
 
-public TypedHashMap runWizard(String startState) throws Exception
-{ return runWizard(startState, null); }
 /** Returns the values collected from the Wizard (for any work not
 accomplished by Wizard already). */
-public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Exception
+public TypedHashMap runWizard(String startState) throws Exception
 {
-	stateName = startState;
+	stateName = (startState == null ? this.startState : startState);
 	String prevState = null;
 	String curState;
 	try {
-		v = (xv == null ? new TypedHashMap() : xv);
+		// v = (xv == null ? new TypedHashMap() : xv);
 		wizCache = new HashMap();
 		for (stateName = startState; stateName != null;) {
-			SqlBatchSet str;
 			
 			// ============= Create the Wiz
 			Context con = newContext();
@@ -154,7 +156,9 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 			
 			// =============== Let user interact with the Wiz
 			con = newContext();
-			str = app.getBatchSet(); //new SqlBatchSet();
+			//SqlBatchSet str;
+			//str = app.getBatchSet(); //new SqlBatchSet();
+			//str = new SqlBatchSet();
 			runWiz(wiz);
 			wiz.getAllValues(v);
 
@@ -184,7 +188,7 @@ public TypedHashMap runWizard(String startState, TypedHashMap xv) throws Excepti
 // =================================================================
 public static class Context {
 	public SqlBatchSet str;		// Access to database
-	public TypedHashMap v;		// Values passed around	
+	public TypedHashMap v;		// Values passed around
 	public Context(SqlBatchSet str, TypedHashMap v) {
 		this.str = str;
 		this.v = v;

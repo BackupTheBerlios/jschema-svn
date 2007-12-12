@@ -59,15 +59,25 @@ public class SqlNumeric implements SqlType
 		double max = Math.exp((double)intDigits * Math.log(10.0));
 		return (Math.abs(d) < max);
 	}
-	public Object get(java.sql.ResultSet rs, int col) throws SQLException
-		{ return rs.getDouble(col); }
-	public Object get(java.sql.ResultSet rs, String col) throws SQLException
-		{ return rs.getDouble(col); }
+	public Double get(java.sql.ResultSet rs, int col) throws SQLException
+	{
+		Number num = (Number)rs.getObject(col);
+		if (num == null) return null;
+		return num.doubleValue();
+	}
+	public Double get(java.sql.ResultSet rs, String col) throws SQLException
+	{
+		Number num = (Number)rs.getObject(col);
+		if (num == null) return null;
+		return num.doubleValue();
+	}
 // ================================================
 	public static String sql(Double ii)
 		{ return ii == null ? "null" : ii.toString(); }
 	public static String sql(int i)
 		{ return ""+i; }
+	public static String sql(double ii)
+		{ return "" + ii; }
 
 /** Makes a NumberFormat object appropriate to this SQL Type */
 public NumberFormat newNumberFormat()

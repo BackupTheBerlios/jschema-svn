@@ -116,6 +116,15 @@ public void addTable(String tableName, String asName, String joinLogic)
 }
 
 
+public boolean containsColumn(String t)
+{
+	for (NVPair nv : columns) {
+		if (t == nv.name) return true;
+		if (nv.name.equals(t)) return true;
+	}
+	return false;
+}
+
 public boolean containsTable(String t)
 { return (tableSet.contains(t)); }
 

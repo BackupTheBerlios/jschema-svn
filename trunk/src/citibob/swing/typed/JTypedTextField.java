@@ -50,7 +50,7 @@ implements TextTypedWidget, KeyListener {
 /** Our best guess of the class this takes. */
 //Class objClass = null;
 protected JType jType;
-protected boolean selectOnSet = true;
+protected boolean selectOnSet = false;
 
 public JTypedTextField()
 {
@@ -141,6 +141,9 @@ public Object getValue()
 // JFormatterTextField already calls PropertyChangeEvent
 //public void setValue(Object val)
 //{
+//if ("tuitionoverride".equals(getColName())) {
+//	System.out.println("hoi");
+//}
 //	super.setValue(val);
 //}
 // ---------------------------------------------------

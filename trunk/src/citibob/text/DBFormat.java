@@ -15,22 +15,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package citibob.swing.calendar;
+/*
+ * KeyedFormatter.java
+ *
+ * Created on March 18, 2006, 4:37 PM
+ *
+ * To change this template, choose Tools | Options and locate the template under
+ * the Source Creation and Management node. Right-click the template and choose
+ * Open. You can then make changes to the template in the Source Editor.
+ */
 
-import java.util.*;
+package citibob.text;
 
-listeners CalModelMVC
+import citibob.types.KeyedModel;
+import javax.swing.*;
+import citibob.sql.*;
+import java.sql.*;
+import citibob.multithread.*;
+
+/**
+ * An AbstractFormatter that must make a database query to do its formatting.
+ * @author citibob
+ */
+public interface DBFormat //implements SFormat
 {
-    /** Value has changed. */
-    calChanged();
 
-    /** Nullness has changed. */
-    nullChanged();
-
-    /** The "final" value has been changed. */
-/*    finalCalChanged();*/
-
-    /** User clicked on a day selection button --- will cause the popup to disappear. */
-    dayButtonSelected();
+public abstract void setDisplayValue(SqlRunner str, Object value);
 
 }

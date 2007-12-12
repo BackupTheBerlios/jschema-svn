@@ -141,10 +141,11 @@ public static Throwable run(DbRunnable r, ConnPool pool)
 public Throwable doRun(CBRunnable rr)
 {
 	Throwable ret;
-	++recursionDepth;
 	if (rr instanceof BatchRunnable) {
+		++recursionDepth;
 		BatchRunnable r = (BatchRunnable)rr;
 		ret = run(r, batchSet);
+		--recursionDepth;
 	} else if (rr instanceof ERunnable) {
 		ERunnable r = (ERunnable)rr;
 		ret = run(r);
@@ -157,7 +158,6 @@ public Throwable doRun(CBRunnable rr)
 	} else {
 		ret = new ClassCastException("CBRunnable of class " + rr.getClass() + " is not one of ERunnable, StRunnable or DbRunnable");
 	}
-	--recursionDepth;
 	return ret;
 }
 

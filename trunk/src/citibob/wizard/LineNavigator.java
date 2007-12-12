@@ -15,21 +15,13 @@ import java.util.*;
  * Implements a simple line of states, as in a classic wizard.
  * @author citibob
  */
-public class LineNavigator implements Wizard.Navigator
+public class LineNavigator extends HashNavigator
 {
-	Map<String,String> next;
 	public LineNavigator(String[] nav)
 	{
-		this.next = new HashMap();
+		super();
 		for (int i=0; i<nav.length-1; i += 1) {
 			next.put(nav[i], nav[i+1]);
 		}
-	}
-	
-	
-	public String getNext(WizState stateRec) { return next.get(stateRec.getName()); }
-	
-	/** Always backtrack to prevState */
-	public String getBack(WizState stateRec) { return null; }
-	
+	}	
 }
