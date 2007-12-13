@@ -17,11 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.multithread;
 
+import citibob.app.App;
 import citibob.swing.*;
-import java.sql.*;
 import citibob.sql.*;
 import java.awt.*;
-import javax.swing.*;
 
 /**
  * Just run the CBRunnables in the current thread.  Route exceptions to the ExpHandler.
@@ -41,13 +40,13 @@ public BusybeeDbActionRunner(DbRawRunner raw, ExpHandler eh)
 	this.raw = raw;
 	this.eh = eh;
 }
-public BusybeeDbActionRunner(SqlBatchSet batchSet, ConnPool pool, ExpHandler eh)
+public BusybeeDbActionRunner(App app, ExpHandler eh)
 {
-	this(new DbRawRunner(batchSet, pool), eh);
+	this(new DbRawRunner(app), eh);
 }
-public BusybeeDbActionRunner(SqlBatchSet batchSet, ConnPool pool)
+public BusybeeDbActionRunner(App app)
 {
-	this(new DbRawRunner(batchSet, pool), new SimpleExpHandler());
+	this(new DbRawRunner(app), new SimpleExpHandler());
 }
 
 public void doRun(Component component, CBRunnable rr)

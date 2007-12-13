@@ -62,10 +62,12 @@ public JPanelWizWrapper(java.awt.Frame owner, String sBack, String snext, JPanel
 	this(owner, wiz);
 	
 	if (sBack == null) bBack.setEnabled(false);
-	else if (!"".equals(sBack)) bBack.setText(sBack);
+	else 
+		if (!"".equals(sBack)) bBack.setText(sBack);
 	
 	if (snext == null) bNext.setEnabled(false);
-	else if (!"".equals(snext)) bNext.setText(snext);
+	else 
+		if (!"".equals(snext)) bNext.setText(snext);
 }
 public void getAllValues(java.util.Map map)
 {

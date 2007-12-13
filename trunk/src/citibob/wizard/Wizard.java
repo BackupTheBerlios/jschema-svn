@@ -126,12 +126,11 @@ protected void finishContext(Context con) throws Exception
 	con.str.runBatches(app.getPool());
 }
 
-public TypedHashMap runWizard() throws Exception
+public boolean runWizard() throws Exception
 { return runWizard(startState); }
 
-/** Returns the values collected from the Wizard (for any work not
-accomplished by Wizard already). */
-public TypedHashMap runWizard(String startState) throws Exception
+/** Returns true if wizard was not cancelled */
+public boolean runWizard(String startState) throws Exception
 {
 	stateName = (startState == null ? this.startState : startState);
 	String prevState = null;
@@ -144,7 +143,7 @@ public TypedHashMap runWizard(String startState) throws Exception
 			// ============= Create the Wiz
 			Context con = newContext();
 			stateRec = (WizState)states.get(stateName);
-			if (stateRec == null) return v;		// Fell off the state graph
+			if (stateRec == null) return true;		// Fell off the state graph
 			wiz = (Wiz)wizCache.get(stateName);
 			if (wiz == null) {
 				wiz = createWiz(stateRec, con);
@@ -170,20 +169,22 @@ public TypedHashMap runWizard(String startState) throws Exception
 				// Remove it from the cache so we re-make
 				// it going "forward" in the Wizard
 				if (!wiz.getCacheWizFwd()) wizCache.remove(stateName);
-				stateName = navigator.getBack(stateRec);
-				if (stateName == null) stateName = prevState;
+				String prevName = navigator.getBack(stateRec);
+				if (prevName == null) prevName = prevState;
+				if (prevName == null && reallyCancel()) return false;
+				stateName = prevName;
 				continue;
-			} else if ("cancel".equals(submit) && reallyCancel()) break;
+			} else if ("cancel".equals(submit) && reallyCancel()) return false;
 
 			// Do screen-specific processing
 			stateRec.process(con);
 			finishContext(con);
 			prevState = curState;
 		}
-		return v;
 	} finally {
 		wizCache = null;		// Free memory...
 	}
+	return true;		// Won't get here
 }
 // =================================================================
 public static class Context {

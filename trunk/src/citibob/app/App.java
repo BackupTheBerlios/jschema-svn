@@ -50,6 +50,8 @@ public java.util.prefs.Preferences systemRoot() { return null; }
 /** Connection pool of the default database */
 public ConnPool getPool() { return null; }
 public SqlBatchSet getBatchSet() { return null; }
+public void pushBatchSet() {}
+public void popBatchSet() throws Exception {}
 
 /** Handler for all unhandled exceptions */
 public ExpHandler getExpHandler() { return null; }

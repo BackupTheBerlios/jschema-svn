@@ -31,9 +31,18 @@ public class SqlBatchSet implements SqlRunner {
 ConnPool xpool;
 HashMap map;				// Map of values to pass from from one SqlRunnable to the next
 SqlBatch batch;			// The batch we're constructing (but not yet running)
+int recursionDepth = 0;		// How many times we've entered a "batch" zone in external code
+int batchDepth = 0;			// How many times we've called ourselves here
 
 // ========================================================================
 // Setting up the batch
+
+/** Not really public */
+public void enterRecursion() { ++recursionDepth; }
+/** Not really public */
+public void exitRecursion() { --recursionDepth; }
+/** Not really public */
+public int getRecursionDepth() { return recursionDepth; }
 
 /** @param pool Connection to use to run batches here; can be null; */
 public SqlBatchSet(ConnPool pool)
@@ -108,12 +117,12 @@ public void runBatches() throws Exception
 	runBatches(xpool);
 }
 
-int recursionDepth = 0;
+//int batchDepth = 0;
 
 /** Recursively executes this batch and all batches its execution creates. */
 public void runBatches(Statement st) throws Exception
-{//	if (recursionDepth != 0)
-	++recursionDepth;
+{//	if (batchDepth != 0)
+	++batchDepth;
 	int nbatch = 0;
 	try {
 		if (batch.size() == 0) return;
@@ -129,8 +138,8 @@ public void runBatches(Statement st) throws Exception
 		}
 	} finally {
 		// Prepare for next set of batches, so we can re-use SqlBatchSet
-		--recursionDepth;
-		if (recursionDepth == 0) init();
+		--batchDepth;
+		if (batchDepth == 0) init();
 	}
 	System.out.println("+++ Done running " + nbatch + " batches of SQL");
 }

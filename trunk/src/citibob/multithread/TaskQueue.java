@@ -17,12 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.multithread;
 
+import citibob.app.App;
 import java.util.*;
-import java.io.*;
-import citibob.multithread.*;
-import citibob.sql.*;
-import citibob.multithread.ExpHandler;
-
 
 public class TaskQueue extends TaskQueueMVC
 {
@@ -42,9 +38,9 @@ public TaskQueue(RawRunner raw, ExpHandler ehandler)
 	this.raw = raw;
 	this.ehandler = ehandler;
 }
-public TaskQueue(SqlBatchSet batchSet, ConnPool pool, ExpHandler ehandler)
+public TaskQueue(App app, ExpHandler ehandler)
 {
-	this(new DbRawRunner(batchSet, pool), ehandler);
+	this(new DbRawRunner(app), ehandler);
 }
 
 public void setSingleTask(boolean b)

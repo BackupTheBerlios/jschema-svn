@@ -119,5 +119,13 @@ protected String vsql(String col, citibob.jschema.Schema schema)
 {
 	return vsql(v.get(col), col, schema);
 }
-
+public boolean runWizard(String startState) throws Exception
+{
+	try {
+		app.pushBatchSet();
+		return super.runWizard(startState);
+	} finally {
+		app.popBatchSet();
+	}
+}
 }

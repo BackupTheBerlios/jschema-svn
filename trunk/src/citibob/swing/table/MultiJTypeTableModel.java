@@ -33,7 +33,9 @@ import javax.swing.event.*;
 import citibob.swing.typed.*;
 
 /**
- *
+ * Present a bunch of JTypeTableModels as one, concatenating their
+ columns together.  Useful for various joins, or for "adding a column"
+ to an existing JTypeTableModel.
  * @author citibob
  */
 public class MultiJTypeTableModel extends AbstractJTypeTableModel

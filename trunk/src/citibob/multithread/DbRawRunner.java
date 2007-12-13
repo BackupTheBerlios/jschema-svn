@@ -19,6 +19,7 @@ package citibob.multithread;
 
 import java.sql.*;
 import citibob.sql.*;
+import citibob.app.*;
 
 /**
  * Just run the CBRunnables in the current thread.  Also used as a basis
@@ -28,15 +29,15 @@ import citibob.sql.*;
 public class DbRawRunner implements RawRunner
 {
 
-ConnPool pool;
-SqlBatchSet batchSet;
-int recursionDepth;
+App app;
+//ConnPool pool;
+//SqlBatchSet batchSet;
+//int recursionDepth;
 
-public ConnPool getPool() { return pool; }
-public DbRawRunner(SqlBatchSet batchSet, ConnPool pool)
+public ConnPool getPool() { return app.getPool(); }
+public DbRawRunner(App app)
 {
-	this.batchSet = batchSet;
-	this.pool = pool;
+	this.app = app;
 }
 
 public static Throwable run(ERunnable r)
@@ -84,14 +85,18 @@ public static Throwable run(StRunnable r, ConnPool pool)
 //	}
 //	return null;
 //}
-public Throwable run(BatchRunnable r, SqlBatchSet batchSet)
+public Throwable run(BatchRunnable r)
 {
 //	SqlBatchSet batch = new SqlBatchSet();
+	SqlBatchSet batchSet = app.getBatchSet();
 	try {
+		batchSet.enterRecursion();
 		r.run(batchSet);
-		if (recursionDepth == 1) batchSet.runBatches();
+		if (batchSet.getRecursionDepth() == 1) batchSet.runBatches();
 	} catch(Throwable e) {
 		return e;
+	} finally {
+		batchSet.exitRecursion();
 	}
 	return null;
 }
@@ -141,20 +146,19 @@ public static Throwable run(DbRunnable r, ConnPool pool)
 public Throwable doRun(CBRunnable rr)
 {
 	Throwable ret;
+	SqlBatchSet batchSet = app.getBatchSet();
 	if (rr instanceof BatchRunnable) {
-		++recursionDepth;
 		BatchRunnable r = (BatchRunnable)rr;
-		ret = run(r, batchSet);
-		--recursionDepth;
+		ret = run(r);
 	} else if (rr instanceof ERunnable) {
 		ERunnable r = (ERunnable)rr;
 		ret = run(r);
 	} else if (rr instanceof StRunnable) {
 		StRunnable r = (StRunnable)rr;
-		ret = run(r, pool);
+		ret = run(r, app.getPool());
 	} else if (rr instanceof DbRunnable) {
 		DbRunnable r = (DbRunnable)rr;
-		ret = run(r, pool);
+		ret = run(r, app.getPool());
 	} else {
 		ret = new ClassCastException("CBRunnable of class " + rr.getClass() + " is not one of ERunnable, StRunnable or DbRunnable");
 	}

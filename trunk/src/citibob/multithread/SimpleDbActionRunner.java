@@ -17,9 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.multithread;
 
-import java.sql.*;
+import citibob.app.App;
 import citibob.sql.*;
-import citibob.multithread.ExpHandler;
 
 /**
  * Just run the CBRunnables in the current thread.  Route exceptions to the ExpHandler.
@@ -38,13 +37,13 @@ public SimpleDbActionRunner(DbRawRunner raw, ExpHandler eh)
 	this.raw = raw;
 	this.eh = eh;
 }
-public SimpleDbActionRunner(SqlBatchSet batchSet, ConnPool pool, ExpHandler eh)
+public SimpleDbActionRunner(App app, ExpHandler eh)
 {
-	this(new DbRawRunner(batchSet, pool), eh);
+	this(new DbRawRunner(app), eh);
 }
-public SimpleDbActionRunner(SqlBatchSet batchSet, ConnPool pool)
+public SimpleDbActionRunner(App app)
 {
-	this(new DbRawRunner(batchSet, pool), new SimpleExpHandler());
+	this(new DbRawRunner(app), new SimpleExpHandler());
 }
 
 public void doRun(CBRunnable rr)
