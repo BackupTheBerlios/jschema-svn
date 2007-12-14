@@ -54,7 +54,7 @@ public class SqlSwingerMap extends JavaSwingerMap
  @param tz The time zone the application is running in (and dates should be DISPLAYED in.)
  */
 public SqlSwingerMap(final TimeZone tz) {
-	super();
+	super(tz);
 	
 	// SqlBool
 	this.addMaker(SqlBool.class, new DefaultSwingerMap.Maker() {

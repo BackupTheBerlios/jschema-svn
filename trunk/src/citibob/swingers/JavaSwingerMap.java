@@ -47,7 +47,7 @@ public class JavaSwingerMap extends DefaultSwingerMap
 
 
 
-public JavaSwingerMap()
+public JavaSwingerMap(final TimeZone tz)
 {
 Maker maker;
 
@@ -91,7 +91,18 @@ Maker maker;
 	public Swinger newSwinger(JType jType) {
 		return new TypedTextSwinger(new JavaJType(TimeZone.class), new TimeZoneSFormat());
 	}});
+
 	
+	// SqlDate --- stored in native TimeZone, render in same TimeZone as is stored.
+	this.addMaker(JDate.class, new DefaultSwingerMap.Maker() {
+	public Swinger newSwinger(JType jType) {
+		JDateType jt = (JDateType)jType;
+		return new JDateSwinger(jt,
+			new String[] {"MM/dd/yyyy", "yyyy-MM-dd", "MM/dd/yy", "MMddyy", "MMddyyyy"},
+			"", tz,
+			citibob.swing.calendar.JCalendarDateOnly.class);
+	}});
+
 	// =========== JTypes
 	this.addMaker(JEnum.class, new DefaultSwingerMap.Maker() {
 	public Swinger newSwinger(JType jType) {

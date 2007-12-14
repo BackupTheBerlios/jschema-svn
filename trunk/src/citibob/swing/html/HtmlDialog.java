@@ -109,6 +109,8 @@ public JComponent getWidget(String name)
 { return (JComponent)html.getMap().get(name); }
 public JComponent addWidget(String name, JComponent widget)
 	{ return html.addWidget(name, widget); }
+public TypedWidget addTypedWidget(String name, TypedWidget widget)
+	{ return (TypedWidget)html.addWidget(name, (JComponent)widget); }
 
 
 public TypedWidget addWidget(String instanceName, String colName, Schema schema)

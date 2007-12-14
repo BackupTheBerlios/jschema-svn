@@ -39,7 +39,8 @@ import citibob.swing.table.*;
  * of system.  Used to automatically construct GUIs appropriate for a schema.
  * @author citibob
  */
-public class DefaultSwingerMap implements citibob.swing.typed.SwingerMap, citibob.text.SFormatMap
+public class DefaultSwingerMap extends citibob.swing.typed.SwingerMap
+implements citibob.text.SFormatMap
 {
 
 //HashMap constMap = new HashMap();

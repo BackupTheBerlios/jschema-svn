@@ -84,6 +84,7 @@ public java.util.Date truncate(java.util.Date dt)
 	cal.set(Calendar.MILLISECOND, 0);
 	return cal.getTime();
 }
+public Calendar getCalendar() { return cal; }
 // ==================================================	
 //public static List makeDateList(Date first, Date last, long periodMS)
 //{

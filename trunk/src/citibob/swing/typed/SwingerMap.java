@@ -39,9 +39,12 @@ import citibob.swing.table.*;
  * of system.  Used to automatically construct GUIs appropriate for a schema.
  * @author citibob
  */
-public interface SwingerMap
+public abstract class SwingerMap
 {
-	public Swinger newSwinger(JType t);
-	public Swinger[] newSwingers(JTypeTableModel model);
-	public Swinger[] newSwingers(JTypeTableModel model, String[] scol, Swinger[] sfmt);
+	public abstract Swinger newSwinger(JType t);
+	public Swinger newSwinger(Class klass) { return newSwinger(new JavaJType(klass)); }
+	public TypedWidget newWidget(JType t) { return newSwinger(t).newWidget(); }
+	public TypedWidget newWidget(Class klass) { return newSwinger(klass).newWidget(); }
+	public abstract Swinger[] newSwingers(JTypeTableModel model);
+	public abstract Swinger[] newSwingers(JTypeTableModel model, String[] scol, Swinger[] sfmt);
 }
