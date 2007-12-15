@@ -105,11 +105,11 @@ public JTypedTextField addTextField(String name)
 	{ return html.addTextField(name, new JavaJType(String.class), new StringSFormat()); }
 
 // ------------------------------------------------------------------
-public JComponent getWidget(String name)
+public JComponent getComponent(String name)
 { return (JComponent)html.getMap().get(name); }
-public JComponent addWidget(String name, JComponent widget)
+public JComponent addComponent(String name, JComponent widget)
 	{ return html.addWidget(name, widget); }
-public TypedWidget addTypedWidget(String name, TypedWidget widget)
+public TypedWidget addWidget(String name, TypedWidget widget)
 	{ return (TypedWidget)html.addWidget(name, (JComponent)widget); }
 
 
@@ -118,7 +118,7 @@ public TypedWidget addWidget(String instanceName, String colName, Schema schema)
 	JType jt = schema.getCol(colName).getType();
 	Swinger sw = swingers.newSwinger(jt);
 	TypedWidget w = sw.newWidget();
-	addWidget(instanceName, (JComponent)w);
+	addComponent(instanceName, (JComponent)w);
 	return w;
 }
 
@@ -128,7 +128,7 @@ public void addWidgetRecursive(Component c)
 	if (c instanceof TypedWidget) {
 		TypedWidget tw = (TypedWidget)c;
 		if (tw.getColName() != null) {
-			addWidget(tw.getColName(), (JComponent)c);
+			addComponent(tw.getColName(), (JComponent)c);
 		}
 	}
 
