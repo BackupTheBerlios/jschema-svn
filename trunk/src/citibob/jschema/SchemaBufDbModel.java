@@ -235,7 +235,7 @@ protected ConsSqlQuery doSimpleDelete(int row, SqlRunner str)
 {
 	SchemaBuf sb = (SchemaBuf)gen;
 	Schema schema = sb.getSchema();
-	ConsSqlQuery q = super.doSimpleDeleteNoRemoveRow(row, str);
+	ConsSqlQuery q = doSimpleDeleteNoRemoveRow(row, str);
 	if (logger != null) logger.log(new QueryLogRec(q, schema, sb, row));
 	gen.removeRow(row);
 	return q;

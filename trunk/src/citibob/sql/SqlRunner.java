@@ -48,6 +48,8 @@ public void execSql(String sql);
 /** Adds processing code to run without any SQL. */
 public void execUpdate(UpdRunnable r);
 
+/** Executes all (potentially) buffered SQL up to now. */
+public void flush() throws Exception;
 ///** @deprecated
 // Gets the SqlRunner for the next batch --- used inside SqlRunnable
 // to run things in sequence. */

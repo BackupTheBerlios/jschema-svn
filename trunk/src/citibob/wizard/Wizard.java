@@ -117,13 +117,13 @@ protected Wiz createWiz(WizState stateRec, Context con) throws Exception {
 /** Override this to create context for Wiz's and WizState's */
 protected Context newContext() throws Exception
 {
-	return new Context(new SqlBatchSet(), v);
+	return new Context(new SqlBatchSet(app.getPool()), v);
 //	return new Context(app.getBatchSet(), v);
 }
 /** Write out any buffers in the context when Wiz/State is done with it. */
 protected void finishContext(Context con) throws Exception
 {
-	con.str.runBatches(app.getPool());
+	con.str.runBatches();
 }
 
 public boolean runWizard() throws Exception

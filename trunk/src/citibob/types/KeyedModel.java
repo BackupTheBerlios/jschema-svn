@@ -44,6 +44,8 @@ Vector keyList = new Vector();
 //String nullString = "<none>";
 int nextSerial = 0;
 
+public int size() { return itemMap.size(); }
+
 /** An item to be added to the combo box in JIntComboBox. */
 public class Item {
 	public Object key;

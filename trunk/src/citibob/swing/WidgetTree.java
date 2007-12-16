@@ -37,6 +37,11 @@ public static Component getRoot(Component c)
 	return root;
 }
 
+/** Assuming c is in a JFrame, gets it. */
+public static JFrame getJFrame(Component c)
+{
+	return (JFrame)getRoot(c);
+}
 ///** Sets the look of the mouse cursor for an entire window, given just the sub-element in that window. */
 //public static void setCursor(Component c, int type)
 //{

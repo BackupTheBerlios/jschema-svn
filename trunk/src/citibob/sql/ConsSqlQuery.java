@@ -37,6 +37,7 @@ public static class NVPair
 // ========================================
 protected String mainTable = null;
 protected ArrayList<NVPair> columns = new ArrayList();
+protected TreeMap<String,NVPair> colMap = new TreeMap();
 protected ArrayList<String> tables = new ArrayList();
 protected TreeSet tableSet = new TreeSet();
 protected ArrayList whereClauses = new ArrayList();
@@ -50,6 +51,7 @@ public Object clone()
 	ConsSqlQuery ret = new ConsSqlQuery();
 	ret.mainTable = mainTable;
 	ret.columns = (ArrayList)columns.clone();
+	ret.colMap = (TreeMap)colMap.clone();
 	ret.tables = (ArrayList)tables.clone();
 	ret.tableSet = (TreeSet)tableSet.clone();
 	return ret;
@@ -76,11 +78,21 @@ public void setDistinct(boolean d)
 /** Add a name-value pair to the list of columns (for update statements).
  Value must be encoded for SQL.
  @see SQL*/
-public void addColumn(String name, String value)
-	{ columns.add(new NVPair(name, value)); }
+public boolean addColumn(String name, String value)
+{
+	if (colMap.get(name) == null) {
+		NVPair nv = new NVPair(name, value);
+		columns.add(nv);
+		colMap.put(name, nv);
+		return true;
+	}
+	return false;
+}
 /** Add a name-only pair to the list of columns (for select statements) */
 public void addColumn(String name)
-	{ columns.add(new NVPair(name, null)); }
+{ addColumn(name, null); }
+//	columns.add(new NVPair(name, null));
+//}
 
 /** Adds to the list of tables being joined in this query */
 public void addTable(String t)
@@ -118,11 +130,12 @@ public void addTable(String tableName, String asName, String joinLogic)
 
 public boolean containsColumn(String t)
 {
-	for (NVPair nv : columns) {
-		if (t == nv.name) return true;
-		if (nv.name.equals(t)) return true;
-	}
-	return false;
+	return (colMap.get(t) != null); 
+//	for (NVPair nv : columns) {
+//		if (t == nv.name) return true;
+//		if (nv.name.equals(t)) return true;
+//	}
+//	return false;
 }
 
 public boolean containsTable(String t)

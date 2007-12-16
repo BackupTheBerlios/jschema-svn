@@ -27,6 +27,7 @@ import citibob.swing.table.*;
 import citibob.swing.typed.*;
 import citibob.swingers.*;
 import citibob.types.*;
+import org.eclipse.jdt.internal.compiler.ast.SuperReference;
 //import de.chka.swing.components.*;
 
 public class CitibobJTable extends JTable
@@ -34,6 +35,10 @@ implements MouseListener, MouseMotionListener
 {
 
 private boolean isHighlightMouseover = false;		// SHould we highlight rows when mousing over?
+private boolean isHighlightSelected = true;		// Should we highlight selected rows?
+
+public void setHighlightSelected(boolean b) { this.isHighlightSelected = b; }
+public boolean getHighlightSelected() { return this.isHighlightSelected; }
 
 public void setHighlightMouseover(boolean b)
 {
@@ -81,6 +86,41 @@ public CitibobTableModel getCBModel()
 {
 	TableModel m = super.getModel();
 	return (CitibobTableModel)m;
+}
+
+/** Returns the row a value is found on (or -1 if no such row) */
+public int rowOfValue(Object val, int col)
+	{ return rowOfValue(val, col, getModel()); }
+
+/** Returns the row a value is found on (or -1 if no such row) */
+protected int rowOfValue(Object val, int col, TableModel model)
+{
+	for (int i=0; i<model.getRowCount(); ++i) {
+		Object rval = model.getValueAt(i, col);
+		boolean eq = (rval == null ? val == null : val.equals(rval));
+		if (eq) return i;
+	}
+	return -1;
+}
+
+protected void setSelectedRow(Object val, int col)
+	{ setSelectedRow(val,col, getModel()); }
+
+/** Sets ONE selected row, based on the value of a column.  Clears
+ selection if val == null. */
+protected void setSelectedRow(Object val, int col, TableModel model)
+{
+	if (val == null) {
+		getSelectionModel().clearSelection();
+		return;
+	}
+	int row = rowOfValue(val, col, model);
+	if (row >= 0) {
+		this.getSelectionModel().setSelectionInterval(row,row);
+		return;
+	} else {
+		getSelectionModel().clearSelection();
+	}
 }
 
 //public void setRowHeightUpdaterEnabled(boolean b)
@@ -207,7 +247,7 @@ public Component prepareRenderer(TableCellRenderer renderer, int row, int col)
 	}
 
 	// Highlight row the mouse is over
-	if (row == mouseRow) {
+	if (row == mouseRow || this.getSelectionModel().isSelectedIndex(row)) {
 		c.setBackground(cTextHighlightBg);
 		c.setForeground(cTextHighlightFg);
 	} else {

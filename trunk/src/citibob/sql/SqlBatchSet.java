@@ -51,8 +51,8 @@ public SqlBatchSet(ConnPool pool)
 	init();
 }
 
-public SqlBatchSet()
-	{ this(null); }
+//public SqlBatchSet()
+//	{ this(null); }
 
 void init()
 {
@@ -73,6 +73,8 @@ public void execSql(String sql, SqlRunnable rr)
 public void execUpdate(UpdRunnable r)
 	{ batch.execSql("", r); }
 
+/** Executes all (potentially) buffered SQL up to now. */
+public void flush() throws Exception { runBatches(); }
 // ========================================================================
 /** While SqlRunnables are running --- store a value for retrieval by later SqlRunnable. */
 public void put(Object key, Object val)

@@ -64,33 +64,36 @@ public void setValueColU(String name)
 public Object getValue()
 { return val; }
 
-/** Returns the row a value is found on (or -1 if no such row) */
-protected int rowOfValue(Object o)
-{
-	for (int i=0; i<getModel().getRowCount(); ++i) {
-		Object val = getModelU().getValueAt(i, valueColU);
-		boolean eq = (val == null ? o == null : o.equals(val));
-		if (eq) return i;
-	}
-	return -1;
-}
+///** Returns the row a value is found on (or -1 if no such row) */
+//protected int rowOfValue(Object o)
+//{
+//	for (int i=0; i<getModel().getRowCount(); ++i) {
+//		Object val = getModelU().getValueAt(i, valueColU);
+//		boolean eq = (val == null ? o == null : o.equals(val));
+//		if (eq) return i;
+//	}
+//	return -1;
+//}
 
 /** Sets the value.  Same as method in JFormattedTextField.  Fires a
  * propertyChangeEvent("value") when calling setValue() changes the value. */
-public void setValue(Object o)
+public void setValue(Object val)
 {
-	if (o == null) {
-		getSelectionModel().clearSelection();
-		return;
-	}
-	int row = rowOfValue(o);
-	if (row >= 0) {
-		this.getSelectionModel().setSelectionInterval(row,row);
-		return;
-	} else {
-		getSelectionModel().clearSelection();
-	}
+	super.setSelectedRowU(val, valueColU);
+//	if (o == null) {
+//		getSelectionModel().clearSelection();
+//		return;
+//	}
+//	int row = rowOfValue(o);
+//	if (row >= 0) {
+//		this.getSelectionModel().setSelectionInterval(row,row);
+//		return;
+//	} else {
+//		getSelectionModel().clearSelection();
+//	}
 }
+
+
 
 
 /** From TableCellEditor (in case this is being used in a TableCellEditor):

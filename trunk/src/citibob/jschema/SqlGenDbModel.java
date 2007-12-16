@@ -110,10 +110,11 @@ public boolean valueChanged()
 }
 // -----------------------------------------------------------
 /** Get Sql query to flush updates to database.
-* Only updates records that have changed; returns null
-* if nothing has changed. */
-public void doUpdate(SqlRunner str, int row)
+* Only updates records that have changed.
+ @returns true if the row was deleted from the model. */
+public boolean doUpdate(SqlRunner str, int row)
 {
+	boolean deleted = false;
 //System.out.println("doUpdate.status(" + row + ") = " + gen.getStatus(row));
 	int status = gen.getStatus(row); // & ~CHANGED;
 	switch(status) {
@@ -123,6 +124,7 @@ public void doUpdate(SqlRunner str, int row)
 		case DELETED :
 		case DELETED | CHANGED :
 			doSimpleDelete(row, str);
+			deleted = true;
 		break;
 		case INSERTED :
 			if (insertBlankRow) doSimpleInsert(row, str);
@@ -138,7 +140,8 @@ public void doUpdate(SqlRunner str, int row)
 	}
 	if (dbChange != null) {
 		dbChange.fireTableWillChange(str, table);
-	}	
+	}
+	return deleted;
 }
 // -----------------------------------------------------------
 /** Get Sql query to flush updates to database.
@@ -146,7 +149,9 @@ public void doUpdate(SqlRunner str, int row)
 * if nothing has changed. */
 public void doUpdate(SqlRunner str)
 {
-	for (int row = 0; row < gen.getRowCount(); ++row) doUpdate(str, row);
+	for (int row = 0; row < gen.getRowCount(); ++row) {
+		if (doUpdate(str, row)) --row;		// Row was deleted, adjust our counting
+	}
 }
 // -----------------------------------------------------------
 /** Get Sql query to delete current record. */

@@ -63,6 +63,10 @@ public int findColumnU(String s)
 {
 	return ((ColPermuteTableModel)getModel()).findColumnU(s);
 }
+//public int getColumnU(int col_u)
+//{
+//	return ((ColPermuteTableModel)getModel()).getColumnU(col_u);
+//}
 
 public CitibobTableModel getModelU()
 {
@@ -89,6 +93,15 @@ public void setRenderEditU(String underlyingName, java.text.Format fmt)
 public void setRenderEditU(String underlyingName, String fmtString)
 	{ setRenderEdit(findColumnU(underlyingName), fmtString); }
 
+public int rowOfValueU(Object val, int col_u)
+	{ return rowOfValue(val, col_u, getModelU()); }
+public int rowOfValueU(Object val, String underlyingName)
+	{ return rowOfValue(val, getModelU().findColumn(underlyingName), getModelU()); }
+
+public void setSelectedRowU(Object val, int col_u)
+	{ setSelectedRow(val, col_u, getModelU()); }
+public void setSelectedRowU(Object val, String underlyingName)
+	{ setSelectedRow(val, getModelU().findColumn(underlyingName), getModelU()); }
 
 
 /** Sets a renderer on a colum, by UNDERLYING column name.  Only sets

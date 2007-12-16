@@ -167,6 +167,13 @@ public int findColumnU(String s)
 	return col_t;
 }
 
+///** Given a column in the underlying table, returns the column in the outer table. */
+//public int getColumnU(int col_u)
+//{
+//	int col_t = iColMap[col_u];
+//	return col_t;	
+//}
+
 /** Column map: i in this table --> colMap[i] in underlying */
 public int getColMap(int col) { return colMap[col]; }
 

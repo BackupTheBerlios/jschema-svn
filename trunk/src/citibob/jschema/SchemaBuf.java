@@ -281,7 +281,9 @@ public void setStatus(int row, int status)
 /** Mark a row for deletion. */
 public void deleteRow(int rowIndex)
 {
+	if (rowIndex < 0) return;
 	SqlRow r = (SqlRow)rows.get(rowIndex);
+	if ((r.status & DELETED) != 0) return;		// Already deleted
 	if ((r.status & INSERTED) != 0) {
 //		// Delete from buffer rows that have been inserted but not in the DB.
 //		rows.remove(rowIndex);
@@ -293,6 +295,26 @@ public void deleteRow(int rowIndex)
 		fireStatusChanged(rowIndex);
 //		fireTableCellUpdated(rowIndex, rowIndex);
 	}
+}
+/** Mark all rows for deletion. */
+public void deleteAllRows()
+{
+	for (int i=0; i<getRowCount(); ++i) deleteRow(i);
+}
+public void undeleteRow(int rowIndex)
+{
+	if (rowIndex < 0) return;
+	SqlRow r = (SqlRow)rows.get(rowIndex);
+	if ((r.status & DELETED) == 0) return;		// Already not deleted
+	
+	// Mark row as not deleted, so we can remove it from DB
+	r.status &= ~DELETED;
+	fireStatusChanged(rowIndex);
+}
+/** Mark all rows for deletion. */
+public void undeleteAllRows()
+{
+	for (int i=0; i<getRowCount(); ++i) undeleteRow(i);
 }
 // ---------------------------------------------------
 /** Physically remove a row from this buffer. */
