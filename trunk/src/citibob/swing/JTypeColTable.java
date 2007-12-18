@@ -43,7 +43,7 @@ import citibob.text.*;
 
 /**
  * A table with one type per column.  Integrated with ColPermuteTable, so it's
- * convenient for editing SchemaBufs.
+ * convenient for editing JTypeTableModels.
  * @author citibob
  */
 public class JTypeColTable extends ColPermuteTable
@@ -79,15 +79,29 @@ public String getTooltip(int row, int col)
 	}
 }
 
-/** @param schemaBuf Underling data buffer to use
+/** Wraps in a StatusSchemaBuf if needed */
+protected JTypeTableModel wrapModel(JTypeTableModel sb, String[] sColMap)
+{
+	if (!(sb instanceof SchemaBuf)) return sb;
+	if (sColMap == null) return sb;
+	for (String s : sColMap) {
+		if (s.startsWith("__")) {
+			return new StatusSchemaBuf((SchemaBuf)sb);
+		}
+	}
+	return sb;
+}
+
+/** @param jtModel Underling data buffer to use
  * @param typeCol Name of type column in the schema
  * @param xColNames Columns (other than type and status) from schema to display
  */
-public void setModelU(JTypeTableModel schemaBuf,
+public JTypeTableModel setModelU(JTypeTableModel jtModel,
 		String[] colNames, String[] sColMap, boolean[] editable,
 		citibob.swing.typed.SwingerMap smap)
 {
-	super.setModelU(schemaBuf, colNames, sColMap, editable);
+	jtModel = wrapModel(jtModel, sColMap);
+	super.setModelU(jtModel, colNames, sColMap, editable);
 	ColPermuteTableModel model = (ColPermuteTableModel)getModel();
 	if (editable != null) model.setEditable(editable);
 	
@@ -95,34 +109,38 @@ public void setModelU(JTypeTableModel schemaBuf,
 //	for (int c=0; c<sColMap.length; ++c) {
 	for (int c=0; c<this.getColumnCount(); ++c) {
 		int bcol = model.getColMap(c);
-		JType sqlType = schemaBuf.getJType(0,bcol);
+		JType sqlType = jtModel.getJType(0,bcol);
 		if (sqlType == null) continue;
-		Swinger swing = smap.newSwinger(sqlType);
+		String colName = jtModel.getColumnName(bcol);
+		Swinger swing = smap.newSwinger(sqlType, colName);
 		if (swing == null) continue;
 		setRenderEdit(c, swing);
 	}
+	
+	return jtModel;
 }
 
-/** @param schemaBuf Underling data buffer to use
+/** @param jtModel Underling data buffer to use
  * @param typeCol Name of type column in the schema
  * @param xColNames Columns (other than type and status) from schema to display
  * @param ttColMap Column in underlying table to display as tooltip for each column in displayed table.
  */
-public void setModelU(JTypeTableModel schemaBuf,
+public void setModelU(JTypeTableModel jtModel,
 		String[] colNames, String[] sColMap, String[] ttColMap, boolean[] editable,
 		citibob.swing.typed.SwingerMap smap)
 {
-	this.setModelU(schemaBuf, colNames, sColMap, editable, smap);
+	jtModel = this.setModelU(jtModel, colNames, sColMap, editable, smap);
 	
 	// Come up with model for all the tooltips
-	ttModel = new ColPermuteTableModel(schemaBuf, colNames, ttColMap, editable);
+	ttModel = new ColPermuteTableModel(jtModel, colNames, ttColMap, editable);
 	ttFmt = new SFormat[ttModel.getColumnCount()];
 	for (int i=0; i<ttModel.getColumnCount(); ++i) {
 		int colU = ttModel.getColMap(i);
 		if (colU < 0) continue;
-		JType jt = schemaBuf.getJType(0, colU);
+		JType jt = jtModel.getJType(0, colU);
+		String colName = jtModel.getColumnName(colU);
 		if (jt == null) continue;
-		ttFmt[i] = smap.newSwinger(jt).getSFormat();
+		ttFmt[i] = smap.newSwinger(jt, colName).getSFormat();
 	}
 }
 

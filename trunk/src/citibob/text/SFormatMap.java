@@ -34,7 +34,7 @@ import java.text.*;
 public interface SFormatMap
 {
 
-public SFormat newSFormat(JType t);
+public SFormat newSFormat(JType t, String colName);
 public SFormat[] newSFormats(JTypeTableModel model);
 public SFormat[] newSFormats(JTypeTableModel model, String[] scol, SFormat[] sfmt);
 

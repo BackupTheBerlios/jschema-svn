@@ -28,4 +28,7 @@ public AbstractSFormat(String nullText) {
 }
 public String getNullText() { return nullText; }
 
+/** This is OK for read-only SFormats */
+public Object stringToValue(String text) throws java.text.ParseException { return null; }
+
 }

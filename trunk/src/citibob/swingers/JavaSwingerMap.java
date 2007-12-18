@@ -27,16 +27,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swingers;
 
+import citibob.jschema.StatusSchemaBuf;
 import citibob.sql.*;
-import citibob.swingers.SqlNumericSwinger;
 import citibob.swing.typed.*;
 import citibob.swing.typed.Swinger;
-import citibob.swing.typed.SwingerMap;
-import java.text.DecimalFormat;
 import citibob.types.*;
 import citibob.text.*;
 import java.util.*;
-import java.text.*;
 
 /**
  *
@@ -122,6 +119,13 @@ Maker maker;
 		return new SqlEnumSwinger((SqlEnum)jType);
 	}});
 	
+	
+	// =========== Special Named Columns
+	this.addMaker("__status__", new DefaultSwingerMap.Maker() {
+	public Swinger newSwinger(JType jType) {
+		return new citibob.swingers.TypedTextSwinger(JavaJType.jtInteger, new StatusSchemaBuf.StatusSFormat());
+	}});
+
 }
 	
 }

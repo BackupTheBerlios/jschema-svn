@@ -17,15 +17,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.jschema;
 
-import java.util.*;
-import javax.swing.table.*;
 import javax.swing.event.*;
-import javax.swing.*;
 import citibob.swing.table.*;
-import citibob.sql.*;
-
-import java.io.*;
+import citibob.text.AbstractSFormat;
 import citibob.types.JType;
+import citibob.types.JavaJType;
+import static citibob.jschema.RowStatusConst.*;
 
 public class StatusSchemaBuf extends AbstractJTypeTableModel
 implements TableModelListener, SchemaBuf.Listener
@@ -51,56 +48,62 @@ public StatusSchemaBuf(SchemaBuf sb)
 // --------------------------------------------------------
 public int findColumn(String colName)
 {
-	if ("__status__".equals(colName)) return 0;
-	return sb.findColumn(colName) + 1;
+	if ("__rowno__".equals(colName)) return 0;
+	if ("__status__".equals(colName)) return 1;
+	return sb.findColumn(colName) + 2;
 }
 public Class getColumnClass(int colIndex)
 {
-	if (colIndex == 0) return Integer.class;
-	return sb.getColumnClass(colIndex-1);
+	switch(colIndex) {
+		case 0 : return Integer.class;
+		case 1 : return Integer.class;
+		default : return sb.getColumnClass(colIndex-2);
+	}
 }
 public JType getJType(int row, int col)
 {
-	if (col == 0) return null;
-	return sb.getJType(row, col-1);
+	switch(col) {
+		case 0 : return JavaJType.jtInteger;
+		case 1 : return JavaJType.jtInteger;
+		default : return sb.getJType(row, col-2);
+	}
 }
-//public JType getColumnJType(int colIndex)
-//{
-//	if (colIndex == 0) return null;
-//	return sb.getColumnJType(colIndex-1);
-//}
-//public JType getJType(int row, int col)
-//	{ return getColumnJType(col); }
 public String getColumnName(int colIndex)
 {
-	if (colIndex == 0) return "__status__";
-	return sb.getColumnName(colIndex-1);
+	switch(colIndex) {
+		case 0 : return "__rowno__";
+		case 1 : return "__status__";
+		default : return sb.getColumnName(colIndex-2);
+	}
 }
+
 /** Allow editing of all non-key fields. */
 public boolean isCellEditable(int rowIndex, int columnIndex)
 {
-	if (columnIndex == 0) return false;
-	return sb.isCellEditable(rowIndex, columnIndex-1);
+	switch(columnIndex) {
+		case 0 : return false;
+		case 1 : return false;
+		default : return sb.isCellEditable(rowIndex, columnIndex-2);
+	}
 }
 
 public int getColumnCount()
 {
-	return sb.getColumnCount() + 1;
+	return sb.getColumnCount() + 2;
 }
 public Object getValueAt(int rowIndex, int colIndex)
 {
-//System.out.println("Returning status value: " + sb.getStatus(rowIndex));
-//if (colIndex == 0) return new Integer(1);
 	Object val;
-	if (colIndex == 0) val = new Integer(sb.getStatus(rowIndex));
-	else val = sb.getValueAt(rowIndex, colIndex-1);
-//	System.out.println("getValueAt(" + rowIndex + ", " + colIndex + " = " + val);
-	return val;
+	switch(colIndex) {
+		case 0 : return new Integer(rowIndex + 1);
+		case 1 : return new Integer(sb.getStatus(rowIndex));
+		default : return sb.getValueAt(rowIndex, colIndex-2);
+	}
 }
 public void setValueAt(Object val, int rowIndex, int colIndex)
 {
-	if (colIndex == 0) return;
-	sb.setValueAt(val, rowIndex, colIndex-1);
+	if (colIndex <= 1) return;
+	sb.setValueAt(val, rowIndex, colIndex-2);
 }
 
 public int getRowCount()
@@ -131,7 +134,7 @@ public void tableChanged(TableModelEvent e_u)
 			this.fireTableRowsUpdated(e_u.getFirstRow(), e_u.getLastRow());
 		} else {
 			// Column in this TableModel is 1 greater than in underlying model
-			int col_t = col_u + 1;
+			int col_t = col_u + 2;
 System.out.println("StatusSchemaBuf.tableChanged: underlying " + col_u +
 	" --> " + col_t + "(" + sb.getColumnName(col_u));
 //			this.fireTableChanged(new TableModelEvent(
@@ -149,6 +152,20 @@ System.out.println("StatusSchemaBuf.tableChanged: underlying " + col_u +
 	}
 }
 
-
+// ===============================================================
+/** Used to format the status column */
+public static class StatusSFormat extends AbstractSFormat {
+public String valueToString(Object value) throws java.text.ParseException {
+	if (value instanceof Integer) {
+		String s = "";
+		int status = ((Integer)value).intValue();
+		if ((status & INSERTED) != 0) s += "I";
+		if ((status & DELETED) != 0) s += "D";
+		if ((status & CHANGED) != 0) s += "*";
+		return s;
+	} else {
+		return "<ERROR";
+	}
+}}
 
 }

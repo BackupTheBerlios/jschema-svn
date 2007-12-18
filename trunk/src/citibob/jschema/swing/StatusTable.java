@@ -37,6 +37,7 @@ import citibob.swing.JTypeColTable;
 /**
  * High-level table: contains a status field and a bunch of other stuff.
  * @author citibob
+ @deprecated
  */
 public class StatusTable extends SchemaBufTable {
 
@@ -61,7 +62,7 @@ boolean[] xEditable, SwingerMap swingers)
 	ssb = new StatusSchemaBuf(schemaBuf);
 	super.setModelU(ssb, colNames, sColMap, editable, swingers);
 
-	setRendererU("__status__", new StatusRenderer());
+//	setRendererU("__status__", new StatusRenderer());
 }
 
 public void setModelU(SchemaBuf schemaBuf,
@@ -86,25 +87,25 @@ boolean[] xEditable, SwingerMap swingers)
 	ssb = new StatusSchemaBuf(schemaBuf);
 	super.setModelU(ssb, colNames, sColMap, ttColMap, editable, swingers);
 
-	setRendererU("__status__", new StatusRenderer());
+//	setRendererU("__status__", new StatusRenderer());
 }	
 // ==========================================================================
-static class StatusRenderer
-extends DefaultTableCellRenderer
-implements citibob.jschema.RowStatusConst {
-	public void setValue(Object o) {
-		if (o instanceof Integer) {
-			String s = "";
-			int status = ((Integer)o).intValue();
-			if ((status & INSERTED) != 0) s += "I";
-			if ((status & DELETED) != 0) s += "D";
-			if ((status & CHANGED) != 0) s += "*";
-			setText(s);
-		} else {
-			setText("<ERROR>");
-		}
-	}
-}
+//static class StatusRenderer
+//extends DefaultTableCellRenderer
+//implements citibob.jschema.RowStatusConst {
+//	public void setValue(Object o) {
+//		if (o instanceof Integer) {
+//			String s = "";
+//			int status = ((Integer)o).intValue();
+//			if ((status & INSERTED) != 0) s += "I";
+//			if ((status & DELETED) != 0) s += "D";
+//			if ((status & CHANGED) != 0) s += "*";
+//			setText(s);
+//		} else {
+//			setText("<ERROR>");
+//		}
+//	}
+//}
 // =====================================================================
 
 }

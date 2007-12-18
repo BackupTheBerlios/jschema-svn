@@ -44,7 +44,7 @@ implements citibob.text.SFormatMap
 {
 
 //HashMap constMap = new HashMap();
-HashMap makerMap = new HashMap();
+HashMap<Object,Maker> makerMap = new HashMap();
 	
 // ===========================================================
 protected static interface Maker
@@ -59,23 +59,37 @@ protected static interface Maker
 //{
 //	constMap.put(swing.getSqlType().getClass(), swing);
 //}
+
+/** Stores a maker by JType subclass. */
 protected void addMaker(Class klass, Maker maker)
 {
 	makerMap.put(klass, maker);
 }
-//public Swinger newSwinger(JType t)
-//{ return newSwinger(t, true); }
+/** Stores a maker by column name */
+protected void addMaker(String colName, Maker maker)
+{
+	makerMap.put(colName, maker);
+}
+
+
 /** Gets a new swinger for a cell of a certain type, depending on whether or not it is editable. */
-public Swinger newSwinger(JType t)
+public Swinger newSwinger(JType t, String colName)
 //public Swinger newSwinger(JType t, boolean editable)
 {
-	// Index on general class of the JType, or on its underlying
-	// Java Class (for JavaJType)
+	Maker m = null;
+	
+	// Try by name
+	if (colName != null) {
+		m = makerMap.get(colName);
+		if (m != null) return m.newSwinger(t);
+	}
+	
+	// Index on general class of the JType,
+	// or on its underlying Java Class (for JavaJType)
 	Class klass = t.getClass();
 	if (klass == JavaJType.class) klass = ((JavaJType) t).getObjClass();
 System.err.println("newSwinger: " + klass);
 
-	Maker m = null;
 	for (;;) {
 System.err.println("     trying: " + klass);
 		m = (Maker)makerMap.get(klass);
@@ -84,8 +98,9 @@ System.err.println("     trying: " + klass);
 		if (klass == null || klass == Object.class) break;
 	}
 	if (m != null) return m.newSwinger(t);
-System.err.println("Failed to find a swinger");
 
+	// No swinger found, punt...
+System.err.println("Failed to find a swinger");
 	return null;
 }
 
@@ -94,7 +109,7 @@ public Swinger[] newSwingers(JTypeTableModel model)
 {
 	int n = model.getColumnCount();
 	Swinger[] sfmt = new Swinger[n];
-	for (int i=0; i<n; ++i) sfmt[i] = newSwinger(model.getJType(0, i));
+	for (int i=0; i<n; ++i) sfmt[i] = newSwinger(model.getJType(0, i), model.getColumnName(i));
 	return sfmt;
 }
 
@@ -116,7 +131,7 @@ String[] scol, Swinger[] swingers)
 	
 	// Fill in defaults
 	for (int i=0; i<n; ++i) if (sfmt2[i] == null) {
-		sfmt2[i] = newSwinger(model.getJType(0, i));
+		sfmt2[i] = newSwinger(model.getJType(0, i), model.getColumnName(i));
 	}
 
 	return sfmt2;
@@ -125,8 +140,8 @@ String[] scol, Swinger[] swingers)
 
 // ==================================================================
 // SFormatMap
-public SFormat newSFormat(JType t)
-	{ return newSwinger(t).getSFormat(); }
+public SFormat newSFormat(JType t, String colName)
+	{ return newSwinger(t, colName).getSFormat(); }
 
 
 /** Create SFormat for an entire set of columns */
@@ -134,7 +149,7 @@ public SFormat[] newSFormats(JTypeTableModel model)
 {
 	int n = model.getColumnCount();
 	SFormat[] sfmt = new SFormat[n];
-	for (int i=0; i<n; ++i) sfmt[i] = newSFormat(model.getJType(0, i));
+	for (int i=0; i<n; ++i) sfmt[i] = newSFormat(model.getJType(0, i), model.getColumnName(i));
 	return sfmt;
 }
 
@@ -153,7 +168,7 @@ String[] scol, SFormat[] sfmt)
 	
 	// Fill in defaults
 	for (int i=0; i<n; ++i) if (sfmt2[i] == null) {
-		sfmt2[i] = newSFormat(model.getJType(0, i));
+		sfmt2[i] = newSFormat(model.getJType(0, i), model.getColumnName(i));
 	}
 
 	return sfmt2;

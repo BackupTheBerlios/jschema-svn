@@ -41,7 +41,13 @@ import citibob.swing.table.*;
  */
 public abstract class SwingerMap
 {
-	public abstract Swinger newSwinger(JType t);
+	public Swinger newSwinger(JType t)
+		{ return newSwinger(t, null); }
+	
+	/** Allows for special column names to be hard-wired with specific Swingers,
+	based on their name, not JType. */
+	public abstract Swinger newSwinger(JType t, String colName);
+
 	public Swinger newSwinger(Class klass) { return newSwinger(new JavaJType(klass)); }
 	public TypedWidget newWidget(JType t) { return newSwinger(t).newWidget(); }
 	public TypedWidget newWidget(Class klass) { return newSwinger(klass).newWidget(); }
