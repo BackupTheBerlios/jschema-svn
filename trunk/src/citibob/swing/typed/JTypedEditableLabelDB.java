@@ -259,7 +259,7 @@ public Object propertyChangeNoFire(PropertyChangeEvent evt)
 public void propertyChange(PropertyChangeEvent evt)
 {
 	Object oldval = propertyChangeNoFire(evt);
-	if (oldval == null) return;
+//	if (oldval == null) return;		// This line caused bugs when user tried to set a value for the first time.
 	Object newval = getValue();
 	firePropertyChange("value", oldval, newval);
 }

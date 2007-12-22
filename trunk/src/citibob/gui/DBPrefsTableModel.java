@@ -112,8 +112,10 @@ throws SQLException, ClassNotFoundException
 	if (pwd == null || "".equals(pwd)) pwd = prefs.get(DEFPASSWORD, null);
 	props.setProperty("password", pwd);
 
-	url = "jdbc:" + prefs.get(DRIVERTYPE, null) + "://" + prefs.get(HOSTADDR, null) +
-		"/" + prefs.get(DATABASE, null) + ":" + prefs.get(PORT, null);
+	url = "jdbc:" + prefs.get(DRIVERTYPE, null) + "://" +
+		prefs.get(HOSTADDR, null) +
+		":" + prefs.get(PORT, null) +
+		"/" + prefs.get(DATABASE, null);
 System.out.println("DBConnPool: url = " + url);
 }
 
