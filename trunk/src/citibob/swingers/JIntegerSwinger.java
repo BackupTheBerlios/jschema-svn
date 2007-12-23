@@ -34,15 +34,18 @@ import citibob.text.*;
 public class JIntegerSwinger extends NumberSwinger
 {
 
+static NumberFormat nfmt = new DecimalFormat("#");
+//static nfmt = NumberFormat.getIntegerInstance();
+	
 public JIntegerSwinger(JType jType)
-	{ this(jType, NumberFormat.getIntegerInstance()); }
+	{ this(jType, nfmt); }
 public JIntegerSwinger(JType jType, NumberFormat nf)
 	{ super(jType, nf); }
 
 public JIntegerSwinger(boolean nullable, NumberFormat nf)
 	{super(new JavaJType(Integer.class, nullable), nf); }
 public JIntegerSwinger(boolean nullable)
-	{ this(nullable, NumberFormat.getIntegerInstance()); }
+	{ this(nullable, nfmt); }
 public JIntegerSwinger()
 	{ this(true); }
 

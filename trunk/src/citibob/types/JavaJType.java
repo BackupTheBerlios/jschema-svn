@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.types;
 
-import java.sql.*;
+import java.io.File;
 
 /** General JType wrapper for Java classes */
 public class JavaJType implements JType
@@ -41,6 +41,8 @@ public class JavaJType implements JType
 public static final JavaJType jtInteger = new JavaJType(Integer.class);
 public static final JavaJType jtBoolean= new JavaJType(Boolean.class);
 public static final JavaJType jtDouble= new JavaJType(Double.class);
+public static final JavaJType jtString= new JavaJType(String.class);
+public static final JavaJType jtFile= new JavaJType(File.class);
 //public static final JavaJType jt= new JavaJType(.class);
 
 }
