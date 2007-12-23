@@ -81,6 +81,12 @@ Maker maker;
 	}};
 	this.addMaker(Boolean.class, maker);
 	this.addMaker(boolean.class, maker);
+	
+	// File
+	this.addMaker(JFile.class, new DefaultSwingerMap.Maker() {
+	public Swinger newSwinger(JType jType) {
+		return new JFileSwinger((JFile)jType);
+	}});
 
 	// ================== Other Java Classes
 	// TimeZone

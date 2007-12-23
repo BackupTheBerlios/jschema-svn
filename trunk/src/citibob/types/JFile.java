@@ -19,30 +19,33 @@ package citibob.types;
 
 import java.io.File;
 
-/** General JType wrapper for Java classes */
-public class JavaJType implements JType
-{	
-	boolean nullable = true;
-	Class klass;
+/** For enumerate types... Nullable depends on KeyedModel.
+This REALLY IS different from SqlEnum!!! */
+public class JFile implements JType
+{
+	boolean nullable;
+	protected javax.swing.filechooser.FileFilter filter;
+	protected File defaultDir;		// Default place we'll chose from
 	
-	public JavaJType(Class klass, boolean nullable) {
-		this.klass = klass;
+	public javax.swing.filechooser.FileFilter getFilter() { return filter; }
+	public File getDefaultDir() { return defaultDir; }
+	
+	/** nullText = string to use for null value, or else <null> if this is not nullable. */
+	public JFile(javax.swing.filechooser.FileFilter filter, File defaultDir, boolean nullable)
+	{
 		this.nullable = nullable;
+		this.filter = filter;
+		this.defaultDir = defaultDir;
 	}
-	public JavaJType(Class klass) { this(klass, true); }
 	
 	/** Java class used to represent this type */
 	public Class getObjClass()
-		{ return klass; }
+		{ return File.class; }
 
 	public boolean isInstance(Object o)
-		{ return (klass.isInstance(o) || (nullable && o == null)); }
-// =================================================================
-public static final JavaJType jtInteger = new JavaJType(Integer.class);
-public static final JavaJType jtBoolean= new JavaJType(Boolean.class);
-public static final JavaJType jtDouble= new JavaJType(Double.class);
-public static final JavaJType jtString= new JavaJType(String.class);
-//public static final JavaJType jtFile= new JavaJType(File.class);
-//public static final JavaJType jt= new JavaJType(.class);
+	{
+		if (o == null) return nullable;
+		return (o instanceof File);
+	}
 
 }
