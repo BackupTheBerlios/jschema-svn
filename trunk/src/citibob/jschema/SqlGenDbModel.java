@@ -138,9 +138,6 @@ public boolean doUpdate(SqlRunner str, int row)
 			doSimpleUpdate(row, str);
 		break;
 	}
-	if (dbChange != null) {
-		dbChange.fireTableWillChange(str, table);
-	}
 	return deleted;
 }
 // -----------------------------------------------------------
@@ -151,6 +148,9 @@ public void doUpdate(SqlRunner str)
 {
 	for (int row = 0; row < gen.getRowCount(); ++row) {
 		if (doUpdate(str, row)) --row;		// Row was deleted, adjust our counting
+	}
+	if (dbChange != null) {
+		dbChange.fireTableWillChange(str, table);
 	}
 }
 // -----------------------------------------------------------

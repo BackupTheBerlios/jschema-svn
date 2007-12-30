@@ -17,6 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.swing;
 
+import citibob.types.JType;
+
 public interface RowModel
 {
 
@@ -55,5 +57,8 @@ public int getColCount();
 
 /** Finds a column's index by name --- also implemented in AbstractTableModel. */
 int findColumn(String name);
+
+JType getJType(int col);
+Class getColumnClass(int col);
 // ===========================================================
 }

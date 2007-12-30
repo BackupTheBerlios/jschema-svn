@@ -37,7 +37,8 @@ import citibob.sql.*;
  *
  * @author citibob
  */
-public class KeyedModel {
+public class KeyedModel extends KeyedModelMVC
+{
 
 Map itemMap = new HashMap();	// HashMap instead of TreeMap doesn't require comparision method
 Vector keyList = new Vector();
@@ -116,6 +117,7 @@ public void addAllItems(SqlRunner str, String sql, final int keyCol, final int i
 {
 	str.execSql(sql, new RsRunnable() {
 	public void run(SqlRunner str, ResultSet rs) throws SQLException {
+		clear();
 		while (rs.next()) {
 			addItem(rs.getObject(keyCol),
 				rs.getObject(itemCol));
@@ -127,6 +129,7 @@ public void addAllItems(SqlRunner str, String sql, final String keyCol, final St
 {
 	str.execSql(sql, new RsRunnable() {
 	public void run(SqlRunner str, ResultSet rs) throws SQLException {
+		clear();
 		while (rs.next()) {
 			addItem(rs.getObject(keyCol),
 				rs.getObject(itemCol));

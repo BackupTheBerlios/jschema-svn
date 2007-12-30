@@ -34,7 +34,7 @@ import citibob.sql.*;
  * @author  citibob
 Used to make a combo box that returns one of a fixed set of integer values.  The ComboBox displays a list of describtive strings, one per integer value to be returned.
  */
-public class JKeyedComboBox extends JComboBox implements TypedWidget {
+public class JKeyedComboBox extends JComboBox implements TypedWidget, KeyedModel.Listener {
 KeyedModel kmodel;
 KeyedSFormat kformatter;
 Object value;
@@ -63,7 +63,15 @@ public JKeyedComboBox(KeyedModel kmodel)
 // --------------------------------------------------------------
 public void setKeyedModel(KeyedModel kmodel)
 {
+	if (this.kmodel != null) {
+		this.kmodel.removeListener(this);
+	}
 	this.kmodel = kmodel;
+	kmodel.addListener(this);
+	refreshKeyedModel();
+}
+public void refreshKeyedModel()
+{
 	kformatter = new KeyedSFormat(kmodel);
 	Vector keyList = kmodel.getKeyList();
 	// Handle null specially if it is in our key list.
@@ -72,6 +80,7 @@ public void setKeyedModel(KeyedModel kmodel)
 		for (int i=0; i<keyList.size(); ++i)
 			if (keyList.get(i) == null) keyList.set(i, NULL);
 	}
+//System.out.println("keyList.size() = " + keyList.size());
 	DefaultComboBoxModel cmodel = new DefaultComboBoxModel(keyList);
 	super.setModel(cmodel);
 	if (keyList.size() > 0) this.setSelectedIndex(0);	// Make sure getValue() returns something
@@ -147,6 +156,11 @@ public Object getValue()
 }
 
 // ==============================================================
+// KeyedModelListener
+public void keyedModelChanged() {
+	refreshKeyedModel();
+}
+// ==============================================================
 class MyRenderer 
 extends DefaultListCellRenderer {
 
@@ -162,5 +176,4 @@ extends DefaultListCellRenderer {
 			list, value == NULL ? null : value, index,isSelected,cellHasFocus);
     }
 }
-
 }

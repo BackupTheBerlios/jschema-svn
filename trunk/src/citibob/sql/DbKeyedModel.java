@@ -74,14 +74,20 @@ throws SQLException
 /** Re-load keyed model from database... */
 public void requery(SqlRunner str)
 {
-	clear();
+//	clear();
 	addAllItems(str, sql, 1, 2);
+	str.execUpdate(new UpdRunnable() {
+	public void run(SqlRunner str) {
+		fireKeyedModelChanged();
+	}});
 }
 
 /** Called when the data potentially changes in the database. */
 public void tableWillChange(SqlRunner str, String table)
 //throws SQLException
 {
+	if (!idTableName.equals(table)) return;
+//System.out.println("tableWillChange: " + table);
 	requery(str);
 }
 

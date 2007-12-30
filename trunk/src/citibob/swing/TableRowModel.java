@@ -19,9 +19,9 @@ package citibob.swing;
 
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.table.*;
 import java.util.*;
 import citibob.swing.table.*;
+import citibob.types.JType;
 
 /** An improvement on TableRowModel, realizing this should have a SelectModel
  *in it too.
@@ -30,21 +30,21 @@ public class TableRowModel
 extends AbstractRowModel
 implements MultiRowModel, TableModelListener, ListSelectionModel {
 
-private CitibobTableModel tmodel;
+private JTypeTableModel tmodel;
 int curRow;
-/** Should we listen to the underlying CitibobTableModel for insert/delete events?
+/** Should we listen to the underlying JTypeTableModel for insert/delete events?
 It's appropriate to be false only when this has been used as a JTable's
 ListSelectionModel. */
 boolean listenTableModel = true;
 
-public CitibobTableModel getTableModel()
+public JTypeTableModel getTableModel()
 { return tmodel; }
 
-public TableRowModel(CitibobTableModel tmodel)
+public TableRowModel(JTypeTableModel tmodel)
 {
 	this(tmodel, true);
 }
-public TableRowModel(CitibobTableModel tmodel, boolean listen)
+public TableRowModel(JTypeTableModel tmodel, boolean listen)
 {
 	listenTableModel = listen;
 	this.tmodel = tmodel;
@@ -89,6 +89,11 @@ public Object get(int col)
 }
 public Object get(String colName)
 	{ return get(findColumn(colName)); }
+public Class getColumnClass(int col)
+	{ return tmodel.getColumnClass(col); }
+public JType getJType(int col)
+	{ return tmodel.getJType(0,col); }
+
 public int getColCount()
 	{ return tmodel.getColumnCount(); }
 // ------------------------------------------------------

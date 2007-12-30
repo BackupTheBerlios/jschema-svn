@@ -26,8 +26,4 @@ public void setValueAt(Object val, int row, String col)
 public JType getJType(int row, String col)
 	{ return getJType(row, findColumn(col)); }
 
-///** Default implementation; can override. */
-//public Object getSortValueAt(int row, int col)
-//	{ return getValueAt(row, col); }
-
 }

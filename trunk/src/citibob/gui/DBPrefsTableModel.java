@@ -116,7 +116,7 @@ throws SQLException, ClassNotFoundException
 		prefs.get(HOSTADDR, null) +
 		":" + prefs.get(PORT, null) +
 		"/" + prefs.get(DATABASE, null);
-System.out.println("DBConnPool: url = " + url);
+//System.out.println("DBConnPool: url = " + url);
 }
 
     /** Creates a new instance of JMBTConnection */

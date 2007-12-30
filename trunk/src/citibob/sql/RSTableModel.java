@@ -31,7 +31,7 @@ extends DefaultJTypeTableModel
 //implements JTypeTableModel
 {
 
-List proto;		// Prototypes for CitibobTableModel
+//List proto;		// Prototypes for CitibobTableModel
 
 // =====================================================
 // DefaultTableModel handles data storage

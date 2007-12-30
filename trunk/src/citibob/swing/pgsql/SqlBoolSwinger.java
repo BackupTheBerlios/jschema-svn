@@ -46,13 +46,14 @@ public class SqlBoolSwinger extends AbstractSwinger
 
 /** Creates a new instance of TypedWidgetSTFactory */
 public SqlBoolSwinger(SqlBool sqlType) {
-	super(sqlType, new BoolSFormat());
+	super(sqlType, new BoolSFormat(), !sqlType.isInstance(null));
 }
 
 /** Create a widget suitable for editing this type of data. */
 public citibob.swing.typed.TypedWidget createWidget()
 {
-	return new JBoolButton();
+	if (jType.isInstance(null)) return new JBoolButton();
+	else return new JBoolCheckbox();
 }
 
 public void configureWidget(TypedWidget w)
