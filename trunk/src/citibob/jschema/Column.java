@@ -17,53 +17,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.jschema;
 
+import citibob.sql.SqlType;
 import citibob.types.JType;
 import citibob.types.JDateType;
-import citibob.sql.SqlType;
 //import citibob.sql.SqlType;
 
 /** Represents one column in a Schema. */
 public class Column
 {
 
-SqlType type;
+SqlType jType;
 String name;
+String label;		// Suggested label for display
 boolean key;
 
 public Column(SqlType type, String name, boolean key)
-//public void init(SqlType type, String name, boolean key)
+	{ this(type, name, name, key); }
+public Column(SqlType type, String name)
+	{ this(type, name, name, false); }
+public Column(SqlType type, String name, String label, boolean key)
 {
-	this.type = type;
+	this.jType = type;
 	this.name = name;
+	this.label = label;
 	this.key = key;
 }
-
-public Column(SqlType type, String name)
-{
-	this(type, name, false);
-}
-
-//public Column(citibob.jschema.pgsql.SqlHoi type, String name, boolean key)
-//{
-//	init(type, name, key);
-//}
-
-/** Convenience function */
-public java.util.TimeZone getTimeZone() { return ((JDateType)getType()).getTimeZone(); }
-/** Convenience function */
-public JDateType getJDateType() { return ((JDateType)getType()); }
-/** Convenience function */
-public java.util.Date newDate() { return getJDateType().truncate(new java.util.Date()); }
-/** Convenience function */
-public String toSql(Object o) { return type.toSql(o); }
-
+// --------------------------------------------------------------------
 /** Type of this column */
 public SqlType getType()
-	{ return type; }
+	{ return jType; }
 
 /** Name of column in Sql */
 public String getName()
 	{ return name; }
+
+public String getLabel()
+	{ return label; }
 
 /** Is this a key column? */
 public boolean isKey()
@@ -73,5 +62,17 @@ public boolean isKey()
  This method will be overridden. */
 public Object getDefault()
 	{ return null; }
+
+// ====================================================================
+// Convenience Functions
+/** Convenience function */
+public java.util.TimeZone getTimeZone() { return ((JDateType)getType()).getTimeZone(); }
+/** Convenience function */
+public JDateType getJDateType() { return ((JDateType)getType()); }
+/** Convenience function */
+public java.util.Date newDate() { return getJDateType().truncate(new java.util.Date()); }
+/** Convenience function */
+public String toSql(Object o) { return ((SqlType)jType).toSql(o); }
+
 
 }

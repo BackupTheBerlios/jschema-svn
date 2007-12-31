@@ -28,17 +28,23 @@ public interface DbModel
 // in every implementation.
 // void setKey()
 
-/** Initialize component to receive data.  Might be needed if some kind of database lookup is needed. */
-void doInit(SqlRunner str);
+///** Initialize component to receive data.  Might be needed if some kind of database lookup is needed. */
+//void doInit(SqlRunner str);
 
-/** Have any of the values here changed and not stored in the DB?  I.e. would calling doUpdate() cause any changes to the database? */
-boolean valueChanged();
+/** Changes the intrinsic key fields representing the row(s) this DbModel
+ will select. */
+public void setKey(Object[] key);
 
 /** Get Sql query to re-select current record
 * from database.  When combined with an actual
 * database and the SqlDisplay.setSqlValue(), this
 * has the result of refreshing the current display. */
 void doSelect(SqlRunner str);
+
+
+
+/** Have any of the values here changed and not stored in the DB?  I.e. would calling doUpdate() cause any changes to the database? */
+boolean valueChanged();
 
 /** Get Sql query to flush updates to database.
 * Only updates records that have changed; returns null
@@ -56,8 +62,5 @@ void doDelete(SqlRunner str);
 is no current record. */
 void doClear();
 
-/** Changes the intrinsic key fields representing the row(s) this DbModel
- will select. */
-public void setKey(Object[] key);
 
 }

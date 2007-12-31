@@ -74,7 +74,7 @@ String[] colNames, String[] sColMap, boolean[] editable,
 citibob.swing.typed.SwingerMap swingers)
 {
 	SchemaBuf sb = setSubSchema(schema, colNames, sColMap, editable, swingers);
-	return new SchemaBufDbModel(sb);
+	return new SchemaBufDbModel(sb, sb.getDefaultTable(), null);
 }
 
 ///** Does an update on the underlying 

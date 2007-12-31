@@ -50,8 +50,18 @@ public static class ColUpdate {
 
 /** For INSERT queries only --- if we can read the WHERE clause, we can use
  this for UPDATE and DELETE queries as well. */
+public QueryLogRec(ConsSqlQuery q, SchemaInfo qc)
+	{ this(q, qc, null, -1); }
+
 public QueryLogRec(ConsSqlQuery q, Schema schema)
 	{ this(q, schema, null, -1); }
+
+public QueryLogRec(ConsSqlQuery query, Schema schema, SchemaBuf sb, int row)
+{
+	this(query, schema, null, sb, row);
+}
+public QueryLogRec(ConsSqlQuery query, SchemaInfo qs, SchemaBuf sb, int row)
+{ this(query, qs.schema, qs.schemaMap, sb, row); }
 
 /** For INSERT, UPDATE and DELETE queries.
  @param sb SchemaBuf used to generate this query; null if query was
@@ -61,7 +71,7 @@ public QueryLogRec(ConsSqlQuery q, Schema schema)
  @param schema Schema must match first table in query
  @param query the query we're logging
  */
-public QueryLogRec(ConsSqlQuery query, Schema schema, SchemaBuf sb, int row)
+public QueryLogRec(ConsSqlQuery query, Schema schema, int[] schemaMap, SchemaBuf sb, int row)
 {
 	this.type = query.getType();
 	this.table = query.getMainTable();
@@ -69,16 +79,19 @@ public QueryLogRec(ConsSqlQuery query, Schema schema, SchemaBuf sb, int row)
 	TreeMap<String,NVPair> inserted = new TreeMap();
 	for (NVPair nv : query.getColumns()) inserted.put(nv.name, nv);
 	
-	for (int i=0; i<schema.getColCount(); ++i) {
+	for (int qi=0; qi<schema.getColCount(); ++qi) {
+		int sbi = (schemaMap == null ? qi : schemaMap[qi]);
+		if (sbi < 0) continue;
+
 		// Retrieve info on column + data from Query and SchemaBuf (if present)
-		Column col = schema.getCol(i);		
-		NVPair nv = inserted.get(col.getName());
+		Column qcol = schema.getCol(sbi);
+		NVPair nv = inserted.get(qcol.getName());
 		
 		// Determine old value
 		String oldsqlval = "null";
 		if (sb != null) {
-			Object oldval = sb.getOrigValueAt(row,i);
-			if (oldval != null) oldsqlval = col.getType().toSql(oldval);			
+			Object oldval = sb.getOrigValueAt(row,sbi);
+			if (oldval != null) oldsqlval = qcol.getType().toSql(oldval);			
 		}
 		
 		// Determine the value we ended up setting
@@ -88,25 +101,25 @@ public QueryLogRec(ConsSqlQuery query, Schema schema, SchemaBuf sb, int row)
 			// Take the value we actually inserted/updated, if it exists.
 			sqlval = nv.value;
 			haveval = true;
-		} else if (sb != null && col.isKey()) {
+		} else if (sb != null && qcol.isKey()) {
 			// Take value in the SchemaBuf, which was set after the insert
 			// due to a SqlSerial data type -- or had the key all along
 			// in the case of an update.  Ignore if null
-			Object setval = sb.getValueAt(row,i);
+			Object setval = sb.getValueAt(row,sbi);
 			if (setval != null) {
 				// Convert setval to a Sql string
-				sqlval = col.getType().toSql(setval);
+				sqlval = qcol.getType().toSql(setval);
 				haveval = true;
 			}
 		}
 
 		
 		
-		if (col.isKey()) {
-			keyCols.add(new ColUpdate(col.getName(), oldsqlval, sqlval));
+		if (qcol.isKey()) {
+			keyCols.add(new ColUpdate(qcol.getName(), oldsqlval, sqlval));
 //			System.out.println("     Key field: " + col.getName() + " = " + sqlval);
 		} else if (type != DELETE && haveval) {
-			valCols.add(new ColUpdate(col.getName(), oldsqlval, sqlval));
+			valCols.add(new ColUpdate(qcol.getName(), oldsqlval, sqlval));
 //			System.out.println("     inserted field: " + col.getName() + " = " + sqlval);
 		}
 	}

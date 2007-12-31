@@ -79,18 +79,18 @@ public String getTooltip(int row, int col)
 	}
 }
 
-/** Wraps in a StatusSchemaBuf if needed */
-protected JTypeTableModel wrapModel(JTypeTableModel sb, String[] sColMap)
-{
-	if (!(sb instanceof SchemaBuf)) return sb;
-	if (sColMap == null) return sb;
-	for (String s : sColMap) {
-		if (s.startsWith("__")) {
-			return new StatusSchemaBuf((SchemaBuf)sb);
-		}
-	}
-	return sb;
-}
+///** Wraps in a StatusSchemaBuf if needed */
+//protected JTypeTableModel wrapModel(JTypeTableModel sb, String[] sColMap)
+//{
+//	if (!(sb instanceof SchemaBuf)) return sb;
+//	if (sColMap == null) return sb;
+//	for (String s : sColMap) {
+//		if (s.startsWith("__")) {
+//			return new StatusSchemaBuf((SchemaBuf)sb);
+//		}
+//	}
+//	return sb;
+//}
 
 /** @param jtModel Underling data buffer to use
  * @param typeCol Name of type column in the schema
@@ -100,7 +100,7 @@ public JTypeTableModel setModelU(JTypeTableModel jtModel,
 		String[] colNames, String[] sColMap, boolean[] editable,
 		citibob.swing.typed.SwingerMap smap)
 {
-	jtModel = wrapModel(jtModel, sColMap);
+//	jtModel = wrapModel(jtModel, sColMap);
 	super.setModelU(jtModel, colNames, sColMap, editable);
 	ColPermuteTableModel model = (ColPermuteTableModel)getModel();
 	if (editable != null) model.setEditable(editable);

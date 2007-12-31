@@ -52,13 +52,13 @@ public int[] getIntsKey() { return idValue; }
 public IntsKeyedDbModel(SchemaBuf buf, String[] keyField, boolean doInsertKeys)
 { this(buf, keyField, doInsertKeys, null); }
 
-public IntsKeyedDbModel(SchemaBuf buf, String[] keyField, boolean doInsertKeys, DbChangeModel dbChange)
+public IntsKeyedDbModel(SchemaBuf sbuf, String[] keyField, boolean doInsertKeys, DbChangeModel dbChange)
 {
-	super(buf, dbChange);
+	super(sbuf, sbuf.getDefaultTable(), dbChange);
 	this.keyField = keyField;
 	keyCol = new int[keyField.length];
 	idValue = new int[keyField.length];
-	for (int i=0; i<idValue.length; ++i) keyCol[i] = buf.findColumn(keyField[i]);
+	for (int i=0; i<idValue.length; ++i) keyCol[i] = sbuf.findColumn(keyField[i]);
 	this.doInsertKeys = doInsertKeys;	
 }
 public IntsKeyedDbModel(Schema schema, String[] keyField, boolean doInsertKeys)

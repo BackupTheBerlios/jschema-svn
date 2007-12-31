@@ -41,7 +41,7 @@ import citibob.swing.JTypeColTable;
  */
 public class StatusTable extends SchemaBufTable {
 
-StatusSchemaBuf ssb;
+//ssbStatusSchemaBuf ssb;
 
 public void setModelU(SchemaBuf schemaBuf,
 String[] xColNames, String[] xSColMap,
@@ -59,8 +59,8 @@ boolean[] xEditable, SwingerMap swingers)
 		sColMap[i+1] = xSColMap[i];
 	}
 	// Set it up
-	ssb = new StatusSchemaBuf(schemaBuf);
-	super.setModelU(ssb, colNames, sColMap, editable, swingers);
+//	ssb = new StatusSchemaBuf(schemaBuf);
+	super.setModelU(schemaBuf, colNames, sColMap, editable, swingers);
 
 //	setRendererU("__status__", new StatusRenderer());
 }
@@ -84,8 +84,8 @@ boolean[] xEditable, SwingerMap swingers)
 		ttColMap[i+1] = xTtColMap[i];
 	}
 	// Set it up
-	ssb = new StatusSchemaBuf(schemaBuf);
-	super.setModelU(ssb, colNames, sColMap, ttColMap, editable, swingers);
+//	ssb = new StatusSchemaBuf(schemaBuf);
+	super.setModelU(schemaBuf, colNames, sColMap, ttColMap, editable, swingers);
 
 //	setRendererU("__status__", new StatusRenderer());
 }	

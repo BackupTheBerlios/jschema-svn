@@ -79,14 +79,14 @@ public void doDelete(SqlRunner str)
 // 	}
 // }
 // ---------------------------------------------------
-public void doInit(SqlRunner str)
-//throws java.sql.SQLException
-{
-	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
-		DbModel m = (DbModel)ii.next();
-		m.doInit(str);
-	}
-}
+//public void doInit(SqlRunner str)
+////throws java.sql.SQLException
+//{
+//	for (Iterator ii = models.iterator(); ii.hasNext(); ) {
+//		DbModel m = (DbModel)ii.next();
+//		m.doInit(str);
+//	}
+//}
 public void doSelect(SqlRunner str)
 //throws java.sql.SQLException
 {

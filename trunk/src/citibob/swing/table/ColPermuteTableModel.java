@@ -91,6 +91,9 @@ boolean[] editable)			// Is each column editable?
 		for (int i = 0; i < colMap.length; ++i) {
 //			for (int j = 0; j < model_u.getColumnCount(); ++j) {
 				colMap[i] = (sColMap[i] == null ? -1 : model_u.findColumn(sColMap[i]));
+//if (colMap[i] < 0) {
+//	System.out.println("hoi");
+//}
 //			}
 		}
 	}

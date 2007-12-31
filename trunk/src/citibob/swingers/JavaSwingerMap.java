@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package citibob.swingers;
 
-import citibob.jschema.StatusSchemaBuf;
 import citibob.sql.*;
 import citibob.swing.typed.*;
 import citibob.swing.typed.Swinger;
@@ -129,7 +128,7 @@ Maker maker;
 	// =========== Special Named Columns
 	this.addMaker("__status__", new DefaultSwingerMap.Maker() {
 	public Swinger newSwinger(JType jType) {
-		return new citibob.swingers.TypedTextSwinger(JavaJType.jtInteger, new StatusSchemaBuf.StatusSFormat());
+		return new citibob.swingers.TypedTextSwinger(JavaJType.jtInteger, new StatusSFormat());
 	}});
 
 }

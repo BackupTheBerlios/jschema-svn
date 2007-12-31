@@ -78,7 +78,7 @@ public IntKeyedDbModel(SchemaBuf buf, String keyField, Params prm)
 
 public IntKeyedDbModel(SchemaBuf buf, String keyField, DbChangeModel dbChange, Params prm)
 {
-	super(buf, dbChange);
+	super(buf, buf.getDefaultTable(), dbChange);
 	this.prm = prm;
 	this.keyField = keyField;
 	this.keyCol = buf.findColumn(keyField);
