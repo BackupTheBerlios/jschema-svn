@@ -45,6 +45,10 @@ TableModelListener instantUpdateListener = null;
 String whereClause;
 String orderClause;
 
+/** Convenience for subclasses */
+protected int intKey;
+protected String stringKey;
+
 // -------------------------------------------------------------
 protected void init(SchemaBuf sbuf, String selectTable, SchemaInfo[] sinfos, DbChangeModel dbChange)
 {
@@ -109,9 +113,9 @@ public void setKey(Object[] key)
 }
 
 /** Common convenience function, to override. */
-public void setKey(int key) {}
+public void setKey(int key) {intKey = key;}
 /** Common convenience function, to override. */
-public void setKey(String key) {}
+public void setKey(String key) {stringKey = key;}
 
 public void setWhereClause(String whereClause)
 {
