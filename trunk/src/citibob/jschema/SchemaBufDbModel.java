@@ -56,6 +56,8 @@ protected void init(SchemaBuf sbuf, String selectTable, SchemaInfo[] sinfos, DbC
 		sinfos[i].schemaMap = SchemaHelper.newSchemaMap(sinfos[i].schema, sbuf.getSchema());
 	}
 }
+protected SchemaBufDbModel() {}
+
 /** Uses the default table for the Schema in buf. */
 public SchemaBufDbModel(SchemaBuf sbuf, SchemaInfo[] sinfos, DbChangeModel dbChange)
 	{ init(sbuf, sbuf.getDefaultTable(), sinfos, dbChange); }
@@ -105,6 +107,11 @@ public void setKey(Object[] key)
 	}
 	setWhereClause(sb.toString());
 }
+
+/** Common convenience function, to override. */
+public void setKey(int key) {}
+/** Common convenience function, to override. */
+public void setKey(String key) {}
 
 public void setWhereClause(String whereClause)
 {

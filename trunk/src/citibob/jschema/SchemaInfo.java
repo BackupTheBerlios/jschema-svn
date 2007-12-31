@@ -16,6 +16,7 @@ public class SchemaInfo {
 	public int[] schemaMap;	// Column i in schema = column colmap[i] in sbuf.getSchema().  User need not set.
 	public SchemaInfo(Schema schema, String table) {
 		this.schema = schema;
+		if (table == null) table = schema.getDefaultTable();
 		this.table = table;
 	}
 	public SchemaInfo(Schema schema) {

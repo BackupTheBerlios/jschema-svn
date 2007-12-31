@@ -72,6 +72,8 @@
     <mvcgen file="src/citibob/multithread/TaskQueueMVC.mvc"/>
     <mvcgen file="src/citibob/swing/calendar/CalModelMVC.mvc"/>
     <mvcgen file="src/citibob/swing/html/ObjHtmlPanelMVC.mvc"/>
+    <mvcgen file="src/citibob/types/KeyedModelMVC.mvc"/>
+    <mvcgen file="src/citibob/jschema/SchemaBufMVC.mvc"/>
 </target>
 
 <target name="-post-jar">

@@ -64,9 +64,11 @@ public SchemaBuf(Schema schema)
 	this.schema = schema;
 }
 
-public SchemaBuf(ResultSet rs, String[] keyFields, SqlTypeSet tset)
+public SchemaBuf(ResultSet rs, Schema[] typeSchemas, String[] keyFields, SqlTypeSet tset)
 throws SQLException
-	{ this(new RSSchema(rs, keyFields, tset)); }
+	{ this(new RSSchema(rs, typeSchemas, keyFields, tset)); }
+public SchemaBuf(SqlRunner str, String protoSql, Schema[] typeSchemas, String[] keyFields, SqlTypeSet tset)
+	{ setCols(str, protoSql, typeSchemas, keyFields, tset); }
 // =====================================================
 // Unique to SchemaBuf
 /** The schema describing the columns */
@@ -134,17 +136,21 @@ public int addRowNoFire(ResultSet rs, int rowIndex, int[] colmap) throws SQLExce
 	return rowIndex;
 }
 /** Convenience function (sort of)... */
-public void addAllRows(ResultSet rs) throws SQLException
+public void addAllRowsNoFire(ResultSet rs) throws SQLException
 {
 	int[] colmap = SchemaHelper.newSchemaMap(rs, schema);
-	int firstRow = rows.size();
 	int n = 0;
 	while (rs.next()) {
 		addRowNoFire(rs, rows.size(), colmap);
 		++n;
 	}
 	rs.close();
-	
+}
+/** Convenience function (sort of)... */
+public void addAllRows(ResultSet rs) throws SQLException
+{
+	int firstRow = rows.size();
+	addAllRowsNoFire(rs);
 	int lastRow = rows.size()-1;
 	if (lastRow >= firstRow) fireTableRowsInserted(firstRow, lastRow);
 }
@@ -154,6 +160,27 @@ public void setRows(SqlRunner str, String sql)
 	public void run(SqlRunner str, ResultSet rs) throws SQLException {
 		clear();
 		addAllRows(rs);
+	}});
+}
+public void setCols(SqlRunner str, String sql,
+final Schema[] typeSchemas, final String[] keyFields, final SqlTypeSet tset)
+{
+	str.execSql(sql,new RsRunnable() {
+	public void run(SqlRunner str, ResultSet rs) throws SQLException {
+		clear();
+		schema = new RSSchema(rs, typeSchemas, keyFields, tset);
+		fireTableStructureChanged();
+	}});
+}
+public void setRowsAndCols(SqlRunner str, String sql,
+final Schema[] typeSchemas, final String[] keyFields, final SqlTypeSet tset)
+{
+	str.execSql(sql,new RsRunnable() {
+	public void run(SqlRunner str, ResultSet rs) throws SQLException {
+		clear();
+		schema = new RSSchema(rs, typeSchemas, keyFields, tset);
+		addAllRowsNoFire(rs);
+		fireTableStructureChanged();
 	}});
 }
 // ===============================================================

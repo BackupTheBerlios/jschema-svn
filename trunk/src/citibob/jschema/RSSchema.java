@@ -20,7 +20,7 @@ public class RSSchema extends ConstSchema
 {
 
 /** Creates a new instance of RSSchema */
-public RSSchema(ResultSet rs, String[] keyFields, SqlTypeSet tset)
+public RSSchema(ResultSet rs, Schema[] typeSchemas, String[] keyFields, SqlTypeSet tset)
 throws SQLException
 {
 	ResultSetMetaData md = rs.getMetaData();
@@ -32,12 +32,34 @@ throws SQLException
 			md.getColumnName(i1), md.getColumnLabel(i1), false);
 	}
 	
+	// Set up data types (and key fields)
+	if (typeSchemas != null)
+	for (int i=0; i<typeSchemas.length; ++i) {
+		Schema schema = typeSchemas[i];
+		setJTypes(schema);
+	}
+
 	// Set up key fields
 	if (keyFields != null)
 	for (int i=0; i<keyFields.length; ++i) {
 		Column col = cols[findCol(keyFields[i])];
 		col.key = true;
 	}
+	
 }
 
+/** Looks for corresponding names, and sets all column types the same
+ as same-named columns in schema. */
+public void setJTypes(Schema schema)
+{
+	for (int i=0; i<schema.getColCount(); ++i) {
+		Column scol = schema.getCol(i);
+		int j = findCol(scol.getName());
+		if (j < 0) continue;
+		Column tcol = this.getCol(j);
+		tcol.jType = scol.getType();
+		tcol.key = scol.isKey();
+		tcol.label = scol.getLabel();
+	}
+}
 }
