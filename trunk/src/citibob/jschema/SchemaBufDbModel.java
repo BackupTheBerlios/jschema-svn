@@ -338,18 +338,18 @@ void fireTablesWillChange(SqlRunner str)
 public void doUpdate(SqlRunner str)
 {
 	for (int row = 0; row < sbuf.getRowCount(); ++row) {
-		doUpdateNoFireTableWillChange(str, row);
+		if (doUpdateNoFireTableWillChange(str, row)) --row;
 	}
 	fireTablesWillChange(str);
 }
-void doUpdateNoFireTableWillChange(SqlRunner str, int row)
+boolean doUpdateNoFireTableWillChange(SqlRunner str, int row)
 {
+	boolean deleted = false;
 	for (SchemaInfo qs : sinfos) {
-		if (doUpdate(str, row, qs)) {
-			sbuf.removeRow(row);
-			--row;		// Row was deleted, adjust our counting
-		}
+		if (doUpdate(str, row, qs)) deleted = true;
 	}
+	if (deleted) sbuf.removeRow(row);
+	return deleted;
 }
 // -----------------------------------------------------------
 /** Get Sql query to delete current record. */
