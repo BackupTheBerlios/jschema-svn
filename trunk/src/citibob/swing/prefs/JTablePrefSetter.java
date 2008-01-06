@@ -24,9 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package citibob.swing.prefs;
 
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.prefs.*;
 import javax.swing.*;
-import java.awt.event.*;
 import javax.swing.table.*;
 
 /**
@@ -42,23 +43,43 @@ public void setPrefs(Component comp, final String prefix, final Preferences pref
 	TableColumnModel cols = table.getColumnModel();
 	for (int i = 0; i < cols.getColumnCount(); ++i) {
 		TableColumn c = cols.getColumn(i);
-		String propName = prefix + ".column[" + i + "]";
+		final String propName = prefix + ".column[" + i + "]";
 		int w = prefs.getInt(propName + ".width", c.getWidth());
 		c.setPreferredWidth(w);
+//		c.setWidth(w);
+
+		c.addPropertyChangeListener(new PropertyChangeListener() {
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (!evt.getPropertyName().equals("width")) return;
+			prefs.putInt(propName + ".width", (Integer)evt.getNewValue());
+//			System.out.println(evt.getPropertyName() + "   " + evt.getNewValue());
+		}});
+
 	}
 
-	// Hack: save the preferences whenever mouse enters this component.	
-	// There is no easy "column width changed" listener.
-	table.addMouseListener(new MouseAdapter() {
-	public void mouseExited(MouseEvent e) {
-		TableColumnModel cols = table.getColumnModel();
-		for (int i = 0; i < cols.getColumnCount(); ++i) {
-			TableColumn c = cols.getColumn(i);
-			String propName = prefix + ".column[" + i + "]";
-			prefs.putInt(propName + ".width", c.getWidth());
-		}
-	}});
+
+//	// Hack: save the preferences whenever mouse enters this component.	
+//	// There is no easy "column width changed" listener.
+//	final MouseListener myMouseListener = new MouseAdapter() {
+//	public void mouseExited(MouseEvent e) {
+//		TableColumnModel cols = table.getColumnModel();
+//		for (int i = 0; i < cols.getColumnCount(); ++i) {
+//			TableColumn c = cols.getColumn(i);
+//			String propName = prefix + ".column[" + i + "]";
+//			prefs.putInt(propName + ".width", c.getWidth());
+//System.out.println("Changed pref: " + prefs.name() + " % " + propName + " to " + c.getWidth());
+//		}
+//	}};
+//JScrollPane sc;
+//sc.add
+//table.add
+//	table.add
+//	table.addMouseListener(
+
+
+
 }
+
 
 }
 

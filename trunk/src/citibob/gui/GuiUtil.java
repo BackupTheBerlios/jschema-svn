@@ -51,5 +51,5 @@ public static void showJPanel(Component c, JPanel panel, App app, String title, 
 	if (dialogName != null) app.setUserPrefs(frame, dialogName);
 	frame.setVisible(true);
 }
-	
+
 }

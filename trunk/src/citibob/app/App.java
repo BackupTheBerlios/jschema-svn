@@ -17,13 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package citibob.app;
 import citibob.swing.typed.SwingerMap;
-import java.sql.*;
 import java.util.*;
 import citibob.sql.*;
 import citibob.multithread.*;
-import citibob.swing.typed.*;
 import citibob.mail.*;
-import javax.mail.internet.*;
 import citibob.jschema.*;
 import citibob.swing.prefs.*;
 
@@ -52,6 +49,8 @@ public ConnPool getPool() { return null; }
 public SqlBatchSet getBatchSet() { return null; }
 public void pushBatchSet() {}
 public void popBatchSet() throws Exception {}
+
+public citibob.gui.FrameSet getFrameSet() { return null; }
 
 /** Handler for all unhandled exceptions */
 public ExpHandler getExpHandler() { return null; }

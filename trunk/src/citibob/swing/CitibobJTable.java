@@ -66,7 +66,7 @@ public CitibobJTable()
 	// TODO: For now, I won't use it, but once JDateChooser is fixed, I'll turn
 	// it back on.
 	this.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-
+//	super.setAutoResizeMode(AUTO_RESIZE_OFF);
 	setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 //javax.swing.plaf.basic.BasicComboBoxUI

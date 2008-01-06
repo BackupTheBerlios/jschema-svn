@@ -59,6 +59,12 @@ public Document getDocument() { return doc; }
 
 public void initRuntime(String title, String guiNodePath)
 {
+	Preferences guiPrefs = Preferences.userRoot();
+	guiPrefs = guiPrefs.node(guiNodePath);
+	initRuntime(title, guiPrefs);
+}
+public void initRuntime(String title, Preferences guiPrefs)
+{
 	setTitle(title);
 	doc = new CircularPlainDocument(20000);
 	logWriter = new DocumentWriter(doc);
@@ -83,8 +89,6 @@ public void initRuntime(String title, String guiNodePath)
 	
 	
 	// Save GUI Preferences preferences
-	Preferences guiPrefs = Preferences.userRoot();
-	guiPrefs = guiPrefs.node(guiNodePath);
 	new SwingPrefs().setPrefs(this, "", guiPrefs);
 
 }
