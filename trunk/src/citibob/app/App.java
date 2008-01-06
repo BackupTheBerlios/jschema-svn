@@ -79,6 +79,8 @@ public SwingerMap getSwingerMap() { return null; }
 public citibob.text.SFormatMap getSFormatMap() { return null; }
 /** Get default conversion between database types and SqlType objects */
 public citibob.sql.SqlTypeSet getSqlTypeSet() { return null; }
+public DbChangeModel getDbChange() { return null; }
+
 // ============================================================================
 // Misc
 /** Allow to log all database changes */

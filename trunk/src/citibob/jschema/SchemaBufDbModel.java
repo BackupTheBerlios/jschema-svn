@@ -37,7 +37,7 @@ DbChangeModel dbChange;
 SchemaBuf sbuf;		// The buffer -- has its own schema, to be used for SQL selects in subclass
 String selectTable = null;		// Table to use for select queries
 
-SchemaInfo[] sinfos;
+SchemaInfo[] updateSchemas;
 /** The listener used to push updates to the database instantly (a la Access) */
 TableModelListener instantUpdateListener = null;
 //InstantUpdateListener instantUpdateListener;
@@ -50,21 +50,21 @@ protected int intKey;
 protected String stringKey;
 
 // -------------------------------------------------------------
-protected void init(SchemaBuf sbuf, String selectTable, SchemaInfo[] sinfos, DbChangeModel dbChange)
+protected void init(SchemaBuf sbuf, String selectTable, SchemaInfo[] updateSchemas, DbChangeModel dbChange)
 {
 	this.sbuf = sbuf;
 	this.selectTable = selectTable;
 	this.dbChange = dbChange;
-	this.sinfos = sinfos;
-	for (int i=0; i<sinfos.length; ++i) {
-		sinfos[i].schemaMap = SchemaHelper.newSchemaMap(sinfos[i].schema, sbuf.getSchema());
+	this.updateSchemas = updateSchemas;
+	for (int i=0; i<updateSchemas.length; ++i) {
+		updateSchemas[i].schemaMap = SchemaHelper.newSchemaMap(updateSchemas[i].schema, sbuf.getSchema());
 	}
 }
 protected SchemaBufDbModel() {}
 
 /** Uses the default table for the Schema in buf. */
-public SchemaBufDbModel(SchemaBuf sbuf, SchemaInfo[] sinfos, DbChangeModel dbChange)
-	{ init(sbuf, sbuf.getDefaultTable(), sinfos, dbChange); }
+public SchemaBufDbModel(SchemaBuf sbuf, SchemaInfo[] updateSchemas, DbChangeModel dbChange)
+	{ init(sbuf, sbuf.getDefaultTable(), updateSchemas, dbChange); }
 public SchemaBufDbModel(SchemaBuf sbuf, DbChangeModel dbChange)
 	{ this(sbuf, sbuf.getDefaultTable(), dbChange); }
 public SchemaBufDbModel(Schema schema, DbChangeModel dbChange)
@@ -280,7 +280,7 @@ public void doSelect(SqlRunner str)
 public void doInsert(SqlRunner str)
 {
 	for (int row = 0; row < sbuf.getRowCount(); ++row) {
-		for (SchemaInfo qs : sinfos) doSimpleInsert(row, str, qs);
+		for (SchemaInfo qs : updateSchemas) doSimpleInsert(row, str, qs);
 	}
 }
 // -----------------------------------------------------------
@@ -328,7 +328,7 @@ public boolean doUpdate(SqlRunner str, int row, SchemaInfo qs)
 // -----------------------------------------------------------
 void fireTablesWillChange(SqlRunner str)
 {
-	for (SchemaInfo qs : sinfos) if (dbChange != null) {
+	for (SchemaInfo qs : updateSchemas) if (dbChange != null) {
 		dbChange.fireTableWillChange(str, qs.table);
 	}
 }
@@ -345,7 +345,7 @@ public void doUpdate(SqlRunner str)
 boolean doUpdateNoFireTableWillChange(SqlRunner str, int row)
 {
 	boolean deleted = false;
-	for (SchemaInfo qs : sinfos) {
+	for (SchemaInfo qs : updateSchemas) {
 		if (doUpdate(str, row, qs)) deleted = true;
 	}
 	if (deleted) sbuf.removeRow(row);
@@ -356,7 +356,7 @@ boolean doUpdateNoFireTableWillChange(SqlRunner str, int row)
 public void doDelete(SqlRunner str)
 {
 	for (int row = 0; row < sbuf.getRowCount(); ++row) {
-		for (SchemaInfo qs : sinfos) {
+		for (SchemaInfo qs : updateSchemas) {
 			// Only delete if this is a real record in the DB.
 			if ((sbuf.getStatus(row) & INSERTED) == 0) {
 				doSimpleDeleteNoRemoveRow(row, str, qs);

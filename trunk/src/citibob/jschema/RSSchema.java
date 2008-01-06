@@ -42,6 +42,7 @@ throws SQLException
 	// Set up key fields
 	if (keyFields != null)
 	for (int i=0; i<keyFields.length; ++i) {
+//System.out.println("Find col key field: " + keyFields[i]);
 		Column col = cols[findCol(keyFields[i])];
 		col.key = true;
 	}

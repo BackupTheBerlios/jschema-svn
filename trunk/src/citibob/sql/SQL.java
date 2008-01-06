@@ -199,4 +199,14 @@ public static String intList(int[] ids)
 	return sb.toString();
 }
 
+public static String intList(Set<Integer> ids)
+{
+	if (ids == null || ids.size() == 0) return null;
+	Iterator<Integer> ii = ids.iterator();
+	StringBuffer sb = new StringBuffer("(" + ii.next());
+	for (; ii.hasNext();) sb.append("," + ii.next());
+	sb.append(")");
+	return sb.toString();
+}
+
 }
